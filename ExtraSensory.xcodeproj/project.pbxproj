@@ -14,13 +14,23 @@
 		9307CBC117F1A78A00D95E05 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBC017F1A78A00D95E05 /* main.m */; };
 		9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */; };
 		9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBC617F1A78A00D95E05 /* Main.storyboard */; };
-		9307CBCB17F1A78A00D95E05 /* ES_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBCA17F1A78A00D95E05 /* ES_ViewController.m */; };
+		9307CBCB17F1A78A00D95E05 /* ES_TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBCA17F1A78A00D95E05 /* ES_TestViewController.m */; };
 		9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBCC17F1A78A00D95E05 /* Images.xcassets */; };
 		9307CBD417F1A78A00D95E05 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBD317F1A78A00D95E05 /* XCTest.framework */; };
 		9307CBD517F1A78A00D95E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB417F1A78A00D95E05 /* Foundation.framework */; };
 		9307CBD617F1A78A00D95E05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB817F1A78A00D95E05 /* UIKit.framework */; };
 		9307CBDE17F1A78A00D95E05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */; };
 		9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */; };
+		9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */; };
+		9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */; };
+		9307CC5417F212E600D95E05 /* ES_Sensors.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC5317F212E600D95E05 /* ES_Sensors.m */; };
+		9307CC6617F219AF00D95E05 /* ES_SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC6517F219AF00D95E05 /* ES_SettingsViewController.m */; };
+		9307CC6917F220DB00D95E05 /* ES_WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */; };
+		9307CC9A17F24ACE00D95E05 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC9917F24ACE00D95E05 /* User.m */; };
+		9307CC9D17F24ACF00D95E05 /* SampleSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC9C17F24ACF00D95E05 /* SampleSet.m */; };
+		9307CCA017F24ACF00D95E05 /* AccelerometerSample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC9F17F24ACF00D95E05 /* AccelerometerSample.m */; };
+		9307CCA317F24ACF00D95E05 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CCA217F24ACF00D95E05 /* Settings.m */; };
+		9307CCA617F24ACF00D95E05 /* AccelerometerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CCA517F24ACF00D95E05 /* AccelerometerSettings.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +55,32 @@
 		9307CBC317F1A78A00D95E05 /* ES_AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ES_AppDelegate.h; sourceTree = "<group>"; };
 		9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ES_AppDelegate.m; sourceTree = "<group>"; };
 		9307CBC717F1A78A00D95E05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9307CBC917F1A78A00D95E05 /* ES_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ES_ViewController.h; sourceTree = "<group>"; };
-		9307CBCA17F1A78A00D95E05 /* ES_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ES_ViewController.m; sourceTree = "<group>"; };
+		9307CBC917F1A78A00D95E05 /* ES_TestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ES_TestViewController.h; sourceTree = "<group>"; };
+		9307CBCA17F1A78A00D95E05 /* ES_TestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ES_TestViewController.m; sourceTree = "<group>"; };
 		9307CBCC17F1A78A00D95E05 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9307CBD217F1A78A00D95E05 /* ExtraSensoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExtraSensoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9307CBD317F1A78A00D95E05 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		9307CBDB17F1A78A00D95E05 /* ExtraSensoryTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExtraSensoryTests-Info.plist"; sourceTree = "<group>"; };
 		9307CBDD17F1A78A00D95E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtraSensoryTests.m; sourceTree = "<group>"; };
+		9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		9307CC3417F2075C00D95E05 /* ES_UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ES_UserDataModel.xcdatamodel; sourceTree = "<group>"; };
+		9307CC5217F212E600D95E05 /* ES_Sensors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Sensors.h; sourceTree = "<group>"; };
+		9307CC5317F212E600D95E05 /* ES_Sensors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Sensors.m; sourceTree = "<group>"; };
+		9307CC6417F219AF00D95E05 /* ES_SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsViewController.h; sourceTree = "<group>"; };
+		9307CC6517F219AF00D95E05 /* ES_SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsViewController.m; sourceTree = "<group>"; };
+		9307CC6717F220DB00D95E05 /* ES_WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_WelcomeViewController.h; sourceTree = "<group>"; };
+		9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_WelcomeViewController.m; sourceTree = "<group>"; };
+		9307CC9817F24ACE00D95E05 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		9307CC9917F24ACE00D95E05 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		9307CC9B17F24ACF00D95E05 /* SampleSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleSet.h; sourceTree = "<group>"; };
+		9307CC9C17F24ACF00D95E05 /* SampleSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleSet.m; sourceTree = "<group>"; };
+		9307CC9E17F24ACF00D95E05 /* AccelerometerSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerSample.h; sourceTree = "<group>"; };
+		9307CC9F17F24ACF00D95E05 /* AccelerometerSample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerSample.m; sourceTree = "<group>"; };
+		9307CCA117F24ACF00D95E05 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		9307CCA217F24ACF00D95E05 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		9307CCA417F24ACF00D95E05 /* AccelerometerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerSettings.h; sourceTree = "<group>"; };
+		9307CCA517F24ACF00D95E05 /* AccelerometerSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerSettings.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */,
 				9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */,
 				9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */,
 				9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */,
@@ -83,6 +112,16 @@
 			isa = PBXGroup;
 			children = (
 				9307CBBA17F1A78A00D95E05 /* ExtraSensory */,
+				9307CCA417F24ACF00D95E05 /* AccelerometerSettings.h */,
+				9307CCA517F24ACF00D95E05 /* AccelerometerSettings.m */,
+				9307CCA117F24ACF00D95E05 /* Settings.h */,
+				9307CCA217F24ACF00D95E05 /* Settings.m */,
+				9307CC9E17F24ACF00D95E05 /* AccelerometerSample.h */,
+				9307CC9F17F24ACF00D95E05 /* AccelerometerSample.m */,
+				9307CC9B17F24ACF00D95E05 /* SampleSet.h */,
+				9307CC9C17F24ACF00D95E05 /* SampleSet.m */,
+				9307CC9817F24ACE00D95E05 /* User.h */,
+				9307CC9917F24ACE00D95E05 /* User.m */,
 				9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */,
 				9307CBB317F1A78A00D95E05 /* Frameworks */,
 				9307CBB217F1A78A00D95E05 /* Products */,
@@ -101,6 +140,7 @@
 		9307CBB317F1A78A00D95E05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */,
 				9307CBB417F1A78A00D95E05 /* Foundation.framework */,
 				9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */,
 				9307CBB817F1A78A00D95E05 /* UIKit.framework */,
@@ -115,8 +155,11 @@
 				9307CBC317F1A78A00D95E05 /* ES_AppDelegate.h */,
 				9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
-				9307CBC917F1A78A00D95E05 /* ES_ViewController.h */,
-				9307CBCA17F1A78A00D95E05 /* ES_ViewController.m */,
+				9307CC6A17F220FE00D95E05 /* ViewControllers */,
+				9307CC5217F212E600D95E05 /* ES_Sensors.h */,
+				9307CC5317F212E600D95E05 /* ES_Sensors.m */,
+				9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */,
+				9307CC3F17F210E500D95E05 /* DataModels */,
 				9307CBCC17F1A78A00D95E05 /* Images.xcassets */,
 				9307CBBB17F1A78A00D95E05 /* Supporting Files */,
 			);
@@ -150,6 +193,26 @@
 				9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9307CC3F17F210E500D95E05 /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = DataModels;
+			sourceTree = "<group>";
+		};
+		9307CC6A17F220FE00D95E05 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				9307CC6717F220DB00D95E05 /* ES_WelcomeViewController.h */,
+				9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */,
+				9307CC6417F219AF00D95E05 /* ES_SettingsViewController.h */,
+				9307CC6517F219AF00D95E05 /* ES_SettingsViewController.m */,
+				9307CBC917F1A78A00D95E05 /* ES_TestViewController.h */,
+				9307CBCA17F1A78A00D95E05 /* ES_TestViewController.m */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,8 +313,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9307CC9A17F24ACE00D95E05 /* User.m in Sources */,
+				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
+				9307CCA617F24ACF00D95E05 /* AccelerometerSettings.m in Sources */,
+				9307CC6917F220DB00D95E05 /* ES_WelcomeViewController.m in Sources */,
+				9307CCA317F24ACF00D95E05 /* Settings.m in Sources */,
+				9307CC5417F212E600D95E05 /* ES_Sensors.m in Sources */,
+				9307CC6617F219AF00D95E05 /* ES_SettingsViewController.m in Sources */,
+				9307CCA017F24ACF00D95E05 /* AccelerometerSample.m in Sources */,
+				9307CC9D17F24ACF00D95E05 /* SampleSet.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
-				9307CBCB17F1A78A00D95E05 /* ES_ViewController.m in Sources */,
+				9307CBCB17F1A78A00D95E05 /* ES_TestViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -471,6 +543,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9307CC3417F2075C00D95E05 /* ES_UserDataModel.xcdatamodel */,
+			);
+			currentVersion = 9307CC3417F2075C00D95E05 /* ES_UserDataModel.xcdatamodel */;
+			path = ES_UserDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9307CBA917F1A78A00D95E05 /* Project object */;
 }
