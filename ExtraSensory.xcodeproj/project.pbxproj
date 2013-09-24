@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB417F1A78A00D95E05 /* Foundation.framework */; };
+		9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */; };
+		9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB817F1A78A00D95E05 /* UIKit.framework */; };
+		9307CBBF17F1A78A00D95E05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBBD17F1A78A00D95E05 /* InfoPlist.strings */; };
+		9307CBC117F1A78A00D95E05 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBC017F1A78A00D95E05 /* main.m */; };
+		9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */; };
+		9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBC617F1A78A00D95E05 /* Main.storyboard */; };
+		9307CBCB17F1A78A00D95E05 /* ES_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBCA17F1A78A00D95E05 /* ES_ViewController.m */; };
+		9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBCC17F1A78A00D95E05 /* Images.xcassets */; };
+		9307CBD417F1A78A00D95E05 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBD317F1A78A00D95E05 /* XCTest.framework */; };
+		9307CBD517F1A78A00D95E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB417F1A78A00D95E05 /* Foundation.framework */; };
+		9307CBD617F1A78A00D95E05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB817F1A78A00D95E05 /* UIKit.framework */; };
+		9307CBDE17F1A78A00D95E05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */; };
+		9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9307CBD717F1A78A00D95E05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9307CBA917F1A78A00D95E05 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9307CBB017F1A78A00D95E05;
+			remoteInfo = ExtraSensory;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		9307CBB117F1A78A00D95E05 /* ExtraSensory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExtraSensory.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9307CBB417F1A78A00D95E05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		9307CBB817F1A78A00D95E05 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		9307CBBC17F1A78A00D95E05 /* ExtraSensory-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExtraSensory-Info.plist"; sourceTree = "<group>"; };
+		9307CBBE17F1A78A00D95E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9307CBC017F1A78A00D95E05 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9307CBC217F1A78A00D95E05 /* ExtraSensory-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ExtraSensory-Prefix.pch"; sourceTree = "<group>"; };
+		9307CBC317F1A78A00D95E05 /* ES_AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ES_AppDelegate.h; sourceTree = "<group>"; };
+		9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ES_AppDelegate.m; sourceTree = "<group>"; };
+		9307CBC717F1A78A00D95E05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9307CBC917F1A78A00D95E05 /* ES_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ES_ViewController.h; sourceTree = "<group>"; };
+		9307CBCA17F1A78A00D95E05 /* ES_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ES_ViewController.m; sourceTree = "<group>"; };
+		9307CBCC17F1A78A00D95E05 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9307CBD217F1A78A00D95E05 /* ExtraSensoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExtraSensoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9307CBD317F1A78A00D95E05 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		9307CBDB17F1A78A00D95E05 /* ExtraSensoryTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExtraSensoryTests-Info.plist"; sourceTree = "<group>"; };
+		9307CBDD17F1A78A00D95E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtraSensoryTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9307CBAE17F1A78A00D95E05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */,
+				9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */,
+				9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9307CBCF17F1A78A00D95E05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9307CBD417F1A78A00D95E05 /* XCTest.framework in Frameworks */,
+				9307CBD617F1A78A00D95E05 /* UIKit.framework in Frameworks */,
+				9307CBD517F1A78A00D95E05 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9307CBA817F1A78A00D95E05 = {
+			isa = PBXGroup;
+			children = (
+				9307CBBA17F1A78A00D95E05 /* ExtraSensory */,
+				9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */,
+				9307CBB317F1A78A00D95E05 /* Frameworks */,
+				9307CBB217F1A78A00D95E05 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9307CBB217F1A78A00D95E05 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9307CBB117F1A78A00D95E05 /* ExtraSensory.app */,
+				9307CBD217F1A78A00D95E05 /* ExtraSensoryTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9307CBB317F1A78A00D95E05 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9307CBB417F1A78A00D95E05 /* Foundation.framework */,
+				9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */,
+				9307CBB817F1A78A00D95E05 /* UIKit.framework */,
+				9307CBD317F1A78A00D95E05 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9307CBBA17F1A78A00D95E05 /* ExtraSensory */ = {
+			isa = PBXGroup;
+			children = (
+				9307CBC317F1A78A00D95E05 /* ES_AppDelegate.h */,
+				9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */,
+				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
+				9307CBC917F1A78A00D95E05 /* ES_ViewController.h */,
+				9307CBCA17F1A78A00D95E05 /* ES_ViewController.m */,
+				9307CBCC17F1A78A00D95E05 /* Images.xcassets */,
+				9307CBBB17F1A78A00D95E05 /* Supporting Files */,
+			);
+			path = ExtraSensory;
+			sourceTree = "<group>";
+		};
+		9307CBBB17F1A78A00D95E05 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9307CBBC17F1A78A00D95E05 /* ExtraSensory-Info.plist */,
+				9307CBBD17F1A78A00D95E05 /* InfoPlist.strings */,
+				9307CBC017F1A78A00D95E05 /* main.m */,
+				9307CBC217F1A78A00D95E05 /* ExtraSensory-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */,
+				9307CBDA17F1A78A00D95E05 /* Supporting Files */,
+			);
+			path = ExtraSensoryTests;
+			sourceTree = "<group>";
+		};
+		9307CBDA17F1A78A00D95E05 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9307CBDB17F1A78A00D95E05 /* ExtraSensoryTests-Info.plist */,
+				9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9307CBB017F1A78A00D95E05 /* ExtraSensory */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9307CBE317F1A78A00D95E05 /* Build configuration list for PBXNativeTarget "ExtraSensory" */;
+			buildPhases = (
+				9307CBAD17F1A78A00D95E05 /* Sources */,
+				9307CBAE17F1A78A00D95E05 /* Frameworks */,
+				9307CBAF17F1A78A00D95E05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ExtraSensory;
+			productName = ExtraSensory;
+			productReference = 9307CBB117F1A78A00D95E05 /* ExtraSensory.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9307CBD117F1A78A00D95E05 /* ExtraSensoryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9307CBE617F1A78A00D95E05 /* Build configuration list for PBXNativeTarget "ExtraSensoryTests" */;
+			buildPhases = (
+				9307CBCE17F1A78A00D95E05 /* Sources */,
+				9307CBCF17F1A78A00D95E05 /* Frameworks */,
+				9307CBD017F1A78A00D95E05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9307CBD817F1A78A00D95E05 /* PBXTargetDependency */,
+			);
+			name = ExtraSensoryTests;
+			productName = ExtraSensoryTests;
+			productReference = 9307CBD217F1A78A00D95E05 /* ExtraSensoryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9307CBA917F1A78A00D95E05 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = ES_;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Bryan Grounds";
+				TargetAttributes = {
+					9307CBD117F1A78A00D95E05 = {
+						TestTargetID = 9307CBB017F1A78A00D95E05;
+					};
+				};
+			};
+			buildConfigurationList = 9307CBAC17F1A78A00D95E05 /* Build configuration list for PBXProject "ExtraSensory" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9307CBA817F1A78A00D95E05;
+			productRefGroup = 9307CBB217F1A78A00D95E05 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9307CBB017F1A78A00D95E05 /* ExtraSensory */,
+				9307CBD117F1A78A00D95E05 /* ExtraSensoryTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9307CBAF17F1A78A00D95E05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */,
+				9307CBBF17F1A78A00D95E05 /* InfoPlist.strings in Resources */,
+				9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9307CBD017F1A78A00D95E05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9307CBDE17F1A78A00D95E05 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9307CBAD17F1A78A00D95E05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
+				9307CBCB17F1A78A00D95E05 /* ES_ViewController.m in Sources */,
+				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9307CBCE17F1A78A00D95E05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9307CBD817F1A78A00D95E05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9307CBB017F1A78A00D95E05 /* ExtraSensory */;
+			targetProxy = 9307CBD717F1A78A00D95E05 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		9307CBBD17F1A78A00D95E05 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9307CBBE17F1A78A00D95E05 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		9307CBC617F1A78A00D95E05 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9307CBC717F1A78A00D95E05 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9307CBDD17F1A78A00D95E05 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9307CBE117F1A78A00D95E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		9307CBE217F1A78A00D95E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9307CBE417F1A78A00D95E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
+				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		9307CBE517F1A78A00D95E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
+				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		9307CBE717F1A78A00D95E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ExtraSensory.app/ExtraSensory";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "ExtraSensoryTests/ExtraSensoryTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		9307CBE817F1A78A00D95E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ExtraSensory.app/ExtraSensory";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
+				INFOPLIST_FILE = "ExtraSensoryTests/ExtraSensoryTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9307CBAC17F1A78A00D95E05 /* Build configuration list for PBXProject "ExtraSensory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9307CBE117F1A78A00D95E05 /* Debug */,
+				9307CBE217F1A78A00D95E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9307CBE317F1A78A00D95E05 /* Build configuration list for PBXNativeTarget "ExtraSensory" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9307CBE417F1A78A00D95E05 /* Debug */,
+				9307CBE517F1A78A00D95E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		9307CBE617F1A78A00D95E05 /* Build configuration list for PBXNativeTarget "ExtraSensoryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9307CBE717F1A78A00D95E05 /* Debug */,
+				9307CBE817F1A78A00D95E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9307CBA917F1A78A00D95E05 /* Project object */;
+}
