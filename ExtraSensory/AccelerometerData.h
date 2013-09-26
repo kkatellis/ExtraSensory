@@ -1,22 +1,21 @@
 //
-//  AccelerometerSample.h
+//  AccelerometerData.h
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 9/24/13.
+//  Created by Bryan Grounds on 9/26/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class SampleSet;
 
-@interface AccelerometerSample : NSManagedObject
+@interface AccelerometerData : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * time;
 @property (nonatomic, retain) NSNumber * x;
 @property (nonatomic, retain) NSNumber * y;
 @property (nonatomic, retain) NSNumber * z;
-@property (nonatomic, retain) NSDecimalNumber * time;
-@property (nonatomic, retain) SampleSet *sampleSet;
+@property (nonatomic, retain) NSManagedObject *samples;
 
 @end

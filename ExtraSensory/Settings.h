@@ -2,18 +2,17 @@
 //  Settings.h
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 9/24/13.
+//  Created by Bryan Grounds on 9/26/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class AccelerometerSettings, User;
 
 @interface Settings : NSManagedObject
 
-@property (nonatomic, retain) User *user;
-@property (nonatomic, retain) AccelerometerSettings *accelerometerSettings;
+@property (nonatomic, retain) NSNumber * accelerometerFreq;
+@property (nonatomic, retain) NSNumber * accelerometerEnabled;
 
 @end

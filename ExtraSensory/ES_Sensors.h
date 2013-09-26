@@ -12,6 +12,12 @@
 // Public interface
 @interface ES_Sensors : NSObject
 
+@property (nonatomic) NSNumber *frequency;
+
+-(void)startRecordingAccelerometer;
+-(void)stopRecordingAccelerometer;
+
+//-(NSNumber *)frequency;
 
 
 @end

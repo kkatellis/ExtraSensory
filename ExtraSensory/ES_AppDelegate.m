@@ -7,57 +7,73 @@
 //
 
 #import "ES_AppDelegate.h"
+#import "UserInfo.h"
 
 @implementation ES_AppDelegate
 
-@synthesize user = _user;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
+@synthesize uuid = _uuid;
 
-- (User *) user
+/*- (NSUUID *)uuid
 {
-    if (!_user) _user = [[User alloc] init];
-    return _user;
+    if (!_uuid)
+    {
+        _uuid = [NSUUID UUID];
+
+        NSManagedObjectContext *context = self.managedObjectContext;
+        
+        UserInfo *userInfo = [NSEntityDescription insertNewObjectForEntityForName:@"UserInfo" inManagedObjectContext:context];
+        
+        NSError *error = [[NSError alloc] init];
+        
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"UserInfo" inManagedObjectContext:context];
+        
+        [request setEntity:entity];
+        
+        NSArray *arr = [context executeFetchRequest:request error:&error];
+        
+        NSNumber *length = [NSNumber numberWithUnsignedInteger:[arr count]];
+        
+        if (length.integerValue == 0)
+        {
+            NSLog(@"There's no UUID in the database. Let's generate one!");
+            userInfo.uuid = [_uuid UUIDString];
+            
+            NSError *error = [[NSError alloc] init];
+            
+            if (![context save:&error])
+            {
+                NSLog(@"Error saving UUID!");
+            }
+            return _uuid;
+            
+        }
+        else if (length.integerValue == 1)
+        {
+            NSLog(@"There's one UUID in the database. Good!");
+            return [arr objectAtIndex: 0];
+        }
+        else
+        {
+            NSLog(@"There's more than one UUID in the database...");
+        }
+    }
+    return _uuid;
+}*/
+
+- (NSUUID *)uuid
+{
+     
+    if (!_uuid)
+        _uuid = [NSUUID UUID];
+    return _uuid;
+     
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // Override point for customization after application launch.
-    
-    
-    
-    
-    
-    return YES;
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
 
 
 #pragma mark -
@@ -69,15 +85,15 @@
  */
 - (NSManagedObjectContext *)managedObjectContext
 {
-	
-    if (!_managedObjectContext)
+    if (!_managedObjectContext) // if it wasn't already initialized...
     {
         // alloc & init
         _managedObjectContext = [NSManagedObjectContext new];
-        
-        // bind to persistent store
-        _managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
     }
+    // bind to persistent store
+    if (!_managedObjectContext.persistentStoreCoordinator)
+        _managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
+    
     return _managedObjectContext;
 }
 

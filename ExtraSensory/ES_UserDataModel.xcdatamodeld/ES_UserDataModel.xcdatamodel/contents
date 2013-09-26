@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F37" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="AccelerometerSample" representedClassName="AccelerometerSample" syncable="YES">
-        <attribute name="time" transient="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="x" transient="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="y" transient="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="z" transient="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="sampleSet" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SampleSet" inverseName="accelerometerSamples" inverseEntity="SampleSet" syncable="YES"/>
+    <entity name="AccelerometerData" representedClassName="AccelerometerData" syncable="YES">
+        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="samples" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Samples" inverseName="accelerometerData" inverseEntity="Samples" syncable="YES"/>
     </entity>
-    <entity name="AccelerometerSettings" representedClassName="AccelerometerSettings" syncable="YES">
-        <attribute name="active" transient="YES" attributeType="Boolean" defaultValueString="NO" indexed="YES" syncable="YES"/>
-        <attribute name="available" transient="YES" attributeType="Boolean" defaultValueString="NO" indexed="YES" syncable="YES"/>
-        <attribute name="enabled" transient="YES" attributeType="Boolean" defaultValueString="NO" indexed="YES" syncable="YES"/>
-        <attribute name="sampleFrequency" transient="YES" attributeType="Decimal" defaultValueString="1" indexed="YES" syncable="YES"/>
-        <relationship name="settings" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Settings" inverseName="accelerometerSettings" inverseEntity="Settings" syncable="YES"/>
-    </entity>
-    <entity name="SampleSet" representedClassName="SampleSet" syncable="YES">
-        <relationship name="accelerometerSamples" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AccelerometerSample" inverseName="sampleSet" inverseEntity="AccelerometerSample" syncable="YES"/>
-        <relationship name="user" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="sampleSet" inverseEntity="User" syncable="YES"/>
+    <entity name="Samples" representedClassName="Samples" syncable="YES">
+        <attribute name="batchID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstTimeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sampleFrequency" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="accelerometerData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AccelerometerData" inverseName="samples" inverseEntity="AccelerometerData" syncable="YES"/>
     </entity>
     <entity name="Settings" representedClassName="Settings" syncable="YES">
-        <relationship name="accelerometerSettings" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AccelerometerSettings" inverseName="settings" inverseEntity="AccelerometerSettings" syncable="YES"/>
-        <relationship name="user" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="settings" inverseEntity="User" syncable="YES"/>
+        <attribute name="accelerometerEnabled" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="accelerometerFreq" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="User" representedClassName="User" syncable="YES">
-        <attribute name="uid" transient="YES" attributeType="String" syncable="YES"/>
-        <relationship name="sampleSet" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SampleSet" inverseName="user" inverseEntity="SampleSet" syncable="YES"/>
-        <relationship name="settings" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Settings" inverseName="user" inverseEntity="Settings" syncable="YES"/>
+    <entity name="UserInfo" representedClassName="UserInfo" syncable="YES">
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="User" positionX="-72" positionY="17" width="128" height="88"/>
-        <element name="SampleSet" positionX="117" positionY="9" width="128" height="73"/>
-        <element name="AccelerometerSample" positionX="304" positionY="18" width="128" height="118"/>
-        <element name="Settings" positionX="-36" positionY="243" width="180" height="73"/>
-        <element name="AccelerometerSettings" positionX="205" positionY="180" width="128" height="118"/>
+        <element name="AccelerometerData" positionX="18" positionY="54" width="128" height="118"/>
+        <element name="Samples" positionX="-173" positionY="54" width="128" height="118"/>
+        <element name="Settings" positionX="-171" positionY="198" width="128" height="73"/>
+        <element name="UserInfo" positionX="7" positionY="236" width="128" height="58"/>
     </elements>
 </model>

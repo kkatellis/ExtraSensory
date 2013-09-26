@@ -12,7 +12,11 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *enabledLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sampleFrequencyLabel;
-@property Settings *settings;
+@property (weak, nonatomic) IBOutlet UISwitch *Switch;
+
+
+- (void)saveSettingName: sN State: sS;
+
 @end
 
 @implementation ES_SettingsViewController
@@ -20,48 +24,63 @@
 @synthesize enabledLabel = _enabledLabel;
 @synthesize sampleFrequencyLabel = _sampleFrequencyLabel;
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
+
 - (IBAction)enabledSwitch:(UISwitch *)sender {
     if (sender.on)
     {
         self.enabledLabel.text = @"Enabled";
-        
+        [self saveSettingName: @"AccelerometerEnbaled" State:@"YES"];
+
+
     }
     else
     {
         self.enabledLabel.text = @"Disabled";
+        [self saveSettingName: @"AccelerometerEnabled" State:@"NO"];
     }
 }
 
-- (void)save
+- (void)saveSettingName: (NSString *)sN
+                  State: (NSString *)sS
 {
-    ES_AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+/*    ES_AppDelegate *delegate =  [[UIApplication sharedApplication] delegate];
     
     NSManagedObjectContext *moc = delegate.managedObjectContext;
     
-    self.settings = [NSEntityDescription insertNewObjectForEntityForName:@"Settings" inManagedObjectContext:moc];
+    Settings * settings = [NSEntityDescription insertNewObjectForEntityForName:@"AllSettings" inManagedObjectContext: moc];
+    settings.
+    settings.
+
+    
+    
+    // Error Checking
+    
+    NSError *error;
+    
+    if(![moc save:&error])
+        NSLog(@"__Something went wrong in the database!");
     
     
     
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"AllSettings" inManagedObjectContext:moc];
+    
+    [request setEntity:entity];
+    
+    // SELECT all from PHONE
+    NSArray *arr = [moc executeFetchRequest:request error:&error];
+    
+    for (Settings *s in arr)
+    {
+        NSLog(@"SettingName %@", s.);
+        NSLog(@"SettingState %@", s.);
+    }*/
 }
 
-
-/*- (void)save
-{
-
-    ES_AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    
-    NSManagedObjectContext *managedObjectContext = delegate.managedObjectContext;
-    
-    NSManagedObject *newSettings;
-    
-    newSettings = [NSEntityDescription insertNewObjectForEntityForName:@"Settings" inManagedObjectContext:managedObjectContext];
-
-    [newSettings setValue:self.enabledLabel.text forKey:@""];
-    
-    NSError* error;
-    [managedObjectContext save:&error];
-    
-    
-}*/
 
 @end

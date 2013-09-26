@@ -26,11 +26,10 @@
 		9307CC5417F212E600D95E05 /* ES_Sensors.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC5317F212E600D95E05 /* ES_Sensors.m */; };
 		9307CC6617F219AF00D95E05 /* ES_SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC6517F219AF00D95E05 /* ES_SettingsViewController.m */; };
 		9307CC6917F220DB00D95E05 /* ES_WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */; };
-		9307CC9A17F24ACE00D95E05 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC9917F24ACE00D95E05 /* User.m */; };
-		9307CC9D17F24ACF00D95E05 /* SampleSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC9C17F24ACF00D95E05 /* SampleSet.m */; };
-		9307CCA017F24ACF00D95E05 /* AccelerometerSample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC9F17F24ACF00D95E05 /* AccelerometerSample.m */; };
-		9307CCA317F24ACF00D95E05 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CCA217F24ACF00D95E05 /* Settings.m */; };
-		9307CCA617F24ACF00D95E05 /* AccelerometerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CCA517F24ACF00D95E05 /* AccelerometerSettings.m */; };
+		933F7CBC17F456AA00B05C96 /* AccelerometerData.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CBB17F456AA00B05C96 /* AccelerometerData.m */; };
+		933F7CC217F456AB00B05C96 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CC117F456AB00B05C96 /* Settings.m */; };
+		933F7CC517F460E800B05C96 /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CC417F460E800B05C96 /* UserInfo.m */; };
+		933F7CC817F46FCC00B05C96 /* Samples.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CC717F46FCC00B05C96 /* Samples.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,16 +70,14 @@
 		9307CC6517F219AF00D95E05 /* ES_SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsViewController.m; sourceTree = "<group>"; };
 		9307CC6717F220DB00D95E05 /* ES_WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_WelcomeViewController.h; sourceTree = "<group>"; };
 		9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_WelcomeViewController.m; sourceTree = "<group>"; };
-		9307CC9817F24ACE00D95E05 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		9307CC9917F24ACE00D95E05 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		9307CC9B17F24ACF00D95E05 /* SampleSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleSet.h; sourceTree = "<group>"; };
-		9307CC9C17F24ACF00D95E05 /* SampleSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleSet.m; sourceTree = "<group>"; };
-		9307CC9E17F24ACF00D95E05 /* AccelerometerSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerSample.h; sourceTree = "<group>"; };
-		9307CC9F17F24ACF00D95E05 /* AccelerometerSample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerSample.m; sourceTree = "<group>"; };
-		9307CCA117F24ACF00D95E05 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
-		9307CCA217F24ACF00D95E05 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
-		9307CCA417F24ACF00D95E05 /* AccelerometerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerSettings.h; sourceTree = "<group>"; };
-		9307CCA517F24ACF00D95E05 /* AccelerometerSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerSettings.m; sourceTree = "<group>"; };
+		933F7CBA17F456AA00B05C96 /* AccelerometerData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerData.h; sourceTree = "<group>"; };
+		933F7CBB17F456AA00B05C96 /* AccelerometerData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerData.m; sourceTree = "<group>"; };
+		933F7CC017F456AB00B05C96 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		933F7CC117F456AB00B05C96 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		933F7CC317F460E800B05C96 /* UserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfo.h; sourceTree = "<group>"; };
+		933F7CC417F460E800B05C96 /* UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
+		933F7CC617F46FCC00B05C96 /* Samples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Samples.h; path = ../Samples.h; sourceTree = "<group>"; };
+		933F7CC717F46FCC00B05C96 /* Samples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Samples.m; path = ../Samples.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,16 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				9307CBBA17F1A78A00D95E05 /* ExtraSensory */,
-				9307CCA417F24ACF00D95E05 /* AccelerometerSettings.h */,
-				9307CCA517F24ACF00D95E05 /* AccelerometerSettings.m */,
-				9307CCA117F24ACF00D95E05 /* Settings.h */,
-				9307CCA217F24ACF00D95E05 /* Settings.m */,
-				9307CC9E17F24ACF00D95E05 /* AccelerometerSample.h */,
-				9307CC9F17F24ACF00D95E05 /* AccelerometerSample.m */,
-				9307CC9B17F24ACF00D95E05 /* SampleSet.h */,
-				9307CC9C17F24ACF00D95E05 /* SampleSet.m */,
-				9307CC9817F24ACE00D95E05 /* User.h */,
-				9307CC9917F24ACE00D95E05 /* User.m */,
 				9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */,
 				9307CBB317F1A78A00D95E05 /* Frameworks */,
 				9307CBB217F1A78A00D95E05 /* Products */,
@@ -198,6 +185,14 @@
 		9307CC3F17F210E500D95E05 /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
+				933F7CC617F46FCC00B05C96 /* Samples.h */,
+				933F7CC717F46FCC00B05C96 /* Samples.m */,
+				933F7CC317F460E800B05C96 /* UserInfo.h */,
+				933F7CC417F460E800B05C96 /* UserInfo.m */,
+				933F7CC017F456AB00B05C96 /* Settings.h */,
+				933F7CC117F456AB00B05C96 /* Settings.m */,
+				933F7CBA17F456AA00B05C96 /* AccelerometerData.h */,
+				933F7CBB17F456AA00B05C96 /* AccelerometerData.m */,
 			);
 			name = DataModels;
 			sourceTree = "<group>";
@@ -313,17 +308,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9307CC9A17F24ACE00D95E05 /* User.m in Sources */,
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
-				9307CCA617F24ACF00D95E05 /* AccelerometerSettings.m in Sources */,
 				9307CC6917F220DB00D95E05 /* ES_WelcomeViewController.m in Sources */,
-				9307CCA317F24ACF00D95E05 /* Settings.m in Sources */,
+				933F7CC217F456AB00B05C96 /* Settings.m in Sources */,
 				9307CC5417F212E600D95E05 /* ES_Sensors.m in Sources */,
+				933F7CBC17F456AA00B05C96 /* AccelerometerData.m in Sources */,
 				9307CC6617F219AF00D95E05 /* ES_SettingsViewController.m in Sources */,
-				9307CCA017F24ACF00D95E05 /* AccelerometerSample.m in Sources */,
-				9307CC9D17F24ACF00D95E05 /* SampleSet.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
+				933F7CC517F460E800B05C96 /* UserInfo.m in Sources */,
 				9307CBCB17F1A78A00D95E05 /* ES_TestViewController.m in Sources */,
+				933F7CC817F46FCC00B05C96 /* Samples.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,6 +527,7 @@
 				9307CBE517F1A78A00D95E05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9307CBE617F1A78A00D95E05 /* Build configuration list for PBXNativeTarget "ExtraSensoryTests" */ = {
 			isa = XCConfigurationList;
@@ -541,6 +536,7 @@
 				9307CBE817F1A78A00D95E05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

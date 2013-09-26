@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "User.h"
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -19,6 +18,6 @@
 
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (strong, nonatomic) User *user;
+@property (strong, nonatomic) NSUUID *uuid;
 
 @end
