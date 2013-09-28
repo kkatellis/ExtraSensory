@@ -16,6 +16,9 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize uuid = _uuid;
 
+
+
+
 /*- (NSUUID *)uuid
 {
     if (!_uuid)
