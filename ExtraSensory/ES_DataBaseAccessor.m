@@ -8,6 +8,7 @@
 
 #import "ES_DataBaseAccessor.h"
 #import "ES_AppDelegate.h"
+#import "ES_Sample.h"
 
 @implementation ES_DataBaseAccessor
 
@@ -33,9 +34,9 @@
     return [[self context] executeFetchRequest:request error:&error];
 }
 
-+ (NSManagedObject *) write:(NSString *)entityDescription
++ (ES_Sample *) write
 {
-    return [NSEntityDescription insertNewObjectForEntityForName:entityDescription inManagedObjectContext: [self context]];
+    return [NSEntityDescription insertNewObjectForEntityForName: @"ES_Sample" inManagedObjectContext: [self context]];
 }
 
 + (void) save

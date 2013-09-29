@@ -11,12 +11,10 @@
 
 
 #import "ES_SensorManager.h"
-#import "ES_AccelerometerAccessor.h"
 
 #import "ES_DataBaseAccessor.h"
 
-#import "Samples.h"
-#import "AccelerometerData.h"
+#import "ES_Sample.h"
 
 @interface ES_WelcomeViewController()
 
@@ -43,7 +41,7 @@
 
 - (IBAction)record:(UIButton *)sender {
     
-    [self.sensorManager.accelerometer record];
+    [self.sensorManager record];
     
 }
 
@@ -52,14 +50,15 @@
     
     NSArray *arr;
     
-    arr = [ES_DataBaseAccessor read: @"Samples"];
+    arr = [ES_DataBaseAccessor read: @"ES_Sample"];
     
     int n = 0;
     
-    for (Samples *s in arr)
+    for (ES_Sample *s in arr)
     {
+        NSLog( @" %.4f, %.4f, %.4f, .4f, %.4f, %.4f, %.4f, %.4f", s.acc_x, s.acc_y, s.acc_z, s.time, s.gyro_x, s.gyro_y, s.gyro_z );
+        NSLog( @" %.4f, %.4f, %.4f, .4f, %.4f, %.4f, %.4f, %.4f", s.acc_x, s.acc_y, s.acc_z, s.time, s.gyro_x, s.gyro_y, s.gyro_z );
         n++;
-        NSLog( @" %@, %@, %@, %@", s.accelerometerData.x, s.accelerometerData.y, s.accelerometerData.z, s.accelerometerData.time );
     }
     
     self.textView.text = [[NSNumber numberWithInt:n] description];

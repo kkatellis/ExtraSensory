@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreMotion/CoreMotion.h>
+#import <CoreLocation/CoreLocation.h>
 
 
 
@@ -16,13 +17,13 @@
 //public interface
 @interface ES_SensorManager : NSObject
 
+@property NSArray *acc_xyzt;
+@property NSArray *gyro_xyzt;
+
 @property (strong, nonatomic) CMMotionManager *motionManager;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-
-@property (strong, nonatomic) ES_AccelerometerAccessor *accelerometer;
-
-- (ES_AccelerometerAccessor *) accelerometer;
+- (void) record;
 
 
 @end

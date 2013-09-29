@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class ES_Sample;
+
 @interface ES_DataBaseAccessor : NSObject
 
 + (NSArray *) read: (NSString *)entityDescription;
-+ (NSManagedObject *) write: (NSString *)data;
++ (ES_Sample *) write;
 + (void) save;
 
 @end

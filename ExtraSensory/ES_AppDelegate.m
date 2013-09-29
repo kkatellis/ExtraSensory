@@ -7,7 +7,6 @@
 //
 
 #import "ES_AppDelegate.h"
-#import "UserInfo.h"
 
 @implementation ES_AppDelegate
 

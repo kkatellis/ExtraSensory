@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F37" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="AccelerometerData" representedClassName="AccelerometerData" syncable="YES">
+    <entity name="ES_Sample" representedClassName="ES_Sample" syncable="YES">
+        <attribute name="acc_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="acc_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="acc_z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="gps_lat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="gps_long" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="gps_speed" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="gyro_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="gyro_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="gyro_z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="mic_avg_db" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="mic_peak_db" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="samples" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Samples" inverseName="accelerometerData" inverseEntity="Samples" syncable="YES"/>
-    </entity>
-    <entity name="Samples" representedClassName="Samples" syncable="YES">
-        <attribute name="batchID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="firstTimeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="sampleFrequency" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="accelerometerData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AccelerometerData" inverseName="samples" inverseEntity="AccelerometerData" syncable="YES"/>
-    </entity>
-    <entity name="Settings" representedClassName="Settings" syncable="YES">
-        <attribute name="accelerometerEnabled" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="accelerometerFreq" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-    </entity>
-    <entity name="UserInfo" representedClassName="UserInfo" syncable="YES">
-        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AccelerometerData" positionX="18" positionY="54" width="128" height="118"/>
-        <element name="Samples" positionX="-173" positionY="54" width="128" height="118"/>
-        <element name="Settings" positionX="-171" positionY="198" width="128" height="73"/>
-        <element name="UserInfo" positionX="7" positionY="236" width="128" height="58"/>
+        <element name="ES_Sample" positionX="-3339" positionY="-540" width="128" height="238"/>
     </elements>
 </model>
