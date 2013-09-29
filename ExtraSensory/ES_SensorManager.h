@@ -17,11 +17,11 @@
 //public interface
 @interface ES_SensorManager : NSObject
 
-@property NSArray *acc_xyzt;
-@property NSArray *gyro_xyzt;
-
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (nonatomic) double sampleFrequency; // Hertz
+@property (nonatomic) double sampleDuration;  // Seconds
 
 - (void) record;
 

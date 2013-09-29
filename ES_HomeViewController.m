@@ -7,17 +7,48 @@
 //
 
 #import "ES_HomeViewController.h"
+#import "ES_SensorManager.h"
+#import "ES_AppDelegate.h"
 
 @interface ES_HomeViewController ()
+
+@property (weak, nonatomic) IBOutlet UILabel *sampleFrequencyLabel;
+
+@property (weak, nonatomic) IBOutlet UISlider *frequencySlider;
 
 @end
 
 @implementation ES_HomeViewController
-- (IBAction)dataCollectionSwitch:(UISwitch *)sender {
+
+- (ES_SensorManager *)sensorManager
+{
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    return appDelegate.sensorManager;
 }
+
+
+- (IBAction)dataCollectionSwitch:(UISwitch *)sender
+{
+    if ( sender.isEnabled )
+    {
+        NSLog(@"This doesn't do anything yet...");
+    }
+}
+
+- (IBAction)sliderValueChanged:(UISlider *)sender
+{
+    self.sampleFrequencyLabel.text = [NSString stringWithFormat: @"%.0f", sender.value ];
+    self.sensorManager.sampleFrequency = self.frequencySlider.value;
+    NSLog( @"SliderValue = %.2f", self.frequencySlider.value);
+}
+
 
 - (void)viewDidLoad
 {
+    self.frequencySlider.minimumValue = 1.0;
+    self.frequencySlider.maximumValue = 100.0;
+    self.sampleFrequencyLabel.text = [NSString stringWithFormat: @"%.0f", self.sensorManager.sampleFrequency ];
+    
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 }

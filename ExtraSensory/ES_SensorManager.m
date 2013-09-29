@@ -7,7 +7,6 @@
 //
 
 #import "ES_SensorManager.h"
-#import "ES_AppDelegate.h"
 #import "ES_Sample.h"
 #import "ES_DataBaseAccessor.h"
 
@@ -20,6 +19,8 @@
 
 @property NSArray *batchData;
 
+@property (nonatomic) dispatch_queue_t sensorQueue;
+
 @end
 
 @implementation ES_SensorManager
@@ -28,15 +29,27 @@
 
 @synthesize locationManager = _locationManager;
 
-@synthesize acc_xyzt = _acc_xyzt;
-
-@synthesize gyro_xyzt = _gyro_xyzt;
-
 @synthesize timer = _timer;
 
 @synthesize counter = _counter;
 
+@synthesize sampleFrequency = _sampleFrequency;
+
+@synthesize sampleDuration = _sampleDuration;
+
+@synthesize sensorQueue = _sensorQueue;
+
 // Getter
+
+- (dispatch_queue_t)sensorQueue
+{
+    if (!_sensorQueue)
+    {
+        return dispatch_queue_create( "ES_SensorQueue ", NULL );
+    }
+    return _sensorQueue;
+    
+}
 
 - (CMMotionManager *)motionManager
 {
@@ -44,13 +57,39 @@
     return _motionManager;
 }
 
+- (double) sampleFrequency
+{
+    if (!_sampleFrequency)
+    {
+        _sampleFrequency = 1;
+    }
+    return _sampleFrequency;
+}
+
+- (int) samplesPerBatch
+{
+    return (int)(self.sampleDuration * self.sampleFrequency);
+}
+
+- (double) sampleDuration
+{
+    if (!_sampleDuration)
+    {
+        _sampleDuration = 5.0;
+    }
+    return _sampleDuration;
+}
+
+
 - (void) record
 {
     NSLog( @"record" );
     
-    self.motionManager.accelerometerUpdateInterval = .002;
-    self.motionManager.gyroUpdateInterval = .002;
-
+    double interval = (1.0 / self.sampleFrequency);
+    
+    self.motionManager.accelerometerUpdateInterval = interval;
+    self.motionManager.gyroUpdateInterval = interval;
+    
     
     [self.locationManager startUpdatingLocation];
     [self.motionManager startAccelerometerUpdates];
@@ -58,7 +97,7 @@
     
     self.counter = 0;
     
-    self.timer = [NSTimer scheduledTimerWithTimeInterval: .002
+    self.timer = [NSTimer scheduledTimerWithTimeInterval: interval
                                                   target: self
                                                 selector: @selector(readSensors)
                                                 userInfo: nil
@@ -67,52 +106,46 @@
 
 - (void) readSensors
 {
-    ES_Sample *s = [ES_DataBaseAccessor write];
-    NSLog( @"sp: %f",s.gps_speed = self.locationManager.location.speed);
-    NSLog( @"la: %f",s.gps_lat = self.locationManager.location.coordinate.latitude);
-    NSLog( @"lo: %f",s.gps_long = self.locationManager.location.coordinate.longitude);
-    NSLog( @"ax: %f",s.acc_x = self.motionManager.accelerometerData.acceleration.x);
-    NSLog( @"gx: %f",s.gyro_x = self.motionManager.gyroData.rotationRate.x);
-    NSLog( @"ay: %f",s.acc_y = self.motionManager.accelerometerData.acceleration.y);
-    NSLog( @"gy: %f",s.gyro_y = self.motionManager.gyroData.rotationRate.y);
-    NSLog( @"az: %f",s.acc_z = self.motionManager.accelerometerData.acceleration.z);
-    NSLog( @"gz: %f",s.gyro_z = self.motionManager.gyroData.rotationRate.z);
-    NSLog( @"at: %f",s.time = self.motionManager.accelerometerData.timestamp);
-    NSLog( @"gt: %f",s.time = self.motionManager.gyroData.timestamp);
-    self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
-
-    if ([self.counter integerValue] > 100)
-    {
-        self.counter = 0;
-        [self.timer invalidate];
-        [self.locationManager stopUpdatingLocation];
-        [self.motionManager stopAccelerometerUpdates];
-        [self.motionManager stopGyroUpdates];
-    }
+    NSLog( @"readSensors" );
     
-}
-
-- (void) setUpdateIntervals: (double)frequency
-{
-    NSLog( @"setUpdateIntervals: %f", frequency);
     
+    __block ES_Sample *s = [ES_DataBaseAccessor write];
+    
+    dispatch_async(self.sensorQueue, ^
+                   {
+                       NSLog( @"sp: %f",s.gps_speed = self.locationManager.location.speed);
+                       NSLog( @"la: %f",s.gps_lat = self.locationManager.location.coordinate.latitude);
+                       NSLog( @"lo: %f",s.gps_long = self.locationManager.location.coordinate.longitude);
+                       NSLog( @"ax: %f",s.acc_x = self.motionManager.accelerometerData.acceleration.x);
+                       NSLog( @"gx: %f",s.gyro_x = self.motionManager.gyroData.rotationRate.x);
+                       NSLog( @"ay: %f",s.acc_y = self.motionManager.accelerometerData.acceleration.y);
+                       NSLog( @"gy: %f",s.gyro_y = self.motionManager.gyroData.rotationRate.y);
+                       NSLog( @"az: %f",s.acc_z = self.motionManager.accelerometerData.acceleration.z);
+                       NSLog( @"gz: %f",s.gyro_z = self.motionManager.gyroData.rotationRate.z);
+                       NSLog( @"at: %f",s.time = self.motionManager.accelerometerData.timestamp);
+                       NSLog( @"gt: %f",s.time = self.motionManager.gyroData.timestamp);
+                       
+                       self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
+                       
+                       if ([self.counter integerValue] >= self.samplesPerBatch )
+                       {
+                           [self.timer invalidate];
+                           
+                           self.counter = 0;
+                           
+                           [self.locationManager stopUpdatingLocation];
+                           [self.motionManager stopAccelerometerUpdates];
+                           [self.motionManager stopGyroUpdates];
+                       }
+                   });
 }
-
 - (void) stopRecording
 {
     NSLog( @"stopRecording");
     
+    [self.locationManager stopUpdatingLocation];
     [self.motionManager stopAccelerometerUpdates];
     [self.motionManager stopGyroUpdates];
-    
-    for (NSArray *a in self.acc_xyzt)
-    {
-        NSLog( @"from acc: %@, %@, %@, %@", [a objectAtIndex: 0], [a objectAtIndex: 1], [a objectAtIndex: 2], [a objectAtIndex: 3] );
-    }
-    for (NSArray *a in self.acc_xyzt)
-    {
-        NSLog( @"from gyro: %@, %@, %@, %@", [a objectAtIndex: 0], [a objectAtIndex: 1], [a objectAtIndex: 2], [a objectAtIndex: 3] );
-    }
 }
 
 

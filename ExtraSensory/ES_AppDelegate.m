@@ -7,6 +7,7 @@
 //
 
 #import "ES_AppDelegate.h"
+#import "ES_SensorManager.h"
 
 @implementation ES_AppDelegate
 
@@ -14,6 +15,32 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize uuid = _uuid;
+
+@synthesize sensorManager = _sensorManager;
+
+@synthesize databaseQueue = _databaseQueue;
+
+// Getter
+
+- (dispatch_queue_t)databaseQueue
+{
+    if (!_databaseQueue)
+    {
+        return dispatch_queue_create( "ES_DataBaseQueue ", NULL );
+    }
+    return _databaseQueue;
+    
+}
+
+
+- (ES_SensorManager *)sensorManager
+{
+    if (!_sensorManager)
+    {
+        _sensorManager = [ES_SensorManager new];
+    }
+    return _sensorManager;
+}
 
 
 
