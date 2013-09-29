@@ -1,5 +1,5 @@
 //
-//  ES_WelcomeViewController.h
+//  ES_DevViewController.h
 //  ExtraSensory
 //
 //  Created by Bryan Grounds on 9/24/13.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ES_WelcomeViewController : UIViewController
+@interface ES_DevViewController : UIViewController
 
 
 

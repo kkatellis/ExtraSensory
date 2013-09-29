@@ -1,14 +1,13 @@
 //
-//  ES_WelcomeViewController.m
+//  ES_DevViewController.m
 //  ExtraSensory
 //
 //  Created by Bryan Grounds on 9/24/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
-#import "ES_WelcomeViewController.h"
+#import "ES_DevViewController.h"
 #import "ES_AppDelegate.h"
-
 
 #import "ES_SensorManager.h"
 
@@ -16,7 +15,7 @@
 
 #import "ES_Sample.h"
 
-@interface ES_WelcomeViewController()
+@interface ES_DevViewController()
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (strong, nonatomic) ES_SensorManager *sensorManager;
@@ -26,7 +25,7 @@
 
 @end
 
-@implementation ES_WelcomeViewController
+@implementation ES_DevViewController
 
 @synthesize sensorManager = _sensorManager;
 

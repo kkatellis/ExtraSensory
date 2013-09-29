@@ -22,11 +22,13 @@
 		9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */; };
 		9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */; };
 		9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */; };
-		9307CC6917F220DB00D95E05 /* ES_WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */; };
+		9307CC6917F220DB00D95E05 /* ES_DevViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC6817F220DB00D95E05 /* ES_DevViewController.m */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
 		93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */; };
 		93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */; };
 		93F678E817F81C98000638CB /* ES_Sample.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678E717F81C98000638CB /* ES_Sample.m */; };
+		93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678ED17F81F42000638CB /* ES_HomeViewController.m */; };
+		93F678F117F81F5F000638CB /* ES_CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678F017F81F5F000638CB /* ES_CalendarViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,8 +61,8 @@
 		9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtraSensoryTests.m; sourceTree = "<group>"; };
 		9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		9307CC3417F2075C00D95E05 /* ES_UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ES_UserDataModel.xcdatamodel; sourceTree = "<group>"; };
-		9307CC6717F220DB00D95E05 /* ES_WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_WelcomeViewController.h; sourceTree = "<group>"; };
-		9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_WelcomeViewController.m; sourceTree = "<group>"; };
+		9307CC6717F220DB00D95E05 /* ES_DevViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_DevViewController.h; sourceTree = "<group>"; };
+		9307CC6817F220DB00D95E05 /* ES_DevViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_DevViewController.m; sourceTree = "<group>"; };
 		933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SensorManager.h; sourceTree = "<group>"; };
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
 		93F659D517F6857B000638CB /* ES_DataBaseAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_DataBaseAccessor.h; sourceTree = "<group>"; };
@@ -69,6 +71,10 @@
 		93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_NetworkAccessor.m; sourceTree = "<group>"; };
 		93F678E617F81C98000638CB /* ES_Sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Sample.h; sourceTree = "<group>"; };
 		93F678E717F81C98000638CB /* ES_Sample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Sample.m; sourceTree = "<group>"; };
+		93F678EC17F81F42000638CB /* ES_HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_HomeViewController.h; path = ../ES_HomeViewController.h; sourceTree = "<group>"; };
+		93F678ED17F81F42000638CB /* ES_HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_HomeViewController.m; path = ../ES_HomeViewController.m; sourceTree = "<group>"; };
+		93F678EF17F81F5F000638CB /* ES_CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_CalendarViewController.h; path = ../ES_CalendarViewController.h; sourceTree = "<group>"; };
+		93F678F017F81F5F000638CB /* ES_CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_CalendarViewController.m; path = ../ES_CalendarViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +139,7 @@
 				9307CBC317F1A78A00D95E05 /* ES_AppDelegate.h */,
 				9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */,
 				93F659DF17F6B299000638CB /* NetworkManagement */,
+				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
 				933F7CCF17F4D7C700B05C96 /* SensorManagement */,
 				9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */,
@@ -175,8 +182,12 @@
 		9307CC6A17F220FE00D95E05 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				9307CC6717F220DB00D95E05 /* ES_WelcomeViewController.h */,
-				9307CC6817F220DB00D95E05 /* ES_WelcomeViewController.m */,
+				93F678EC17F81F42000638CB /* ES_HomeViewController.h */,
+				93F678ED17F81F42000638CB /* ES_HomeViewController.m */,
+				93F678EF17F81F5F000638CB /* ES_CalendarViewController.h */,
+				93F678F017F81F5F000638CB /* ES_CalendarViewController.m */,
+				9307CC6717F220DB00D95E05 /* ES_DevViewController.h */,
+				9307CC6817F220DB00D95E05 /* ES_DevViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -204,7 +215,6 @@
 		93F659DF17F6B299000638CB /* NetworkManagement */ = {
 			isa = PBXGroup;
 			children = (
-				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
 				93F659DC17F6B280000638CB /* ES_NetworkAccessor.h */,
 				93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */,
 			);
@@ -311,9 +321,11 @@
 			files = (
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
-				9307CC6917F220DB00D95E05 /* ES_WelcomeViewController.m in Sources */,
+				9307CC6917F220DB00D95E05 /* ES_DevViewController.m in Sources */,
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
+				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
+				93F678F117F81F5F000638CB /* ES_CalendarViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
 				93F678E817F81C98000638CB /* ES_Sample.m in Sources */,
