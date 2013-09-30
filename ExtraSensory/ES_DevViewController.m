@@ -36,7 +36,8 @@
 {
     NSLog( @"sendDataToServerButton");
     
-    [ES_NetworkAccessor upload];
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate.networkAccessor upload];
 }
 
 

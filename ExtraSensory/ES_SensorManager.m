@@ -102,6 +102,7 @@
     self.motionManager.accelerometerUpdateInterval = interval;
     self.motionManager.gyroUpdateInterval = interval;
     
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
     [self.locationManager startUpdatingLocation];
     [self.motionManager startAccelerometerUpdates];

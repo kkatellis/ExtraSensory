@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
-        <!--Home View Controller - Home-->
+        <!--Home View Controller - Settings-->
         <scene sceneID="XYB-Oc-mys">
             <objects>
                 <viewController id="Id0-k4-3dv" customClass="ES_HomeViewController" sceneMemberID="viewController">
@@ -23,13 +23,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SSS-UX-8qf">
-                                <rect key="frame" x="111" y="78" width="98" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Data Collection" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJc-MR-XsR">
                                 <rect key="frame" x="20" y="139" width="130" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -41,7 +34,7 @@
                                 <rect key="frame" x="239" y="141" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
-                                    <action selector="dataCollectionSwitch:" destination="Id0-k4-3dv" eventType="valueChanged" id="HcT-kE-vxE"/>
+                                    <action selector="dataCollectionSwitch:" destination="Id0-k4-3dv" eventType="valueChanged" id="IgL-8i-xlC"/>
                                 </connections>
                             </switch>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="voS-yU-0Bi">
@@ -73,15 +66,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Home" id="gYR-22-m1Z"/>
+                    <navigationItem key="navigationItem" title="Settings" id="iAG-Y2-Agy"/>
                     <connections>
-                        <outlet property="frequencySlider" destination="voS-yU-0Bi" id="a46-JM-cWG"/>
                         <outlet property="sampleFrequencyLabel" destination="VIO-d0-8kA" id="Gdf-Rg-xT9"/>
+                        <outlet property="sampleFrequencySlider" destination="voS-yU-0Bi" id="qUi-bF-wjK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="alz-gN-hpr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-481" y="-804"/>
+            <point key="canvasLocation" x="45" y="-804"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="lTd-gs-VXa">
@@ -94,16 +87,16 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="Id0-k4-3dv" kind="relationship" relationship="viewControllers" id="tPK-UM-5iF"/>
-                        <segue destination="wnX-k8-Spg" kind="relationship" relationship="viewControllers" id="R9a-Kv-kgY"/>
-                        <segue destination="P8K-Tf-UNi" kind="relationship" relationship="viewControllers" id="NKu-Q0-d30"/>
+                        <segue destination="XSl-NS-bfN" kind="relationship" relationship="viewControllers" id="tPK-UM-5iF"/>
+                        <segue destination="wbz-WQ-rgr" kind="relationship" relationship="viewControllers" id="R9a-Kv-kgY"/>
+                        <segue destination="QA4-bv-xce" kind="relationship" relationship="viewControllers" id="NKu-Q0-d30"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qZM-eT-dNB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1070" y="-147"/>
         </scene>
-        <!--Calendar View Controller - Settings-->
+        <!--Calendar View Controller - Calendar-->
         <scene sceneID="MvC-uF-XbE">
             <objects>
                 <viewController id="wnX-k8-Spg" customClass="ES_CalendarViewController" sceneMemberID="viewController">
@@ -116,7 +109,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="&lt;Today>" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bUq-Fl-aMj">
-                                <rect key="frame" x="20" y="20" width="280" height="54"/>
+                                <rect key="frame" x="20" y="72" width="280" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
@@ -124,16 +117,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" id="FsB-2p-fhl"/>
+                    <navigationItem key="navigationItem" title="Calendar" id="5Ed-mn-hQl"/>
                     <connections>
                         <outlet property="dateLabel" destination="bUq-Fl-aMj" id="dnx-NZ-F63"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hjf-HF-EZk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-481" y="-147"/>
+            <point key="canvasLocation" x="45" y="-147"/>
         </scene>
-        <!--Dev View Controller - Dev-->
+        <!--Dev View Controller - Developer-->
         <scene sceneID="gpz-yl-9fo">
             <objects>
                 <viewController id="P8K-Tf-UNi" customClass="ES_DevViewController" sceneMemberID="viewController">
@@ -146,7 +139,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPY-8f-J17">
-                                <rect key="frame" x="20" y="20" width="89" height="60"/>
+                                <rect key="frame" x="20" y="67" width="89" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="record">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -156,7 +149,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KYm-ho-vcf">
-                                <rect key="frame" x="20" y="100" width="88" height="41"/>
+                                <rect key="frame" x="20" y="150" width="88" height="53"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Read db">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -166,14 +159,14 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rmM-8d-mH3">
-                                <rect key="frame" x="20" y="178" width="280" height="370"/>
+                                <rect key="frame" x="20" y="267" width="280" height="242"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="65S-OY-COY">
-                                <rect key="frame" x="194" y="28" width="87" height="52"/>
+                                <rect key="frame" x="211" y="67" width="87" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="testTextNZip">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -183,7 +176,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oFU-n6-Rcu">
-                                <rect key="frame" x="169" y="100" width="122" height="41"/>
+                                <rect key="frame" x="176" y="150" width="122" height="53"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Send To Server">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -195,12 +188,69 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dev" id="q1R-Y8-V3W"/>
+                    <navigationItem key="navigationItem" title="Developer" id="FYI-Gz-zla"/>
                     <connections>
                         <outlet property="textView" destination="rmM-8d-mH3" id="DIw-9W-fA4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="57H-JG-wsE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="45" y="524"/>
+        </scene>
+        <!--Navigation Controller - Home-->
+        <scene sceneID="PGO-VT-4hX">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="XSl-NS-bfN" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Home" id="gYR-22-m1Z"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KpA-mb-L8d">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Id0-k4-3dv" kind="relationship" relationship="rootViewController" id="ZRH-yN-YUt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yGm-44-Uvq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-481" y="-804"/>
+        </scene>
+        <!--Navigation Controller - Settings-->
+        <scene sceneID="3Og-Ro-WEu">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wbz-WQ-rgr" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Settings" id="FsB-2p-fhl"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ryu-t4-5nz">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="wnX-k8-Spg" kind="relationship" relationship="rootViewController" id="RrH-6m-406"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hec-fY-6ML" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-481" y="-147"/>
+        </scene>
+        <!--Navigation Controller - Dev-->
+        <scene sceneID="8Uz-l6-vzf">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QA4-bv-xce" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Dev" id="q1R-Y8-V3W"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bg3-HX-e5I">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="P8K-Tf-UNi" kind="relationship" relationship="rootViewController" id="hVJ-1x-LlT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tor-bU-nYB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-481" y="524"/>
         </scene>

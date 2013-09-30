@@ -10,6 +10,8 @@
 
 @interface ES_NetworkAccessor : NSObject
 
-+ (void) upload;
+@property (strong, nonatomic) NSMutableData *recievedData;
+
+- (void) upload;
 
 @end

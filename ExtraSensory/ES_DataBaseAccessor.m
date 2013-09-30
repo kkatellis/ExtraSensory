@@ -11,6 +11,7 @@
 #import "ES_Sample.h"
 #import "ZipArchive.h"
 #import "ES_NetworkAccessor.h"
+#import "ES_SettingsModel.h"
 
 @implementation ES_DataBaseAccessor
 
@@ -47,6 +48,12 @@
     {
         NSLog(@"Error saving sample data!");
     }
+}
+
++ (ES_SettingsModel *) newSettingsModel
+{
+    return [NSEntityDescription insertNewObjectForEntityForName:@"ES_SettingsModel"
+                                         inManagedObjectContext:[self context]];
 }
 
 + (NSString *)applicationDocumentsDirectory {

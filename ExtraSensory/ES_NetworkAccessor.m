@@ -17,6 +17,17 @@
 
 @implementation ES_NetworkAccessor
 
+@synthesize recievedData = _recievedData;
+
+- (NSData *) recievedData
+{
+    if (!_recievedData)
+    {
+        _recievedData = [NSMutableData data];
+    }
+    return _recievedData;
+}
+
 
 /**
  
@@ -24,7 +35,7 @@
  The data is uploaded using an HTTP POST command.
  
  */
-+ (void) upload
+- (void) upload
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
@@ -61,8 +72,8 @@
         NSLog( @"url request failed");
     }
     
-    NSURLConnection * connection = [[NSURLConnection alloc] initWithRequest: urlRequest
-                                                                   delegate: self];
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest: urlRequest
+                                                                   delegate: appDelegate.networkAccessor];
     
     if (!connection) {
         NSLog( @"Connection Failed");
@@ -76,7 +87,7 @@
  Creates a HTML POST request.
  
  */
-+ (NSURLRequest *)postRequestWithURL: (NSURL *)url
+- (NSURLRequest *)postRequestWithURL: (NSURL *)url
                              boundry: (NSString *)boundry
                                 data: (NSData *)data
                             fileName: (NSString *) fileName
@@ -108,6 +119,37 @@
     
     return urlRequest;
 }
+
+- (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    NSLog( @"connection: %@ didReceiveResponse: %@", [connection description], [response description] );
+    
+    [self.recievedData setLength: 0];
+    
+}
+
+- (void) connection: (NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    NSLog( @"connection: %@ didReceiveData: %@", connection, data);
+    [self.recievedData appendData:data];
+}
+
+- (void) connection: (NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    connection = nil;
+    self.recievedData = nil;
+    NSLog( @"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLErrorKey]);
+}
+
+- (void) connectionDidFinishLoading: (NSURLConnection *)connection
+{
+    [self.recievedData writeToFile: [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"newData!" ] atomically:YES];
+    
+    NSLog(@"Succeeded! Received %d bytes of data.", [self.recievedData length]);
+    
+    connection = nil;
+}
+
 
 
 @end

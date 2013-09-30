@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@class ES_SensorManager;
+@class ES_SensorManager, ES_NetworkAccessor;
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -28,6 +28,8 @@
 @property (weak, nonatomic) dispatch_queue_t databaseQueue;
 
 @property (strong, atomic) NSMutableArray *networkStack;
+
+@property (strong, nonatomic) ES_NetworkAccessor *networkAccessor;
 
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;

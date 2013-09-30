@@ -8,6 +8,7 @@
 
 #import "ES_AppDelegate.h"
 #import "ES_SensorManager.h"
+#import "ES_NetworkAccessor.h"
 
 @implementation ES_AppDelegate
 
@@ -21,6 +22,18 @@
 @synthesize databaseQueue = _databaseQueue;
 
 @synthesize networkStack = _networkStack;
+
+@synthesize networkAccessor = _networkAccessor;
+
+- (ES_NetworkAccessor *)networkAccessor
+{
+    if (!_networkAccessor)
+    {
+        _networkAccessor = [ES_NetworkAccessor new];
+    }
+    return _networkAccessor;
+}
+
 
 - (void) pushOnNetworkStack: (NSString *)file
 {

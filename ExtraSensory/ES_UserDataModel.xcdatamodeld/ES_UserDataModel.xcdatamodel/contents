@@ -15,7 +15,11 @@
         <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="ES_SettingsModel" representedClassName="ES_SettingsModel" syncable="YES">
+        <attribute name="sampleFrequency" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="ES_Sample" positionX="-3339" positionY="-540" width="128" height="238"/>
+        <element name="ES_Sample" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ES_SettingsModel" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

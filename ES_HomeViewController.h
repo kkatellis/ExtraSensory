@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class ES_SettingsModel;
+
 @interface ES_HomeViewController : UIViewController
+
+@property (nonatomic, strong) ES_SettingsModel *settings;
 
 @end

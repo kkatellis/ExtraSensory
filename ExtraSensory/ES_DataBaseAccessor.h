@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ES_Sample;
+@class ES_Sample, ES_SettingsModel;
 
 @interface ES_DataBaseAccessor : NSObject
 
@@ -19,5 +19,6 @@
 + (void) writeToTextFile;
 + (NSString *) applicationDocumentsDirectory;
 + (NSString *) dataDirectory;
++ (ES_SettingsModel *) newSettingsModel;
 
 @end
