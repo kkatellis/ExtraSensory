@@ -30,6 +30,11 @@
 		93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678ED17F81F42000638CB /* ES_HomeViewController.m */; };
 		93F678F117F81F5F000638CB /* ES_CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678F017F81F5F000638CB /* ES_CalendarViewController.m */; };
 		93F679B517F91DD4000638CB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F679B417F91DD4000638CB /* libz.dylib */; };
+		93F679C317F978AF000638CB /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679B917F978AF000638CB /* ioapi.c */; };
+		93F679C417F978AF000638CB /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BB17F978AF000638CB /* mztools.c */; };
+		93F679C517F978AF000638CB /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BD17F978AF000638CB /* unzip.c */; };
+		93F679C617F978AF000638CB /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BF17F978AF000638CB /* zip.c */; };
+		93F679C717F978AF000638CB /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 93F679C217F978AF000638CB /* ZipArchive.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +82,17 @@
 		93F678EF17F81F5F000638CB /* ES_CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_CalendarViewController.h; path = ../ES_CalendarViewController.h; sourceTree = "<group>"; };
 		93F678F017F81F5F000638CB /* ES_CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_CalendarViewController.m; path = ../ES_CalendarViewController.m; sourceTree = "<group>"; };
 		93F679B417F91DD4000638CB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		93F679B817F978AF000638CB /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		93F679B917F978AF000638CB /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		93F679BA17F978AF000638CB /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		93F679BB17F978AF000638CB /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		93F679BC17F978AF000638CB /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		93F679BD17F978AF000638CB /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		93F679BE17F978AF000638CB /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		93F679BF17F978AF000638CB /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		93F679C017F978AF000638CB /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		93F679C117F978AF000638CB /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		93F679C217F978AF000638CB /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +228,7 @@
 				93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */,
 				93F678E617F81C98000638CB /* ES_Sample.h */,
 				93F678E717F81C98000638CB /* ES_Sample.m */,
+				93F679B617F97878000638CB /* ZipArchiver */,
 			);
 			name = DatabaseManagement;
 			sourceTree = "<group>";
@@ -223,6 +240,32 @@
 				93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */,
 			);
 			name = NetworkManagement;
+			sourceTree = "<group>";
+		};
+		93F679B617F97878000638CB /* ZipArchiver */ = {
+			isa = PBXGroup;
+			children = (
+				93F679B717F978AF000638CB /* minizip */,
+				93F679C117F978AF000638CB /* ZipArchive.h */,
+				93F679C217F978AF000638CB /* ZipArchive.mm */,
+			);
+			name = ZipArchiver;
+			sourceTree = "<group>";
+		};
+		93F679B717F978AF000638CB /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				93F679B817F978AF000638CB /* crypt.h */,
+				93F679B917F978AF000638CB /* ioapi.c */,
+				93F679BA17F978AF000638CB /* ioapi.h */,
+				93F679BB17F978AF000638CB /* mztools.c */,
+				93F679BC17F978AF000638CB /* mztools.h */,
+				93F679BD17F978AF000638CB /* unzip.c */,
+				93F679BE17F978AF000638CB /* unzip.h */,
+				93F679BF17F978AF000638CB /* zip.c */,
+				93F679C017F978AF000638CB /* zip.h */,
+			);
+			path = minizip;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -325,12 +368,17 @@
 			files = (
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
+				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				9307CC6917F220DB00D95E05 /* ES_DevViewController.m in Sources */,
+				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
+				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
 				93F678F117F81F5F000638CB /* ES_CalendarViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
+				93F679C317F978AF000638CB /* ioapi.c in Sources */,
+				93F679C617F978AF000638CB /* zip.c in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
 				93F678E817F81C98000638CB /* ES_Sample.m in Sources */,
 			);

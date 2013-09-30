@@ -10,4 +10,6 @@
 
 @interface ES_NetworkAccessor : NSObject
 
++ (void) upload;
+
 @end

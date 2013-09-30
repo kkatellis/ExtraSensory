@@ -156,9 +156,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KYm-ho-vcf">
-                                <rect key="frame" x="45" y="88" width="230" height="82"/>
+                                <rect key="frame" x="20" y="100" width="88" height="41"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Read From Database">
+                                <state key="normal" title="Read db">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -180,6 +180,16 @@
                                 </state>
                                 <connections>
                                     <action selector="testTextNZip:" destination="P8K-Tf-UNi" eventType="touchUpInside" id="ANN-oS-7em"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oFU-n6-Rcu">
+                                <rect key="frame" x="169" y="100" width="122" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Send To Server">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="sendDataToServerButton:" destination="P8K-Tf-UNi" eventType="touchUpInside" id="ODD-Lz-gxg"/>
                                 </connections>
                             </button>
                         </subviews>

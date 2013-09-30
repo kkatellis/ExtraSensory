@@ -16,6 +16,8 @@
 
 #import "ES_AppDelegate.h"
 
+#import "ES_NetworkAccessor.h"
+
 @interface ES_DevViewController()
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -29,6 +31,14 @@
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     return appDelegate.sensorManager;
 }
+
+- (IBAction)sendDataToServerButton:(UIButton *)sender
+{
+    NSLog( @"sendDataToServerButton");
+    
+    [ES_NetworkAccessor upload];
+}
+
 
 - (IBAction)record:(UIButton *)sender
 {

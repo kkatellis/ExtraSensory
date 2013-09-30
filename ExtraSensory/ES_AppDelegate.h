@@ -27,5 +27,9 @@
 
 @property (weak, nonatomic) dispatch_queue_t databaseQueue;
 
+@property (strong, atomic) NSMutableArray *networkStack;
+
+- (void) pushOnNetworkStack: (NSString *) file;
+- (NSString *) popOffNetworkStack;
 
 @end

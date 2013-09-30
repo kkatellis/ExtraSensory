@@ -17,7 +17,7 @@
 
 @property NSNumber *counter;
 
-@property NSArray *batchData;
+@property (nonatomic) NSArray *batchData;
 
 @property (nonatomic) dispatch_queue_t sensorQueue;
 
@@ -39,7 +39,19 @@
 
 @synthesize sensorQueue = _sensorQueue;
 
+@synthesize batchData = _batchData;
+
+
 // Getter
+
+- (NSArray *)batchData
+{
+    if (!_batchData)
+    {
+        _batchData = [NSArray new];
+    }
+    return _batchData;
+}
 
 - (dispatch_queue_t)sensorQueue
 {
@@ -99,7 +111,7 @@
     
     self.timer = [NSTimer scheduledTimerWithTimeInterval: interval
                                                   target: self
-                                                selector: @selector(readSensors)
+                                                selector: @selector(readSensorsIntoDictionary)
                                                 userInfo: nil
                                                  repeats: YES];
 }
@@ -139,6 +151,65 @@
                        }
                    });
 }
+
+- (NSArray *) keys
+{
+    return [NSArray arrayWithObjects: @"speed", @"lat", @"long", @"timestamp", @"gyro_x", @"acc_x", @"gyro_y", @"acc_y", @"gyro_z", @"acc_z", nil ];
+}
+
+- (void) readSensorsIntoDictionary
+{
+    NSLog( @"readSensorsIntoDictionary" );
+    
+    __block ES_SensorManager *blockSelf = self;
+    
+    dispatch_async(self.sensorQueue, ^
+                   {
+                       NSArray *objects = [NSArray new];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.speed ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.latitude ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.longitude ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.timestamp ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.x ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.x ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.y ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.y ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.z ]];
+                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.z ]];
+                       
+                       NSDictionary *dictionary = [NSDictionary dictionaryWithObjects: objects forKeys: [blockSelf keys]];
+                       
+                       blockSelf.batchData = [blockSelf.batchData arrayByAddingObject: dictionary];
+                       
+                       blockSelf.counter = [NSNumber numberWithInteger: [blockSelf.counter integerValue] + 1];
+                       
+                       if ([blockSelf.counter integerValue] >= self.samplesPerBatch )
+                       {
+                           [blockSelf.timer invalidate];
+                           
+                           blockSelf.counter = 0;
+                           
+                           [blockSelf.locationManager stopUpdatingLocation];
+                           [blockSelf.motionManager stopAccelerometerUpdates];
+                           [blockSelf.motionManager stopGyroUpdates];
+                           
+                           
+                           NSLog( @"%@", [blockSelf.batchData description]);
+                           
+                           NSError * error = [NSError new];
+                           
+                           NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: blockSelf.batchData options:0 error:&error];
+                           
+                           NSString *filePath = [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
+                           
+                           [jsonObject writeToFile: filePath atomically:YES];
+                       }
+                       
+                   });
+    
+}
+
+
 - (void) stopRecording
 {
     NSLog( @"stopRecording");

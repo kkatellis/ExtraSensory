@@ -20,6 +20,27 @@
 
 @synthesize databaseQueue = _databaseQueue;
 
+@synthesize networkStack = _networkStack;
+
+- (void) pushOnNetworkStack: (NSString *)file
+{
+    if (!self.networkStack)
+    {
+        [self setNetworkStack: [NSMutableArray new]];
+    }
+    [self.networkStack addObject: file];
+}
+
+- (NSString *) popOffNetworkStack
+{
+    NSString *result = [self.networkStack lastObject];
+    [self.networkStack removeLastObject];
+    
+    return result;
+}
+
+
+
 // Getter
 
 - (dispatch_queue_t)databaseQueue
@@ -42,6 +63,19 @@
     return _sensorManager;
 }
 
+- (void) applicationDidFinishLaunching:(UIApplication *)application
+{
+    //[self redirectNSLogToDocuments];
+}
+
+- (void)redirectNSLogToDocuments
+{
+    NSString *documentsDirectory = [self applicationDocumentsDirectory];
+    
+    NSString *pathForLog = [documentsDirectory stringByAppendingPathComponent:@"NSLogRedirect.txt"];
+    
+    freopen([pathForLog cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+}
 
 
 

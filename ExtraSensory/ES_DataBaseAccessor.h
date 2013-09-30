@@ -17,5 +17,7 @@
 + (ES_Sample *) write;
 + (void) save;
 + (void) writeToTextFile;
++ (NSString *) applicationDocumentsDirectory;
++ (NSString *) dataDirectory;
 
 @end
