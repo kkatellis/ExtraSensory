@@ -16,5 +16,6 @@
 + (NSArray *) read: (NSString *)entityDescription;
 + (ES_Sample *) write;
 + (void) save;
++ (void) writeToTextFile;
 
 @end

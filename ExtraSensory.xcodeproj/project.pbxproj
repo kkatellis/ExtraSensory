@@ -29,6 +29,7 @@
 		93F678E817F81C98000638CB /* ES_Sample.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678E717F81C98000638CB /* ES_Sample.m */; };
 		93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678ED17F81F42000638CB /* ES_HomeViewController.m */; };
 		93F678F117F81F5F000638CB /* ES_CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678F017F81F5F000638CB /* ES_CalendarViewController.m */; };
+		93F679B517F91DD4000638CB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F679B417F91DD4000638CB /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		93F678ED17F81F42000638CB /* ES_HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_HomeViewController.m; path = ../ES_HomeViewController.m; sourceTree = "<group>"; };
 		93F678EF17F81F5F000638CB /* ES_CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_CalendarViewController.h; path = ../ES_CalendarViewController.h; sourceTree = "<group>"; };
 		93F678F017F81F5F000638CB /* ES_CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_CalendarViewController.m; path = ../ES_CalendarViewController.m; sourceTree = "<group>"; };
+		93F679B417F91DD4000638CB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93F679B517F91DD4000638CB /* libz.dylib in Frameworks */,
 				9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */,
 				9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */,
 				9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */,
@@ -124,6 +127,7 @@
 		9307CBB317F1A78A00D95E05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				93F679B417F91DD4000638CB /* libz.dylib */,
 				9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */,
 				9307CBB417F1A78A00D95E05 /* Foundation.framework */,
 				9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */,

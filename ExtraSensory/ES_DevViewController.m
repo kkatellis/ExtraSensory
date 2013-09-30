@@ -59,6 +59,10 @@
     
     //self.textView.text = [[NSNumber numberWithInt:n] description];
 }
+- (IBAction)testTextNZip:(UIButton *)sender
+{
+    [ES_DataBaseAccessor writeToTextFile];
+}
 
 
 
