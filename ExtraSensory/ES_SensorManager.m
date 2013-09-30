@@ -102,6 +102,9 @@
     self.motionManager.accelerometerUpdateInterval = interval;
     self.motionManager.gyroUpdateInterval = interval;
     
+    NSLog( @"location authorization status: %u", [CLLocationManager authorizationStatus]);
+    
+    
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
     [self.locationManager startUpdatingLocation];

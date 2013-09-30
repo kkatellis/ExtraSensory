@@ -321,6 +321,13 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Bryan Grounds";
 				TargetAttributes = {
+					9307CBB017F1A78A00D95E05 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					9307CBD117F1A78A00D95E05 = {
 						TestTargetID = 9307CBB017F1A78A00D95E05;
 					};

@@ -19,6 +19,8 @@
 + (void) writeToTextFile;
 + (NSString *) applicationDocumentsDirectory;
 + (NSString *) dataDirectory;
++ (NSString *) zipDirectory;
++ (NSString *) serverResponseDirectory;
 + (ES_SettingsModel *) newSettingsModel;
 
 @end

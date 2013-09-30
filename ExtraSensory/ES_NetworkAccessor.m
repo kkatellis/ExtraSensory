@@ -49,7 +49,7 @@
         return;
     }
         
-    NSString *storagePath = [ES_DataBaseAccessor dataDirectory];
+    NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
     
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
@@ -155,7 +155,7 @@
     
     //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
-    [self.recievedData writeToFile: [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/JSONData" ] atomically:YES];
+    [self.recievedData writeToFile: [[ES_DataBaseAccessor serverResponseDirectory] stringByAppendingString: @"/JSONData" ] atomically:YES];
     
     NSLog(@"Succeeded! Received %d bytes of data.", [self.recievedData length]);
     
