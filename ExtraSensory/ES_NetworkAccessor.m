@@ -143,7 +143,19 @@
 
 - (void) connectionDidFinishLoading: (NSURLConnection *)connection
 {
-    [self.recievedData writeToFile: [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"newData!" ] atomically:YES];
+    NSError *error;
+    
+    NSString *reply = [[NSString alloc] initWithData: self.recievedData
+                                            encoding: NSUTF8StringEncoding];
+    NSLog( @" reply = %@", [reply description]);
+    
+    NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
+    
+    NSLog( @"Data: %@", [response description]);
+    
+    //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
+    
+    [self.recievedData writeToFile: [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/JSONData" ] atomically:YES];
     
     NSLog(@"Succeeded! Received %d bytes of data.", [self.recievedData length]);
     
