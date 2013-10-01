@@ -18,13 +18,28 @@
 
 #import "ES_NetworkAccessor.h"
 
+#import "ES_Scheduler.h"
+
 @interface ES_DevViewController()
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 
+@property (strong, nonatomic) ES_Scheduler *scheduler;
+
 @end
 
 @implementation ES_DevViewController
+
+@synthesize scheduler = _scheduler;
+
+- (ES_Scheduler *) scheduler
+{
+    if (!_scheduler)
+    {
+        _scheduler = [ES_Scheduler new];
+    }
+    return _scheduler;
+}
 
 - (ES_SensorManager *)sensorManager
 {
@@ -44,8 +59,6 @@
 - (IBAction)record:(UIButton *)sender
 {
     NSLog( @"recordButton");
-    
-    [self.sensorManager record];
     
 }
 
@@ -72,9 +85,13 @@
 }
 - (IBAction)testTextNZip:(UIButton *)sender
 {
-    [ES_DataBaseAccessor writeToTextFile];
+    [ES_DataBaseAccessor zipSensorData];
 }
 
+- (IBAction)go:(UIButton *)sender
+{
+    [self.scheduler sampleSaveSend];
+}
 
 
 @end

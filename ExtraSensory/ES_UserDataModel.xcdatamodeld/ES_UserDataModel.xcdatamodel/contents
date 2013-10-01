@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F37" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="ES_PredictionRecords" syncable="YES">
+        <attribute name="correct" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="prediction" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="predictionID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userCorrection" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="ES_Sample" representedClassName="ES_Sample" syncable="YES">
         <attribute name="acc_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="acc_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -19,7 +25,8 @@
         <attribute name="sampleFrequency" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ES_Sample" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ES_SettingsModel" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ES_Sample" positionX="7" positionY="50" width="128" height="238"/>
+        <element name="ES_SettingsModel" positionX="9" positionY="-135" width="128" height="60"/>
+        <element name="ES_PredictionRecords" positionX="7" positionY="-63" width="128" height="105"/>
     </elements>
 </model>
