@@ -24,6 +24,7 @@
 		9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */; };
 		9307CC6917F220DB00D95E05 /* ES_DevViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC6817F220DB00D95E05 /* ES_DevViewController.m */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
+		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
 		93E8390717F9FC5900E78B19 /* ES_SettingsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E8390617F9FC5900E78B19 /* ES_SettingsModel.m */; };
 		93E8391417FAEAFA00E78B19 /* ES_CalendarTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E8391317FAEAFA00E78B19 /* ES_CalendarTableView.m */; };
 		93E8391817FAEBA300E78B19 /* ES_CalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E8391717FAEBA300E78B19 /* ES_CalendarTableViewCell.m */; };
@@ -75,6 +76,8 @@
 		9307CC6817F220DB00D95E05 /* ES_DevViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_DevViewController.m; sourceTree = "<group>"; };
 		933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SensorManager.h; sourceTree = "<group>"; };
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
+		93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Scheduler.h; sourceTree = "<group>"; };
+		93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Scheduler.m; sourceTree = "<group>"; };
 		93E8390517F9FC5900E78B19 /* ES_SettingsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsModel.h; sourceTree = "<group>"; };
 		93E8390617F9FC5900E78B19 /* ES_SettingsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsModel.m; sourceTree = "<group>"; };
 		93E8391217FAEAFA00E78B19 /* ES_CalendarTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarTableView.h; sourceTree = "<group>"; };
@@ -170,6 +173,8 @@
 			children = (
 				9307CBC317F1A78A00D95E05 /* ES_AppDelegate.h */,
 				9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */,
+				93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */,
+				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				93F659DF17F6B299000638CB /* NetworkManagement */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
 				93E8391517FAEB0700E78B19 /* Views */,
@@ -345,6 +350,7 @@
 				ORGANIZATIONNAME = "Bryan Grounds";
 				TargetAttributes = {
 					9307CBB017F1A78A00D95E05 = {
+						DevelopmentTeam = AA24Q7Y7CJ;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -408,6 +414,7 @@
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93E8390717F9FC5900E78B19 /* ES_SettingsModel.m in Sources */,
+				93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */,
 				93E8391817FAEBA300E78B19 /* ES_CalendarTableViewCell.m in Sources */,
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
@@ -546,6 +553,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
@@ -559,6 +567,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";

@@ -53,7 +53,7 @@
     
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
-    NSLog( @"[DataUploader] Attempting to upload %@", fullPath );
+    NSLog( @"[DataUploader] Attempting to upload %@", file );
     
     NSData *data = [NSData dataWithContentsOfFile: fullPath];
     
@@ -115,14 +115,14 @@
     
     [urlRequest setHTTPBody:postData];
     
-    NSLog( @"urlRequest = %@", urlRequest);
+    //NSLog( @"urlRequest = %@", urlRequest);
     
     return urlRequest;
 }
 
 - (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    NSLog( @"connection: %@ didReceiveResponse: %@", [connection description], [response description] );
+    NSLog( @"connection: didReceiveResponse: ..." );
     
     [self.recievedData setLength: 0];
     
@@ -130,7 +130,7 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSLog( @"connection: %@ didReceiveData: %@", connection, data);
+    NSLog( @"connection: didReceiveData: ...");
     [self.recievedData appendData:data];
 }
 
@@ -151,7 +151,7 @@
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
-    NSLog( @"Data: %@", [response description]);
+    //NSLog( @"Data: %@", [response description]);
     
     //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     

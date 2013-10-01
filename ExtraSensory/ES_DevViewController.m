@@ -18,6 +18,8 @@
 
 #import "ES_NetworkAccessor.h"
 
+#import "ES_Scheduler.h"
+
 @interface ES_DevViewController()
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -72,9 +74,16 @@
 }
 - (IBAction)testTextNZip:(UIButton *)sender
 {
-    [ES_DataBaseAccessor writeToTextFile];
+    [ES_DataBaseAccessor zipData];
 }
 
+- (IBAction)runSchedule:(UIButton *)sender
+{
+    ES_Scheduler *scheduler = [ES_Scheduler new];
+    
+    [scheduler sampleSaveSendCycler];
+    
+}
 
 
 @end

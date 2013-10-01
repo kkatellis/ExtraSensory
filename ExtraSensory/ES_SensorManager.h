@@ -23,7 +23,10 @@
 @property (nonatomic) double sampleFrequency; // Hertz
 @property (nonatomic) double sampleDuration;  // Seconds
 
-- (void) record;
+@property (nonatomic, strong) NSNumber *isReady;
+
+- (BOOL) record;
+
 
 
 @end

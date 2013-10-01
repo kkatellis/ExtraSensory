@@ -42,9 +42,7 @@
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    NSLog( @"observing keyPath: %@ ofObject: %@", keyPath, [object valueForKey:@"sampleFrequency"]);
-    
+{    
     if ( [keyPath isEqualToString: @"sampleFrequency"] )
         [self.sampleFrequencyLabel setText: [NSString stringWithFormat: @"%@", [object valueForKey:@"sampleFrequency"]] ];
 }
