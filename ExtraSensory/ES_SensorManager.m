@@ -119,7 +119,7 @@
     self.motionManager.accelerometerUpdateInterval = interval;
     self.motionManager.gyroUpdateInterval = interval;
     
-    NSLog( @"LocAuthStatus: %u", [CLLocationManager authorizationStatus]);
+    NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
     
     
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;

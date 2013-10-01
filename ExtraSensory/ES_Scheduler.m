@@ -78,7 +78,7 @@
 {
     self.devViewController = devViewController;
     
-    NSLog( @"Start" );
+    NSLog( @"\n\nStart" );
     NSTimer *timer;
     timer = [NSTimer new];
     
