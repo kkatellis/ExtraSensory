@@ -10,6 +10,7 @@
 
 @interface ES_DevViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 
 
 @end

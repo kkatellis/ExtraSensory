@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class ES_DevViewController;
+
 @interface ES_Scheduler : NSObject
 
-- (void) sampleSaveSendCycler;
+- (void) sampleSaveSendCycler: (ES_DevViewController *) devViewController;
 
 @end

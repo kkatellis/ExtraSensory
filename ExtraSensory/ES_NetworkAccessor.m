@@ -122,7 +122,7 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    NSLog( @"connection: didReceiveResponse: ..." );
+    //NSLog( @"connection: didReceiveResponse: ..." );
     
     [self.recievedData setLength: 0];
     
@@ -130,7 +130,7 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSLog( @"connection: didReceiveData: ...");
+    //NSLog( @"connection: didReceiveData: ...");
     [self.recievedData appendData:data];
 }
 
@@ -157,7 +157,7 @@
     
     [self.recievedData writeToFile: [[ES_DataBaseAccessor serverResponseDirectory] stringByAppendingString: @"/JSONData" ] atomically:YES];
     
-    NSLog(@"Succeeded! Received %d bytes of data.", [self.recievedData length]);
+    //NSLog(@"Succeeded! Received %d bytes of data.", [self.recievedData length]);
     
     connection = nil;
 }

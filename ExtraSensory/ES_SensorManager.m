@@ -112,14 +112,14 @@
         return NO;
     }
     
-    NSLog( @"record" );
+    //NSLog( @"record" );
     
     double interval = (1.0 / self.sampleFrequency);
     
     self.motionManager.accelerometerUpdateInterval = interval;
     self.motionManager.gyroUpdateInterval = interval;
     
-    NSLog( @"location authorization status: %u", [CLLocationManager authorizationStatus]);
+    NSLog( @"LocAuthStatus: %u", [CLLocationManager authorizationStatus]);
     
     
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -196,7 +196,7 @@
                            
                            if (writeFileSuccess)
                            {
-                               NSLog(@"Data successfully written to file");
+                               //NSLog(@"Data successfully written to file");
                            }
                            
                            self.isReady = [NSNumber numberWithBool: YES];

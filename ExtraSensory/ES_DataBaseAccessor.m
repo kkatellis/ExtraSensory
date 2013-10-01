@@ -63,7 +63,7 @@
 
 + (void) zipData
 {
-    NSLog( @"Writing File");
+    //NSLog( @"Writing File");
     
     NSString *zipName = [self zipFilesInDirectory:[self dataDirectory]];
     
@@ -71,7 +71,7 @@
     
     if (zipName)
     {
-        NSLog( @"Pushing: %@", zipName);
+        //NSLog( @"Pushing: %@", zipName);
         ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         [appDelegate pushOnNetworkStack: zipName];
     }
@@ -174,7 +174,7 @@
     BOOL successCompressing = [archiver CloseZipFile2];
     if(successCompressing)
     {
-        NSLog(@"Zipped Successfully!");
+        //NSLog(@"Zipped Successfully!");
         return zipFile;
     }
     else

@@ -10,6 +10,7 @@
 #import "ES_SensorManager.h"
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_DevViewController.h"
 
 @interface ES_Scheduler()
 
@@ -22,6 +23,8 @@
 @property BOOL isReady;
 
 @property double waitTime;
+
+@property (nonatomic, strong) ES_DevViewController * devViewController;
 
 @end
 
@@ -42,7 +45,7 @@
 {
     if (!_waitTime)
     {
-        _waitTime = 2.0;
+        _waitTime = 10.0;
     }
     return _waitTime;
 }
@@ -71,23 +74,39 @@
 }
 
 
-- (void) sampleSaveSendCycler
+- (void) sampleSaveSendCycler: (ES_DevViewController *) devViewController
 {
+    self.devViewController = devViewController;
+    
     NSLog( @"Start" );
     NSTimer *timer;
     timer = [NSTimer new];
     
-    timer = [NSTimer scheduledTimerWithTimeInterval: 10.0
+    timer = [NSTimer scheduledTimerWithTimeInterval: 20.0
                                              target: self
                                            selector: @selector(sampleSaveSend)
                                            userInfo: nil
                                             repeats: YES];
+    
+    
+
 }
 
 
 - (void) sampleSaveSend
 {
         
+    //////////////
+    NSString *documentsDirectory = [ES_DataBaseAccessor applicationDocumentsDirectory];
+    
+    NSString *pathForLog = [documentsDirectory stringByAppendingPathComponent:@"NSLogRedirect.txt"];
+    
+    NSString *fileContents = [NSString stringWithContentsOfFile: pathForLog ];
+    
+    [self.devViewController.textView setText: fileContents ];
+    [self.devViewController.textView scrollRangeToVisible: NSMakeRange([self.devViewController.textView.text length], 0)];
+    //////////////
+
     
     NSTimer *timer;
     
@@ -100,6 +119,8 @@
                                            selector: @selector(operationCycler)
                                            userInfo: nil
                                             repeats: YES];
+
+
     
 }
 
@@ -126,7 +147,7 @@
 
 -(void) firstOp
 {
-    NSLog(@"firstOp");
+    //NSLog(@"firstOp");
     
     [self.sensorManager record];
     
@@ -134,7 +155,7 @@
 
 -(void) secondOp
 {
-    NSLog(@"secondOp");
+    //NSLog(@"secondOp");
 
     [ES_DataBaseAccessor zipData];
     
@@ -142,7 +163,7 @@
 
 -(void) thirdOp
 {
-    NSLog(@"thirdOp");
+    //NSLog(@"thirdOp");
 
     [self.networkAccessor upload];
 }

@@ -22,11 +22,24 @@
 
 @interface ES_DevViewController()
 
-@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (nonatomic, strong) ES_Scheduler *scheduler;
+
+
 
 @end
 
 @implementation ES_DevViewController
+
+@synthesize scheduler = _scheduler;
+
+- (ES_Scheduler *) scheduler
+{
+    if (!_scheduler)
+    {
+        _scheduler = [ES_Scheduler new];
+    }
+    return _scheduler;
+}
 
 - (ES_SensorManager *)sensorManager
 {
@@ -79,9 +92,19 @@
 
 - (IBAction)runSchedule:(UIButton *)sender
 {
-    ES_Scheduler *scheduler = [ES_Scheduler new];
     
-    [scheduler sampleSaveSendCycler];
+}
+- (IBAction)runSchedulerSwitch:(UISwitch *)sender
+{
+    if (sender.isEnabled)
+    {
+        [self.scheduler sampleSaveSendCycler: self ];
+    }
+    else
+    {
+        NSLog( @"off!");
+        exit(0);
+    }
     
 }
 
