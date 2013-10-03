@@ -49,7 +49,7 @@
 
 - (IBAction)sendDataToServerButton:(UIButton *)sender
 {
-    NSLog( @"sendDataToServerButton");
+    //NSLog( @"sendDataToServerButton");
     
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate.networkAccessor upload];

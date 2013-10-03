@@ -41,7 +41,7 @@
     
     NSString *file = [appDelegate popOffNetworkStack];
     
-    NSLog( @"upload: %@", file);
+    //NSLog( @"upload: %@", file);
     
     if (!file)
     {
@@ -53,7 +53,7 @@
     
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
-    NSLog( @"[DataUploader] Attempting to upload %@", file );
+    //NSLog( @"[DataUploader] Attempting to upload %@", file );
     
     NSData *data = [NSData dataWithContentsOfFile: fullPath];
     
@@ -147,11 +147,17 @@
     
     NSString *reply = [[NSString alloc] initWithData: self.recievedData
                                             encoding: NSUTF8StringEncoding];
+    
+    
+    
+    
     NSLog( @" reply = %@", [reply description]);
+    
+    
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
-    //NSLog( @"Data: %@", [response description]);
+    NSLog( @"Data: %@", [response description]);
     
     //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
