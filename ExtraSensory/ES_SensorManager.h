@@ -15,7 +15,16 @@
 @class ES_AccelerometerAccessor;
 
 //public interface
-@interface ES_SensorManager : NSObject
+@interface ES_SensorManager : NSObject <CLLocationManagerDelegate>
+{
+    CLLocationManager *locationManager;
+    
+    CLLocation *currentLocation;
+    
+}
+
+@property (strong, nonatomic) CLLocation *currentLocation;
+@property (strong, nonatomic) CLLocation *previousLocation;
 
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;

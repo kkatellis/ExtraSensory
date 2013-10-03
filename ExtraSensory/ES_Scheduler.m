@@ -75,6 +75,7 @@
     if (!_sensorManager)
     {
         _sensorManager = [ES_SensorManager new];
+        _sensorManager.locationManager = self.appDelegate.locationManager;
     }
     return _sensorManager;
 }
@@ -86,6 +87,11 @@
         _networkAccessor = [ES_NetworkAccessor new];
     }
     return _networkAccessor;
+}
+
+- (ES_AppDelegate *) appDelegate
+{
+    return (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 
@@ -111,7 +117,7 @@
     
     self.counter = 0;
     
-    timer = [NSTimer scheduledTimerWithTimeInterval: 5.0
+    timer = [NSTimer scheduledTimerWithTimeInterval: 6.0
                                              target: self
                                            selector: @selector(operationCycler)
                                            userInfo: nil

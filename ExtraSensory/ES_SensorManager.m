@@ -25,6 +25,8 @@
 
 @implementation ES_SensorManager
 
+@synthesize currentLocation = _currentLocation;
+
 @synthesize motionManager = _motionManager;
 
 @synthesize locationManager = _locationManager;
@@ -104,17 +106,25 @@
     
     //NSLog( @"record" );
     
-    double interval = .01;
+    double interval = 1/40.0;
+    
     
     self.motionManager.accelerometerUpdateInterval = interval;
     self.motionManager.gyroUpdateInterval = interval;
     
-    NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
     
-    
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
+    [self.locationManager setDelegate: self];
+    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+    [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
+    [self.locationManager setPausesLocationUpdatesAutomatically: NO];
     [self.locationManager startUpdatingLocation];
+
+    
+    NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
+
+    
+
+    
     [self.motionManager startAccelerometerUpdates];
     [self.motionManager startGyroUpdates];
     
@@ -138,9 +148,9 @@
 - (void) readSensorsIntoDictionary
 {
     NSArray *objects = [NSArray new];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.speed ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.latitude ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.longitude ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.speed ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.timestamp ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.x ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.x ]];
@@ -195,6 +205,23 @@
     [self.locationManager stopUpdatingLocation];
     [self.motionManager stopAccelerometerUpdates];
     [self.motionManager stopGyroUpdates];
+}
+
+#pragma mark Location Manager Delegate Methods
+
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    NSLog( @"status = %u", status);
+}
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    self.currentLocation = locations.lastObject;
+}
+
+- (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"[locationManager] ERROR: %@ DOMAIN: %@ CODE: %ld", [error localizedDescription], [error domain], (long)[error code]);
 }
 
 

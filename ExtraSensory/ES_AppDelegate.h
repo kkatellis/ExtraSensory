@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class ES_SensorManager, ES_NetworkAccessor;
 
@@ -30,6 +31,8 @@
 @property (strong, nonatomic) ES_NetworkAccessor *networkAccessor;
 
 @property (strong, nonatomic) NSMutableArray *predictions;
+
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;
