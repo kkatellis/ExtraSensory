@@ -17,6 +17,8 @@
 
 @interface ES_NetworkAccessor()
 
+@property (strong, nonatomic) NSString *currentZipFilePath;
+
 
 @end
 
@@ -68,6 +70,8 @@
     NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
     
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
+    
+    self.currentZipFilePath = fullPath;
     
     //NSLog( @"[DataUploader] Attempting to upload %@", file );
     
@@ -190,6 +194,11 @@
     [appDelegate.predictions insertObject:predictionAndDate atIndex:0];
     
     connection = nil;
+    
+    if( [[NSFileManager defaultManager] fileExistsAtPath: self.currentZipFilePath])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:self.currentZipFilePath error:nil];
+    }
 }
 
 

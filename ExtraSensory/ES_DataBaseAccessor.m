@@ -187,6 +187,20 @@
 
 + (void) writeData:(NSData *)data toPath:(NSString *)filePath
 {
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    BOOL fileExists = [fileManager fileExistsAtPath:filePath];
+    NSLog(@"Path to file: %@", filePath);
+    NSLog(@"File exists: %d", fileExists);
+    NSLog(@"Is deletable file at path: %d", [fileManager isDeletableFileAtPath:filePath]);
+    if (fileExists)
+    {
+        BOOL success = [fileManager removeItemAtPath:filePath error:&error];
+        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+    }
+
+    
     BOOL writeFileSuccess = [data writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
     {

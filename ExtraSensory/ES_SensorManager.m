@@ -167,7 +167,7 @@
     
     self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
     
-    if ([self.counter integerValue] >= 200 )
+    if ([self.counter integerValue] >= 400 )
     {
         [self.timer invalidate];
         
@@ -183,10 +183,11 @@
         
         NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: self.batchData options:0 error:&error];
         
+        
         NSString *filePath = [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
         
         [ES_DataBaseAccessor writeData: jsonObject toPath:filePath];
-        
+        self.batchData = [NSMutableArray new];
         
         
         self.isReady = [NSNumber numberWithBool: YES];

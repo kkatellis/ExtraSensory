@@ -24,6 +24,8 @@
 		9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
 		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
+		93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */; };
+		93E29C2017FE1E8A00BE0AD2 /* ES_UITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E29C1F17FE1E8A00BE0AD2 /* ES_UITabBarController.m */; };
 		93E8390717F9FC5900E78B19 /* ES_SettingsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E8390617F9FC5900E78B19 /* ES_SettingsModel.m */; };
 		93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */; };
 		93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */; };
@@ -71,6 +73,10 @@
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
 		93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Scheduler.h; sourceTree = "<group>"; };
 		93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Scheduler.m; sourceTree = "<group>"; };
+		93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewTableViewController.h; sourceTree = "<group>"; };
+		93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_CalendarViewTableViewController.m; sourceTree = "<group>"; };
+		93E29C1E17FE1E8A00BE0AD2 /* ES_UITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_UITabBarController.h; sourceTree = "<group>"; };
+		93E29C1F17FE1E8A00BE0AD2 /* ES_UITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_UITabBarController.m; sourceTree = "<group>"; };
 		93E8390517F9FC5900E78B19 /* ES_SettingsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsModel.h; sourceTree = "<group>"; };
 		93E8390617F9FC5900E78B19 /* ES_SettingsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsModel.m; sourceTree = "<group>"; };
 		93F659D517F6857B000638CB /* ES_DataBaseAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_DataBaseAccessor.h; sourceTree = "<group>"; };
@@ -162,6 +168,10 @@
 				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				93F659DF17F6B299000638CB /* NetworkManagement */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
+				93E29C1E17FE1E8A00BE0AD2 /* ES_UITabBarController.h */,
+				93E29C1F17FE1E8A00BE0AD2 /* ES_UITabBarController.m */,
+				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
+				93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
 				933F7CCF17F4D7C700B05C96 /* SensorManagement */,
 				9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */,
@@ -376,6 +386,7 @@
 			files = (
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
+				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
@@ -384,6 +395,7 @@
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
+				93E29C2017FE1E8A00BE0AD2 /* ES_UITabBarController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
 				93F679C617F978AF000638CB /* zip.c in Sources */,

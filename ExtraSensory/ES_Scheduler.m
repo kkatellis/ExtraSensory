@@ -148,7 +148,7 @@
     
     
     
-    timer = [NSTimer scheduledTimerWithTimeInterval: 6.0
+    timer = [NSTimer scheduledTimerWithTimeInterval: 12.0
                                              target: self
                                            selector: @selector(operationCycler)
                                            userInfo: nil
