@@ -192,12 +192,11 @@
                            
                            NSString *filePath = [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
                            
-                           BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
                            
-                           if (writeFileSuccess)
-                           {
-                               //NSLog(@"Data successfully written to file");
-                           }
+                           //BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
+                           [ES_DataBaseAccessor writeData: jsonObject toPath:filePath];
+                           
+                           
                            
                            self.isReady = [NSNumber numberWithBool: YES];
                            

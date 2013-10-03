@@ -78,7 +78,7 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
-    [self redirectNSLogToDocuments];
+    //[self redirectNSLogToDocuments];
 }
 
 - (void)redirectNSLogToDocuments

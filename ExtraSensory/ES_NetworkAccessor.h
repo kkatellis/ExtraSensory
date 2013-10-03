@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) NSMutableData *recievedData;
 
+@property (strong, nonatomic) NSMutableArray *predictions;
+
 - (void) upload;
 
 @end

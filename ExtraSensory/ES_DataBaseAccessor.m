@@ -185,4 +185,18 @@
     
 }
 
++ (void) writeData:(NSData *)data toPath:(NSString *)filePath
+{
+    BOOL writeFileSuccess = [data writeToFile: filePath atomically:YES];
+    if (writeFileSuccess)
+    {
+        NSLog(@"Data successfully written to file");
+    }
+    else
+    {
+        NSLog(@"Error writing data to file!!");
+    }
+
+}
+
 @end

@@ -22,5 +22,6 @@
 + (NSString *) zipDirectory;
 + (NSString *) serverResponseDirectory;
 + (ES_SettingsModel *) newSettingsModel;
++ (void) writeData: (NSData *)data toPath: (NSString *)filePath;
 
 @end

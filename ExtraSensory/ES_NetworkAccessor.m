@@ -15,9 +15,16 @@
 #define API_FEEDBACK    @"http://137.110.112.50:8080/api/feedback?%@"
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
 
+@interface ES_NetworkAccessor()
+
+
+@end
+
 @implementation ES_NetworkAccessor
 
 @synthesize recievedData = _recievedData;
+
+@synthesize predictions = _predictions;
 
 - (NSData *) recievedData
 {
@@ -161,7 +168,11 @@
     
     //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
-    [self.recievedData writeToFile: [[ES_DataBaseAccessor serverResponseDirectory] stringByAppendingString: @"/JSONData" ] atomically:YES];
+    [self.predictions addObject: response];
+    
+    //[self.recievedData writeToFile: [[ES_DataBaseAccessor serverResponseDirectory] stringByAppendingString: @"/JSONData" ] atomically:YES];
+    
+    
     
     //NSLog(@"Succeeded! Received %d bytes of data.", [self.recievedData length]);
     

@@ -10,7 +10,7 @@
 #import "ES_SensorManager.h"
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
-#import "ES_DevViewController.h"
+#import "ES_HomeViewController.h"
 
 @interface ES_Scheduler()
 
@@ -24,7 +24,9 @@
 
 @property double waitTime;
 
-@property (nonatomic, strong) ES_DevViewController * devViewController;
+@property (nonatomic, strong) ES_HomeViewController *homeViewController;
+
+@property (nonatomic, strong) NSMutableArray *predictions;
 
 @end
 
@@ -40,6 +42,18 @@
 @synthesize isReady = _isReady;
 
 @synthesize waitTime = _waitTime;
+
+@synthesize predictions = _predictions;
+
+- (NSMutableArray *) predictions
+{
+    if (!_predictions)
+    {
+        _predictions = [NSMutableArray new];
+    }
+    return _predictions;
+}
+
 
 - (double) waitTime
 {
@@ -74,20 +88,19 @@
 }
 
 
-- (void) sampleSaveSendCycler: (ES_DevViewController *) devViewController
+- (void) sampleSaveSendCycler: (ES_HomeViewController *) homeViewController
 {
-    self.devViewController = devViewController;
+    self.homeViewController = homeViewController;
     
     NSLog( @"\n\nStart" );
     NSTimer *timer;
     timer = [NSTimer new];
     
-    timer = [NSTimer scheduledTimerWithTimeInterval: 20.0
+    timer = [NSTimer scheduledTimerWithTimeInterval: 50.0
                                              target: self
                                            selector: @selector(sampleSaveSend)
                                            userInfo: nil
                                             repeats: YES];
-    
     
 
 }
@@ -103,8 +116,8 @@
     
     NSString *fileContents = [NSString stringWithContentsOfFile: pathForLog ];
     
-    [self.devViewController.textView setText: fileContents ];
-    [self.devViewController.textView scrollRangeToVisible: NSMakeRange([self.devViewController.textView.text length], 0)];
+    [self.homeViewController.logView setText: fileContents ];
+    [self.homeViewController.logView scrollRangeToVisible:NSMakeRange([self.homeViewController.logView.text length], 0)];
     //////////////
 
     
@@ -147,7 +160,7 @@
 
 -(void) firstOp
 {
-    //NSLog(@"firstOp");
+    NSLog(@"Record Sensors");
     
     [self.sensorManager record];
     
@@ -155,7 +168,7 @@
 
 -(void) secondOp
 {
-    //NSLog(@"secondOp");
+    NSLog(@"Zip Data");
 
     [ES_DataBaseAccessor zipData];
     
@@ -163,9 +176,12 @@
 
 -(void) thirdOp
 {
-    //NSLog(@"thirdOp");
+    NSLog(@"upload");
 
     [self.networkAccessor upload];
+    self.predictions = self.networkAccessor.predictions;
+    [self.homeViewController.logView setText: [self.predictions description]];
+    
 }
 
 

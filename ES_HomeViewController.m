@@ -11,6 +11,7 @@
 #import "ES_AppDelegate.h"
 #import "ES_SettingsModel.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_Scheduler.h"
 
 @interface ES_HomeViewController ()
 
@@ -18,11 +19,25 @@
 
 @property (weak, nonatomic) IBOutlet UISlider *sampleFrequencySlider;
 
+@property (strong, nonatomic) ES_Scheduler *scheduler;
+
 @end
 
 @implementation ES_HomeViewController
 
 @synthesize settings = _settings;
+@synthesize scheduler = _scheduler;
+@synthesize logView = _logView;
+
+- (ES_Scheduler *) scheduler
+{
+    if (!_scheduler)
+    {
+        _scheduler = [ES_Scheduler new];
+        NSLog(@"Scheduler Created!");
+    }
+    return _scheduler;
+}
 
 - (ES_SettingsModel *) settings
 {
@@ -36,13 +51,13 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [self.settings addObserver:self
-           forKeyPath:@"sampleFrequency"
-              options:NSKeyValueObservingOptionNew
-              context:NULL];
+                    forKeyPath:@"sampleFrequency"
+                       options:NSKeyValueObservingOptionNew
+                       context:NULL];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{    
+{
     if ( [keyPath isEqualToString: @"sampleFrequency"] )
         [self.sampleFrequencyLabel setText: [NSString stringWithFormat: @"%@", [object valueForKey:@"sampleFrequency"]] ];
 }
@@ -58,15 +73,6 @@
     return appDelegate.sensorManager;
 }
 
-
-- (IBAction)dataCollectionSwitch:(UISwitch *)sender
-{
-    if ( sender.isEnabled )
-    {
-        NSLog(@"This doesn't do anything yet...");
-    }
-}
-
 - (IBAction)sliderValueChanged:(UISlider *)sender
 {
     //self.sampleFrequencyLabel.text = [NSString stringWithFormat: @"%.0f", sender.value ];
@@ -74,9 +80,24 @@
     //NSLog( @"SliderValue = %.2f", self.sampleFrequencySlider.value);
     
     [self.settings setValue: [NSNumber numberWithFloat: sender.value ]
-        forKeyPath: @"sampleFrequency"];
+                 forKeyPath: @"sampleFrequency"];
     
 }
+
+- (IBAction)startScheduler:(UISwitch *)sender
+{
+    if (sender.isEnabled)
+    {
+        [self.scheduler sampleSaveSendCycler: self ];
+    }
+    else
+    {
+        NSLog( @"off!");
+        exit(0);
+    }
+    
+}
+
 
 
 - (void)viewDidLoad
@@ -94,5 +115,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 @end
