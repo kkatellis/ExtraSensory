@@ -174,7 +174,7 @@
     BOOL successCompressing = [archiver CloseZipFile2];
     if(successCompressing)
     {
-        //NSLog(@"Zipped Successfully!");
+        NSLog(@"Zipped Successfully!");
         return zipFile;
     }
     else

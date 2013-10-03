@@ -11,6 +11,7 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_HomeViewController.h"
+#import "ES_AppDelegate.h"
 
 @interface ES_Scheduler()
 
@@ -96,11 +97,7 @@
     NSTimer *timer;
     timer = [NSTimer new];
     
-    timer = [NSTimer scheduledTimerWithTimeInterval: 50.0
-                                             target: self
-                                           selector: @selector(sampleSaveSend)
-                                           userInfo: nil
-                                            repeats: YES];
+    [self sampleSaveSend];
     
 
 }
@@ -108,33 +105,17 @@
 
 - (void) sampleSaveSend
 {
-        
-    //////////////
-    NSString *documentsDirectory = [ES_DataBaseAccessor applicationDocumentsDirectory];
-    
-    NSString *pathForLog = [documentsDirectory stringByAppendingPathComponent:@"NSLogRedirect.txt"];
-    
-    NSString *fileContents = [NSString stringWithContentsOfFile: pathForLog ];
-    
-    [self.homeViewController.logView setText: fileContents ];
-    [self.homeViewController.logView scrollRangeToVisible:NSMakeRange([self.homeViewController.logView.text length], 0)];
-    //////////////
-
-    
     NSTimer *timer;
     
     timer = [NSTimer new];
     
     self.counter = 0;
     
-    timer = [NSTimer scheduledTimerWithTimeInterval: self.waitTime
+    timer = [NSTimer scheduledTimerWithTimeInterval: 5.0
                                              target: self
                                            selector: @selector(operationCycler)
                                            userInfo: nil
-                                            repeats: YES];
-
-
-    
+                                            repeats: YES];    
 }
 
 
@@ -179,9 +160,10 @@
     NSLog(@"upload");
 
     [self.networkAccessor upload];
-    self.predictions = self.networkAccessor.predictions;
-    [self.homeViewController.logView setText: [self.predictions description]];
     
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    self.homeViewController.logView.text = [appDelegate.predictions description];
 }
 
 

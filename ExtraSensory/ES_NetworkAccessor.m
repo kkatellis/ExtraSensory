@@ -26,6 +26,15 @@
 
 @synthesize predictions = _predictions;
 
+- (NSMutableArray *) predictions
+{
+    if (!_predictions)
+    {
+        _predictions = [NSMutableArray new];
+    }
+    return _predictions;
+}
+
 - (NSData *) recievedData
 {
     if (!_recievedData)
@@ -164,17 +173,15 @@
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
-    NSLog( @"Data: %@", [response description]);
+    NSString *predictedActivity = [response objectForKey:@"predicted_actvity"];
+    
+    NSLog( @"Prediction: %@", predictedActivity );
     
     //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
-    [self.predictions addObject: response];
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    //[self.recievedData writeToFile: [[ES_DataBaseAccessor serverResponseDirectory] stringByAppendingString: @"/JSONData" ] atomically:YES];
-    
-    
-    
-    //NSLog(@"Succeeded! Received %d bytes of data.", [self.recievedData length]);
+    [appDelegate.predictions addObject: predictedActivity];
     
     connection = nil;
 }

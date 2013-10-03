@@ -25,11 +25,11 @@
 
 @property (strong, nonatomic) ES_SensorManager *sensorManager;
 
-@property (weak, nonatomic) dispatch_queue_t databaseQueue;
-
 @property (strong, atomic) NSMutableArray *networkStack;
 
 @property (strong, nonatomic) ES_NetworkAccessor *networkAccessor;
+
+@property (strong, nonatomic) NSMutableArray *predictions;
 
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;

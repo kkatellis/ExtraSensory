@@ -19,7 +19,6 @@
 
 @property (nonatomic) NSArray *batchData;
 
-@property (nonatomic) dispatch_queue_t sensorQueue;
 
 
 @end
@@ -38,7 +37,6 @@
 
 @synthesize sampleDuration = _sampleDuration;
 
-@synthesize sensorQueue = _sensorQueue;
 
 @synthesize batchData = _batchData;
 
@@ -65,15 +63,7 @@
     return _batchData;
 }
 
-- (dispatch_queue_t)sensorQueue
-{
-    if (!_sensorQueue)
-    {
-        return dispatch_queue_create( "ES_SensorQueue ", NULL );
-    }
-    return _sensorQueue;
-    
-}
+
 
 - (CMMotionManager *)motionManager
 {
@@ -99,7 +89,7 @@
 {
     if (!_sampleDuration)
     {
-        _sampleDuration = 5.0;
+        _sampleDuration = 10.0;
     }
     return _sampleDuration;
 }
@@ -114,7 +104,7 @@
     
     //NSLog( @"record" );
     
-    double interval = (1.0 / self.sampleFrequency);
+    double interval = .01;
     
     self.motionManager.accelerometerUpdateInterval = interval;
     self.motionManager.gyroUpdateInterval = interval;
@@ -147,63 +137,54 @@
 
 - (void) readSensorsIntoDictionary
 {
-    //NSLog( @"readSensorsIntoDictionary" );
+    NSArray *objects = [NSArray new];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.speed ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.latitude ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.longitude ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.timestamp ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.x ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.x ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.y ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.y ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.z ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.z ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_peak_db
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_avg_db
     
-    __block ES_SensorManager *blockSelf = self;
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjects: objects forKeys: [self keys]];
     
-    dispatch_async(self.sensorQueue, ^
-                   {
-                       NSArray *objects = [NSArray new];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.speed ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.latitude ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.locationManager.location.coordinate.longitude ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.timestamp ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.x ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.x ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.y ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.y ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.z ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.z ]];
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_peak_db
-                       objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_avg_db
-                       
-                       NSDictionary *dictionary = [NSDictionary dictionaryWithObjects: objects forKeys: [blockSelf keys]];
-                       
-                       blockSelf.batchData = [blockSelf.batchData arrayByAddingObject: dictionary];
-                       
-                       blockSelf.counter = [NSNumber numberWithInteger: [blockSelf.counter integerValue] + 1];
-                       
-                       if ([blockSelf.counter integerValue] >= self.samplesPerBatch )
-                       {
-                           [blockSelf.timer invalidate];
-                           
-                           blockSelf.counter = 0;
-                           
-                           [blockSelf.locationManager stopUpdatingLocation];
-                           [blockSelf.motionManager stopAccelerometerUpdates];
-                           [blockSelf.motionManager stopGyroUpdates];
-                           
-                           
-                           //NSLog( @"%@", [blockSelf.batchData description]);
-                           
-                           NSError * error = [NSError new];
-                           
-                           NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: blockSelf.batchData options:0 error:&error];
-                           
-                           NSString *filePath = [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
-                           
-                           
-                           //BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
-                           [ES_DataBaseAccessor writeData: jsonObject toPath:filePath];
-                           
-                           
-                           
-                           self.isReady = [NSNumber numberWithBool: YES];
-                           
-                       }
-                       
-                   });
+    self.batchData = [self.batchData arrayByAddingObject: dictionary];
     
+    self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
+    
+    NSLog(@"sample # %@", self.counter );
+    
+    
+    if ([self.counter integerValue] >= 200 )
+    {
+        [self.timer invalidate];
+        
+        self.counter = 0;
+        
+        [self.locationManager stopUpdatingLocation];
+        [self.motionManager stopAccelerometerUpdates];
+        [self.motionManager stopGyroUpdates];
+        
+        
+        
+        NSError * error = [NSError new];
+        
+        NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: self.batchData options:0 error:&error];
+        
+        NSString *filePath = [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
+        
+        [ES_DataBaseAccessor writeData: jsonObject toPath:filePath];
+        
+        
+        
+        self.isReady = [NSNumber numberWithBool: YES];
+        
+    }
 }
 
 

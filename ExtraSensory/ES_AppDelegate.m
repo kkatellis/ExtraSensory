@@ -19,11 +19,20 @@
 
 @synthesize sensorManager = _sensorManager;
 
-@synthesize databaseQueue = _databaseQueue;
-
 @synthesize networkStack = _networkStack;
 
 @synthesize networkAccessor = _networkAccessor;
+
+@synthesize predictions = _predictions;
+
+- (NSMutableArray *) predictions
+{
+    if (!_predictions)
+    {
+        _predictions = [NSMutableArray new];
+    }
+    return _predictions;
+}
 
 - (ES_NetworkAccessor *)networkAccessor
 {
@@ -56,15 +65,7 @@
 
 // Getter
 
-- (dispatch_queue_t)databaseQueue
-{
-    if (!_databaseQueue)
-    {
-        return dispatch_queue_create( "ES_DataBaseQueue ", NULL );
-    }
-    return _databaseQueue;
-    
-}
+
 
 
 - (ES_SensorManager *)sensorManager
@@ -81,6 +82,7 @@
     //[self redirectNSLogToDocuments];
 }
 
+/*
 - (void)redirectNSLogToDocuments
 {
     NSString *documentsDirectory = [self applicationDocumentsDirectory];
@@ -88,7 +90,7 @@
     NSString *pathForLog = [documentsDirectory stringByAppendingPathComponent:@"NSLogRedirect.txt"];
     
     freopen([pathForLog cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
-}
+}*/
 
 
 

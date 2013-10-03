@@ -75,9 +75,7 @@
 
 - (IBAction)sliderValueChanged:(UISlider *)sender
 {
-    //self.sampleFrequencyLabel.text = [NSString stringWithFormat: @"%.0f", sender.value ];
     self.sensorManager.sampleFrequency = self.sampleFrequencySlider.value;
-    //NSLog( @"SliderValue = %.2f", self.sampleFrequencySlider.value);
     
     [self.settings setValue: [NSNumber numberWithFloat: sender.value ]
                  forKeyPath: @"sampleFrequency"];
