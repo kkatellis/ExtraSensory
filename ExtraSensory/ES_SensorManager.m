@@ -167,9 +167,6 @@
     
     self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
     
-    NSLog(@"sample # %@", self.counter );
-    
-    
     if ([self.counter integerValue] >= 200 )
     {
         [self.timer invalidate];

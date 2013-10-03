@@ -175,13 +175,19 @@
     
     NSString *predictedActivity = [response objectForKey:@"predicted_actvity"];
     
-    NSLog( @"Prediction: %@", predictedActivity );
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    NSString *dateString = [NSString stringWithFormat: @" - %@", [dateFormatter stringFromDate: [NSDate date]]];
+    
+    NSString *predictionAndDate = [predictedActivity stringByAppendingString: dateString];
+    
+    NSLog( @"Prediction: %@", predictionAndDate );
     
     //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    [appDelegate.predictions addObject: predictedActivity];
+    [appDelegate.predictions insertObject:predictionAndDate atIndex:0];
     
     connection = nil;
 }

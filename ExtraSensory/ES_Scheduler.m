@@ -100,22 +100,53 @@
     self.homeViewController = homeViewController;
     
     NSLog( @"\n\nStart" );
-    NSTimer *timer;
-    timer = [NSTimer new];
-    
-    [self sampleSaveSend];
     
 
-}
-
-
-- (void) sampleSaveSend
-{
     NSTimer *timer;
     
     timer = [NSTimer new];
     
     self.counter = 0;
+    
+    
+    //2)Making background task Asynchronous
+    if([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)])
+    {
+        NSLog(@"Multitasking Supported");
+        
+        __block UIBackgroundTaskIdentifier background_task;
+        background_task = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^ {
+            
+            //Clean up code. Tell the system that we are done.
+            [[UIApplication sharedApplication] endBackgroundTask: background_task];
+            background_task = UIBackgroundTaskInvalid;
+        }];
+        
+        
+        //Putting All together**
+        //To make the code block asynchronous
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            //### background task starts
+            NSLog(@"Running in the background\n");
+            while(TRUE)
+            {
+                NSLog(@"Background time Remaining: %f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
+                [NSThread sleepForTimeInterval:150]; //wait for 1 sec
+            }
+            //#### background task ends
+            
+            //Clean up code. Tell the system that we are done.
+            [[UIApplication sharedApplication] endBackgroundTask: background_task];
+            background_task = UIBackgroundTaskInvalid;
+        });
+    }
+    else
+    {
+        NSLog(@"Multitasking Not Supported");
+    }
+    
+    
     
     timer = [NSTimer scheduledTimerWithTimeInterval: 6.0
                                              target: self
