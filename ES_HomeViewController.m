@@ -19,6 +19,9 @@
 
 @property (weak, nonatomic) IBOutlet UISlider *sampleFrequencySlider;
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *activitiesButton;
+
+
 @property (strong, nonatomic) ES_Scheduler *scheduler;
 
 @end
@@ -28,7 +31,7 @@
 @synthesize settings = _settings;
 @synthesize scheduler = _scheduler;
 @synthesize logView = _logView;
-
+@synthesize activitiesButton = _activitiesButton;
 - (ES_Scheduler *) scheduler
 {
     if (!_scheduler)
@@ -50,21 +53,21 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    [self.settings addObserver:self
+/*    [self.settings addObserver:self
                     forKeyPath:@"sampleFrequency"
                        options:NSKeyValueObservingOptionNew
-                       context:NULL];
+                       context:NULL];*/
 }
 
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+/*- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ( [keyPath isEqualToString: @"sampleFrequency"] )
         [self.sampleFrequencyLabel setText: [NSString stringWithFormat: @"%@", [object valueForKey:@"sampleFrequency"]] ];
-}
+}*/
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    [self.settings removeObserver:self forKeyPath:@"sampleFrequency"];
+//    [self.settings removeObserver:self forKeyPath:@"sampleFrequency"];
 }
 
 - (ES_SensorManager *)sensorManager
@@ -73,14 +76,14 @@
     return appDelegate.sensorManager;
 }
 
-- (IBAction)sliderValueChanged:(UISlider *)sender
+/*- (IBAction)sliderValueChanged:(UISlider *)sender
 {
     self.sensorManager.sampleFrequency = self.sampleFrequencySlider.value;
     
     [self.settings setValue: [NSNumber numberWithFloat: sender.value ]
                  forKeyPath: @"sampleFrequency"];
     
-}
+}*/
 
 - (IBAction)startScheduler:(UISwitch *)sender
 {
@@ -114,6 +117,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog( @"Prepare for segue %@", segue );
+    if ([segue.identifier isEqualToString:@"ActivitiesButton"])
+    {
+        NSLog( @"segue identifier = Calendar View");
+        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [segue.destinationViewController setPredictions: appDelegate.predictions];
+    }
+}
 
 
 @end

@@ -20,7 +20,8 @@
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
-    if (self) {
+    if (self)
+    {
         // Custom initialization
     }
     return self;
@@ -54,31 +55,42 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+/*- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    self.predictions = appDelegate.predictions;
-    NSLog( @"prediction count = %lu", (unsigned long)[appDelegate.predictions count]);
-    return [appDelegate.predictions count];
-
-}
+    return 0;
+}*/
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.predictions = appDelegate.predictions;
+    
+    NSLog( @"prediction count = %lu", (unsigned long)[appDelegate.predictions count]);
+    return [appDelegate.predictions count];
+
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.predictions = appDelegate.predictions;
     
-    NSLog(@"table view = %@", tableView);
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Activity Description" forIndexPath:indexPath];
+    
+    NSLog(@"table view = %@", [tableView description]);
+    static NSString *CellIdentifier = @"ActivityDescription";
+    
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath:indexPath];
+    /*if( cell == nil )
+    {
+        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }*/
     
     // Configure the cell...
+    NSLog( @"prediction for cell = %@", [self.predictions objectAtIndex: indexPath.row]);
     
-    
-    cell.textLabel.text = [self.predictions objectAtIndex:indexPath.row];
+    cell.textLabel.text = [self.predictions objectAtIndex: indexPath.row ];
     
     return cell;
 }
