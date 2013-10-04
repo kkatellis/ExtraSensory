@@ -15,6 +15,8 @@
 
 @implementation ES_CalendarViewTableViewController
 
+@synthesize predictions = _predictions;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -28,13 +30,17 @@
 {
     [super viewDidLoad];
     
+    NSLog( @"CalendarView Did Load");
     
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    self.predictions = appDelegate.predictions;
     
     
     
 
     // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+     self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -50,23 +56,29 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.predictions = appDelegate.predictions;
+    NSLog( @"prediction count = %lu", (unsigned long)[appDelegate.predictions count]);
+    return [appDelegate.predictions count];
 
-    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSLog( @"prediction count = %@", [appDelegate.predictions count]);
-    return [appDelegate.predictions count];
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    NSLog(@"table view = %@", tableView);
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Activity Description" forIndexPath:indexPath];
     
     // Configure the cell...
+    
+    
+    cell.textLabel.text = [self.predictions objectAtIndex:indexPath.row];
     
     return cell;
 }

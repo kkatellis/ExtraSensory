@@ -19,8 +19,6 @@
 
 @property (nonatomic) NSArray *batchData;
 
-
-
 @end
 
 @implementation ES_SensorManager
@@ -124,7 +122,7 @@
 
     
 
-    
+    [self.motionManager startDeviceMotionUpdates];
     [self.motionManager startAccelerometerUpdates];
     [self.motionManager startGyroUpdates];
     
@@ -151,13 +149,13 @@
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.speed ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.timestamp ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.x ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.x ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.y ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.y ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.gyroData.rotationRate.z ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.accelerometerData.acceleration.z ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ]];
+    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_peak_db
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_avg_db
     
