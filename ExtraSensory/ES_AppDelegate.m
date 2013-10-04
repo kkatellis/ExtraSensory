@@ -25,6 +25,9 @@
 
 @synthesize predictions = _predictions;
 
+@synthesize user = _user;
+
+
 - (NSMutableArray *) predictions
 {
     if (!_predictions)

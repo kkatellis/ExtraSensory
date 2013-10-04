@@ -14,7 +14,6 @@
 
 @property (nonatomic, strong) ES_SettingsModel *settings;
 
-@property (weak, nonatomic) IBOutlet UITextView *logView;
 
 
 @end

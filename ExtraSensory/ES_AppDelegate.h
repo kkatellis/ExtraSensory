@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class ES_SensorManager, ES_NetworkAccessor;
+@class ES_SensorManager, ES_NetworkAccessor, ES_User;
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -33,6 +33,8 @@
 @property (strong, nonatomic) NSMutableArray *predictions;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) ES_User *user;
 
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;

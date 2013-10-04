@@ -76,22 +76,13 @@
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.predictions = appDelegate.predictions;
     
-    
-    NSLog(@"table view = %@", [tableView description]);
     static NSString *CellIdentifier = @"ActivityDescription";
     
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath:indexPath];
-    /*if( cell == nil )
-    {
-        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }*/
     
     // Configure the cell...
-    NSLog( @"prediction for cell = %@", [self.predictions objectAtIndex: indexPath.row]);
-    
     cell.textLabel.text = [self.predictions objectAtIndex: indexPath.row ];
-    
     return cell;
 }
 

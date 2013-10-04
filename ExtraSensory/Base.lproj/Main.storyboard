@@ -16,13 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" editable="NO" text="Logs print here" translatesAutoresizingMaskIntoConstraints="NO" id="eKg-dl-K24">
-                                <rect key="frame" x="0.0" y="126" width="320" height="393"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Data Collection" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJc-MR-XsR">
                                 <rect key="frame" x="20" y="73" width="130" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -49,14 +42,13 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activitiesButton" destination="2WC-HM-86c" id="SnS-mv-W4p"/>
-                        <outlet property="logView" destination="eKg-dl-K24" id="jvF-Qu-Q8L"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="alz-gN-hpr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1213" y="-364"/>
         </scene>
-        <!--Calendar View Table View Controller - Item-->
+        <!--Calendar View Table View Controller - Activity History-->
         <scene sceneID="upH-LE-r7c">
             <objects>
                 <tableViewController storyboardIdentifier="Calendar View" useStoryboardIdentifierAsRestorationIdentifier="YES" id="clN-UH-6YB" customClass="ES_CalendarViewTableViewController" sceneMemberID="viewController">
@@ -89,7 +81,7 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Item" id="YjH-4T-leD"/>
-                    <navigationItem key="navigationItem" id="pBf-eq-Q71"/>
+                    <navigationItem key="navigationItem" title="Activity History" id="pBf-eq-Q71"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZGO-IW-sOw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -197,10 +197,6 @@
     NSLog(@"upload");
 
     [self.networkAccessor upload];
-    
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    self.homeViewController.logView.text = [appDelegate.predictions description];
 }
 
 

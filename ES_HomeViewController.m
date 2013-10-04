@@ -30,7 +30,6 @@
 
 @synthesize settings = _settings;
 @synthesize scheduler = _scheduler;
-@synthesize logView = _logView;
 @synthesize activitiesButton = _activitiesButton;
 - (ES_Scheduler *) scheduler
 {
