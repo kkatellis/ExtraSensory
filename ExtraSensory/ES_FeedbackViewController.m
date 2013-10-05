@@ -9,7 +9,7 @@
 #import "ES_FeedbackViewController.h"
 
 @interface ES_FeedbackViewController ()
-@property (weak, nonatomic) IBOutlet UITableView *feedbackTableView;
+@property (weak, nonatomic) IBOutlet UILabel *correctActivityLabel;
 
 @end
 
@@ -17,7 +17,39 @@
 
 @synthesize fromCell = _fromCell;
 
-@synthesize feedbackTableView = _feedbackTableView;
+- (IBAction)send:(UIBarButtonItem *)sender {
+    
+}
+
+
+- (IBAction)lying:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
+}
+
+- (IBAction)sitting:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
+}
+
+- (IBAction)standing:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
+}
+
+- (IBAction)walking:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
+}
+
+- (IBAction)running:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
+}
+
+- (IBAction)bicycling:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
+}
+
+- (IBAction)driving:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
+}
+
 
 
 - (void)viewDidLoad

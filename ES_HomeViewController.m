@@ -21,6 +21,7 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *activitiesButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *indicatorLabel;
 
 @property (strong, nonatomic) ES_Scheduler *scheduler;
 
@@ -85,18 +86,21 @@
     
 }*/
 
+#define RECORDING_TEXT @"We are now recording!"
+#define NOT_RECORDING_TEXT @"We are not currently recording."
+
 - (IBAction)startScheduler:(UISwitch *)sender
 {
     if (sender.isOn)
     {
         [self.scheduler setIsOn: YES];
         [self.scheduler sampleSaveSendCycler: self ];
+        [self.indicatorLabel setText: RECORDING_TEXT];
     }
     else
     {
         [self.scheduler setIsOn:NO];
-        NSLog( @"off!");
-
+        [self.indicatorLabel setText: NOT_RECORDING_TEXT];
     }
     
 }

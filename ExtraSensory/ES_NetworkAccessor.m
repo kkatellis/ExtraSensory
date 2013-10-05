@@ -180,7 +180,7 @@
     NSString *predictedActivity = [response objectForKey:@"predicted_activity"];
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    [dateFormatter setDateFormat:@"hh:mm:ss"];
     NSString *dateString = [NSString stringWithFormat: @" - %@", [dateFormatter stringFromDate: [NSDate date]]];
     
     NSString *predictionAndDate = [predictedActivity stringByAppendingString: dateString];
