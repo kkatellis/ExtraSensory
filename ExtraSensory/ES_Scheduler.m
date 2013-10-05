@@ -21,13 +21,13 @@
 
 @property int counter;
 
-@property BOOL isReady;
-
 @property double waitTime;
 
 @property (nonatomic, strong) ES_HomeViewController *homeViewController;
 
 @property (nonatomic, strong) NSMutableArray *predictions;
+
+@property NSTimer *timer;
 
 @end
 
@@ -45,6 +45,9 @@
 @synthesize waitTime = _waitTime;
 
 @synthesize predictions = _predictions;
+
+@synthesize timer = _timer;
+
 
 - (NSMutableArray *) predictions
 {
@@ -101,11 +104,6 @@
     
     NSLog( @"\n\nStart" );
     
-
-    NSTimer *timer;
-    
-    timer = [NSTimer new];
-    
     self.counter = 0;
     
     
@@ -146,57 +144,96 @@
         NSLog(@"Multitasking Not Supported");
     }
     
-    
-    
-    timer = [NSTimer scheduledTimerWithTimeInterval: 12.0
-                                             target: self
-                                           selector: @selector(operationCycler)
-                                           userInfo: nil
-                                            repeats: YES];    
-}
-
-
-
-- (void) operationCycler
-{
-    if ( self.counter == 0 )
+    if (self.isReady)
     {
+        [self setIsReady:NO];
+        
         [self firstOp];
-        self.counter++;
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval: 300
+                                                      target: self
+                                                    selector: @selector(firstOp)
+                                                    userInfo: nil
+                                                     repeats: YES];
     }
-    else if (self.counter == 1 )
+    else
     {
-        [self secondOp];
-        self.counter++;
-    }
-    else if (self.counter == 2 )
-    {
-        [self thirdOp];
-        self.counter = 0;
+        NSLog(@"not ready!");
     }
 }
+
+
+
+
+/*- (void) operationCycler
+ {
+ if ( self.counter == 0 )
+ {
+ [self firstOp];
+ self.counter++;
+ }
+ else if (self.counter == 1 )
+ {
+ [self secondOp];
+ self.counter++;
+ }
+ else if (self.counter == 2 )
+ {
+ [self thirdOp];
+ self.counter = 0;
+ }
+ }*/
 
 -(void) firstOp
 {
+    if (!self.isOn)
+    {
+        [self.timer invalidate];
+        return;
+    }
+    
     NSLog(@"Record Sensors");
     
     [self.sensorManager record];
+    
+    NSLog(@"Back from sensor Recording");
+    
+    NSTimer *timer;
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval: 25
+                                             target: self
+                                           selector: @selector(secondOp)
+                                           userInfo: nil
+                                            repeats: NO];
+    
     
 }
 
 -(void) secondOp
 {
     NSLog(@"Zip Data");
-
+    
     [ES_DataBaseAccessor zipData];
+    
+    NSTimer *timer;
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval: 5
+                                             target: self
+                                           selector: @selector(thirdOp)
+                                           userInfo: nil
+                                            repeats: NO];
     
 }
 
 -(void) thirdOp
 {
     NSLog(@"upload");
-
+    
     [self.networkAccessor upload];
+    
+    NSLog(@"back from uploading");
+    
+    [self setIsReady: YES];
 }
 
 

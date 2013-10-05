@@ -36,6 +36,7 @@
     if (!_scheduler)
     {
         _scheduler = [ES_Scheduler new];
+        _scheduler.isReady = YES;
         NSLog(@"Scheduler Created!");
     }
     return _scheduler;
@@ -86,14 +87,16 @@
 
 - (IBAction)startScheduler:(UISwitch *)sender
 {
-    if (sender.isEnabled)
+    if (sender.isOn)
     {
+        [self.scheduler setIsOn: YES];
         [self.scheduler sampleSaveSendCycler: self ];
     }
     else
     {
+        [self.scheduler setIsOn:NO];
         NSLog( @"off!");
-        exit(0);
+
     }
     
 }
@@ -118,10 +121,8 @@
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog( @"Prepare for segue %@", segue );
     if ([segue.identifier isEqualToString:@"ActivitiesButton"])
     {
-        NSLog( @"segue identifier = Calendar View");
         ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         [segue.destinationViewController setPredictions: appDelegate.predictions];
     }

@@ -12,6 +12,10 @@
 
 @interface ES_Scheduler : NSObject
 
+@property BOOL isReady;
+
+@property BOOL isOn;
+
 - (void) sampleSaveSendCycler: (ES_HomeViewController *) homeViewController;
 
 @end

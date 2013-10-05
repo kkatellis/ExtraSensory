@@ -29,6 +29,8 @@
 		934377AC17FEE51500521B0D /* ES_UserActivityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377AB17FEE51500521B0D /* ES_UserActivityLabel.m */; };
 		934377AF17FEE51500521B0D /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377AE17FEE51500521B0D /* ES_Activity.m */; };
 		934377B217FEE51500521B0D /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B117FEE51500521B0D /* ES_User.m */; };
+		934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B417FF94E200521B0D /* ES_FeedbackViewController.m */; };
+		934377B817FF9BB700521B0D /* ES_FeedbackPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B717FF9BB700521B0D /* ES_FeedbackPickerView.m */; };
 		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
 		93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */; };
 		93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */; };
@@ -86,6 +88,10 @@
 		934377AE17FEE51500521B0D /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_Activity.m; path = ../ES_Activity.m; sourceTree = "<group>"; };
 		934377B017FEE51500521B0D /* ES_User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_User.h; path = ../ES_User.h; sourceTree = "<group>"; };
 		934377B117FEE51500521B0D /* ES_User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_User.m; path = ../ES_User.m; sourceTree = "<group>"; };
+		934377B317FF94E200521B0D /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
+		934377B417FF94E200521B0D /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
+		934377B617FF9BB700521B0D /* ES_FeedbackPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackPickerView.h; sourceTree = "<group>"; };
+		934377B717FF9BB700521B0D /* ES_FeedbackPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackPickerView.m; sourceTree = "<group>"; };
 		93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Scheduler.h; sourceTree = "<group>"; };
 		93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Scheduler.m; sourceTree = "<group>"; };
 		93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewTableViewController.h; sourceTree = "<group>"; };
@@ -178,6 +184,7 @@
 				93F659DF17F6B299000638CB /* NetworkManagement */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
+				934377B917FF9BC000521B0D /* Views */,
 				933F7CCF17F4D7C700B05C96 /* SensorManagement */,
 				9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */,
 				93F659DB17F6B1BE000638CB /* DataManagement */,
@@ -219,10 +226,12 @@
 		9307CC6A17F220FE00D95E05 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
-				93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */,
 				93F678EC17F81F42000638CB /* ES_HomeViewController.h */,
 				93F678ED17F81F42000638CB /* ES_HomeViewController.m */,
+				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
+				93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */,
+				934377B317FF94E200521B0D /* ES_FeedbackViewController.h */,
+				934377B417FF94E200521B0D /* ES_FeedbackViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -253,6 +262,15 @@
 				934377A217FEE51400521B0D /* ES_Sample.m */,
 			);
 			name = DataModels;
+			sourceTree = "<group>";
+		};
+		934377B917FF9BC000521B0D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				934377B617FF9BB700521B0D /* ES_FeedbackPickerView.h */,
+				934377B717FF9BB700521B0D /* ES_FeedbackPickerView.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		93F659DB17F6B1BE000638CB /* DataManagement */ = {
@@ -411,8 +429,10 @@
 				934377A317FEE51400521B0D /* ES_Sample.m in Sources */,
 				934377AC17FEE51500521B0D /* ES_UserActivityLabel.m in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
+				934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
+				934377B817FF9BB700521B0D /* ES_FeedbackPickerView.m in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */,

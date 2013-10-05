@@ -177,7 +177,7 @@
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
-    NSString *predictedActivity = [response objectForKey:@"predicted_actvity"];
+    NSString *predictedActivity = [response objectForKey:@"predicted_activity"];
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];

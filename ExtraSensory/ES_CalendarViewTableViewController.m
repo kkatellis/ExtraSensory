@@ -8,6 +8,7 @@
 
 #import "ES_CalendarViewTableViewController.h"
 #import "ES_AppDelegate.h"
+#import "ES_FeedbackViewController.h"
 
 @interface ES_CalendarViewTableViewController ()
 
@@ -30,8 +31,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSLog( @"CalendarView Did Load");
     
     ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -125,17 +124,18 @@
 }
 */
 
-/*
+
 
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [(ES_FeedbackViewController *)segue.destinationViewController setFromCell:sender ];
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
 
- */
+
 
 @end

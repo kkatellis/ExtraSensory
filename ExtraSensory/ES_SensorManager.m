@@ -165,7 +165,7 @@
     
     self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
     
-    if ([self.counter integerValue] >= 400 )
+    if ([self.counter integerValue] >= 800 )
     {
         [self.timer invalidate];
         
