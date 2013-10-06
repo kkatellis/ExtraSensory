@@ -7,9 +7,12 @@
 //
 
 #import "ES_SensorManager.h"
-#import "ES_Sample.h"
 #import "ES_DataBaseAccessor.h"
-
+#import "ES_User.h"
+#import "ES_AppDelegate.h"
+#import "ES_Settings.h"
+#import "ES_SensorSample.h"
+#import "ES_Activity.h"
 
 @interface ES_SensorManager()
 
@@ -17,7 +20,8 @@
 
 @property NSNumber *counter;
 
-@property (nonatomic) NSArray *batchData;
+//@property (nonatomic) NSArray *batchData;
+
 
 @end
 
@@ -37,10 +41,33 @@
 
 @synthesize sampleDuration = _sampleDuration;
 
-
-@synthesize batchData = _batchData;
+//@synthesize batchData = _batchData;
 
 @synthesize isReady = _isReady;
+
+@synthesize user = _user;
+
+@synthesize currentActivity = _currentActivity;
+
+- (ES_Activity *) currentActivity
+{
+    if (!_currentActivity)
+    {
+        _currentActivity = [ES_DataBaseAccessor newActivity];
+    }
+    return _currentActivity;
+}
+
+- (ES_User *) user
+{
+    if (!_user)
+    {
+        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        _user = appDelegate.user;
+    }
+    return _user;
+}
+
 
 - (NSNumber *) isReady
 {
@@ -54,14 +81,14 @@
 
 // Getter
 
-- (NSArray *)batchData
+/*- (NSArray *)batchData
 {
     if (!_batchData)
     {
         _batchData = [NSArray new];
     }
     return _batchData;
-}
+}*/
 
 
 
@@ -75,7 +102,7 @@
 {
     if (!_sampleFrequency)
     {
-        _sampleFrequency = 1;
+        _sampleFrequency = [self.user.settings.sampleRate doubleValue];
     }
     return _sampleFrequency;
 }
@@ -89,7 +116,7 @@
 {
     if (!_sampleDuration)
     {
-        _sampleDuration = 10.0;
+        _sampleDuration = [self.user.settings.sampleDuration doubleValue];
     }
     return _sampleDuration;
 }
@@ -104,7 +131,8 @@
     
     //NSLog( @"record" );
     
-    double interval = 1/40.0;
+    double interval = 1 / [self.user.settings.sampleRate doubleValue];
+    NSLog(@"Sample interval = %f", interval);
     
     
     self.motionManager.accelerometerUpdateInterval = interval;
@@ -138,14 +166,36 @@
 }
 
 
-- (NSArray *) keys
+/*- (NSArray *) keys
 {
-    return [NSArray arrayWithObjects: @"speed", @"lat", @"long", @"timestamp", @"gyro_x", @"acc_x", @"gyro_y", @"acc_y", @"gyro_z", @"acc_z", @"mic_peak_db",  @"mic_avg_db", nil ];
-}
+    return [NSArray arrayWithObjects: @"speed", @"lat", @"long", @"time", @"gyro_x", @"acc_x", @"gyro_y", @"acc_y", @"gyro_z", @"acc_z", @"mic_peak_db",  @"mic_avg_db", nil ];
+}*/
 
 - (void) readSensorsIntoDictionary
 {
-    NSArray *objects = [NSArray new];
+    //NSArray *objects = [NSArray new];
+    
+    ES_SensorSample *sample = [ES_DataBaseAccessor newSensorSample];
+    
+    sample.speed       = [NSNumber numberWithDouble: self.currentLocation.speed ];
+    sample.lat         = [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ];
+    sample.longitude   = [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ];
+    
+    sample.time        = [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ];
+    
+    
+    sample.gyro_x      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ];
+    sample.acc_x       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ];
+    sample.gyro_y      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ];
+    sample.acc_y       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ];
+    sample.gyro_z      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ];
+    sample.acc_z       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ];
+    sample.mic_peak_db = [NSNumber numberWithDouble: 0.0 ];
+    sample.mic_avg_db  = [NSNumber numberWithDouble: 0.0 ];
+    
+    
+    
+    /*
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.speed ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ]];
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ]];
@@ -160,13 +210,18 @@
     objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_avg_db
     
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjects: objects forKeys: [self keys]];
-    
-    self.batchData = [self.batchData arrayByAddingObject: dictionary];
+    */
+     
+    [self.currentActivity addSensorSamplesObject: sample];
+        
+    //self.batchData = [self.batchData arrayByAddingObject: dictionary];
     
     self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
     
+    
     if ([self.counter integerValue] >= 800 )
     {
+        self.currentActivity.timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
         [self.timer invalidate];
         
         self.counter = 0;
@@ -176,17 +231,15 @@
         [self.motionManager stopGyroUpdates];
         
         
+        [ES_DataBaseAccessor writeActivity: self.currentActivity];
         
-        NSError * error = [NSError new];
+        //[ES_DataBaseAccessor writeData: self.batchData];
+        //self.batchData = [NSMutableArray new];
         
-        NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: self.batchData options:0 error:&error];
+        [self.user addActivitiesObject: self.currentActivity];
         
         
-        NSString *filePath = [[ES_DataBaseAccessor dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
-        
-        [ES_DataBaseAccessor writeData: jsonObject toPath:filePath];
-        self.batchData = [NSMutableArray new];
-        
+        self.currentActivity = [ES_DataBaseAccessor newActivity];
         
         self.isReady = [NSNumber numberWithBool: YES];
         

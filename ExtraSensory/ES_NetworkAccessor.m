@@ -9,6 +9,8 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_AppDelegate.h"
+#import "ES_User.h"
+#import "ES_Activity.h"
 
 #define API_URL         @"http://137.110.112.50:8080/api/analyze?%@"
 #define API_UPLOAD      @"http://137.110.112.50:8080/api/feedback_upload"
@@ -16,8 +18,6 @@
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
 
 @interface ES_NetworkAccessor()
-
-@property (strong, nonatomic) NSString *currentZipFilePath;
 
 
 @end
@@ -59,7 +59,7 @@
     
     NSString *file = [appDelegate popOffNetworkStack];
     
-    //NSLog( @"upload: %@", file);
+    NSLog( @"upload: %@", file);
     
     if (!file)
     {
@@ -71,9 +71,9 @@
     
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
-    self.currentZipFilePath = fullPath;
+    appDelegate.currentZipFilePath = fullPath;
     
-    //NSLog( @"[DataUploader] Attempting to upload %@", file );
+    NSLog( @"[DataUploader] Attempting to upload %@", file );
     
     NSData *data = [NSData dataWithContentsOfFile: fullPath];
     
@@ -112,7 +112,6 @@
                                 data: (NSData *)data
                             fileName: (NSString *) fileName
 {
-    
     // From http://www.cocoadev.com/index.pl?HTTPFileUpload
     NSMutableURLRequest *urlRequest =
     [NSMutableURLRequest requestWithURL:url];
@@ -169,8 +168,6 @@
                                             encoding: NSUTF8StringEncoding];
     
     
-    
-    
     NSLog( @" reply = %@", [reply description]);
     
     
@@ -178,6 +175,9 @@
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
     NSString *predictedActivity = [response objectForKey:@"predicted_activity"];
+    NSNumber *time = [NSNumber numberWithDouble: [[response objectForKey: @"timestamp"] doubleValue]];
+    
+    NSLog(@"time = %@", time);
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"hh:mm"];
@@ -193,12 +193,26 @@
     
     [appDelegate.predictions insertObject:predictionAndDate atIndex:0];
     
+    NSLog(@"prediction: %@", [appDelegate.predictions objectAtIndex: 0]);
+    
+    NSLog(@"time = %f", [time doubleValue]);
+    
+    ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
+    
+    [activity setValue: time forKey: @"timestamp"];
+    
+    [activity setValue: predictedActivity forKey: @"serverPrediction" ];
+    
     connection = nil;
     
-    if( [[NSFileManager defaultManager] fileExistsAtPath: self.currentZipFilePath])
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:self.currentZipFilePath error:nil];
-    }
+    NSFileManager *fileMgr = [NSFileManager defaultManager];
+        
+    if (![fileMgr removeItemAtPath: appDelegate.currentZipFilePath error:&error])
+        NSLog(@"Unable to delete file: %@", [error localizedDescription]);
+    else
+        NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
+    
+    
 }
 
 

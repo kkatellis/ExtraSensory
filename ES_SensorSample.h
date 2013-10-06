@@ -1,8 +1,8 @@
 //
-//  ES_Sample.h
+//  ES_SensorSample.h
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 10/4/13.
+//  Created by Bryan Grounds on 10/6/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
@@ -11,14 +11,14 @@
 
 @class ES_Activity;
 
-@interface ES_Sample : NSManagedObject
+@interface ES_SensorSample : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * acc_x;
 @property (nonatomic, retain) NSNumber * acc_y;
 @property (nonatomic, retain) NSNumber * acc_z;
-@property (nonatomic, retain) NSNumber * gps_lat;
-@property (nonatomic, retain) NSNumber * gps_long;
-@property (nonatomic, retain) NSNumber * gps_speed;
+@property (nonatomic, retain) NSNumber * lat;
+@property (nonatomic, retain) NSNumber * longitude;
+@property (nonatomic, retain) NSNumber * speed;
 @property (nonatomic, retain) NSNumber * gyro_x;
 @property (nonatomic, retain) NSNumber * gyro_y;
 @property (nonatomic, retain) NSNumber * gyro_z;

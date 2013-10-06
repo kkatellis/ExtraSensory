@@ -2,7 +2,7 @@
 //  ES_ActivityStatistic.m
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 10/4/13.
+//  Created by Bryan Grounds on 10/6/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
@@ -12,8 +12,16 @@
 
 @implementation ES_ActivityStatistic
 
-@dynamic statistic;
-@dynamic value;
+@dynamic countActivities;
+@dynamic countBicycling;
+@dynamic countDriving;
+@dynamic countLying;
+@dynamic countRunning;
+@dynamic countSitting;
+@dynamic countStanding;
+@dynamic countWalking;
+@dynamic timeSamplingBegan;
+@dynamic timeSpentSampling;
 @dynamic user;
 
 @end

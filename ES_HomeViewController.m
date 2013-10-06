@@ -9,9 +9,9 @@
 #import "ES_HomeViewController.h"
 #import "ES_SensorManager.h"
 #import "ES_AppDelegate.h"
-#import "ES_SettingsModel.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_Scheduler.h"
+#import "ES_User.h"
 
 @interface ES_HomeViewController ()
 
@@ -24,6 +24,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *indicatorLabel;
 
 @property (strong, nonatomic) ES_Scheduler *scheduler;
+
+@property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
 
 @end
 
@@ -54,6 +56,9 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [self.uuidLabel setText: appDelegate.user.uuid];
+    
 /*    [self.settings addObserver:self
                     forKeyPath:@"sampleFrequency"
                        options:NSKeyValueObservingOptionNew
@@ -109,9 +114,9 @@
 
 - (void)viewDidLoad
 {
-    self.sampleFrequencySlider.minimumValue = 1.0;
+    /*self.sampleFrequencySlider.minimumValue = 1.0;
     self.sampleFrequencySlider.maximumValue = 100.0;
-    self.sampleFrequencyLabel.text = [NSString stringWithFormat: @"%.0f", self.sensorManager.sampleFrequency ];
+    self.sampleFrequencyLabel.text = [NSString stringWithFormat: @"%.0f", self.sensorManager.sampleFrequency ];*/
     
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
@@ -129,6 +134,7 @@
     {
         ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         [segue.destinationViewController setPredictions: appDelegate.predictions];
+        NSLog(@"AppD predictions: %@", appDelegate.predictions );
     }
 }
 

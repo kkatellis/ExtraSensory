@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@class ES_HomeViewController;
+@class ES_HomeViewController, ES_User;
 
 @interface ES_Scheduler : NSObject
 
 @property BOOL isReady;
 
 @property BOOL isOn;
+
+@property (nonatomic, weak) ES_User* user;
 
 - (void) sampleSaveSendCycler: (ES_HomeViewController *) homeViewController;
 

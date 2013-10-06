@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ES_Sample, ES_SettingsModel;
+@class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample;
 
 @interface ES_DataBaseAccessor : NSObject
 
@@ -22,6 +22,12 @@
 + (NSString *) zipDirectory;
 + (NSString *) serverResponseDirectory;
 + (ES_SettingsModel *) newSettingsModel;
-+ (void) writeData: (NSData *)data toPath: (NSString *)filePath;
++ (void) writeData: (NSArray *)data;
++ (ES_User *) user;
++ (ES_Activity *) newActivity;
++ (ES_SensorSample *) newSensorSample;
++ (ES_Activity *) getActivityWithTime: (NSNumber *)time;
++ (void) writeActivity: (ES_Activity *)activity;
+
 
 @end

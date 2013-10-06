@@ -1,8 +1,8 @@
 //
-//  ES_SettingsModel.h
+//  ES_Settings.h
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 10/4/13.
+//  Created by Bryan Grounds on 10/6/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
@@ -11,11 +11,11 @@
 
 @class ES_User;
 
-@interface ES_SettingsModel : NSManagedObject
+@interface ES_Settings : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * sampleFrequency;
 @property (nonatomic, retain) NSNumber * sampleDuration;
-@property (nonatomic, retain) NSNumber * timeBetweenSamples;
+@property (nonatomic, retain) NSNumber * sampleRate;
+@property (nonatomic, retain) NSNumber * timeBetweenSampling;
 @property (nonatomic, retain) ES_User *user;
 
 @end

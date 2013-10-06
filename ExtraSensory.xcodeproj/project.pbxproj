@@ -22,13 +22,13 @@
 		9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */; };
 		9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */; };
 		9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */; };
+		93146B5C18016AD100F2AAC7 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B5B18016AD100F2AAC7 /* ES_Activity.m */; };
+		93146B5F18016AD200F2AAC7 /* ES_SensorSample.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B5E18016AD200F2AAC7 /* ES_SensorSample.m */; };
+		93146B6218016AD200F2AAC7 /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B6118016AD200F2AAC7 /* ES_Settings.m */; };
+		93146B6518016AD200F2AAC7 /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B6418016AD200F2AAC7 /* ES_User.m */; };
+		93146B6818016AD200F2AAC7 /* ES_ActivityStatistic.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B6718016AD200F2AAC7 /* ES_ActivityStatistic.m */; };
+		93146B6B18016AD200F2AAC7 /* ES_UserActivityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B6A18016AD200F2AAC7 /* ES_UserActivityLabel.m */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
-		934377A317FEE51400521B0D /* ES_Sample.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377A217FEE51400521B0D /* ES_Sample.m */; };
-		934377A617FEE51500521B0D /* ES_ActivityStatistic.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377A517FEE51500521B0D /* ES_ActivityStatistic.m */; };
-		934377A917FEE51500521B0D /* ES_SettingsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377A817FEE51500521B0D /* ES_SettingsModel.m */; };
-		934377AC17FEE51500521B0D /* ES_UserActivityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377AB17FEE51500521B0D /* ES_UserActivityLabel.m */; };
-		934377AF17FEE51500521B0D /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377AE17FEE51500521B0D /* ES_Activity.m */; };
-		934377B217FEE51500521B0D /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B117FEE51500521B0D /* ES_User.m */; };
 		934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B417FF94E200521B0D /* ES_FeedbackViewController.m */; };
 		934377B817FF9BB700521B0D /* ES_FeedbackPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B717FF9BB700521B0D /* ES_FeedbackPickerView.m */; };
 		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
@@ -74,20 +74,20 @@
 		9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtraSensoryTests.m; sourceTree = "<group>"; };
 		9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		9307CC3417F2075C00D95E05 /* ES_UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ES_UserDataModel.xcdatamodel; sourceTree = "<group>"; };
+		93146B5A18016AD100F2AAC7 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_Activity.h; path = ../ES_Activity.h; sourceTree = "<group>"; };
+		93146B5B18016AD100F2AAC7 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_Activity.m; path = ../ES_Activity.m; sourceTree = "<group>"; };
+		93146B5D18016AD200F2AAC7 /* ES_SensorSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_SensorSample.h; path = ../ES_SensorSample.h; sourceTree = "<group>"; };
+		93146B5E18016AD200F2AAC7 /* ES_SensorSample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_SensorSample.m; path = ../ES_SensorSample.m; sourceTree = "<group>"; };
+		93146B6018016AD200F2AAC7 /* ES_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_Settings.h; path = ../ES_Settings.h; sourceTree = "<group>"; };
+		93146B6118016AD200F2AAC7 /* ES_Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_Settings.m; path = ../ES_Settings.m; sourceTree = "<group>"; };
+		93146B6318016AD200F2AAC7 /* ES_User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_User.h; path = ../ES_User.h; sourceTree = "<group>"; };
+		93146B6418016AD200F2AAC7 /* ES_User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_User.m; path = ../ES_User.m; sourceTree = "<group>"; };
+		93146B6618016AD200F2AAC7 /* ES_ActivityStatistic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_ActivityStatistic.h; path = ../ES_ActivityStatistic.h; sourceTree = "<group>"; };
+		93146B6718016AD200F2AAC7 /* ES_ActivityStatistic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_ActivityStatistic.m; path = ../ES_ActivityStatistic.m; sourceTree = "<group>"; };
+		93146B6918016AD200F2AAC7 /* ES_UserActivityLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_UserActivityLabel.h; path = ../ES_UserActivityLabel.h; sourceTree = "<group>"; };
+		93146B6A18016AD200F2AAC7 /* ES_UserActivityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_UserActivityLabel.m; path = ../ES_UserActivityLabel.m; sourceTree = "<group>"; };
 		933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SensorManager.h; sourceTree = "<group>"; };
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
-		934377A117FEE51400521B0D /* ES_Sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_Sample.h; path = ../ES_Sample.h; sourceTree = "<group>"; };
-		934377A217FEE51400521B0D /* ES_Sample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_Sample.m; path = ../ES_Sample.m; sourceTree = "<group>"; };
-		934377A417FEE51500521B0D /* ES_ActivityStatistic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_ActivityStatistic.h; path = ../ES_ActivityStatistic.h; sourceTree = "<group>"; };
-		934377A517FEE51500521B0D /* ES_ActivityStatistic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_ActivityStatistic.m; path = ../ES_ActivityStatistic.m; sourceTree = "<group>"; };
-		934377A717FEE51500521B0D /* ES_SettingsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_SettingsModel.h; path = ../ES_SettingsModel.h; sourceTree = "<group>"; };
-		934377A817FEE51500521B0D /* ES_SettingsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_SettingsModel.m; path = ../ES_SettingsModel.m; sourceTree = "<group>"; };
-		934377AA17FEE51500521B0D /* ES_UserActivityLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_UserActivityLabel.h; path = ../ES_UserActivityLabel.h; sourceTree = "<group>"; };
-		934377AB17FEE51500521B0D /* ES_UserActivityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_UserActivityLabel.m; path = ../ES_UserActivityLabel.m; sourceTree = "<group>"; };
-		934377AD17FEE51500521B0D /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_Activity.h; path = ../ES_Activity.h; sourceTree = "<group>"; };
-		934377AE17FEE51500521B0D /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_Activity.m; path = ../ES_Activity.m; sourceTree = "<group>"; };
-		934377B017FEE51500521B0D /* ES_User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_User.h; path = ../ES_User.h; sourceTree = "<group>"; };
-		934377B117FEE51500521B0D /* ES_User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_User.m; path = ../ES_User.m; sourceTree = "<group>"; };
 		934377B317FF94E200521B0D /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		934377B417FF94E200521B0D /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		934377B617FF9BB700521B0D /* ES_FeedbackPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackPickerView.h; sourceTree = "<group>"; };
@@ -248,18 +248,18 @@
 		934377A017FEE27E00521B0D /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
-				934377B017FEE51500521B0D /* ES_User.h */,
-				934377B117FEE51500521B0D /* ES_User.m */,
-				934377AD17FEE51500521B0D /* ES_Activity.h */,
-				934377AE17FEE51500521B0D /* ES_Activity.m */,
-				934377AA17FEE51500521B0D /* ES_UserActivityLabel.h */,
-				934377AB17FEE51500521B0D /* ES_UserActivityLabel.m */,
-				934377A717FEE51500521B0D /* ES_SettingsModel.h */,
-				934377A817FEE51500521B0D /* ES_SettingsModel.m */,
-				934377A417FEE51500521B0D /* ES_ActivityStatistic.h */,
-				934377A517FEE51500521B0D /* ES_ActivityStatistic.m */,
-				934377A117FEE51400521B0D /* ES_Sample.h */,
-				934377A217FEE51400521B0D /* ES_Sample.m */,
+				93146B6918016AD200F2AAC7 /* ES_UserActivityLabel.h */,
+				93146B6A18016AD200F2AAC7 /* ES_UserActivityLabel.m */,
+				93146B6618016AD200F2AAC7 /* ES_ActivityStatistic.h */,
+				93146B6718016AD200F2AAC7 /* ES_ActivityStatistic.m */,
+				93146B6318016AD200F2AAC7 /* ES_User.h */,
+				93146B6418016AD200F2AAC7 /* ES_User.m */,
+				93146B6018016AD200F2AAC7 /* ES_Settings.h */,
+				93146B6118016AD200F2AAC7 /* ES_Settings.m */,
+				93146B5D18016AD200F2AAC7 /* ES_SensorSample.h */,
+				93146B5E18016AD200F2AAC7 /* ES_SensorSample.m */,
+				93146B5A18016AD100F2AAC7 /* ES_Activity.h */,
+				93146B5B18016AD100F2AAC7 /* ES_Activity.m */,
 			);
 			name = DataModels;
 			sourceTree = "<group>";
@@ -426,8 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
-				934377A317FEE51400521B0D /* ES_Sample.m in Sources */,
-				934377AC17FEE51500521B0D /* ES_UserActivityLabel.m in Sources */,
+				93146B5F18016AD200F2AAC7 /* ES_SensorSample.m in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
@@ -436,16 +435,17 @@
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */,
+				93146B6518016AD200F2AAC7 /* ES_User.m in Sources */,
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
-				934377B217FEE51500521B0D /* ES_User.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
-				934377A917FEE51500521B0D /* ES_SettingsModel.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
+				93146B5C18016AD100F2AAC7 /* ES_Activity.m in Sources */,
+				93146B6B18016AD200F2AAC7 /* ES_UserActivityLabel.m in Sources */,
+				93146B6818016AD200F2AAC7 /* ES_ActivityStatistic.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
-				934377AF17FEE51500521B0D /* ES_Activity.m in Sources */,
-				934377A617FEE51500521B0D /* ES_ActivityStatistic.m in Sources */,
 				93F679C617F978AF000638CB /* zip.c in Sources */,
+				93146B6218016AD200F2AAC7 /* ES_Settings.m in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

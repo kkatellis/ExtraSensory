@@ -12,6 +12,9 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_HomeViewController.h"
 #import "ES_AppDelegate.h"
+#import "ES_User.h"
+#import "ES_SensorSample.h"
+#import "ES_Activity.h"
 
 @interface ES_Scheduler()
 
@@ -48,6 +51,17 @@
 
 @synthesize timer = _timer;
 
+@synthesize user = _user;
+
+- (ES_User *) user
+{
+    if (!_user)
+    {
+        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        _user = appDelegate.user;
+    }
+    return _user;
+}
 
 - (NSMutableArray *) predictions
 {
@@ -202,7 +216,7 @@
     
     timer = [NSTimer scheduledTimerWithTimeInterval: 25
                                              target: self
-                                           selector: @selector(secondOp)
+                                           selector: @selector(thirdOp)
                                            userInfo: nil
                                             repeats: NO];
     
@@ -211,6 +225,8 @@
 
 -(void) secondOp
 {
+    NSLog( @"sensor activity = %@", [self.sensorManager.user.activities lastObject]);
+    
     NSLog(@"Zip Data");
     
     [ES_DataBaseAccessor zipData];

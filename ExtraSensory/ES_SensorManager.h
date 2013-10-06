@@ -12,7 +12,7 @@
 
 
 
-@class ES_AccelerometerAccessor;
+@class ES_AccelerometerAccessor, ES_User, ES_Activity;
 
 //public interface
 @interface ES_SensorManager : NSObject <CLLocationManagerDelegate>
@@ -24,6 +24,7 @@
 }
 
 @property (strong, nonatomic) CLLocation *currentLocation;
+
 @property (strong, nonatomic) CLLocation *previousLocation;
 
 @property (strong, nonatomic) CMMotionManager *motionManager;
@@ -33,6 +34,10 @@
 @property (nonatomic) double sampleDuration;  // Seconds
 
 @property (nonatomic, strong) NSNumber *isReady;
+
+@property (nonatomic, weak) ES_User *user;
+
+@property (nonatomic, strong) ES_Activity *currentActivity;
 
 - (BOOL) record;
 

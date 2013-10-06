@@ -1,7 +1,7 @@
 //
 //  ES_AppDelegate.m
 //  ExtraSensory
-//      
+//
 //  Created by Bryan Grounds on 9/24/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
@@ -9,6 +9,8 @@
 #import "ES_AppDelegate.h"
 #import "ES_SensorManager.h"
 #import "ES_NetworkAccessor.h"
+#import "ES_DataBaseAccessor.h"
+#import "ES_User.h"
 
 @implementation ES_AppDelegate
 
@@ -26,6 +28,17 @@
 @synthesize predictions = _predictions;
 
 @synthesize user = _user;
+
+@synthesize currentZipFilePath = _currentZipFilePath;
+
+- (ES_User *)user
+{
+    if (!_user)
+    {
+        _user = [ES_DataBaseAccessor user];
+    }
+    return _user;
+}
 
 
 - (NSMutableArray *) predictions
@@ -66,6 +79,8 @@
 
 
 
+
+
 // Getter
 
 
@@ -82,87 +97,90 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
+    NSLog( @"user = %@", self.user );
+    NSLog( @"settings = %@", self.user.settings );
+    
     // Create a location manager instance to determine if location services are enabled. This manager instance will be
     // immediately released afterwards.
     self.locationManager = [CLLocationManager new];
     /*if ( [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) {
-        UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:@"Location Services Disabled" message:@"You currently have all location services for this device disabled. If you proceed, you will be asked to confirm whether location services should be reenabled." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [servicesDisabledAlert show];
-    }*/
+     UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:@"Location Services Disabled" message:@"You currently have all location services for this device disabled. If you proceed, you will be asked to confirm whether location services should be reenabled." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+     [servicesDisabledAlert show];
+     }*/
     [self.locationManager startUpdatingLocation];
-
-
+    
+    
     //[self redirectNSLogToDocuments];
 }
 
 /*
-- (void)redirectNSLogToDocuments
-{
-    NSString *documentsDirectory = [self applicationDocumentsDirectory];
-    
-    NSString *pathForLog = [documentsDirectory stringByAppendingPathComponent:@"NSLogRedirect.txt"];
-    
-    freopen([pathForLog cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
-}*/
+ - (void)redirectNSLogToDocuments
+ {
+ NSString *documentsDirectory = [self applicationDocumentsDirectory];
+ 
+ NSString *pathForLog = [documentsDirectory stringByAppendingPathComponent:@"NSLogRedirect.txt"];
+ 
+ freopen([pathForLog cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+ }*/
 
 
 
 /*- (NSUUID *)uuid
-{
-    if (!_uuid)
-    {
-        _uuid = [NSUUID UUID];
-
-        NSManagedObjectContext *context = self.managedObjectContext;
-        
-        UserInfo *userInfo = [NSEntityDescription insertNewObjectForEntityForName:@"UserInfo" inManagedObjectContext:context];
-        
-        NSError *error = [[NSError alloc] init];
-        
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"UserInfo" inManagedObjectContext:context];
-        
-        [request setEntity:entity];
-        
-        NSArray *arr = [context executeFetchRequest:request error:&error];
-        
-        NSNumber *length = [NSNumber numberWithUnsignedInteger:[arr count]];
-        
-        if (length.integerValue == 0)
-        {
-            NSLog(@"There's no UUID in the database. Let's generate one!");
-            userInfo.uuid = [_uuid UUIDString];
-            
-            NSError *error = [[NSError alloc] init];
-            
-            if (![context save:&error])
-            {
-                NSLog(@"Error saving UUID!");
-            }
-            return _uuid;
-            
-        }
-        else if (length.integerValue == 1)
-        {
-            NSLog(@"There's one UUID in the database. Good!");
-            return [arr objectAtIndex: 0];
-        }
-        else
-        {
-            NSLog(@"There's more than one UUID in the database...");
-        }
-    }
-    return _uuid;
-}*/
+ {
+ if (!_uuid)
+ {
+ _uuid = [NSUUID UUID];
+ 
+ NSManagedObjectContext *context = self.managedObjectContext;
+ 
+ UserInfo *userInfo = [NSEntityDescription insertNewObjectForEntityForName:@"UserInfo" inManagedObjectContext:context];
+ 
+ NSError *error = [[NSError alloc] init];
+ 
+ NSFetchRequest *request = [[NSFetchRequest alloc] init];
+ 
+ NSEntityDescription *entity = [NSEntityDescription entityForName:@"UserInfo" inManagedObjectContext:context];
+ 
+ [request setEntity:entity];
+ 
+ NSArray *arr = [context executeFetchRequest:request error:&error];
+ 
+ NSNumber *length = [NSNumber numberWithUnsignedInteger:[arr count]];
+ 
+ if (length.integerValue == 0)
+ {
+ NSLog(@"There's no UUID in the database. Let's generate one!");
+ userInfo.uuid = [_uuid UUIDString];
+ 
+ NSError *error = [[NSError alloc] init];
+ 
+ if (![context save:&error])
+ {
+ NSLog(@"Error saving UUID!");
+ }
+ return _uuid;
+ 
+ }
+ else if (length.integerValue == 1)
+ {
+ NSLog(@"There's one UUID in the database. Good!");
+ return [arr objectAtIndex: 0];
+ }
+ else
+ {
+ NSLog(@"There's more than one UUID in the database...");
+ }
+ }
+ return _uuid;
+ }*/
 
 - (NSUUID *)uuid
 {
-     
+    
     if (!_uuid)
         _uuid = [NSUUID UUID];
     return _uuid;
-     
+    
 }
 
 
@@ -244,7 +262,7 @@
 	
     if (!_managedObjectModel)
         _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-
+    
     return _managedObjectModel;
 }
 

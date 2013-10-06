@@ -36,6 +36,8 @@
 
 @property (strong, nonatomic) ES_User *user;
 
+@property (strong, nonatomic) NSString *currentZipFilePath;
+
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;
 
