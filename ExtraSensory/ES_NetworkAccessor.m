@@ -46,6 +46,11 @@
     return _recievedData;
 }
 
+- (void) sendFeedback: (NSString *)feedback
+{
+    
+}
+
 
 /**
  
@@ -167,10 +172,7 @@
     NSString *reply = [[NSString alloc] initWithData: self.recievedData
                                             encoding: NSUTF8StringEncoding];
     
-    
     NSLog( @" reply = %@", [reply description]);
-    
-    
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
@@ -181,9 +183,9 @@
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"hh:mm"];
-    NSString *dateString = [NSString stringWithFormat: @" - %@", [dateFormatter stringFromDate: [NSDate date]]];
+    NSString *dateString = [NSString stringWithFormat: @"%@ - ", [dateFormatter stringFromDate: [NSDate date]]];
     
-    NSString *predictionAndDate = [predictedActivity stringByAppendingString: dateString];
+    NSString *predictionAndDate = [dateString stringByAppendingString: predictedActivity];
     
     NSLog( @"Prediction: %@", predictionAndDate );
     

@@ -20,9 +20,6 @@
 
 @property NSNumber *counter;
 
-//@property (nonatomic) NSArray *batchData;
-
-
 @end
 
 @implementation ES_SensorManager
@@ -40,8 +37,6 @@
 @synthesize sampleFrequency = _sampleFrequency;
 
 @synthesize sampleDuration = _sampleDuration;
-
-//@synthesize batchData = _batchData;
 
 @synthesize isReady = _isReady;
 
@@ -77,20 +72,6 @@
     }
     return _isReady;
 }
-
-
-// Getter
-
-/*- (NSArray *)batchData
-{
-    if (!_batchData)
-    {
-        _batchData = [NSArray new];
-    }
-    return _batchData;
-}*/
-
-
 
 - (CMMotionManager *)motionManager
 {
@@ -144,12 +125,12 @@
     [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
     [self.locationManager setPausesLocationUpdatesAutomatically: NO];
     [self.locationManager startUpdatingLocation];
-
+    
     
     NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
-
     
-
+    
+    
     [self.motionManager startDeviceMotionUpdates];
     [self.motionManager startAccelerometerUpdates];
     [self.motionManager startGyroUpdates];
@@ -165,15 +146,8 @@
     return YES;
 }
 
-
-/*- (NSArray *) keys
-{
-    return [NSArray arrayWithObjects: @"speed", @"lat", @"long", @"time", @"gyro_x", @"acc_x", @"gyro_y", @"acc_y", @"gyro_z", @"acc_z", @"mic_peak_db",  @"mic_avg_db", nil ];
-}*/
-
 - (void) readSensorsIntoDictionary
 {
-    //NSArray *objects = [NSArray new];
     
     ES_SensorSample *sample = [ES_DataBaseAccessor newSensorSample];
     
@@ -194,30 +168,9 @@
     sample.mic_avg_db  = [NSNumber numberWithDouble: 0.0 ];
     
     
-    
-    /*
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.speed ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ]];
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_peak_db
-    objects = [objects arrayByAddingObject: [NSNumber numberWithDouble: 0.0 ]]; // placeholder for mic_avg_db
-    
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjects: objects forKeys: [self keys]];
-    */
-     
     [self.currentActivity addSensorSamplesObject: sample];
-        
-    //self.batchData = [self.batchData arrayByAddingObject: dictionary];
     
     self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
-    
     
     if ([self.counter integerValue] >= 800 )
     {
@@ -233,11 +186,7 @@
         
         [ES_DataBaseAccessor writeActivity: self.currentActivity];
         
-        //[ES_DataBaseAccessor writeData: self.batchData];
-        //self.batchData = [NSMutableArray new];
-        
         [self.user addActivitiesObject: self.currentActivity];
-        
         
         self.currentActivity = [ES_DataBaseAccessor newActivity];
         
@@ -246,15 +195,6 @@
     }
 }
 
-
-- (void) stopRecording
-{
-    NSLog( @"stopRecording");
-    
-    [self.locationManager stopUpdatingLocation];
-    [self.motionManager stopAccelerometerUpdates];
-    [self.motionManager stopGyroUpdates];
-}
 
 #pragma mark Location Manager Delegate Methods
 

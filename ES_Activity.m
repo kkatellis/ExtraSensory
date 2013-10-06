@@ -22,6 +22,8 @@
 @dynamic timestamp;
 @dynamic userCorrection;
 @dynamic uuid;
+@dynamic hasBeenSent;
+@dynamic zipFilePath;
 @dynamic sensorSamples;
 @dynamic user;
 @dynamic userActivityLabels;

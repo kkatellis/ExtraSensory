@@ -45,15 +45,6 @@
     return _scheduler;
 }
 
-- (ES_SettingsModel *) settings
-{
-    if (!_settings)
-    {
-        _settings = [ES_DataBaseAccessor newSettingsModel];
-    }
-    return _settings;
-}
-
 - (void) viewDidAppear:(BOOL)animated
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];

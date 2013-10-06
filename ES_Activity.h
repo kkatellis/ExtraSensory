@@ -21,6 +21,8 @@
 @property (nonatomic, retain) NSNumber * timestamp;
 @property (nonatomic, retain) NSString * userCorrection;
 @property (nonatomic, retain) NSString * uuid;
+@property (nonatomic, retain) NSNumber * hasBeenSent;
+@property (nonatomic, retain) NSString * zipFilePath;
 @property (nonatomic, retain) NSOrderedSet *sensorSamples;
 @property (nonatomic, retain) ES_User *user;
 @property (nonatomic, retain) NSSet *userActivityLabels;

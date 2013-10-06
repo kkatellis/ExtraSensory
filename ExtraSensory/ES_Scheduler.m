@@ -177,27 +177,6 @@
 }
 
 
-
-
-/*- (void) operationCycler
- {
- if ( self.counter == 0 )
- {
- [self firstOp];
- self.counter++;
- }
- else if (self.counter == 1 )
- {
- [self secondOp];
- self.counter++;
- }
- else if (self.counter == 2 )
- {
- [self thirdOp];
- self.counter = 0;
- }
- }*/
-
 -(void) firstOp
 {
     if (!self.isOn)
@@ -216,32 +195,15 @@
     
     timer = [NSTimer scheduledTimerWithTimeInterval: 25
                                              target: self
-                                           selector: @selector(thirdOp)
+                                           selector: @selector(secondOp)
                                            userInfo: nil
                                             repeats: NO];
     
     
 }
+
 
 -(void) secondOp
-{
-    NSLog( @"sensor activity = %@", [self.sensorManager.user.activities lastObject]);
-    
-    NSLog(@"Zip Data");
-    
-    [ES_DataBaseAccessor zipData];
-    
-    NSTimer *timer;
-    
-    timer = [NSTimer scheduledTimerWithTimeInterval: 5
-                                             target: self
-                                           selector: @selector(thirdOp)
-                                           userInfo: nil
-                                            repeats: NO];
-    
-}
-
--(void) thirdOp
 {
     NSLog(@"upload");
     

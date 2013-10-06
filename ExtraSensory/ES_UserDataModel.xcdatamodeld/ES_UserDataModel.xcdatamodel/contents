@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F37" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ES_Activity" representedClassName="ES_Activity" syncable="YES">
+        <attribute name="hasBeenSent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isPredictionCorrect" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isPredictionVerified" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="numberOfSamples" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -9,6 +10,7 @@
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="userCorrection" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="zipFilePath" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="sensorSamples" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="ES_SensorSample" inverseName="activity" inverseEntity="ES_SensorSample" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_User" inverseName="activities" inverseEntity="ES_User" syncable="YES"/>
         <relationship name="userActivityLabels" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_UserActivityLabel" inverseName="activity" inverseEntity="ES_UserActivityLabel" syncable="YES"/>

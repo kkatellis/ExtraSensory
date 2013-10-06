@@ -51,7 +51,7 @@
     }
     else
     {
-        NSLog( @"Why are there %d users in the database??", [users count] );
+        NSLog( @"Why are there %lu users in the database??", (unsigned long)[users count] );
     }
     return user;
 }
@@ -74,11 +74,6 @@
     [request setEntity:entity];
     
     return [[self context] executeFetchRequest:request error:&error];
-}
-
-+ (ES_Sample *) write
-{
-    return [NSEntityDescription insertNewObjectForEntityForName: @"ES_Sample" inManagedObjectContext: [self context]];
 }
 
 + (ES_Activity *) newActivity
@@ -109,7 +104,7 @@
     
     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
     
-    NSLog(@"number of matching hits = %d", [results count]);
+    NSLog(@"number of matching hits = %lu", (unsigned long)[results count]);
    // NSLog(@"error: %@", [error localizedDescription]);
     
     if ([results count] > 0 )
@@ -134,55 +129,14 @@
     }
 }
 
-+ (ES_SettingsModel *) newSettingsModel
-{
-    return [NSEntityDescription insertNewObjectForEntityForName:@"ES_SettingsModel"
-                                         inManagedObjectContext:[self context]];
-}
-
 + (NSString *)applicationDocumentsDirectory
 {
 	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
 
-+ (void) zipData
-{
-    //NSLog( @"Writing File");
-    
-    NSString *zipName = [self zipFilesInDirectory:[self dataDirectory]];
-    
-    
-    
-    if (zipName)
-    {
-        NSLog( @"Pushing: %@", zipName);
-        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [appDelegate pushOnNetworkStack: zipName];
-    }
-}
-
 + (NSString *) dataDirectory
 {
     NSString *directory = [[self applicationDocumentsDirectory] stringByAppendingString: @"/data"];
-    
-    NSFileManager *fileManager= [NSFileManager defaultManager];
-    
-    BOOL isDir;
-    
-    if (![fileManager fileExistsAtPath:directory isDirectory: &isDir ])
-    {
-        NSError *error = nil;
-        if(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:&error])
-        {
-            NSLog(@"Failed to create directory \"%@\". Error: %@", directory, error);
-        }
-    }
-    return directory;
-}
-
-+ (NSString *) serverResponseDirectory
-{
-    NSString *directory = [[self applicationDocumentsDirectory] stringByAppendingString: @"/serverResponse"];
     
     NSFileManager *fileManager= [NSFileManager defaultManager];
     
@@ -218,18 +172,6 @@
     return directory;
 }
 
-+ (NSString *) zipFileName
-{
-    
-    NSDate *now = [NSDate date];
-    NSTimeInterval timestamp = [now timeIntervalSince1970];
-    
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSString *uuid = [appDelegate.uuid UUIDString];
-    
-    return [NSString stringWithFormat:@"/%0.0f-%@", timestamp, uuid];
-}
-
 + (NSString *) zipFileName2: (NSString *)time
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -237,45 +179,6 @@
     return [NSString stringWithFormat:@"/%@-%@", time, appDelegate.user.uuid];
 }
 
-+ (NSString *) zipFilesInDirectory: (NSString *)dirToZip
-{
-    
-    BOOL isDir=NO;
-    NSArray *subpaths;
-    NSString *exportPath = dirToZip;
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    if ([fileManager fileExistsAtPath:exportPath isDirectory:&isDir] && isDir){
-        subpaths = [fileManager subpathsAtPath:exportPath];
-    }
-    NSString *zipFile = [[self zipFileName] stringByAppendingString:@".zip"];
-    
-    NSString *archivePath = [[self zipDirectory] stringByAppendingString: zipFile ];
-    
-    ZipArchive *archiver = [[ZipArchive alloc] init];
-    [archiver CreateZipFile2:archivePath];
-    for(NSString *path in subpaths)
-    {
-        NSString *longPath = [exportPath stringByAppendingPathComponent:path];
-        if([fileManager fileExistsAtPath:longPath isDirectory:&isDir] && !isDir)
-        {
-            [archiver addFileToZip:longPath newname:path];
-        }
-    }
-    BOOL successCompressing = [archiver CloseZipFile2];
-    if(successCompressing)
-    {
-        NSLog(@"Zipped Successfully!");
-        return zipFile;
-    }
-    else
-    {
-        NSLog(@"Fail");
-        return nil;
-    }
-    
-}
 
 + (void) zipFilesWithTimer: (NSTimer *)timer
 {
@@ -321,12 +224,19 @@
 
 + (void) writeActivity: (ES_Activity *)activity
 {
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [self writeData: [self arrayFromActivity: activity]];
     
-    NSTimer *timer;
     
     NSLog(@"activity timestamp = %@", activity.timestamp);
     
+    NSString *zipFileName = [[NSString stringWithFormat: @"/%0.0f-%@", [activity.timestamp doubleValue], appDelegate.user.uuid ] stringByAppendingString:@".zip"];
+
+    activity.zipFilePath = [[self zipDirectory] stringByAppendingString:zipFileName];
+    
+    NSLog( @"activity.zipfilepath = %@", activity.zipFilePath);
+    
+    NSTimer *timer;
     timer = [NSTimer scheduledTimerWithTimeInterval: 2
                                              target: self
                                            selector: @selector(zipFilesWithTimer: )

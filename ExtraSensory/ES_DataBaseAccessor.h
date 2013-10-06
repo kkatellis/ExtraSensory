@@ -14,14 +14,10 @@
 @interface ES_DataBaseAccessor : NSObject
 
 + (NSArray *) read: (NSString *)entityDescription;
-+ (ES_Sample *) write;
 + (void) save;
-+ (void) zipData;
 + (NSString *) applicationDocumentsDirectory;
 + (NSString *) dataDirectory;
 + (NSString *) zipDirectory;
-+ (NSString *) serverResponseDirectory;
-+ (ES_SettingsModel *) newSettingsModel;
 + (void) writeData: (NSArray *)data;
 + (ES_User *) user;
 + (ES_Activity *) newActivity;

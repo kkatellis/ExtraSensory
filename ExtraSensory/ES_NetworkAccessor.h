@@ -15,5 +15,6 @@
 @property (strong, nonatomic) NSMutableArray *predictions;
 
 - (void) upload;
+- (void) sendFeedback: (NSString *)feedback;
 
 @end
