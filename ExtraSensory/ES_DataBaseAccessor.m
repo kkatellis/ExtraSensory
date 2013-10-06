@@ -100,7 +100,6 @@
     NSString *attributeValue = [NSString stringWithFormat: @"%@", time];
     
     NSLog(@"attributeValue = %@", attributeValue );
-    NSString *attributeName = @"timestamp";
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(timestamp == %@)", attributeValue ];
     
