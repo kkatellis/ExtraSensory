@@ -219,7 +219,7 @@
     
 }
 
-#define act1 @"LYING_DOWN"
+#define act1 @"LYING DOWN"
 #define act2 @"SITTING"
 #define act3 @"STANDING"
 #define act4 @"WALKING"
