@@ -239,6 +239,7 @@
     
     if ([predictedActivity  isEqualToString: act1])
     {
+        appDelegate.user.activityStatistics.
         NSLog(@"%@", act1);
         count = [countArray objectAtIndex:0];
         count = [NSNumber numberWithInt: ([count integerValue] + 1)];

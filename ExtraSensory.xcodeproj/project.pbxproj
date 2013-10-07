@@ -28,6 +28,9 @@
 		93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B8A18024A9D00F2AAC7 /* ES_ActivityStatistic.m */; };
 		93146B8E18024A9D00F2AAC7 /* ES_UserActivityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B8D18024A9D00F2AAC7 /* ES_UserActivityLabel.m */; };
 		93146B9118024A9D00F2AAC7 /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B9018024A9D00F2AAC7 /* ES_User.m */; };
+		93146B991802BFB200F2AAC7 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93146B931802BFB200F2AAC7 /* libTestFlight.a */; };
+		93146B9A1802BFB200F2AAC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 93146B941802BFB200F2AAC7 /* README.md */; };
+		93146B9B1802BFB200F2AAC7 /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 93146B951802BFB200F2AAC7 /* release_notes.md */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
 		934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B417FF94E200521B0D /* ES_FeedbackViewController.m */; };
 		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
@@ -85,6 +88,12 @@
 		93146B8D18024A9D00F2AAC7 /* ES_UserActivityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_UserActivityLabel.m; path = ../ES_UserActivityLabel.m; sourceTree = "<group>"; };
 		93146B8F18024A9D00F2AAC7 /* ES_User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_User.h; path = ../ES_User.h; sourceTree = "<group>"; };
 		93146B9018024A9D00F2AAC7 /* ES_User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_User.m; path = ../ES_User.m; sourceTree = "<group>"; };
+		93146B931802BFB200F2AAC7 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		93146B941802BFB200F2AAC7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		93146B951802BFB200F2AAC7 /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
+		93146B961802BFB200F2AAC7 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		93146B971802BFB200F2AAC7 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		93146B981802BFB200F2AAC7 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SensorManager.h; sourceTree = "<group>"; };
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
 		934377B317FF94E200521B0D /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
@@ -121,6 +130,7 @@
 				93F679B517F91DD4000638CB /* libz.dylib in Frameworks */,
 				9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */,
 				9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */,
+				93146B991802BFB200F2AAC7 /* libTestFlight.a in Frameworks */,
 				9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */,
 				9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */,
 			);
@@ -142,6 +152,7 @@
 		9307CBA817F1A78A00D95E05 = {
 			isa = PBXGroup;
 			children = (
+				93146B921802BFB200F2AAC7 /* TestFlightSDK2.0.2 */,
 				9307CBBA17F1A78A00D95E05 /* ExtraSensory */,
 				9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */,
 				9307CBB317F1A78A00D95E05 /* Frameworks */,
@@ -230,6 +241,19 @@
 				934377B417FF94E200521B0D /* ES_FeedbackViewController.m */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		93146B921802BFB200F2AAC7 /* TestFlightSDK2.0.2 */ = {
+			isa = PBXGroup;
+			children = (
+				93146B931802BFB200F2AAC7 /* libTestFlight.a */,
+				93146B941802BFB200F2AAC7 /* README.md */,
+				93146B951802BFB200F2AAC7 /* release_notes.md */,
+				93146B961802BFB200F2AAC7 /* TestFlight+AsyncLogging.h */,
+				93146B971802BFB200F2AAC7 /* TestFlight+ManualSessions.h */,
+				93146B981802BFB200F2AAC7 /* TestFlight.h */,
+			);
+			path = TestFlightSDK2.0.2;
 			sourceTree = "<group>";
 		};
 		933F7CCF17F4D7C700B05C96 /* SensorManagement */ = {
@@ -393,7 +417,9 @@
 			files = (
 				9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */,
 				9307CBBF17F1A78A00D95E05 /* InfoPlist.strings in Resources */,
+				93146B9A1802BFB200F2AAC7 /* README.md in Resources */,
 				9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */,
+				93146B9B1802BFB200F2AAC7 /* release_notes.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,6 +589,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/bryan/xcode/ExtraSensory/TestFlightSDK2.0.2,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -577,6 +607,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/bryan/xcode/ExtraSensory/TestFlightSDK2.0.2,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

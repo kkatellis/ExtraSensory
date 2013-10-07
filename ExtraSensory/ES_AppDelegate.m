@@ -12,6 +12,8 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_User.h"
 
+#import "TestFlight+ManualSessions.h"
+
 @implementation ES_AppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -114,6 +116,8 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
+    [TestFlight takeOff:@"cec84bf3-3cfa-42c8-9eb1-d029677c73a0"];
+    
     NSLog( @"user = %@", self.user );
     NSLog( @"settings = %@", self.user.settings );
     
