@@ -38,6 +38,9 @@
 
 @property (strong, nonatomic) NSString *currentZipFilePath;
 
+@property (strong, nonatomic) NSMutableArray *countLySiStWaRuBiDr;
+
+
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;
 

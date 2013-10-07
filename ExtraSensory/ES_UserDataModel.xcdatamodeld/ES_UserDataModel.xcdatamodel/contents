@@ -47,7 +47,7 @@
     <entity name="ES_Settings" representedClassName="ES_Settings" syncable="YES">
         <attribute name="sampleDuration" attributeType="Double" minValueString="5" defaultValueString="20" syncable="YES"/>
         <attribute name="sampleRate" attributeType="Double" minValueString="1" maxValueString="1000" defaultValueString="40" syncable="YES"/>
-        <attribute name="timeBetweenSampling" attributeType="Double" defaultValueString="600" syncable="YES"/>
+        <attribute name="timeBetweenSampling" attributeType="Double" defaultValueString="60" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_User" inverseName="settings" inverseEntity="ES_User" syncable="YES"/>
     </entity>
     <entity name="ES_User" representedClassName="ES_User" syncable="YES">

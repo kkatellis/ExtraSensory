@@ -31,6 +31,23 @@
 
 @synthesize currentZipFilePath = _currentZipFilePath;
 
+@synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
+
+- (NSMutableArray *)countLySiStWaRuBiDr
+{
+    if (!_countLySiStWaRuBiDr)
+    {
+        _countLySiStWaRuBiDr = [[NSMutableArray alloc] initWithCapacity:7];
+        for (int i = 0; i <7; i++)
+        {
+            [_countLySiStWaRuBiDr setObject: [NSNumber numberWithInt: 0] atIndexedSubscript: i];
+        }
+        NSLog( @"countArrayLength = %lu", (unsigned long)[_countLySiStWaRuBiDr count]);
+    }
+    return _countLySiStWaRuBiDr;
+}
+
+
 - (ES_User *)user
 {
     if (!_user)

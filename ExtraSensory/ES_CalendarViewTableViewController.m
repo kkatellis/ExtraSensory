@@ -106,7 +106,7 @@
      self.predictions = appDelegate.predictions;
     
     NSLog( @"prediction count = %lu", (unsigned long)[self.user.activities count]);
-    return [self.user.activities count];
+    return [self.predictions count];
     
     //return [appDelegate.user.activities count];
 }

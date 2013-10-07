@@ -15,6 +15,7 @@
 #import "ES_User.h"
 #import "ES_SensorSample.h"
 #import "ES_Activity.h"
+#import "ES_Settings.h"
 
 @interface ES_Scheduler()
 
@@ -144,7 +145,7 @@
             while(TRUE)
             {
                 NSLog(@"Background time Remaining: %f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
-                [NSThread sleepForTimeInterval:150]; //wait for 1 sec
+                [NSThread sleepForTimeInterval:30]; //wait for 30 sec
             }
             //#### background task ends
             
@@ -164,7 +165,9 @@
         
         [self firstOp];
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval: 300
+        NSLog( @"time between sampling = %f", [self.user.settings.timeBetweenSampling doubleValue] );
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval: [self.user.settings.timeBetweenSampling doubleValue]
                                                       target: self
                                                     selector: @selector(firstOp)
                                                     userInfo: nil

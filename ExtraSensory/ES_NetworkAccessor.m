@@ -179,6 +179,8 @@
     NSString *predictedActivity = [response objectForKey:@"predicted_activity"];
     NSNumber *time = [NSNumber numberWithDouble: [[response objectForKey: @"timestamp"] doubleValue]];
     
+    [self updateCounts: predictedActivity];
+    
     NSLog(@"time = %@", time);
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
@@ -215,6 +217,78 @@
         NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
     
     
+}
+
+#define act1 @"LYING_DOWN"
+#define act2 @"SITTING"
+#define act3 @"STANDING"
+#define act4 @"WALKING"
+#define act5 @"RUNNING"
+#define act6 @"BICYCLING"
+#define act7 @"DRIVING"
+
+- (void) updateCounts: (NSString *)predictedActivity
+{
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+
+    NSNumber *count;
+    
+    NSMutableArray *countArray = appDelegate.countLySiStWaRuBiDr;
+    
+    NSLog(@"predicted activity = %@", predictedActivity);
+    
+    if ([predictedActivity  isEqualToString: act1])
+    {
+        NSLog(@"%@", act1);
+        count = [countArray objectAtIndex:0];
+        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+        [countArray setObject: count atIndexedSubscript:0];
+    }
+    else if ([predictedActivity isEqualToString: act2])
+    {
+        NSLog(@"%@", act2);
+        count = [countArray objectAtIndex:1];
+        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+        [countArray setObject: count atIndexedSubscript:1];
+    }
+    else if ([predictedActivity isEqualToString: act3])
+    {
+        NSLog(@"%@", act3);
+        count = [countArray objectAtIndex:2];
+        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+        [countArray setObject: count atIndexedSubscript:2];
+    }
+    else if ([predictedActivity isEqualToString: act4])
+    {
+        NSLog(@"%@", act4);
+        count = [countArray objectAtIndex:3];
+        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+        [countArray setObject: count atIndexedSubscript:3];
+    }
+    else if ([predictedActivity isEqualToString: act5])
+    {
+        NSLog(@"%@", act5);
+        count = [countArray objectAtIndex:4];
+        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+        [countArray setObject: count atIndexedSubscript:4];
+    }
+    else if ([predictedActivity isEqualToString: act6])
+    {
+        NSLog(@"%@", act6);
+        count = [countArray objectAtIndex:5];
+        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+        [countArray setObject: count atIndexedSubscript:5];
+    }
+    else if ([predictedActivity isEqualToString: act7])
+    {
+        NSLog(@"%@", act7);
+        count = [countArray objectAtIndex:6];
+        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+        [countArray setObject: count atIndexedSubscript:6];
+    }
+    appDelegate.countLySiStWaRuBiDr = countArray;
+    
+    NSLog(@"count array = %@", appDelegate.countLySiStWaRuBiDr);
 }
 
 

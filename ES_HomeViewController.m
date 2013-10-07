@@ -12,6 +12,7 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_Scheduler.h"
 #import "ES_User.h"
+#import "ES_Settings.h"
 
 @interface ES_HomeViewController ()
 
@@ -21,11 +22,28 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *activitiesButton;
 
+@property NSMutableArray *activityCountArray;
+
 @property (weak, nonatomic) IBOutlet UILabel *indicatorLabel;
 
 @property (strong, nonatomic) ES_Scheduler *scheduler;
 
 @property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *lyingTime;
+
+@property (weak, nonatomic) IBOutlet UILabel *sittingTime;
+
+@property (weak, nonatomic) IBOutlet UILabel *standingTime;
+
+@property (weak, nonatomic) IBOutlet UILabel *walkingTime;
+
+@property (weak, nonatomic) IBOutlet UILabel *runningTime;
+
+@property (weak, nonatomic) IBOutlet UILabel *bikingTime;
+
+@property (weak, nonatomic) IBOutlet UILabel *drivingTime;
+
 
 @end
 
@@ -48,6 +66,11 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    self.activityCountArray = appDelegate.countLySiStWaRuBiDr;
+    
+    [self updateCounts];
+
     [self.uuidLabel setText: appDelegate.user.uuid];
     
 /*    [self.settings addObserver:self
@@ -61,6 +84,33 @@
     if ( [keyPath isEqualToString: @"sampleFrequency"] )
         [self.sampleFrequencyLabel setText: [NSString stringWithFormat: @"%@", [object valueForKey:@"sampleFrequency"]] ];
 }*/
+
+- (void) updateCounts
+{
+    self.lyingTime.text    = [self timeString: 0];
+    self.sittingTime.text  = [self timeString: 1];
+    self.standingTime.text = [self timeString: 2];
+    self.walkingTime.text  = [self timeString: 3];
+    self.runningTime.text  = [self timeString: 4];
+    self.bikingTime.text   = [self timeString: 5];
+    self.drivingTime.text  = [self timeString: 6];
+}
+
+- (NSString *) timeString: (int) index
+{
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.activityCountArray = appDelegate.countLySiStWaRuBiDr;
+    
+    NSNumber *time = appDelegate.user.settings.timeBetweenSampling;
+    NSNumber *numPredictions;
+    NSLog(@"numPredictions = %@", numPredictions = [appDelegate.countLySiStWaRuBiDr objectAtIndex:index]);
+    time = [NSNumber numberWithDouble: ([time doubleValue] * [numPredictions doubleValue])];
+    
+    time = [NSNumber numberWithDouble:([time doubleValue] / 60.0)];
+    
+    NSString *result = [NSString stringWithFormat:@"%@", time];
+    return result;
+}
 
 - (void) viewWillDisappear:(BOOL)animated
 {
@@ -82,8 +132,8 @@
     
 }*/
 
-#define RECORDING_TEXT @"We are now recording!"
-#define NOT_RECORDING_TEXT @"We are not currently recording."
+#define RECORDING_TEXT @"ON"
+#define NOT_RECORDING_TEXT @"OFF"
 
 - (IBAction)startScheduler:(UISwitch *)sender
 {
