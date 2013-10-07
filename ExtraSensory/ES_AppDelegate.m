@@ -12,8 +12,6 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_User.h"
 
-#import "TestFlight+ManualSessions.h"
-
 @implementation ES_AppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -116,8 +114,6 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
-    [TestFlight takeOff:@"cec84bf3-3cfa-42c8-9eb1-d029677c73a0"];
-    
     NSLog( @"user = %@", self.user );
     NSLog( @"settings = %@", self.user.settings );
     
@@ -134,66 +130,7 @@
     //[self redirectNSLogToDocuments];
 }
 
-/*
- - (void)redirectNSLogToDocuments
- {
- NSString *documentsDirectory = [self applicationDocumentsDirectory];
- 
- NSString *pathForLog = [documentsDirectory stringByAppendingPathComponent:@"NSLogRedirect.txt"];
- 
- freopen([pathForLog cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
- }*/
 
-
-
-/*- (NSUUID *)uuid
- {
- if (!_uuid)
- {
- _uuid = [NSUUID UUID];
- 
- NSManagedObjectContext *context = self.managedObjectContext;
- 
- UserInfo *userInfo = [NSEntityDescription insertNewObjectForEntityForName:@"UserInfo" inManagedObjectContext:context];
- 
- NSError *error = [[NSError alloc] init];
- 
- NSFetchRequest *request = [[NSFetchRequest alloc] init];
- 
- NSEntityDescription *entity = [NSEntityDescription entityForName:@"UserInfo" inManagedObjectContext:context];
- 
- [request setEntity:entity];
- 
- NSArray *arr = [context executeFetchRequest:request error:&error];
- 
- NSNumber *length = [NSNumber numberWithUnsignedInteger:[arr count]];
- 
- if (length.integerValue == 0)
- {
- NSLog(@"There's no UUID in the database. Let's generate one!");
- userInfo.uuid = [_uuid UUIDString];
- 
- NSError *error = [[NSError alloc] init];
- 
- if (![context save:&error])
- {
- NSLog(@"Error saving UUID!");
- }
- return _uuid;
- 
- }
- else if (length.integerValue == 1)
- {
- NSLog(@"There's one UUID in the database. Good!");
- return [arr objectAtIndex: 0];
- }
- else
- {
- NSLog(@"There's more than one UUID in the database...");
- }
- }
- return _uuid;
- }*/
 
 - (NSUUID *)uuid
 {

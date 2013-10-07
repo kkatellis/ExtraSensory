@@ -11,6 +11,7 @@
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
 #import "ES_Activity.h"
+#import "ES_ActivityStatistic.h"
 
 #define API_URL         @"http://137.110.112.50:8080/api/analyze?%@"
 #define API_UPLOAD      @"http://137.110.112.50:8080/api/feedback_upload"
@@ -239,7 +240,6 @@
     
     if ([predictedActivity  isEqualToString: act1])
     {
-        appDelegate.user.activityStatistics.
         NSLog(@"%@", act1);
         count = [countArray objectAtIndex:0];
         count = [NSNumber numberWithInt: ([count integerValue] + 1)];
