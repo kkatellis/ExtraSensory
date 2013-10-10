@@ -13,6 +13,7 @@
 #import "ES_Scheduler.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
+#import "ES_PieChartView.h"
 
 @interface ES_HomeViewController ()
 
@@ -44,6 +45,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *drivingTime;
 
+@property (weak, nonatomic) IBOutlet ES_PieChartView *pieChartView;
 
 @end
 
@@ -52,6 +54,7 @@
 @synthesize settings = _settings;
 @synthesize scheduler = _scheduler;
 @synthesize activitiesButton = _activitiesButton;
+
 - (ES_Scheduler *) scheduler
 {
     if (!_scheduler)
@@ -94,6 +97,9 @@
     self.runningTime.text  = [self timeString: 4];
     self.bikingTime.text   = [self timeString: 5];
     self.drivingTime.text  = [self timeString: 6];
+    
+    self.pieChartView.activityCounts = self.activityCountArray;
+    [self.pieChartView setNeedsDisplay];
 }
 
 - (NSString *) timeString: (int) index
