@@ -20,12 +20,12 @@
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
-                                    <barButtonItem title="Settings" width="147" id="Nhz-z1-AbL">
+                                    <barButtonItem image="gear.png" id="Nhz-z1-AbL">
                                         <connections>
                                             <segue destination="FhT-sF-lQK" kind="push" id="CgN-Ss-AJf"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="History" width="147" id="MpC-Jx-QyC">
+                                    <barButtonItem title="History" width="214" id="MpC-Jx-QyC">
                                         <connections>
                                             <segue destination="clN-UH-6YB" kind="push" id="FXG-i4-eE7"/>
                                         </connections>
@@ -164,6 +164,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="biking.png" translatesAutoresizingMaskIntoConstraints="NO" id="2CW-vY-Fqr">
+                                <rect key="frame" x="133" y="78" width="43" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
@@ -300,10 +304,15 @@
                             <outlet property="delegate" destination="clN-UH-6YB" id="xes-Fb-nmY"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Item" id="YjH-4T-leD"/>
+                    <tabBarItem key="tabBarItem" title="Item" id="gnt-TE-2rG"/>
                     <navigationItem key="navigationItem" title="Activity History" id="pBf-eq-Q71">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="M5t-aY-jVJ"/>
+                        <barButtonItem key="rightBarButtonItem" title="Feedback" id="foz-32-aG7">
+                            <connections>
+                                <segue destination="veM-TY-9u1" kind="push" id="FPR-gR-fLP"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZGO-IW-sOw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -324,6 +333,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5bR-Wg-sxN">
                                 <rect key="frame" x="83" y="138" width="155" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Lying Down">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -334,6 +344,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7O8-sf-CZK">
                                 <rect key="frame" x="83" y="267" width="155" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Walking">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -344,6 +355,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5H0-fb-adY">
                                 <rect key="frame" x="83" y="224" width="155" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Standing">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -354,6 +366,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wq1-70-999">
                                 <rect key="frame" x="83" y="181" width="155" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Sitting">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -364,6 +377,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rdh-AX-yCG">
                                 <rect key="frame" x="83" y="310" width="155" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Running">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -374,6 +388,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h9T-jl-UwC">
                                 <rect key="frame" x="83" y="353" width="155" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Bicycling">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -384,6 +399,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t3Z-6R-sr2">
                                 <rect key="frame" x="83" y="396" width="155" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Driving">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -398,7 +414,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" alpha="0.89999999999999991" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRW-5C-07s">
-                                <rect key="frame" x="90" y="474" width="141" height="30"/>
+                                <rect key="frame" x="71" y="451" width="179" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Send Feedback">
@@ -409,9 +425,17 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Correct Activity" id="EcM-Sd-x7w">
-                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="Esf-nd-QtD"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Correct Activity" id="EcM-Sd-x7w"/>
+                    <connections>
+                        <outlet property="Bicycling" destination="h9T-jl-UwC" id="ffc-w1-4Vi"/>
+                        <outlet property="Driving" destination="t3Z-6R-sr2" id="onB-H1-D01"/>
+                        <outlet property="LyingDown" destination="5bR-Wg-sxN" id="02m-MP-vVV"/>
+                        <outlet property="Running" destination="Rdh-AX-yCG" id="Iwe-aC-Dnu"/>
+                        <outlet property="SendFeedback" destination="hRW-5C-07s" id="qMK-nB-OeD"/>
+                        <outlet property="Sitting" destination="Wq1-70-999" id="KOU-QC-Feu"/>
+                        <outlet property="Standing" destination="5H0-fb-adY" id="aAe-t1-RFV"/>
+                        <outlet property="Walking" destination="7O8-sf-CZK" id="Uwe-dU-TqC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wru-i0-xBP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -581,9 +605,16 @@
             <point key="canvasLocation" x="805" y="-364"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="biking.png" width="128" height="128"/>
+        <image name="gear.png" width="26" height="26"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="FPR-gR-fLP"/>
+    </inferredMetricsTieBreakers>
 </document>
