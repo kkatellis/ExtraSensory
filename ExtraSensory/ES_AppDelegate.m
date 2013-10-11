@@ -125,6 +125,8 @@
      [servicesDisabledAlert show];
      }*/
     [self.locationManager startUpdatingLocation];
+    UIImage *navBackgroundImage = [UIImage imageNamed:@"iOS7-blue"];
+    [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
     
     
     //[self redirectNSLogToDocuments];

@@ -53,9 +53,6 @@
 		70F8835C1806FAEF00F02411 /* button-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F883191806FAEE00F02411 /* button-bg.png */; };
 		70F8835D1806FAEF00F02411 /* danger-btn-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F8831A1806FAEE00F02411 /* danger-btn-bg.png */; };
 		70F8835E1806FAEF00F02411 /* default_playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = 70F8831B1806FAEE00F02411 /* default_playlist.json */; };
-		70F8835F1806FAEF00F02411 /* icon-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F8831C1806FAEF00F02411 /* icon-ipad.png */; };
-		70F883601806FAEF00F02411 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F8831D1806FAEF00F02411 /* icon.png */; };
-		70F883611806FAEF00F02411 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F8831E1806FAEF00F02411 /* icon@2x.png */; };
 		70F883621806FAEF00F02411 /* music-note.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F8831F1806FAEF00F02411 /* music-note.png */; };
 		70F883631806FAEF00F02411 /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F883211806FAEF00F02411 /* favorite.png */; };
 		70F883641806FAEF00F02411 /* feed-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F883221806FAEF00F02411 /* feed-icon.png */; };
@@ -73,6 +70,8 @@
 		70F883701806FAEF00F02411 /* silent-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F8832E1806FAEF00F02411 /* silent-on.png */; };
 		70F883711806FAEF00F02411 /* smiley.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F8832F1806FAEF00F02411 /* smiley.png */; };
 		70F883721806FAEF00F02411 /* success-btn-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F883301806FAEF00F02411 /* success-btn-bg.png */; };
+		70F883741808626F00F02411 /* blue-fabric.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F883731808626F00F02411 /* blue-fabric.png */; };
+		70F883761808640200F02411 /* iOS7-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F883751808640200F02411 /* iOS7-blue.png */; };
 		9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB417F1A78A00D95E05 /* Foundation.framework */; };
 		9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */; };
 		9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB817F1A78A00D95E05 /* UIKit.framework */; };
@@ -166,9 +165,6 @@
 		70F883191806FAEE00F02411 /* button-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-bg.png"; sourceTree = "<group>"; };
 		70F8831A1806FAEE00F02411 /* danger-btn-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "danger-btn-bg.png"; sourceTree = "<group>"; };
 		70F8831B1806FAEE00F02411 /* default_playlist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = default_playlist.json; sourceTree = "<group>"; };
-		70F8831C1806FAEF00F02411 /* icon-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ipad.png"; sourceTree = "<group>"; };
-		70F8831D1806FAEF00F02411 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		70F8831E1806FAEF00F02411 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		70F8831F1806FAEF00F02411 /* music-note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music-note.png"; sourceTree = "<group>"; };
 		70F883211806FAEF00F02411 /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
 		70F883221806FAEF00F02411 /* feed-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed-icon.png"; sourceTree = "<group>"; };
@@ -186,6 +182,8 @@
 		70F8832E1806FAEF00F02411 /* silent-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "silent-on.png"; sourceTree = "<group>"; };
 		70F8832F1806FAEF00F02411 /* smiley.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smiley.png; sourceTree = "<group>"; };
 		70F883301806FAEF00F02411 /* success-btn-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success-btn-bg.png"; sourceTree = "<group>"; };
+		70F883731808626F00F02411 /* blue-fabric.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-fabric.png"; sourceTree = "<group>"; };
+		70F883751808640200F02411 /* iOS7-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS7-blue.png"; sourceTree = "<group>"; };
 		9307CBB117F1A78A00D95E05 /* ExtraSensory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExtraSensory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9307CBB417F1A78A00D95E05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -274,6 +272,8 @@
 		70F882EA1806FAEE00F02411 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				70F883751808640200F02411 /* iOS7-blue.png */,
+				70F883731808626F00F02411 /* blue-fabric.png */,
 				70F882EB1806FAEE00F02411 /* activities */,
 				70F8830F1806FAEE00F02411 /* activity_button.png */,
 				70F883101806FAEE00F02411 /* activity_button@2x.png */,
@@ -285,9 +285,6 @@
 				70F883191806FAEE00F02411 /* button-bg.png */,
 				70F8831A1806FAEE00F02411 /* danger-btn-bg.png */,
 				70F8831B1806FAEE00F02411 /* default_playlist.json */,
-				70F8831C1806FAEF00F02411 /* icon-ipad.png */,
-				70F8831D1806FAEF00F02411 /* icon.png */,
-				70F8831E1806FAEF00F02411 /* icon@2x.png */,
 				70F8831F1806FAEF00F02411 /* music-note.png */,
 				70F883201806FAEF00F02411 /* nav-menu */,
 				70F883291806FAEF00F02411 /* nav-menu-icon.png */,
@@ -639,7 +636,6 @@
 				70F883571806FAEF00F02411 /* alert.wav in Resources */,
 				70F883631806FAEF00F02411 /* favorite.png in Resources */,
 				70F883431806FAEF00F02411 /* indicator-running.png in Resources */,
-				70F8835F1806FAEF00F02411 /* icon-ipad.png in Resources */,
 				70F8833C1806FAEF00F02411 /* indicator-driving@2x.png in Resources */,
 				70F883581806FAEF00F02411 /* network.png in Resources */,
 				70F883561806FAEF00F02411 /* album-art.png in Resources */,
@@ -653,6 +649,7 @@
 				70F8834B1806FAEF00F02411 /* party-small.png in Resources */,
 				70F883441806FAEF00F02411 /* indicator-running@2x.png in Resources */,
 				70F883541806FAEF00F02411 /* activity_button@2x.png in Resources */,
+				70F883741808626F00F02411 /* blue-fabric.png in Resources */,
 				70F883711806FAEF00F02411 /* smiley.png in Resources */,
 				70F883511806FAEF00F02411 /* talking.png in Resources */,
 				70F883411806FAEF00F02411 /* indicator-party.png in Resources */,
@@ -666,7 +663,6 @@
 				70F883351806FAEF00F02411 /* Bus-256.png in Resources */,
 				9307CBBF17F1A78A00D95E05 /* InfoPlist.strings in Resources */,
 				70F883481806FAEF00F02411 /* indicator-talking@2x.png in Resources */,
-				70F883601806FAEF00F02411 /* icon.png in Resources */,
 				70F8835C1806FAEF00F02411 /* button-bg.png in Resources */,
 				70F883591806FAEF00F02411 /* success.png in Resources */,
 				70F8833B1806FAEF00F02411 /* indicator-driving.png in Resources */,
@@ -679,11 +675,11 @@
 				9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */,
 				70F883451806FAEF00F02411 /* indicator-sitting.png in Resources */,
 				70F8836C1806FAEF00F02411 /* play_btn.png in Resources */,
-				70F883611806FAEF00F02411 /* icon@2x.png in Resources */,
 				70F8836D1806FAEF00F02411 /* primary-btn-bg.png in Resources */,
 				70F883691806FAEF00F02411 /* table-bg.png in Resources */,
 				70F883621806FAEF00F02411 /* music-note.png in Resources */,
 				70F8834F1806FAEF00F02411 /* studying-small.png in Resources */,
+				70F883761808640200F02411 /* iOS7-blue.png in Resources */,
 				70F883721806FAEF00F02411 /* success-btn-bg.png in Resources */,
 				70F883681806FAEF00F02411 /* settings-icon.png in Resources */,
 				70F883551806FAEF00F02411 /* album-art-small.png in Resources */,
