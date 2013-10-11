@@ -29,8 +29,6 @@
 
 @property (strong, nonatomic) ES_Scheduler *scheduler;
 
-@property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
-
 @property (weak, nonatomic) IBOutlet UILabel *lyingTime;
 
 @property (weak, nonatomic) IBOutlet UILabel *sittingTime;
@@ -74,7 +72,6 @@
     
     [self updateCounts];
 
-    [self.uuidLabel setText: appDelegate.user.uuid];
     
 /*    [self.settings addObserver:self
                     forKeyPath:@"sampleFrequency"

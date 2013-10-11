@@ -7,6 +7,8 @@
 //
 
 #import "ES_FeedbackViewController.h"
+#import "ES_CalendarViewCell.h"
+#import "ES_Activity.h"
 
 @interface ES_FeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *correctActivityLabel;
@@ -18,6 +20,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *Running;
 @property (strong, nonatomic) IBOutlet UIButton *Bicycling;
 @property (strong, nonatomic) IBOutlet UIButton *Driving;
+
+
 
 @end
 
@@ -128,5 +132,16 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (IBAction)sendFeedback:(UIButton *)sender
+{
+    //self.fromCell.detailTextLabel.text = self.correctActivityLabel.text;
+    //NSLog( @"LOOK AT THIS! -> %@", self.correctActivityLabel.text);
+    
+    self.fromCell.activity.userCorrection = self.correctActivityLabel.text;
+    
+    [self.navigationController popViewControllerAnimated:YES ];
+}
+
 
 @end

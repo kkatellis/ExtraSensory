@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class ES_CalendarViewCell;
+
 @interface ES_FeedbackViewController : UIViewController
 
-@property UITableViewCell *fromCell;
+@property ES_CalendarViewCell *fromCell;
+
+@property NSMutableArray *predictions;
 
 @end

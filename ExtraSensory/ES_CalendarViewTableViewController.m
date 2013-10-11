@@ -13,6 +13,7 @@
 #import "ES_ActivityStatistic.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_Activity.h"
+#import "ES_CalendarViewCell.h"
 
 @interface ES_CalendarViewTableViewController ()
 
@@ -91,19 +92,19 @@
 #pragma mark - Table view data source
 
 /*- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 0;
-    
-     double now = [[NSDate date] timeIntervalSince1970];
-     double historyAgeInSeconds = now - [self.user.activityStatistics.timeSamplingBegan doubleValue];
-     double historyAgeInDays = historyAgeInSeconds / (60 * 60 * 24);
-     return (int)ceil(historyAgeInDays);
-}*/
+ {
+ return 0;
+ 
+ double now = [[NSDate date] timeIntervalSince1970];
+ double historyAgeInSeconds = now - [self.user.activityStatistics.timeSamplingBegan doubleValue];
+ double historyAgeInDays = historyAgeInSeconds / (60 * 60 * 24);
+ return (int)ceil(historyAgeInDays);
+ }*/
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-     self.predictions = appDelegate.predictions;
+    self.predictions = appDelegate.predictions;
     
     NSLog( @"prediction count = %lu", (unsigned long)[self.user.activities count]);
     return [self.predictions count];
@@ -120,13 +121,20 @@
     static NSString *CellIdentifier = @"ActivityDescription";
     
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath:indexPath];
+    ES_CalendarViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
     //ES_Activity *activity = [self.user.activities objectAtIndex: indexPath.row ];
     //cell.textLabel.text = activity.serverPrediction;
     
-    cell.textLabel.text = [appDelegate.predictions objectAtIndex: indexPath.row ];
+    cell.activity = [appDelegate.predictions objectAtIndex: indexPath.row];
+    cell.textLabel.text = [(ES_Activity *)[appDelegate.predictions objectAtIndex: indexPath.row ] serverPrediction];
+    
+    if (cell.activity.userCorrection)
+    {
+        cell.detailTextLabel.text = [(ES_Activity *)[appDelegate.predictions objectAtIndex: indexPath.row ] userCorrection];
+    }
+    
     return cell;
 }
 
@@ -137,6 +145,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     [(ES_FeedbackViewController *)segue.destinationViewController setFromCell:sender ];
+    [(ES_FeedbackViewController *)segue.destinationViewController setPredictions: self.predictions];
 }
 
 

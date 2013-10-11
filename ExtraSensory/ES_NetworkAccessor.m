@@ -196,13 +196,15 @@
     
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    [appDelegate.predictions insertObject:predictionAndDate atIndex:0];
+    
+    ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
+
+    [appDelegate.predictions insertObject:activity atIndex:0];
+
     
     NSLog(@"prediction: %@", [appDelegate.predictions objectAtIndex: 0]);
     
     NSLog(@"time = %f", [time doubleValue]);
-    
-    ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
     
     [activity setValue: time forKey: @"timestamp"];
     

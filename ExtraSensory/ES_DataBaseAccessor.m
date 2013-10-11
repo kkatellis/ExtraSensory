@@ -96,20 +96,36 @@
     
     NSLog(@"attributeValue = %@", attributeValue );
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(timestamp == %@)", attributeValue ];
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(timestamp == %@)", attributeValue ];
     
-    [fetchRequest setPredicate:predicate];
+    //[fetchRequest setPredicate:predicate];
     
     NSError *error = [NSError new];
     
     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+    
+    NSLog(@"nubmer of results = %lu", (unsigned long)[results count]);
+    
+    ES_Activity *resultActivity;
+    
+    for (ES_Activity *a in results)
+    {
+        NSNumber *t = a.timestamp;
+        
+        NSLog(@"time = %@, t = %@", time, t );
+        
+        if ( [t intValue] == [time intValue] ) resultActivity = a;
+        
+            
+    }
+    
     
     NSLog(@"number of matching hits = %lu", (unsigned long)[results count]);
    // NSLog(@"error: %@", [error localizedDescription]);
     
     if ([results count] > 0 )
     {
-        return [results objectAtIndex: 0];
+        return resultActivity;
     }
     else return nil;
     

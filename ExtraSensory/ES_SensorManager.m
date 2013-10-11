@@ -174,7 +174,7 @@
     
     if ([self.counter integerValue] >= 800 )
     {
-        self.currentActivity.timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+        self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[[NSDate date] timeIntervalSince1970]];
         [self.timer invalidate];
         
         self.counter = 0;

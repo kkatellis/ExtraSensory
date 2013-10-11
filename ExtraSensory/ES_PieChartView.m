@@ -109,7 +109,6 @@
             CGContextDrawPath(context, kCGPathFillStroke);
 
             startAngle = (1.0 - [[percentages objectAtIndex:i ] doubleValue ]) * 2 * M_PI;
-
         }
     }
     
