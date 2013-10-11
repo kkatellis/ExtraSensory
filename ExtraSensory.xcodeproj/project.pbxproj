@@ -96,6 +96,7 @@
 		93146B9F1802CD9F00F2AAC7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93146B9E1802CD9F00F2AAC7 /* libz.dylib */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
 		934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B417FF94E200521B0D /* ES_FeedbackViewController.m */; };
+		939562FD1806481800BF448E /* ES_PieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939562FC1806481800BF448E /* ES_PieChartView.m */; };
 		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
 		93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */; };
 		93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */; };
@@ -220,6 +221,8 @@
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
 		934377B317FF94E200521B0D /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		934377B417FF94E200521B0D /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
+		939562FB1806481800BF448E /* ES_PieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_PieChartView.h; sourceTree = "<group>"; };
+		939562FC1806481800BF448E /* ES_PieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieChartView.m; sourceTree = "<group>"; };
 		93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Scheduler.h; sourceTree = "<group>"; };
 		93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Scheduler.m; sourceTree = "<group>"; };
 		93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewTableViewController.h; sourceTree = "<group>"; };
@@ -413,6 +416,7 @@
 				9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */,
 				93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */,
 				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
+				939562FE1806482200BF448E /* New Group */,
 				93F659DF17F6B299000638CB /* NetworkManagement */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
@@ -493,6 +497,15 @@
 				93146B8118024A9C00F2AAC7 /* ES_SensorSample.m */,
 			);
 			name = DataModels;
+			sourceTree = "<group>";
+		};
+		939562FE1806482200BF448E /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				939562FC1806481800BF448E /* ES_PieChartView.m */,
+				939562FB1806481800BF448E /* ES_PieChartView.h */,
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		93F659DB17F6B1BE000638CB /* DataManagement */ = {
@@ -716,6 +729,7 @@
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */,
+				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
@@ -863,6 +877,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -877,6 +892,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
