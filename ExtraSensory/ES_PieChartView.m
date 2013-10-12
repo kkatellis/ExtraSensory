@@ -26,7 +26,7 @@
 // An empty implementation adversely affects performance during animation.
 
 
-#define DEFAULT_SCALE 0.90
+#define DEFAULT_SCALE 1
 
 - (void)drawRect:(CGRect)rect
 {

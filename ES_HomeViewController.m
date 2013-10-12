@@ -66,24 +66,15 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCounts) name:@"Activities" object:nil];
+
+    
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
     self.activityCountArray = appDelegate.countLySiStWaRuBiDr;
     
     [self updateCounts];
-
-    
-/*    [self.settings addObserver:self
-                    forKeyPath:@"sampleFrequency"
-                       options:NSKeyValueObservingOptionNew
-                       context:NULL];*/
 }
-
-/*- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ( [keyPath isEqualToString: @"sampleFrequency"] )
-        [self.sampleFrequencyLabel setText: [NSString stringWithFormat: @"%@", [object valueForKey:@"sampleFrequency"]] ];
-}*/
 
 - (void) updateCounts
 {
@@ -117,7 +108,7 @@
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-//    [self.settings removeObserver:self forKeyPath:@"sampleFrequency"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (ES_SensorManager *)sensorManager
@@ -125,15 +116,6 @@
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     return appDelegate.sensorManager;
 }
-
-/*- (IBAction)sliderValueChanged:(UISlider *)sender
-{
-    self.sensorManager.sampleFrequency = self.sampleFrequencySlider.value;
-    
-    [self.settings setValue: [NSNumber numberWithFloat: sender.value ]
-                 forKeyPath: @"sampleFrequency"];
-    
-}*/
 
 #define RECORDING_TEXT @"ON"
 #define NOT_RECORDING_TEXT @"OFF"
@@ -158,10 +140,6 @@
 
 - (void)viewDidLoad
 {
-    /*self.sampleFrequencySlider.minimumValue = 1.0;
-    self.sampleFrequencySlider.maximumValue = 100.0;
-    self.sampleFrequencyLabel.text = [NSString stringWithFormat: @"%.0f", self.sensorManager.sampleFrequency ];*/
-    
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 }

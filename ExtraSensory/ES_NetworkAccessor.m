@@ -219,7 +219,7 @@
     else
         NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
     
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
 }
 
 #define act1 @"LYING DOWN"

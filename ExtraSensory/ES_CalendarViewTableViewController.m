@@ -45,6 +45,7 @@
 {
     [super viewDidLoad];
     
+    
     ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     self.predictions = appDelegate.predictions;
@@ -63,6 +64,8 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:@"Activities" object:nil];
+
     [self.user addObserver: self
                 forKeyPath: @"activities"
                    options: NSKeyValueObservingOptionNew
@@ -71,6 +74,8 @@
 
 - (void) viewWillDisappear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [self.user removeObserver: self
                    forKeyPath:@"activities"];
 }
@@ -90,16 +95,6 @@
 }
 
 #pragma mark - Table view data source
-
-/*- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
- {
- return 0;
- 
- double now = [[NSDate date] timeIntervalSince1970];
- double historyAgeInSeconds = now - [self.user.activityStatistics.timeSamplingBegan doubleValue];
- double historyAgeInDays = historyAgeInSeconds / (60 * 60 * 24);
- return (int)ceil(historyAgeInDays);
- }*/
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -124,15 +119,25 @@
     ES_CalendarViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
-    //ES_Activity *activity = [self.user.activities objectAtIndex: indexPath.row ];
-    //cell.textLabel.text = activity.serverPrediction;
+    
+    NSTimeInterval t = [[(ES_Activity *)[appDelegate.predictions objectAtIndex: indexPath.row ] timestamp] doubleValue];
+
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"hh:mm"];
+    NSString *dateString = [NSString stringWithFormat: @"%@", [dateFormatter stringFromDate: [NSDate dateWithTimeIntervalSince1970: t ]]];
+    
+
     
     cell.activity = [appDelegate.predictions objectAtIndex: indexPath.row];
-    cell.textLabel.text = [(ES_Activity *)[appDelegate.predictions objectAtIndex: indexPath.row ] serverPrediction];
+    cell.textLabel.text = dateString;
     
     if (cell.activity.userCorrection)
     {
-        cell.detailTextLabel.text = [(ES_Activity *)[appDelegate.predictions objectAtIndex: indexPath.row ] userCorrection];
+        cell.detailTextLabel.text = [[(ES_Activity *)[appDelegate.predictions objectAtIndex: indexPath.row ] userCorrection] stringByAppendingString:@"*"];
+    }
+    else
+    {
+        cell.detailTextLabel.text = [(ES_Activity *)[appDelegate.predictions objectAtIndex: indexPath.row ] serverPrediction];
     }
     
     return cell;

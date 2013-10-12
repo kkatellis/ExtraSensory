@@ -135,11 +135,11 @@
 
 - (IBAction)sendFeedback:(UIButton *)sender
 {
-    //self.fromCell.detailTextLabel.text = self.correctActivityLabel.text;
-    //NSLog( @"LOOK AT THIS! -> %@", self.correctActivityLabel.text);
     
     self.fromCell.activity.userCorrection = self.correctActivityLabel.text;
     
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
+
     [self.navigationController popViewControllerAnimated:YES ];
 }
 
