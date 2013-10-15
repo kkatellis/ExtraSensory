@@ -33,6 +33,17 @@
 
 @synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
 
+@synthesize activitiesToUpload = _activitiesToUpload;
+
+- (NSMutableArray *)activitiesToUpload
+{
+    if (!_activitiesToUpload)
+    {
+        _activitiesToUpload = [NSMutableArray new];
+    }
+    return _activitiesToUpload;
+}
+
 - (NSMutableArray *)countLySiStWaRuBiDr
 {
     if (!_countLySiStWaRuBiDr)
@@ -92,6 +103,16 @@
     [self.networkStack removeLastObject];
     
     return result;
+}
+
+- (NSString *) getFirstOnNetworkStack
+{
+    return [self.networkStack firstObject];
+}
+
+- (void) removeFirstOnNetworkStack
+{
+    [self.networkStack removeObjectAtIndex: 0];
 }
 
 

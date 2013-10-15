@@ -40,6 +40,11 @@
 
 @property (strong, nonatomic) NSMutableArray *countLySiStWaRuBiDr;
 
+@property (strong, nonatomic) NSMutableArray *activitiesToUpload;
+
+- (NSString *) getFirstOnNetworkStack;
+
+- (void) removeFirstOnNetworkStack;
 
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;

@@ -63,7 +63,8 @@
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    NSString *file = [appDelegate popOffNetworkStack];
+    //NSString *file = [appDelegate popOffNetworkStack];
+    NSString *file = [appDelegate getFirstOnNetworkStack];
     
     NSLog( @"upload: %@", file);
     
@@ -161,6 +162,8 @@
 
 - (void) connection: (NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
     connection = nil;
     self.recievedData = nil;
     NSLog( @"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLErrorKey]);
@@ -215,11 +218,22 @@
     NSFileManager *fileMgr = [NSFileManager defaultManager];
         
     if (![fileMgr removeItemAtPath: appDelegate.currentZipFilePath error:&error])
+    {
         NSLog(@"Unable to delete file: %@", [error localizedDescription]);
+    }
     else
+    {
         NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
+
+    [appDelegate removeFirstOnNetworkStack];
+    NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
+    if ( [appDelegate.networkStack count] > 0 )
+    {
+        [self upload];
+    }
 }
 
 #define act1 @"LYING DOWN"
