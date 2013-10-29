@@ -92,11 +92,12 @@
 		93146B8818024A9D00F2AAC7 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B8718024A9D00F2AAC7 /* ES_Activity.m */; };
 		93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B8A18024A9D00F2AAC7 /* ES_ActivityStatistic.m */; };
 		93146B8E18024A9D00F2AAC7 /* ES_UserActivityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B8D18024A9D00F2AAC7 /* ES_UserActivityLabel.m */; };
-		93146B9118024A9D00F2AAC7 /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B9018024A9D00F2AAC7 /* ES_User.m */; };
 		93146B9F1802CD9F00F2AAC7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93146B9E1802CD9F00F2AAC7 /* libz.dylib */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
 		934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B417FF94E200521B0D /* ES_FeedbackViewController.m */; };
 		939562FD1806481800BF448E /* ES_PieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939562FC1806481800BF448E /* ES_PieChartView.m */; };
+		939600A5181B0194006221C6 /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A4181B0194006221C6 /* ES_User.m */; };
+		939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A7181B0195006221C6 /* ES_UserPopulation.m */; };
 		93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */; };
 		93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71A91808A91800D58E77 /* ES_CalendarViewCell.m */; };
 		93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71AC1808D41000D58E77 /* ES_Format.m */; };
@@ -217,8 +218,6 @@
 		93146B8A18024A9D00F2AAC7 /* ES_ActivityStatistic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_ActivityStatistic.m; path = ../ES_ActivityStatistic.m; sourceTree = "<group>"; };
 		93146B8C18024A9D00F2AAC7 /* ES_UserActivityLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_UserActivityLabel.h; path = ../ES_UserActivityLabel.h; sourceTree = "<group>"; };
 		93146B8D18024A9D00F2AAC7 /* ES_UserActivityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_UserActivityLabel.m; path = ../ES_UserActivityLabel.m; sourceTree = "<group>"; };
-		93146B8F18024A9D00F2AAC7 /* ES_User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_User.h; path = ../ES_User.h; sourceTree = "<group>"; };
-		93146B9018024A9D00F2AAC7 /* ES_User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_User.m; path = ../ES_User.m; sourceTree = "<group>"; };
 		93146B9E1802CD9F00F2AAC7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SensorManager.h; sourceTree = "<group>"; };
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
@@ -226,6 +225,10 @@
 		934377B417FF94E200521B0D /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		939562FB1806481800BF448E /* ES_PieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_PieChartView.h; sourceTree = "<group>"; };
 		939562FC1806481800BF448E /* ES_PieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieChartView.m; sourceTree = "<group>"; };
+		939600A3181B0194006221C6 /* ES_User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_User.h; sourceTree = "<group>"; };
+		939600A4181B0194006221C6 /* ES_User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_User.m; sourceTree = "<group>"; };
+		939600A6181B0195006221C6 /* ES_UserPopulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_UserPopulation.h; sourceTree = "<group>"; };
+		939600A7181B0195006221C6 /* ES_UserPopulation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_UserPopulation.m; sourceTree = "<group>"; };
 		93AC71A5180878A000D58E77 /* ES_SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsViewController.h; sourceTree = "<group>"; };
 		93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsViewController.m; sourceTree = "<group>"; };
 		93AC71A81808A91800D58E77 /* ES_CalendarViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewCell.h; sourceTree = "<group>"; };
@@ -498,8 +501,10 @@
 		934377A017FEE27E00521B0D /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
-				93146B8F18024A9D00F2AAC7 /* ES_User.h */,
-				93146B9018024A9D00F2AAC7 /* ES_User.m */,
+				939600A6181B0195006221C6 /* ES_UserPopulation.h */,
+				939600A7181B0195006221C6 /* ES_UserPopulation.m */,
+				939600A3181B0194006221C6 /* ES_User.h */,
+				939600A4181B0194006221C6 /* ES_User.m */,
 				93146B8C18024A9D00F2AAC7 /* ES_UserActivityLabel.h */,
 				93146B8D18024A9D00F2AAC7 /* ES_UserActivityLabel.m */,
 				93146B8918024A9D00F2AAC7 /* ES_ActivityStatistic.h */,
@@ -750,15 +755,16 @@
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */,
+				939600A5181B0194006221C6 /* ES_User.m in Sources */,
 				93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */,
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
+				939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93146B8818024A9D00F2AAC7 /* ES_Activity.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
-				93146B9118024A9D00F2AAC7 /* ES_User.m in Sources */,
 				93F679C617F978AF000638CB /* zip.c in Sources */,
 				93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */,
 				93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */,

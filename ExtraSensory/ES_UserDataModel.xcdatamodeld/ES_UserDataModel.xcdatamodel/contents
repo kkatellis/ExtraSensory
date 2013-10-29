@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F37" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ES_Activity" representedClassName="ES_Activity" syncable="YES">
         <attribute name="hasBeenSent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isPredictionCorrect" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -56,17 +56,22 @@
         <relationship name="activities" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="ES_Activity" inverseName="user" inverseEntity="ES_Activity" syncable="YES"/>
         <relationship name="activityStatistics" maxCount="1" deletionRule="Nullify" destinationEntity="ES_ActivityStatistics" inverseName="user" inverseEntity="ES_ActivityStatistics" syncable="YES"/>
         <relationship name="settings" maxCount="1" deletionRule="Nullify" destinationEntity="ES_Settings" inverseName="user" inverseEntity="ES_Settings" syncable="YES"/>
+        <relationship name="userPopulation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_UserPopulation" inverseName="users" inverseEntity="ES_UserPopulation" syncable="YES"/>
     </entity>
     <entity name="ES_UserActivityLabel" representedClassName="ES_UserActivityLabel" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_Activity" inverseName="userActivityLabels" inverseEntity="ES_Activity" syncable="YES"/>
     </entity>
+    <entity name="ES_UserPopulation" representedClassName="ES_UserPopulation" syncable="YES">
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_User" inverseName="userPopulation" inverseEntity="ES_User" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="ES_Activity" positionX="-180" positionY="2" width="128" height="208"/>
+        <element name="ES_Activity" positionX="-173" positionY="-18" width="128" height="208"/>
         <element name="ES_ActivityStatistics" positionX="-182" positionY="225" width="128" height="208"/>
         <element name="ES_SensorSample" positionX="-2" positionY="-81" width="128" height="253"/>
-        <element name="ES_Settings" positionX="-549" positionY="99" width="128" height="103"/>
-        <element name="ES_User" positionX="-396" positionY="89" width="128" height="118"/>
+        <element name="ES_Settings" positionX="-549" positionY="113" width="128" height="103"/>
+        <element name="ES_User" positionX="-371" positionY="101" width="128" height="133"/>
         <element name="ES_UserActivityLabel" positionX="-2" positionY="197" width="128" height="73"/>
+        <element name="ES_UserPopulation" positionX="-416" positionY="284" width="128" height="58"/>
     </elements>
 </model>

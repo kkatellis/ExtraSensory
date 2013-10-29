@@ -2,7 +2,7 @@
 //  ES_User.h
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 10/6/13.
+//  Created by Bryan Grounds on 10/25/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSOrderedSet *activities;
 @property (nonatomic, retain) ES_ActivityStatistic *activityStatistics;
 @property (nonatomic, retain) ES_Settings *settings;
+@property (nonatomic, retain) NSManagedObject *userPopulation;
 @end
 
 @interface ES_User (CoreDataGeneratedAccessors)

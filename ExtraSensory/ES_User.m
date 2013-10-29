@@ -2,7 +2,7 @@
 //  ES_User.m
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 10/6/13.
+//  Created by Bryan Grounds on 10/25/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
 
@@ -19,12 +19,13 @@
 @dynamic activities;
 @dynamic activityStatistics;
 @dynamic settings;
+@dynamic userPopulation;
 
-- (void)addActivitiesObject:(ES_Activity *)value
-{
-    NSMutableOrderedSet *tempSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:self.activities];
-    [tempSet addObject:value];
-    self.activities = tempSet;
-}
-
+    - (void)addActivitiesObject:(ES_Activity *)value
+    {
+        NSMutableOrderedSet *tempSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:self.activities];
+        [tempSet addObject:value];
+        self.activities = tempSet;
+    }
+    
 @end
