@@ -67,6 +67,8 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCounts) name:@"Activities" object:nil];
+    
+    [ES_DataBaseAccessor save];
 
     
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -109,6 +111,8 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [ES_DataBaseAccessor save];
+
 }
 
 - (ES_SensorManager *)sensorManager
