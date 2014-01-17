@@ -9,6 +9,9 @@
 #import "ES_FeedbackViewController.h"
 #import "ES_CalendarViewCell.h"
 #import "ES_Activity.h"
+#import "ES_AppDelegate.h"
+#import "ES_User.h"
+#import "ES_ActivityStatistic.h"
 
 @interface ES_FeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *correctActivityLabel;
@@ -21,98 +24,37 @@
 @property (strong, nonatomic) IBOutlet UIButton *Bicycling;
 @property (strong, nonatomic) IBOutlet UIButton *Driving;
 
-
+@property (strong, nonatomic) NSString *databaseReferenceString;
 
 @end
 
 @implementation ES_FeedbackViewController
 
 @synthesize fromCell = _fromCell;
+@synthesize databaseReferenceString = _databaseReferenceString;
 
-- (IBAction)send:(UIBarButtonItem *)sender
-{
+
+- (IBAction)correctedActivity:(UIButton *)sender {
+    [self.correctActivityLabel setText: sender.titleLabel.text];
     
-}
-
-
-- (IBAction)lying:(UIButton *)sender {
-    [self.correctActivityLabel setText: sender.titleLabel.text];
-   _LyingDown.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
-    _Sitting.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Standing.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Walking.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Running.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Bicycling.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-}
-
-- (IBAction)sitting:(UIButton *)sender {
-    [self.correctActivityLabel setText: sender.titleLabel.text];
-    _LyingDown.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Sitting.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
-    _Standing.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Walking.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Running.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Bicycling.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-}
-
-- (IBAction)standing:(UIButton *)sender {
-    [self.correctActivityLabel setText: sender.titleLabel.text];
-    _LyingDown.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Sitting.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Standing.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
-    _Walking.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Running.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Bicycling.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-}
-
-- (IBAction)walking:(UIButton *)sender {
-    [self.correctActivityLabel setText: sender.titleLabel.text];
-    _LyingDown.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Sitting.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Standing.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Walking.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
-    _Running.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Bicycling.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-}
-
-- (IBAction)running:(UIButton *)sender {
-    [self.correctActivityLabel setText: sender.titleLabel.text];
-    _LyingDown.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Sitting.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Standing.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Walking.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Running.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
-    _Bicycling.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-}
-
-- (IBAction)bicycling:(UIButton *)sender {
-    [self.correctActivityLabel setText: sender.titleLabel.text];
-    _LyingDown.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Sitting.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Standing.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Walking.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Running.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Bicycling.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
-    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-}
-
-- (IBAction)driving:(UIButton *)sender {
-    [self.correctActivityLabel setText: sender.titleLabel.text];
     _LyingDown.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     _Sitting.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     _Standing.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     _Walking.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     _Running.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     _Bicycling.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
+    _Driving.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+    
+    sender.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
+    
+    if( [[sender.titleLabel.text description] isEqualToString: @"Lying Down"] )
+        self.databaseReferenceString = @"Lying";
+    else
+        self.databaseReferenceString = [sender.titleLabel.text description];
+    
+    self.databaseReferenceString = [@"count" stringByAppendingString: self.databaseReferenceString];
+
 }
-
-
 
 - (void)viewDidLoad
 {
@@ -137,6 +79,17 @@
 {
     
     self.fromCell.activity.userCorrection = self.correctActivityLabel.text;
+    
+    
+    ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    int newCount = [[appDelegate.user.activityStatistics valueForKey: self.databaseReferenceString] intValue];
+    
+    newCount++;
+    
+    [appDelegate.user.activityStatistics setValue: [NSNumber numberWithInt: newCount] forKey: self.databaseReferenceString];
+    
+    //int oldCount = appDelegate.user.activityStatistics valueForKey:
     
     [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
 

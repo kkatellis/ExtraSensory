@@ -67,7 +67,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:@"Activities" object:nil];
 
     [self.user addObserver: self
-                forKeyPath: @"activities"
+                forKeyPath: @"Activities"
                    options: NSKeyValueObservingOptionNew
                    context: NULL];
 }
@@ -77,12 +77,12 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     [self.user removeObserver: self
-                   forKeyPath:@"activities"];
+                   forKeyPath:@"Activities"];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ( [keyPath isEqualToString: @"activities"] )
+    if ( [keyPath isEqualToString: @"Activities"] )
     {
         [self.tableView reloadData];
     }
@@ -99,9 +99,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    
     self.predictions = appDelegate.predictions;
     
     NSLog( @"prediction count = %lu", (unsigned long)[self.user.activities count]);
+    
+    // return the number of entries in the predictions data structure
     return [self.predictions count];
     
     //return [appDelegate.user.activities count];

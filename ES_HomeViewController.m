@@ -14,6 +14,7 @@
 #import "ES_User.h"
 #import "ES_Settings.h"
 #import "ES_PieChartView.h"
+#import "ES_ActivityStatistic.h"
 
 @interface ES_HomeViewController ()
 
@@ -53,6 +54,8 @@
 @synthesize scheduler = _scheduler;
 @synthesize activitiesButton = _activitiesButton;
 
+
+
 - (ES_Scheduler *) scheduler
 {
     if (!_scheduler)
@@ -66,7 +69,10 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCounts) name:@"Activities" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateCounts)
+                                                 name:@"Activities"
+                                               object:nil];
     
     [ES_DataBaseAccessor save];
 
@@ -80,16 +86,25 @@
 
 - (void) updateCounts
 {
-    self.lyingTime.text    = [self timeString: 0];
-    self.sittingTime.text  = [self timeString: 1];
-    self.standingTime.text = [self timeString: 2];
-    self.walkingTime.text  = [self timeString: 3];
-    self.runningTime.text  = [self timeString: 4];
-    self.bikingTime.text   = [self timeString: 5];
-    self.drivingTime.text  = [self timeString: 6];
+//    self.lyingTime.text    = [self timeString: 0];
+//    self.sittingTime.text  = [self timeString: 1];
+//    self.standingTime.text = [self timeString: 2];
+//    self.walkingTime.text  = [self timeString: 3];
+//    self.runningTime.text  = [self timeString: 4];
+//    self.bikingTime.text   = [self timeString: 5];
+//    self.drivingTime.text  = [self timeString: 6];
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    self.pieChartView.activityCounts = self.activityCountArray;
-    [self.pieChartView setNeedsDisplay];
+    self.lyingTime.text    = [appDelegate.user.activityStatistics.countLying description];
+    self.sittingTime.text  = [appDelegate.user.activityStatistics.countSitting description];
+    self.standingTime.text = [appDelegate.user.activityStatistics.countStanding description];
+    self.walkingTime.text  = [appDelegate.user.activityStatistics.countWalking description];
+    self.runningTime.text  = [appDelegate.user.activityStatistics.countRunning description];
+    self.bikingTime.text   = [appDelegate.user.activityStatistics.countBicycling description];
+    self.drivingTime.text  = [appDelegate.user.activityStatistics.countDriving description];
+    
+    //self.pieChartView.activityCounts = self.activityCountArray;
+    //[self.pieChartView setNeedsDisplay];
 }
 
 - (NSString *) timeString: (int) index

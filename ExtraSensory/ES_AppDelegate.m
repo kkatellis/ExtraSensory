@@ -44,6 +44,8 @@
     return _activitiesToUpload;
 }
 
+
+// this should not exist. Use the ES_UserActivityStatistics
 - (NSMutableArray *)countLySiStWaRuBiDr
 {
     if (!_countLySiStWaRuBiDr)
@@ -148,7 +150,6 @@
     [self.locationManager startUpdatingLocation];
     UIImage *navBackgroundImage = [UIImage imageNamed:@"iOS7-blue"];
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
-    
     
     //[self redirectNSLogToDocuments];
 }
