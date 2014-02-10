@@ -7,15 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ES_Activity.h"
 
-@interface ES_NetworkAccessor : NSObject
+@interface ES_NetworkAccessor : NSObject{
 
+NSURLConnection *api_connection;        // Connection to API server
+    
+}
 @property (strong, nonatomic) NSMutableData *recievedData;
 
 @property (strong, nonatomic) NSMutableArray *predictions;
 
 
+
 - (void) upload;
-- (void) sendFeedback: (NSString *)feedback;
+- (void) sendFeedback: (ES_Activity *)feedback;
 
 @end
