@@ -173,7 +173,7 @@
     NSError *error;
     
     
-    // Convert revieved data from data into characters, store in reply
+    // Convert recieved data from data into characters, store in reply
     NSString *reply = [[NSString alloc] initWithData: self.recievedData
                                             encoding: NSUTF8StringEncoding];
     

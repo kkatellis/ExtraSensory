@@ -11,7 +11,9 @@
 
 @class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample;
 
-@interface ES_DataBaseAccessor : NSObject
+@interface ES_DataBaseAccessor : NSObject {
+    
+}
 
 + (NSArray *) read: (NSString *)entityDescription;
 + (void) save;

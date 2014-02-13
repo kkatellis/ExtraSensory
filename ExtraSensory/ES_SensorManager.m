@@ -13,16 +13,29 @@
 #import "ES_Settings.h"
 #import "ES_SensorSample.h"
 #import "ES_Activity.h"
+#import "ES_SoundWaveProcessor.h"
+
+// In Hertz
+#define HF_SAMPLING_RATE    40
+
+#define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
+#define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
+
+#define MIC_AVG         @"mic_avg_db"
+#define MIC_PEAK        @"mic_peak_db"
 
 @interface ES_SensorManager()
 
 @property NSTimer *timer;
+@property NSTimer *soundTimer;
 
 @property NSNumber *counter;
 
 @end
 
 @implementation ES_SensorManager
+
+@synthesize soundProcessor = _soundProcessor;
 
 @synthesize currentLocation = _currentLocation;
 
@@ -31,6 +44,8 @@
 @synthesize locationManager = _locationManager;
 
 @synthesize timer = _timer;
+
+@synthesize soundTimer = _soundTimer;
 
 @synthesize counter = _counter;
 
@@ -43,6 +58,15 @@
 @synthesize user = _user;
 
 @synthesize currentActivity = _currentActivity;
+
+-(ES_SoundWaveProcessor *) soundProcessor
+{
+    if(!_soundProcessor)
+    {
+        _soundProcessor = [[ES_SoundWaveProcessor alloc] init];
+    }
+    return _soundProcessor;
+}
 
 - (ES_Activity *) currentActivity
 {
@@ -102,6 +126,31 @@
     return _sampleDuration;
 }
 
+/* starts recording of microphone depending on filename*/
+- (void) _prepStage: (NSString *)fileName {
+    
+    //--// Get user documents folder path
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory
+                                          inDomain: NSUserDomainMask
+                                 appropriateForURL: nil
+                                            create: YES
+                                             error: nil];
+    
+
+        NSLog(@"Turning on Dur sound Processor...");
+        [self.soundProcessor startDurRecording];
+    
+    //--// Append our file name to the directory path
+    HFFilePath = [[dataPath path] stringByAppendingPathComponent: fileName];
+    
+    // Remove any old data
+    if( [[NSFileManager defaultManager] fileExistsAtPath:HFFilePath] ) {
+        [[NSFileManager defaultManager] removeItemAtPath:HFFilePath error:nil];
+        NSLog(@"removed any old sound file in direc");
+    }
+
+}
 
 - (BOOL) record
 {
@@ -164,8 +213,8 @@
     sample.acc_y       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ];
     sample.gyro_z      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ];
     sample.acc_z       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ];
-    sample.mic_peak_db = [NSNumber numberWithDouble: 0.0 ];
-    sample.mic_avg_db  = [NSNumber numberWithDouble: 0.0 ];
+    
+    // add samples for avg and peak db
     
     
     [self.currentActivity addSensorSamplesObject: sample];
@@ -182,7 +231,8 @@
         [self.locationManager stopUpdatingLocation];
         [self.motionManager stopAccelerometerUpdates];
         [self.motionManager stopGyroUpdates];
-        
+       // [self.soundProcessor pauseDurRecording];
+       // stop recording sound
         
         [ES_DataBaseAccessor writeActivity: self.currentActivity];
         
@@ -194,6 +244,8 @@
         
     }
 }
+
+
 
 
 #pragma mark Location Manager Delegate Methods

@@ -46,7 +46,7 @@
 
 
 // this should not exist. Use the ES_UserActivityStatistics
-- (NSMutableArray *)countLySiStWaRuBiDr
+/*- (NSMutableArray *)countLySiStWaRuBiDr
 {
     if (!_countLySiStWaRuBiDr)
     {
@@ -58,7 +58,7 @@
         NSLog( @"countArrayLength = %lu", (unsigned long)[_countLySiStWaRuBiDr count]);
     }
     return _countLySiStWaRuBiDr;
-}
+}*/
 
 
 - (ES_User *)user

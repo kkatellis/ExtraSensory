@@ -16,6 +16,10 @@
 #import "ES_SensorSample.h"
 #import "ES_Activity.h"
 #import "ES_Settings.h"
+#import "ES_SoundWaveProcessor.h"
+
+#define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
+#define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
 
 @interface ES_Scheduler()
 
@@ -191,11 +195,13 @@
     NSLog(@"Record Sensors");
     
     [self.sensorManager record];
+    [self.sensorManager _prepStage:HF_DUR_FNAME];
     
     NSLog(@"Back from sensor Recording");
     
     NSTimer *timer;
     
+    // every 25 seconds call secondOp which will upload data to network
     timer = [NSTimer scheduledTimerWithTimeInterval: 25
                                              target: self
                                            selector: @selector(secondOp)

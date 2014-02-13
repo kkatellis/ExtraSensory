@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */; };
 		70F883311806FAEF00F02411 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882EC1806FAEE00F02411 /* 100-coffee.png */; };
 		70F883321806FAEF00F02411 /* 25-weather.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882ED1806FAEE00F02411 /* 25-weather.png */; };
 		70F883331806FAEF00F02411 /* 32-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882EE1806FAEE00F02411 /* 32-iphone.png */; };
@@ -124,6 +125,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
+		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SoundWaveProcessor.m; sourceTree = "<group>"; };
 		70F882EC1806FAEE00F02411 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
 		70F882ED1806FAEE00F02411 /* 25-weather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "25-weather.png"; sourceTree = "<group>"; };
 		70F882EE1806FAEE00F02411 /* 32-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "32-iphone.png"; sourceTree = "<group>"; };
@@ -494,6 +497,8 @@
 			children = (
 				933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */,
 				933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */,
+				10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */,
+				10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -758,6 +763,7 @@
 				939600A5181B0194006221C6 /* ES_User.m in Sources */,
 				93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */,
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
+				10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.m in Sources */,
 				939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93146B8818024A9D00F2AAC7 /* ES_Activity.m in Sources */,
