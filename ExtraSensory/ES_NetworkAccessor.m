@@ -13,10 +13,17 @@
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
 
-#define API_URL         @"http://137.110.112.50:8080/api/analyze?%@"
-#define API_UPLOAD      @"http://137.110.112.50:8080/api/feedback_upload"
-#define API_FEEDBACK    @"http://137.110.112.50:8080/api/feedback?%@"
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
+
+//#if TARGET_IPHONE_SIMULATOR
+//    #define API_URL         @"http://localhost:8000/api/analyze?%@"
+//    #define API_UPLOAD      @"http://localhost:8000/api/feedback_upload"
+//    #define API_FEEDBACK    @"http://localhost:8000/api/feedback?%@"
+//#else
+    #define API_URL         @"http://137.110.112.50:8080/api/analyze?%@"
+    #define API_UPLOAD      @"http://137.110.112.50:8080/api/feedback_upload"
+    #define API_FEEDBACK    @"http://137.110.112.50:8080/api/feedback?%@"
+//#endif
 
 @interface ES_NetworkAccessor()
 
@@ -47,9 +54,30 @@
     return _recievedData;
 }
 
-- (void) sendFeedback: (NSString *)feedback
+- (void) sendFeedback: (ES_Activity *)activity
 {
+    [self apiCall:API_FEEDBACK withParams:activity];
     
+}
+
+- (void) apiCall:(NSString *)api withParams:(ES_Activity *)activity{
+    // format the keys and values for the api call
+    NSMutableArray *dataValues = [[NSMutableArray alloc] init];
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"predicted_activity",activity.serverPrediction]];
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"corrected_activity",activity.userCorrection]];
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"uuid",activity.user.uuid]];
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"timestamp",activity.timestamp]];
+    
+    //NSString *combined = [[params objectForKey:key] componentsJoinedByString:@","];
+    
+    // setup final API url
+    NSString *api_call = [dataValues componentsJoinedByString:@"&"];
+    api_call = [NSString stringWithFormat:api, api_call];
+    NSLog(@"API call: %@", api_call);
+    
+    // setup connection
+    NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:api_call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    api_connection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:YES];
 }
 
 
@@ -147,7 +175,7 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    //NSLog( @"connection: didReceiveResponse: ..." );
+    //NSLog( @"connectiondidReceiveResponse %@",response);
     
     [self.recievedData setLength: 0];
     
@@ -155,7 +183,7 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    //NSLog( @"connection: didReceiveData: ...");
+    NSLog( @"connection: didReceiveData: ...");
     [self.recievedData appendData:data];
 }
 
@@ -182,62 +210,60 @@
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
     NSString *predictedActivity = [response objectForKey:@"predicted_activity"];
-    NSNumber *time = [NSNumber numberWithDouble: [[response objectForKey: @"timestamp"] doubleValue]];
+    if (predictedActivity){
+        NSNumber *time = [NSNumber numberWithDouble: [[response objectForKey: @"timestamp"] doubleValue]];
     
-    [self updateCounts: predictedActivity];
+        [self updateCounts: predictedActivity];
     
-    NSLog(@"time = %@", time);
+        NSLog(@"time = %@", time);
     
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    [dateFormatter setDateFormat:@"hh:mm"];
-    NSString *dateString = [NSString stringWithFormat: @"%@ - ", [dateFormatter stringFromDate: [NSDate date]]];
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        [dateFormatter setDateFormat:@"hh:mm"];
+        NSString *dateString = [NSString stringWithFormat: @"%@ - ", [dateFormatter stringFromDate: [NSDate date]]];
     
-    NSString *predictionAndDate = [dateString stringByAppendingString: predictedActivity];
+        NSString *predictionAndDate = [dateString stringByAppendingString: predictedActivity];
     
-    NSLog( @"Prediction: %@", predictionAndDate );
+        NSLog( @"Prediction: %@", predictionAndDate );
     
-    //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
+        //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
     
-    ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
+        ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
 
-    [appDelegate.predictions insertObject:activity atIndex:0];
+        [appDelegate.predictions insertObject:activity atIndex:0];
 
     
-    NSLog(@"prediction: %@", [appDelegate.predictions objectAtIndex: 0]);
+        NSLog(@"prediction: %@", [appDelegate.predictions objectAtIndex: 0]);
     
-    NSLog(@"time = %f", [time doubleValue]);
+        NSLog(@"time = %f", [time doubleValue]);
     
-    // set the predicted activity for our local Activity object
-    [activity setValue: time forKey: @"timestamp"];
+        // set the predicted activity for our local Activity object
+        [activity setValue: time forKey: @"timestamp"];
     
-    [activity setValue: predictedActivity forKey: @"serverPrediction" ];
+        [activity setValue: predictedActivity forKey: @"serverPrediction" ];
     
-    connection = nil;
+        connection = nil;
     
-    NSFileManager *fileMgr = [NSFileManager defaultManager];
+        NSFileManager *fileMgr = [NSFileManager defaultManager];
         
-    if (![fileMgr removeItemAtPath: appDelegate.currentZipFilePath error:&error])
-    {
-        NSLog(@"Unable to delete file: %@", [error localizedDescription]);
-    }
-    else
-    {
-        NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
-    }
+        if (![fileMgr removeItemAtPath: appDelegate.currentZipFilePath error:&error]){
+            NSLog(@"Unable to delete file: %@", [error localizedDescription]);
+        } else {
+            NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
+        }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
 
-    [appDelegate removeFirstOnNetworkStack];
+        [appDelegate removeFirstOnNetworkStack];
     
-    NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
+        NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
     
     
-    if ( [appDelegate.networkStack count] > 0 )
-    {
-        [self upload];
+        if ( [appDelegate.networkStack count] > 0 ){
+            [self upload];
+        }
     }
 }
 

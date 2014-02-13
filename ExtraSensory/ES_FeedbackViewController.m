@@ -12,6 +12,7 @@
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
 #import "ES_ActivityStatistic.h"
+#import "ES_NetworkAccessor.h"
 
 @interface ES_FeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *correctActivityLabel;
@@ -88,6 +89,8 @@
     newCount++;
     
     [appDelegate.user.activityStatistics setValue: [NSNumber numberWithInt: newCount] forKey: self.databaseReferenceString];
+    NSLog(@"activity:%@",self.fromCell.activity);
+    [appDelegate.networkAccessor sendFeedback:self.fromCell.activity];
     
     //int oldCount = appDelegate.user.activityStatistics valueForKey:
     

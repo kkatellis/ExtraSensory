@@ -112,6 +112,9 @@
 		93F679C517F978AF000638CB /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BD17F978AF000638CB /* unzip.c */; };
 		93F679C617F978AF000638CB /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BF17F978AF000638CB /* zip.c */; };
 		93F679C717F978AF000638CB /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 93F679C217F978AF000638CB /* ZipArchive.mm */; };
+		9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
+		9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
+		9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -259,6 +262,10 @@
 		93F679C017F978AF000638CB /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		93F679C117F978AF000638CB /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		93F679C217F978AF000638CB /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
+		9F59F66518A9A9C5002C94B9 /* ES_HistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_HistoryTableViewController.h; sourceTree = SOURCE_ROOT; };
+		9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_HistoryTableViewController.m; sourceTree = SOURCE_ROOT; };
+		9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEvent.h; sourceTree = "<group>"; };
+		9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEvent.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -478,6 +485,10 @@
 		9307CC6A17F220FE00D95E05 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */,
+				9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */,
+				9F59F66518A9A9C5002C94B9 /* ES_HistoryTableViewController.h */,
+				9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */,
 				93F678EC17F81F42000638CB /* ES_HomeViewController.h */,
 				93F678ED17F81F42000638CB /* ES_HomeViewController.m */,
 				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
@@ -753,9 +764,11 @@
 				93146B8E18024A9D00F2AAC7 /* ES_UserActivityLabel.m in Sources */,
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
+				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
 				934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
+				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
@@ -784,6 +797,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
 				9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
