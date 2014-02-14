@@ -11,9 +11,8 @@
 @interface ES_EventEditAndFeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
 @property (weak, nonatomic) IBOutlet UILabel *event1FromTime;
-@property (weak, nonatomic) IBOutlet UILabel *event2FromTime;
-@property (weak, nonatomic) IBOutlet UILabel *event2ToTime;
 @property (weak, nonatomic) IBOutlet UIPickerView *event1Activity;
+@property (weak, nonatomic) IBOutlet UILabel *event2Label;
 
 + (NSArray *)activityLabelList;
 + (NSNumber *) indexOfActivityLabel:(NSString *)label;
@@ -21,6 +20,9 @@
 @end
 
 @implementation ES_EventEditAndFeedbackViewController
+
+- (IBAction)event1EndTimeValueChanged:(id)sender {
+}
 
 + (NSArray *)activityLabelList
 {
@@ -74,9 +76,8 @@
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"hh:mm"];
-    NSString *dateString = [NSString stringWithFormat:@"%@ - ",[dateFormatter stringFromDate:startDate]];
+    NSString *dateString = [NSString stringWithFormat:@"from %@ to",[dateFormatter stringFromDate:startDate]];
     
-    NSString *endTimeString = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:endDate]];
     
     // Edit the initial state of the labels to reflect the current info of the relevant activity event:
     self.event1FromTime.text = dateString;
@@ -84,15 +85,34 @@
     self.datePicker.minimumDate = startDate;
     self.datePicker.maximumDate = endDate;
     NSString *currentActivityLabel = self.activityEvent.userCorrection ? self.activityEvent.userCorrection : self.activityEvent.serverPrediction;
-    NSLog(@"===== %@" , currentActivityLabel);
     NSNumber *labelIndex = [[self class] indexOfActivityLabel:currentActivityLabel];
     [self.event1Activity selectRow:[labelIndex intValue] inComponent:0 animated:NO];
     
     
-    self.event2FromTime.hidden = YES;
-    self.event2ToTime.hidden = YES;
-    self.event2ToTime.text = endTimeString;
+    self.event2Label.hidden = YES;
 }
+
+- (IBAction)even1EndTimeChanged:(id)sender {
+    NSDate * totalEventEndDate = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
+    
+    NSDate * event1EndDate = self.datePicker.date;
+    
+    // Toggle the second event:
+    if ([event1EndDate isEqualToDate:totalEventEndDate])
+    {
+        self.event2Label.hidden = YES;
+    }
+    else{
+        NSDate *event2StartDate = [event1EndDate dateByAddingTimeInterval:60];
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        [dateFormatter setDateFormat:@"hh:mm"];
+        NSString *event2String = [NSString stringWithFormat:@"Then what were you doing from %@ to %@?",[dateFormatter stringFromDate:event2StartDate],[dateFormatter stringFromDate:totalEventEndDate]];
+        
+        self.event2Label.text =event2String;
+        self.event2Label.hidden = NO;
+    }
+}
+
 
 - (void)viewDidLoad
 {
@@ -126,5 +146,7 @@ numberOfRowsInComponent:(NSInteger)component
             forComponent:(NSInteger)component
 {
     return [self.class activityLabelList][row];
+}
+- (IBAction)event1endTimeValueChanged:(id)sender {
 }
 @end
