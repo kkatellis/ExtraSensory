@@ -11,6 +11,7 @@
 #import "ES_DataBaseAccessor.h"
 
 @interface ES_ActiveFeedbackViewController ()
+@property (strong, nonatomic) IBOutlet UITableViewCell *SubmitFeedbackButton;
 
 @end
 
@@ -122,7 +123,20 @@
     return YES;
 }
 */
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
+{
+    NSLog(@"%@",indexPath);
+    if (indexPath.section == 3)
+    {
+        [self SubmitFeedback];
+    }
+}
 
+- (void) SubmitFeedback
+{
+    NSLog(@"Submit Feedback");
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 #pragma mark - Navigation
 

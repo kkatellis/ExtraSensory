@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *sampleFrequencySlider;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *activitiesButton;
+- (IBAction)Compose:(UIBarButtonItem *)sender;
 
 @property NSMutableArray *activityCountArray;
 
@@ -180,4 +181,12 @@
 }
 
 
+- (IBAction)Compose:(UIBarButtonItem *)sender {
+    
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
+    UIViewController* initialView = [storyboard instantiateInitialViewController];
+    
+    initialView.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self presentViewController:initialView animated:YES completion:nil];
+}
 @end

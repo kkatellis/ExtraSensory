@@ -491,6 +491,8 @@
 		9307CC6A17F220FE00D95E05 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				708A3E4018A99EEF00010847 /* ES_MainActivityViewController.h */,
+				708A3E4118A99EEF00010847 /* ES_MainActivityViewController.m */,
 				9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */,
 				9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */,
 				9F59F66518A9A9C5002C94B9 /* ES_HistoryTableViewController.h */,
