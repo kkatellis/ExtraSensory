@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		706B47BD18AD94D400CE54E1 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */; };
 		708A3E3F18A9976C00010847 /* ES_ActiveFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A3E3E18A9976C00010847 /* ES_ActiveFeedbackViewController.m */; };
 		708A3E4218A99EEF00010847 /* ES_MainActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A3E4118A99EEF00010847 /* ES_MainActivityViewController.m */; };
 		70F883311806FAEF00F02411 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882EC1806FAEE00F02411 /* 100-coffee.png */; };
@@ -126,6 +127,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		706B47BC18AD94D400CE54E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
 		708A3E3D18A9976C00010847 /* ES_ActiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActiveFeedbackViewController.h; sourceTree = "<group>"; };
 		708A3E3E18A9976C00010847 /* ES_ActiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActiveFeedbackViewController.m; sourceTree = "<group>"; };
 		708A3E4018A99EEF00010847 /* ES_MainActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_MainActivityViewController.h; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				93AC71AB1808D41000D58E77 /* ES_Format.h */,
 				93AC71AC1808D41000D58E77 /* ES_Format.m */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
+				706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
 				939562FE1806482200BF448E /* Views */,
 				93F659DF17F6B299000638CB /* Network */,
@@ -689,6 +692,7 @@
 				70F8834C1806FAEF00F02411 /* party.png in Resources */,
 				70F8834E1806FAEF00F02411 /* sitting.png in Resources */,
 				70F883531806FAEF00F02411 /* activity_button.png in Resources */,
+				706B47BD18AD94D400CE54E1 /* ActiveFeedback.storyboard in Resources */,
 				70F8834B1806FAEF00F02411 /* party-small.png in Resources */,
 				70F883441806FAEF00F02411 /* indicator-running@2x.png in Resources */,
 				70F883541806FAEF00F02411 /* activity_button@2x.png in Resources */,
@@ -805,6 +809,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				706B47BC18AD94D400CE54E1 /* Base */,
+			);
+			name = ActiveFeedback.storyboard;
+			sourceTree = "<group>";
+		};
 		9307CBBD17F1A78A00D95E05 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
