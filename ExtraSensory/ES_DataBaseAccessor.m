@@ -14,6 +14,7 @@
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_SensorSample.h"
+#import "ES_UserActivityLabel.h"
 
 @implementation ES_DataBaseAccessor
 
@@ -81,9 +82,49 @@
     return [NSEntityDescription insertNewObjectForEntityForName: @"ES_Activity" inManagedObjectContext:[self context]];
 }
 
++ (void) deleteActivity: (ES_Activity *) activity
+{
+    NSLog(@"deleting activity at %@", activity.timestamp);
+    [[self context] deleteObject:activity];
+}
+
 + (ES_SensorSample *) newSensorSample
 {
     return [NSEntityDescription insertNewObjectForEntityForName:@"ES_SensorSample" inManagedObjectContext:[self context]];
+}
+
++ (ES_UserActivityLabel *) getUserActivityLabel: (NSString *)label
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabel"];
+    NSError *error = [NSError new];
+    
+    if ([[self context] countForFetchRequest:fetchRequest error:&error])
+    {
+        ES_UserActivityLabel *UserActivityLabel = [[[self context] executeFetchRequest:fetchRequest error:&error] firstObject];
+        NSLog(@"found UserActivityLabel: %@", UserActivityLabel.name);
+        return UserActivityLabel;
+    }
+    // if not exists, just insert a new entity
+    else
+    {
+        ES_UserActivityLabel *UserActivityLabel = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabel"
+                                              inManagedObjectContext:[self context]];
+        UserActivityLabel.name = label;
+        NSLog(@"added a new entry for UserActivityLabel: %@", UserActivityLabel.name);
+        return UserActivityLabel;
+    }
+}
+
++ (void)addUserActivityLabel:(NSString *)label toActivity:(ES_Activity *)activity
+{
+    ES_UserActivityLabel *UserActivityLabel = [self getUserActivityLabel:label];
+    [activity addUserActivityLabelsObject:UserActivityLabel];
+}
+
++ (void)removeUserActivityLabel:(NSString *)label fromActivity:(ES_Activity *)activity
+{
+    ES_UserActivityLabel *UserActivityLabel = [self getUserActivityLabel:label];
+    [activity removeUserActivityLabelsObject:UserActivityLabel];
 }
 
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time

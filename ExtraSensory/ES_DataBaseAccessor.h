@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample;
+@class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel;
 
 @interface ES_DataBaseAccessor : NSObject
 
@@ -21,8 +21,11 @@
 + (void) writeData: (NSArray *)data;
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
++ (void) deleteActivity: (ES_Activity *) activity;
 + (ES_SensorSample *) newSensorSample;
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time;
++ (void)addUserActivityLabel:(NSString *)label toActivity:(ES_Activity *)activity;
++ (void)removeUserActivityLabel:(NSString *)label fromActivity:(ES_Activity *)activity;
 + (void) writeActivity: (ES_Activity *)activity;
 
 

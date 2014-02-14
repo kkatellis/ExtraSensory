@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		706B47BD18AD94D400CE54E1 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */; };
+		708A3E3F18A9976C00010847 /* ES_ActiveFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A3E3E18A9976C00010847 /* ES_ActiveFeedbackViewController.m */; };
+		708A3E4218A99EEF00010847 /* ES_MainActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A3E4118A99EEF00010847 /* ES_MainActivityViewController.m */; };
 		70F883311806FAEF00F02411 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882EC1806FAEE00F02411 /* 100-coffee.png */; };
 		70F883321806FAEF00F02411 /* 25-weather.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882ED1806FAEE00F02411 /* 25-weather.png */; };
 		70F883331806FAEF00F02411 /* 32-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882EE1806FAEE00F02411 /* 32-iphone.png */; };
@@ -129,6 +132,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		706B47BC18AD94D400CE54E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
+		708A3E3D18A9976C00010847 /* ES_ActiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActiveFeedbackViewController.h; sourceTree = "<group>"; };
+		708A3E3E18A9976C00010847 /* ES_ActiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActiveFeedbackViewController.m; sourceTree = "<group>"; };
+		708A3E4018A99EEF00010847 /* ES_MainActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_MainActivityViewController.h; sourceTree = "<group>"; };
+		708A3E4118A99EEF00010847 /* ES_MainActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_MainActivityViewController.m; sourceTree = "<group>"; };
 		70F882EC1806FAEE00F02411 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
 		70F882ED1806FAEE00F02411 /* 25-weather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "25-weather.png"; sourceTree = "<group>"; };
 		70F882EE1806FAEE00F02411 /* 32-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "32-iphone.png"; sourceTree = "<group>"; };
@@ -444,6 +452,7 @@
 				93AC71AB1808D41000D58E77 /* ES_Format.h */,
 				93AC71AC1808D41000D58E77 /* ES_Format.m */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
+				706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
 				939562FE1806482200BF448E /* Views */,
 				93F659DF17F6B299000638CB /* Network */,
@@ -498,6 +507,8 @@
 				9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */,
 				93F678EC17F81F42000638CB /* ES_HomeViewController.h */,
 				93F678ED17F81F42000638CB /* ES_HomeViewController.m */,
+				708A3E3D18A9976C00010847 /* ES_ActiveFeedbackViewController.h */,
+				708A3E3E18A9976C00010847 /* ES_ActiveFeedbackViewController.m */,
 				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
 				93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */,
 				93AC71A81808A91800D58E77 /* ES_CalendarViewCell.h */,
@@ -700,6 +711,7 @@
 				70F8834C1806FAEF00F02411 /* party.png in Resources */,
 				70F8834E1806FAEF00F02411 /* sitting.png in Resources */,
 				70F883531806FAEF00F02411 /* activity_button.png in Resources */,
+				706B47BD18AD94D400CE54E1 /* ActiveFeedback.storyboard in Resources */,
 				70F8834B1806FAEF00F02411 /* party-small.png in Resources */,
 				70F883441806FAEF00F02411 /* indicator-running@2x.png in Resources */,
 				70F883541806FAEF00F02411 /* activity_button@2x.png in Resources */,
@@ -776,6 +788,7 @@
 				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
+				708A3E3F18A9976C00010847 /* ES_ActiveFeedbackViewController.m in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */,
 				939600A5181B0194006221C6 /* ES_User.m in Sources */,
@@ -790,6 +803,7 @@
 				9F90A5C718AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m in Sources */,
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
 				93F679C617F978AF000638CB /* zip.c in Sources */,
+				708A3E4218A99EEF00010847 /* ES_MainActivityViewController.m in Sources */,
 				93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */,
 				93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
@@ -819,6 +833,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				706B47BC18AD94D400CE54E1 /* Base */,
+			);
+			name = ActiveFeedback.storyboard;
+			sourceTree = "<group>";
+		};
 		9307CBBD17F1A78A00D95E05 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
