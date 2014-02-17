@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ES_Activity.h"
 
 @interface ES_ActivityEvent : NSObject
 
@@ -20,8 +19,6 @@
 @property (nonatomic, retain) NSNumber * startTimestamp;
 @property (nonatomic, retain) NSNumber * endTimestamp;
 
-@property (nonatomic, retain) ES_Activity * startActivity;
-
-- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp startActivity:(ES_Activity *)startActivity;
+- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp;
 
 @end

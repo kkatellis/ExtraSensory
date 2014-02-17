@@ -5,7 +5,6 @@
 //  Created by Bryan Grounds on 9/24/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
-//
 
 #import "ES_AppDelegate.h"
 #import "ES_SensorManager.h"
@@ -47,7 +46,7 @@
 
 
 // this should not exist. Use the ES_UserActivityStatistics
-/*- (NSMutableArray *)countLySiStWaRuBiDr
+- (NSMutableArray *)countLySiStWaRuBiDr
 {
     if (!_countLySiStWaRuBiDr)
     {
@@ -59,7 +58,7 @@
         NSLog( @"countArrayLength = %lu", (unsigned long)[_countLySiStWaRuBiDr count]);
     }
     return _countLySiStWaRuBiDr;
-}*/
+}
 
 
 - (ES_User *)user

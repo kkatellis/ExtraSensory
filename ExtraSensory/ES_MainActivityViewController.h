@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "ES_Activity.h"
+#import "ES_ActiveFeedbackViewController.h"
 
 @interface ES_MainActivityViewController : UITableViewController
 
-@property ES_Activity *activity;
-@property NSArray *choices;
+@property NSMutableSet *appliedLabels; // the labels that the user has chosen
+@property NSArray *choices; // the possible label choices
 
 @end

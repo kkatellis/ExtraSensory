@@ -17,24 +17,19 @@
 
 @implementation ES_MainActivityViewController
 
-@synthesize activity = _activity;
-
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-
     }
     return self;
 }
 
-
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"Main Activity View Controller Did Load");
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -49,31 +44,33 @@
 }
 
 #pragma mark - Table view data source
-/*
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [self.choices count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
     // Configure the cell...
-    
+    UITableViewCell *cell = [[UITableViewCell alloc] init];
+    cell.textLabel.text = [self.choices objectAtIndex:indexPath.row];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    if ([self.appliedLabels containsObject:cell.textLabel.text])
+    {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
+    }
     return cell;
 }
-*/
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -85,20 +82,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
-    [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [ES_DataBaseAccessor addUserActivityLabel:cell.textLabel.text
-                                   toActivity:self.activity];
-    NSLog(@"labels: %@",self.activity.userActivityLabels);
+    if ([self.appliedLabels containsObject:cell.textLabel.text])
+    {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [self.appliedLabels removeObject:cell.textLabel.text];
+    }
+    else
+    {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [self.appliedLabels addObject:cell.textLabel.text];
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryNone;
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [ES_DataBaseAccessor removeUserActivityLabel:cell.textLabel.text
-                                   fromActivity:self.activity];
-    NSLog(@"labels: %@",self.activity.userActivityLabels);
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    [self.appliedLabels removeObject:cell.textLabel.text];
 }
 
 /*
@@ -131,16 +132,16 @@
 }
 */
 
-/*
-#pragma mark - Navigation
 
+#pragma mark - Navigation
+/*
 // In a story board-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [segue.destinationViewController setAppliedLabels:self.appliedLabels];
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-
- */
+*/
 
 @end

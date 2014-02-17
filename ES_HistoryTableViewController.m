@@ -16,8 +16,6 @@
 #import "ES_Activity.h"
 //#import "ES_CalendarViewCell.h"
 #import "ES_ActivityEvent.h"
-#import "ES_ActivityEventTableCell.h"
-#import "ES_EventEditAndFeedbackViewController.h"
 
 @interface ES_HistoryTableViewController ()
 
@@ -118,7 +116,7 @@
             if (startOfActivity)
             {
                 // Create an event from the start and end of the previous activity:
-                ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp startActivity:startOfActivity];
+                ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp];
                 [self.eventHistory addObject:event];
             }
             
@@ -130,7 +128,7 @@
     if (endOfActivity)
     {
         // Create the last event from the start and end of activity:
-        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp startActivity:startOfActivity];
+        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp];
         [self.eventHistory addObject:event];
     }
     
@@ -153,7 +151,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"ActivityEventCell";
-    ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
     ES_ActivityEvent *relevantEvent = (ES_ActivityEvent *)[self.eventHistory objectAtIndex:indexPath.row];
@@ -166,7 +164,6 @@
     NSString *dateString = [NSString stringWithFormat:@"%@ - %@",[dateFormatter stringFromDate:startDate],[dateFormatter stringFromDate:endDate]];
 
     cell.textLabel.text = dateString;
-    cell.activityEvent = relevantEvent;
     
     if (relevantEvent.userCorrection)
     {
@@ -220,7 +217,7 @@
 }
 */
 
-
+/*
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
@@ -228,10 +225,8 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    ES_EventEditAndFeedbackViewController * editController = (ES_EventEditAndFeedbackViewController *)segue.destinationViewController;
-    editController.activityEvent = ((ES_ActivityEventTableCell *)sender).activityEvent;
 }
 
- 
+ */
 
 @end
