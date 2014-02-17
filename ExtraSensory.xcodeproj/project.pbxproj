@@ -136,10 +136,10 @@
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SoundWaveProcessor.m; sourceTree = "<group>"; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
-		70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_MainActivityViewController.m; path = ExtraSensory/ES_MainActivityViewController.m; sourceTree = "<group>"; };
-		70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_MainActivityViewController.h; path = ExtraSensory/ES_MainActivityViewController.h; sourceTree = "<group>"; };
-		70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ES_ActiveFeedbackViewController.m; path = ExtraSensory/ES_ActiveFeedbackViewController.m; sourceTree = "<group>"; };
-		70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_ActiveFeedbackViewController.h; path = ExtraSensory/ES_ActiveFeedbackViewController.h; sourceTree = "<group>"; };
+		70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_MainActivityViewController.m; sourceTree = "<group>"; };
+		70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_MainActivityViewController.h; sourceTree = "<group>"; };
+		70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActiveFeedbackViewController.m; sourceTree = "<group>"; };
+		70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActiveFeedbackViewController.h; sourceTree = "<group>"; };
 		70F882EC1806FAEE00F02411 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
 		70F882ED1806FAEE00F02411 /* 25-weather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "25-weather.png"; sourceTree = "<group>"; };
 		70F882EE1806FAEE00F02411 /* 32-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "32-iphone.png"; sourceTree = "<group>"; };
@@ -415,11 +415,6 @@
 		9307CBA817F1A78A00D95E05 = {
 			isa = PBXGroup;
 			children = (
-				70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */,
-				70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */,
-				70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */,
-				70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */,
-				70228E2918B19FF200189063 /* ActiveFeedback.storyboard */,
 				70F882EA1806FAEE00F02411 /* Resources */,
 				9307CBBA17F1A78A00D95E05 /* ExtraSensory */,
 				9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */,
@@ -459,8 +454,8 @@
 				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				93AC71AB1808D41000D58E77 /* ES_Format.h */,
 				93AC71AC1808D41000D58E77 /* ES_Format.m */,
+				70228E2918B19FF200189063 /* ActiveFeedback.storyboard */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
-				706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
 				939562FE1806482200BF448E /* Views */,
 				93F659DF17F6B299000638CB /* Network */,
@@ -505,6 +500,10 @@
 		9307CC6A17F220FE00D95E05 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */,
+				70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */,
+				70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */,
+				70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */,
 				9F90A5C818AD7A6700E6E29B /* ES_ActivityEventTableCell.h */,
 				9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */,
 				9F90A5C518AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.h */,
@@ -848,13 +847,7 @@
 				70228E2A18B19FF200189063 /* Base */,
 			);
 			name = ActiveFeedback.storyboard;
-			sourceTree = "<group>";
-		};
-		706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = ActiveFeedback.storyboard;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		9307CBBD17F1A78A00D95E05 /* InfoPlist.strings */ = {
