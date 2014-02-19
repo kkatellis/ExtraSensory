@@ -12,7 +12,7 @@
 
 +(NSArray *)mainActivities {
     
-    return @[@"Lying down", @"Sitting", @"Standing", @"Walking", @"Running", @"Bicycling"];
+    return @[@"Lying down", @"Sitting", @"Standing", @"Walking", @"Running", @"Bicycling", @"Driving"];
 }
 
 +(NSArray *)associatedActivities {

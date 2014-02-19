@@ -715,6 +715,7 @@
 				70F8834C1806FAEF00F02411 /* party.png in Resources */,
 				70F8834E1806FAEF00F02411 /* sitting.png in Resources */,
 				70F883531806FAEF00F02411 /* activity_button.png in Resources */,
+				70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */,
 				70F8834B1806FAEF00F02411 /* party-small.png in Resources */,
 				70F883441806FAEF00F02411 /* indicator-running@2x.png in Resources */,
 				70F883541806FAEF00F02411 /* activity_button@2x.png in Resources */,
@@ -841,6 +842,7 @@
 		70228E2918B19FF200189063 /* ActiveFeedback.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
+				70228E2A18B19FF200189063 /* Base */,
 			);
 			name = ActiveFeedback.storyboard;
 			path = ..;
