@@ -9,6 +9,7 @@
 #import "ES_ActiveFeedbackViewController.h"
 #import "ES_MainActivityViewController.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_ActivitiesStrings.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -182,19 +183,19 @@
     {
         ES_MainActivityViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mainActivity]];
-        [viewController setChoices: @[@"LYING DOWN", @"SITTING", @"STANDING", @"WALKING", @"RUNNING", @"BICYCLING", @"DRIVING"]]; //replace with [newObject mainActivities];
+        [viewController setChoices: [ES_ActivitiesStrings mainActivities]];
     }
     else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
     {
         ES_MainActivityViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.secondaryActivities]];
-        [viewController setChoices: @[@"EATING", @"LISTENING TO MUSIC", @"HOUSEHOLD ACTIVITY"]];
+        [viewController setChoices: [ES_ActivitiesStrings secondaryActivities]];
     }
     else if ([segue.identifier isEqualToString:MOOD])
     {
         ES_MainActivityViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mood]];
-        [viewController setChoices: @[@"HAPPY", @"SAD", @"BORED", @"EXCITED"]];
+        [viewController setChoices: [ES_ActivitiesStrings moods]];
     }
 }
 

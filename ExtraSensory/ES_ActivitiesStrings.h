@@ -12,7 +12,7 @@
 
 +(NSArray *) mainActivities;
 
-+(NSArray *) associatedActivities;
++(NSArray *) secondaryActivities;
 
 +(NSArray *)moods;
 

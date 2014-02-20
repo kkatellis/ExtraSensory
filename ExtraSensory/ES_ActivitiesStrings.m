@@ -15,7 +15,7 @@
     return @[@"Lying down", @"Sitting", @"Standing", @"Walking", @"Running", @"Bicycling", @"Driving"];
 }
 
-+(NSArray *)associatedActivities {
++(NSArray *)secondaryActivities {
     return @[@"Lifting weights", @"Playing baseball", @"Playing basketball", @"Playing lacrosse", @"Skateboarding", @"Playing soccer", @"Playing frisbee", @"Stretching", @"Yoga", @"Elliptical machine", @"Treadmill", @"Stationary Bike", @"Cooking", @"Cleaning", @"Gardening", @"Doing laundry", @"Mowing the lawn", @"Raking the leaves", @"Vacuuming", @"Doing dishes", @"Washing car", @"Manual labor", @"Dancing", @"Driving", @"Eating", @"Drinking",@"Jumping", @"Listening to music", @"Relaxing", @"Shopping", @"Sleeping", @"Talking with friends", @"Using the bathroom", @"Playing videogames", @"Watching TV", @"Lab work", @"Written work", @"Drawing", @"Surfing the internet", @"Computer work", @"Reading a book", @"Studying", @"In class", @"In a meeting", @"Texting", @"At a bar", @"At a concert", @"At the beach", @"At a restaurant", @"On a bus", @"On a plane", @"On a train", @"In a car"];
 }
 
