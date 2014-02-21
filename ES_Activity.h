@@ -26,9 +26,11 @@
 @property (nonatomic, retain) NSOrderedSet *sensorSamples;
 @property (nonatomic, retain) ES_User *user;
 @property (nonatomic, retain) NSSet *userActivityLabels;
+
 @end
 
 @interface ES_Activity (CoreDataGeneratedAccessors)
++ (ES_Activity *) initWithCopyOf:(ES_Activity *)other;
 
 - (void)insertObject:(ES_SensorSample *)value inSensorSamplesAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromSensorSamplesAtIndex:(NSUInteger)idx;

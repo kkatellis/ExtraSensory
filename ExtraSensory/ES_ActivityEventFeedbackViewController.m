@@ -7,6 +7,8 @@
 //
 
 #import "ES_ActivityEventFeedbackViewController.h"
+#import "ES_AppDelegate.h"
+#import "ES_NetworkAccessor.h"
 
 
 @interface ES_ActivityEventFeedbackViewController ()
@@ -148,13 +150,31 @@
     NSDate * startDateBeforeCahnge = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.startTimestamp doubleValue]];
     NSDate * endDateBeforeChange = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
 
+    ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+
     // Create an ES_Activity object for each minute in the original range:
     for (NSDate *time = startDateBeforeCahnge; [time compare:endDateBeforeChange] != NSOrderedDescending; time = [time dateByAddingTimeInterval:60])
     {
+        // Create an object for this minute:
+        ES_Activity *minuteActivity = [ES_Activity initWithCopyOf:self.activityEvent.startActivity];
+        minuteActivity.timestamp = [NSNumber numberWithInt:(int)[time timeIntervalSince1970]];
         
+        // Is this minute now outside of the edited event's time period?
+        if (([time compare:startDateBeforeCahnge] == NSOrderedDescending) || ([time compare:endDateBeforeChange] == NSOrderedAscending))
+        {
+            // Remove the userCorrection label, and leave the rest:
+            minuteActivity.userCorrection = nil;
+        }
+        else
+        {
+            // Copy the chosen labels from the edited activity event:
+            minuteActivity.userCorrection = self.activityEvent.userCorrection;
+            minuteActivity.userActivityLabels = self.activityEvent.userActivityLabels;
+        }
+        // Send this minute's data to the server:
+        [appDelegate.networkAccessor sendFeedback:minuteActivity];
     }
-    // Send the data to the server:
-    /////////////
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

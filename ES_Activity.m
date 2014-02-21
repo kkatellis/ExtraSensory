@@ -35,4 +35,24 @@
     self.sensorSamples = tempSet;
 }
 
++ (ES_Activity *) initWithCopyOf:(ES_Activity *)other
+{
+    ES_Activity *newCopy = [[ES_Activity alloc] init];
+    newCopy.isPredictionCorrect = other.isPredictionCorrect;
+    newCopy.isPredictionVerified = other.isPredictionVerified;
+    newCopy.numberOfSamples = other.numberOfSamples;
+    newCopy.sampleFrequency = other.sampleFrequency;
+    newCopy.serverPrediction = other.serverPrediction;
+    newCopy.timestamp = other.timestamp;
+    newCopy.userCorrection = other.userCorrection;
+    newCopy.uuid = other.uuid;
+    newCopy.hasBeenSent = other.hasBeenSent;
+    newCopy.zipFilePath = other.zipFilePath;
+    newCopy.sensorSamples = other.sensorSamples;
+    newCopy.user = other.user;
+    newCopy.userActivityLabels = other.userActivityLabels;
+    
+    return newCopy;
+}
+
 @end
