@@ -9,13 +9,28 @@
 #import "ES_ActiveFeedbackViewController.h"
 #import "ES_MainActivityViewController.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_ActivitiesStrings.h"
+
+#define MAIN_ACTIVITY @"Main Activity"
+#define SECONDARY_ACTIVITIES @"Secondary Activities"
+#define MOOD @"Mood"
+#define SUBMIT_FEEDBACK @"Submit Feedback"
 
 @interface ES_ActiveFeedbackViewController ()
-@property (strong, nonatomic) IBOutlet UITableViewCell *SubmitFeedbackButton;
+
+@property NSMutableArray *mainActivity;
+@property NSMutableArray *secondaryActivities;
+@property NSMutableArray *mood;
 
 @end
 
 @implementation ES_ActiveFeedbackViewController
+
+- (IBAction)Cancel:(UIBarButtonItem *)sender {
+    NSLog(@"Cancel button was pressed");
+    [ES_DataBaseAccessor deleteActivity:self.activity];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 @synthesize activity = _activity;
 
@@ -57,33 +72,51 @@
 
 #pragma mark - Table view data source
 
-/*
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return 1;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Main activity";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.textLabel.text = @"textLabel.txt";
+    UITableViewCell *cell;
+    if (indexPath.section == 0)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:MAIN_ACTIVITY];
+        cell.textLabel.text = MAIN_ACTIVITY;
+        cell.detailTextLabel.text = [self.mainActivity componentsJoinedByString:@", "];
+    }
+    else if (indexPath.section == 1)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:SECONDARY_ACTIVITIES];
+        cell.textLabel.text = SECONDARY_ACTIVITIES;
+        cell.detailTextLabel.text = [self.secondaryActivities componentsJoinedByString:@", "];
+    }
+    else if (indexPath.section == 2)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:MOOD];
+        cell.textLabel.text = MOOD;
+        cell.detailTextLabel.text = [self.mood componentsJoinedByString:@", "];
+    }
+    else if (indexPath.section == 3)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:SUBMIT_FEEDBACK];
+        cell.textLabel.text = SUBMIT_FEEDBACK;
+    }
     
     // Configure the cell...
     
     return cell;
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.
@@ -125,7 +158,6 @@
 */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
-    NSLog(@"%@",indexPath);
     if (indexPath.section == 3)
     {
         [self SubmitFeedback];
@@ -135,7 +167,8 @@
 - (void) SubmitFeedback
 {
     NSLog(@"Submit Feedback");
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:NULL];
+    //[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Navigation
@@ -145,23 +178,51 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    [(ES_MainActivityViewController *)segue.destinationViewController setActivity: self.activity];
-    [(ES_MainActivityViewController *) segue.destinationViewController setChoices: @[@"LYING DOWN", @"SITTING", @"STANDING", @"WALKING", @"RUNNING", @"BICYCLING", @"DRIVING"]];
     
+    if ([segue.identifier isEqualToString:MAIN_ACTIVITY])
+    {
+        ES_MainActivityViewController *viewController = [segue destinationViewController];
+        [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mainActivity]];
+        [viewController setChoices: [ES_ActivitiesStrings mainActivities]];
+    }
+    else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
+    {
+        ES_MainActivityViewController *viewController = [segue destinationViewController];
+        [viewController setAppliedLabels: [NSMutableSet setWithArray:self.secondaryActivities]];
+        [viewController setChoices: [ES_ActivitiesStrings secondaryActivities]];
+    }
+    else if ([segue.identifier isEqualToString:MOOD])
+    {
+        ES_MainActivityViewController *viewController = [segue destinationViewController];
+        [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mood]];
+        [viewController setChoices: [ES_ActivitiesStrings moods]];
+    }
 }
 
--(void) viewWillDisappear:(BOOL)animated {
-    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
-        // back button was pressed.  We know this is true because self is no longer
-        // in the navigation stack.
-        NSLog(@"Back button was pressed");
-        [ES_DataBaseAccessor deleteActivity:self.activity];
-    }
-    else { NSLog(@"Back button wasn't pressed");
-    }
-    [super viewWillDisappear:animated];
+-(void) viewWillAppear:(BOOL)animated {
+    [self.tableView reloadData];
 }
 
+-(IBAction)editedLabels:(UIStoryboardSegue *)segue
+{
+    NSLog(@"editedLabels: %@", segue.identifier);
+    if ([segue.sourceViewController isKindOfClass:[ES_MainActivityViewController class]])
+    {
+        ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
+        if ([segue.identifier isEqualToString:MAIN_ACTIVITY])
+        {
+            self.mainActivity = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+        }
+        else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
+        {
+            self.secondaryActivities = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+        }
+        else if ([segue.identifier isEqualToString:MOOD])
+        {
+            self.mood = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+        }
+    }
+}
 
 
 @end
