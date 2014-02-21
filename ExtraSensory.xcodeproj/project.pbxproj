@@ -119,6 +119,8 @@
 		9F90A5C718AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C618AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m */; };
 		9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */; };
 		9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */; };
+		9FD9D2F918AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FD9D2F818AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard */; };
+		9FD9D2FC18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD9D2FB18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -277,6 +279,9 @@
 		9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEventTableCell.m; sourceTree = "<group>"; };
 		9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEvent.h; sourceTree = "<group>"; };
 		9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEvent.m; sourceTree = "<group>"; };
+		9FD9D2F818AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = ActivityEventFeedback.storyboard; path = ../ActivityEventFeedback.storyboard; sourceTree = "<group>"; };
+		9FD9D2FA18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEventFeedbackViewController.h; sourceTree = "<group>"; };
+		9FD9D2FB18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEventFeedbackViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -453,6 +458,7 @@
 				93AC71AC1808D41000D58E77 /* ES_Format.m */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
 				706B47BB18AD94D400CE54E1 /* ActiveFeedback.storyboard */,
+				9FD9D2F818AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
 				939562FE1806482200BF448E /* Views */,
 				93F659DF17F6B299000638CB /* Network */,
@@ -501,6 +507,8 @@
 				9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */,
 				9F90A5C518AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.h */,
 				9F90A5C618AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m */,
+				708A3E4018A99EEF00010847 /* ES_MainActivityViewController.h */,
+				708A3E4118A99EEF00010847 /* ES_MainActivityViewController.m */,
 				9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */,
 				9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */,
 				9F59F66518A9A9C5002C94B9 /* ES_HistoryTableViewController.h */,
@@ -508,6 +516,8 @@
 				93F678EC17F81F42000638CB /* ES_HomeViewController.h */,
 				93F678ED17F81F42000638CB /* ES_HomeViewController.m */,
 				708A3E3D18A9976C00010847 /* ES_ActiveFeedbackViewController.h */,
+				9FD9D2FA18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.h */,
+				9FD9D2FB18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m */,
 				708A3E3E18A9976C00010847 /* ES_ActiveFeedbackViewController.m */,
 				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
 				93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */,
@@ -736,6 +746,7 @@
 				70F8833A1806FAEF00F02411 /* indicator-biking@2x.png in Resources */,
 				70F883361806FAEF00F02411 /* driving.png in Resources */,
 				70F883331806FAEF00F02411 /* 32-iphone.png in Resources */,
+				9FD9D2F918AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard in Resources */,
 				70F8833F1806FAEF00F02411 /* indicator-housework.png in Resources */,
 				70F883341806FAEF00F02411 /* biking.png in Resources */,
 				9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */,
@@ -797,6 +808,7 @@
 				939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93146B8818024A9D00F2AAC7 /* ES_Activity.m in Sources */,
+				9FD9D2FC18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,

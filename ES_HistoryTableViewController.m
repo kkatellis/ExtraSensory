@@ -17,13 +17,15 @@
 //#import "ES_CalendarViewCell.h"
 #import "ES_ActivityEvent.h"
 #import "ES_ActivityEventTableCell.h"
-#import "ES_EventEditAndFeedbackViewController.h"
+//#import "ES_EventEditAndFeedbackViewController.h"
+#import "ES_ActivityEventFeedbackViewController.h"
 
 @interface ES_HistoryTableViewController ()
 
 @property (nonatomic, retain) NSMutableArray * eventHistory;
 
 + (BOOL)isActivity:(ES_Activity *)activity1 similarToActivity:(ES_Activity *)activity2;
+- (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
 @end
 
@@ -61,12 +63,17 @@
 
 - (void) refreshTable
 {
+    NSLog(@"==== refresh table 1");
     [self recalculateEventsFromPredictionList];
+    NSLog(@"==== after recalc. num events: %lu",(unsigned long)self.eventHistory.count);
+    NSLog(@"==== refresh table2");
     [self.tableView reloadData];
+    NSLog(@"==== refresh table3");
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    NSLog(@"==== viewWillAppear");
     [self refreshTable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTable) name:@"Activities" object:nil];
@@ -181,6 +188,10 @@
     return cell;
 }
 
+
+
+
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -220,6 +231,32 @@
 }
 */
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
+{
+    static NSString *cellIdentifier = @"ActivityEventCell";
+    ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    
+    NSLog(@"==== cell is: %@",cell);
+    ES_ActivityEvent *activityEvent = cell.activityEvent;
+    NSLog(@"==== didselect. activity event given is: %@",activityEvent);
+    
+    [self segueToEditEvent:activityEvent];
+}
+
+- (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
+    UIViewController *initialView = [storyboard instantiateInitialViewController];
+    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)initialView;
+    
+    activityFeedback.activityEvent = activityEvent;
+    NSLog(@"==== fb view initialized is: %@",activityFeedback);
+    NSLog(@"==== and it has activity event: %@",activityFeedback.activityEvent);
+    NSLog(@"==== now segueying..........");
+    
+    [self.navigationController pushViewController:activityFeedback animated:YES];
+}
+
 
 #pragma mark - Navigation
 
@@ -228,8 +265,8 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    ES_EventEditAndFeedbackViewController * editController = (ES_EventEditAndFeedbackViewController *)segue.destinationViewController;
-    editController.activityEvent = ((ES_ActivityEventTableCell *)sender).activityEvent;
+//    ES_EventEditAndFeedbackViewController * editController = (ES_EventEditAndFeedbackViewController *)segue.destinationViewController;
+//    editController.activityEvent = ((ES_ActivityEventTableCell *)sender).activityEvent;
 }
 
  
