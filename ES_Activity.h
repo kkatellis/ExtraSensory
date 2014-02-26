@@ -27,10 +27,10 @@
 @property (nonatomic, retain) ES_User *user;
 @property (nonatomic, retain) NSSet *userActivityLabels;
 
+-(id) copyWithZone: (NSZone *) zone;
 @end
 
 @interface ES_Activity (CoreDataGeneratedAccessors)
-+ (ES_Activity *) initWithCopyOf:(ES_Activity *)other;
 
 - (void)insertObject:(ES_SensorSample *)value inSensorSamplesAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromSensorSamplesAtIndex:(NSUInteger)idx;

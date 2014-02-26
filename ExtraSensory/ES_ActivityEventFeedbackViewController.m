@@ -9,7 +9,13 @@
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_NetworkAccessor.h"
+#import "ES_SelectTimeViewController.h"
 
+#define MAIN_ACTIVITY_SEC (int)0
+#define USER_ACTIVITIES_SEC (int)1
+#define MOOD_SEC (int)2
+#define TIMES_SEC (int)3
+#define SEND_SEC (int)4
 
 @interface ES_ActivityEventFeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *mainActivityCell;
@@ -19,9 +25,12 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *endTimeCell;
 
 
+
 @end
 
 @implementation ES_ActivityEventFeedbackViewController
+
+
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -36,14 +45,11 @@
 {
     NSLog(@"==== fb: viewWill. what is activity event: %@",self.activityEvent);
     // Get the current info of the relevant activity event:
-    NSDate * startDate = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.startTimestamp doubleValue]];
-    NSDate * endDate = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
-    
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"hh:mm"];
-    NSString *startString = [dateFormatter stringFromDate:startDate];
-    NSString *endString = [dateFormatter stringFromDate:endDate];
+    NSString *startString = [dateFormatter stringFromDate:self.startTime];
+    NSString *endString = [dateFormatter stringFromDate:self.endTime];
     
     NSLog(@"====fb: viewWillAppear start: %@. end: %@",startString,endString);
     self.startTimeCell.detailTextLabel.text = startString;
@@ -138,11 +144,53 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
-    NSLog(@"%@",indexPath);
-    if (indexPath.section == 3)
-    {
-        [self submitFeedback];
+    switch (indexPath.section) {
+        case TIMES_SEC:
+            switch (indexPath.row) {
+                case 0:
+                    [self setTimeFor:YES];
+                    break;
+                case 1:
+                    [self setTimeFor:NO];
+                    
+                default:
+                    break;
+            }
+            break;
+        case SEND_SEC:
+            [self submitFeedback];
+            break;
+            
+        default:
+            break;
     }
+}
+
+- (void) setTimeFor:(BOOL)settingStartTime
+{
+
+    // Prepare the time-selection view:
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
+    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"SetTime"];
+    ES_SelectTimeViewController *selectTimeView = (ES_SelectTimeViewController *)newView;
+    
+    NSLog(@"==== in settingTimeFor. selectTimeView is: %@",selectTimeView);
+    NSLog(@"==== activity event is: %@ and its start time is: %@",self.activityEvent,self.activityEvent.startTimestamp);
+    NSDate *tmp =[NSDate dateWithTimeIntervalSince1970:[self.activityEvent.startTimestamp doubleValue]];
+    NSLog(@"==== tmp NSDate is: %@" ,tmp);
+    selectTimeView.minDate = tmp;
+    NSLog(@"==== after setting minDate");
+    selectTimeView.maxDate = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
+    
+    NSLog(@"==== in settingTimeFor 2");
+    
+    selectTimeView.selectedDate = settingStartTime ? self.startTime : self.endTime;
+    NSLog(@"==== 3");
+    selectTimeView.timeName = settingStartTime ? @"start" : @"end";
+
+    NSLog(@"==== 4");
+    [self.navigationController pushViewController:selectTimeView animated:YES];
+    
 }
 
 - (void) submitFeedback
@@ -156,11 +204,11 @@
     for (NSDate *time = startDateBeforeCahnge; [time compare:endDateBeforeChange] != NSOrderedDescending; time = [time dateByAddingTimeInterval:60])
     {
         // Create an object for this minute:
-        ES_Activity *minuteActivity = [ES_Activity initWithCopyOf:self.activityEvent.startActivity];
+        ES_Activity *minuteActivity = [self.activityEvent.startActivity copy];
         minuteActivity.timestamp = [NSNumber numberWithInt:(int)[time timeIntervalSince1970]];
         
         // Is this minute now outside of the edited event's time period?
-        if (([time compare:startDateBeforeCahnge] == NSOrderedDescending) || ([time compare:endDateBeforeChange] == NSOrderedAscending))
+        if (([time compare:self.startTime] == NSOrderedAscending) || ([time compare:self.endTime] == NSOrderedDescending))
         {
             // Remove the userCorrection label, and leave the rest:
             minuteActivity.userCorrection = nil;

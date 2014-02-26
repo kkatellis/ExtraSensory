@@ -35,24 +35,25 @@
     self.sensorSamples = tempSet;
 }
 
-+ (ES_Activity *) initWithCopyOf:(ES_Activity *)other
+-(id) copyWithZone: (NSZone *) zone
 {
-    ES_Activity *newCopy = [[ES_Activity alloc] init];
-    newCopy.isPredictionCorrect = other.isPredictionCorrect;
-    newCopy.isPredictionVerified = other.isPredictionVerified;
-    newCopy.numberOfSamples = other.numberOfSamples;
-    newCopy.sampleFrequency = other.sampleFrequency;
-    newCopy.serverPrediction = other.serverPrediction;
-    newCopy.timestamp = other.timestamp;
-    newCopy.userCorrection = other.userCorrection;
-    newCopy.uuid = other.uuid;
-    newCopy.hasBeenSent = other.hasBeenSent;
-    newCopy.zipFilePath = other.zipFilePath;
-    newCopy.sensorSamples = other.sensorSamples;
-    newCopy.user = other.user;
-    newCopy.userActivityLabels = other.userActivityLabels;
+    ES_Activity *newCopy = [[ES_Activity allocWithZone:zone] initWithEntity:nil insertIntoManagedObjectContext:nil];
+    newCopy.isPredictionCorrect = self.isPredictionCorrect;
+    newCopy.isPredictionVerified = self.isPredictionVerified;
+    newCopy.numberOfSamples = self.numberOfSamples;
+    newCopy.sampleFrequency = self.sampleFrequency;
+    newCopy.serverPrediction = self.serverPrediction;
+    newCopy.timestamp = self.timestamp;
+    newCopy.userCorrection = self.userCorrection;
+    newCopy.uuid = self.uuid;
+    newCopy.hasBeenSent = self.hasBeenSent;
+    newCopy.zipFilePath = self.zipFilePath;
+    newCopy.sensorSamples = self.sensorSamples;
+    newCopy.user = self.user;
+    newCopy.userActivityLabels = self.userActivityLabels;
     
     return newCopy;
 }
+
 
 @end

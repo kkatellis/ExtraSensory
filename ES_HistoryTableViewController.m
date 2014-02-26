@@ -233,8 +233,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
-    static NSString *cellIdentifier = @"ActivityEventCell";
-    ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)[tableView cellForRowAtIndexPath:indexPath];
     
     NSLog(@"==== cell is: %@",cell);
     ES_ActivityEvent *activityEvent = cell.activityEvent;
@@ -246,10 +245,12 @@
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
-    UIViewController *initialView = [storyboard instantiateInitialViewController];
-    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)initialView;
+    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
+    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
     
     activityFeedback.activityEvent = activityEvent;
+    activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
+    activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
     NSLog(@"==== fb view initialized is: %@",activityFeedback);
     NSLog(@"==== and it has activity event: %@",activityFeedback.activityEvent);
     NSLog(@"==== now segueying..........");

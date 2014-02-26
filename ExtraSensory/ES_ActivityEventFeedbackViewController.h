@@ -12,5 +12,7 @@
 @interface ES_ActivityEventFeedbackViewController : UITableViewController
 
 @property (nonatomic,strong) ES_ActivityEvent *activityEvent;
+@property (nonatomic) NSDate *startTime;
+@property (nonatomic) NSDate *endTime;
 
 @end
