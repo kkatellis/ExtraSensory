@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "ES_ActivityEvent.h"
+#import "ES_SelectTimeViewController.h"
 
-@interface ES_ActivityEventFeedbackViewController : UITableViewController
+@interface ES_ActivityEventFeedbackViewController : UITableViewController <SetTimeDelegate>
 
 @property (nonatomic,strong) ES_ActivityEvent *activityEvent;
 @property (nonatomic) NSDate *startTime;
 @property (nonatomic) NSDate *endTime;
 
 @end
+

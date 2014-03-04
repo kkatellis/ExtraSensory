@@ -29,14 +29,9 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    NSLog(@"==== in selectTime viewWillApprea");
-    NSLog(@"==== time name: %@. ",self.timeName);
     NSString *buttonStr = [NSString stringWithFormat:@"set %@ time",self.timeName];
-    NSLog(@"==== current button label is : %@, and chaning it to %@.",self.setButton.titleLabel.text,buttonStr);
-//    self.setButton.titleLabel.text = buttonStr;
   
     [self.setButton setTitle:buttonStr forState:UIControlStateNormal];
-    NSLog(@"==== set the button label");
     self.timePicker.date = self.selectedDate;
     self.timePicker.minimumDate = self.minDate;
     self.timePicker.maximumDate = self.maxDate;
@@ -62,7 +57,9 @@
 - (void) setTheTimeAndGoBack
 {
     self.selectedDate = self.timePicker.date;
+    [self.delegate receiveTime:self.timePicker.date for:self.isStartTime];
     NSLog(@"==== tuch button. after set selected data, before folding back");
+    NSLog(@"==== after setting time ref: %lu and val: %@",(uintptr_t)self.selectedDate,self.selectedDate);
     [self.navigationController popViewControllerAnimated:YES];
 }
 

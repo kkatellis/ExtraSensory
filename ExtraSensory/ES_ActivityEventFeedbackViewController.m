@@ -9,7 +9,7 @@
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_NetworkAccessor.h"
-#import "ES_SelectTimeViewController.h"
+//#import "ES_SelectTimeViewController.h"
 
 #define MAIN_ACTIVITY_SEC (int)0
 #define USER_ACTIVITIES_SEC (int)1
@@ -28,9 +28,21 @@
 
 @end
 
+
 @implementation ES_ActivityEventFeedbackViewController
 
-
+- (void) receiveTime:(NSDate *)selectedTime for:(BOOL)startTime
+{
+    if (startTime)
+    {
+        self.startTime = selectedTime;
+        NSLog(@"==== received time: %@. now starttime is: %@",selectedTime,self.startTime);
+    }
+    else
+    {
+        self.endTime = selectedTime;
+    }
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,6 +56,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     NSLog(@"==== fb: viewWill. what is activity event: %@",self.activityEvent);
+    NSLog(@"==== fb: start time reference is: %lu. and the date value is: %@",(uintptr_t)self.startTime,self.startTime);
     // Get the current info of the relevant activity event:
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
@@ -185,12 +198,13 @@
     NSLog(@"==== in settingTimeFor 2");
     
     selectTimeView.selectedDate = settingStartTime ? self.startTime : self.endTime;
-    NSLog(@"==== 3");
+    NSLog(@"==== 3. selectedRef is %lu and its val is: %@",(uintptr_t)selectTimeView.selectedDate,selectTimeView.selectedDate);
     selectTimeView.timeName = settingStartTime ? @"start" : @"end";
 
+    selectTimeView.isStartTime = settingStartTime;
+    selectTimeView.delegate = self;
     NSLog(@"==== 4");
     [self.navigationController pushViewController:selectTimeView animated:YES];
-    
 }
 
 - (void) submitFeedback
@@ -225,6 +239,7 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 /*
 #pragma mark - Navigation

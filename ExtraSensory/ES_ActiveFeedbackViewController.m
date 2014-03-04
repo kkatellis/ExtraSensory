@@ -205,7 +205,7 @@
 
 -(IBAction)editedLabels:(UIStoryboardSegue *)segue
 {
-    NSLog(@"editedLabels: %@", segue.identifier);
+    NSLog(@"-------- editedLabels: %@", segue.identifier);
     if ([segue.sourceViewController isKindOfClass:[ES_MainActivityViewController class]])
     {
         ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
