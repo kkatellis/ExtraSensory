@@ -36,7 +36,6 @@
     if (startTime)
     {
         self.startTime = selectedTime;
-        NSLog(@"==== received time: %@. now starttime is: %@",selectedTime,self.startTime);
     }
     else
     {
@@ -55,8 +54,6 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    NSLog(@"==== fb: viewWill. what is activity event: %@",self.activityEvent);
-    NSLog(@"==== fb: start time reference is: %lu. and the date value is: %@",(uintptr_t)self.startTime,self.startTime);
     // Get the current info of the relevant activity event:
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
@@ -64,12 +61,18 @@
     NSString *startString = [dateFormatter stringFromDate:self.startTime];
     NSString *endString = [dateFormatter stringFromDate:self.endTime];
     
-    NSLog(@"====fb: viewWillAppear start: %@. end: %@",startString,endString);
     self.startTimeCell.detailTextLabel.text = startString;
     self.endTimeCell.detailTextLabel.text =
         endString;
+    
+    // Did the user already correcte the activity:
+    if (!self.activityEvent.userCorrection)
+    {
+        // If not, initialize the user correction to the initial guess (the server prediction):
+        self.activityEvent.userCorrection = self.activityEvent.serverPrediction;
+    }
 
-    self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection ? self.activityEvent.userCorrection : self.activityEvent.serverPrediction;
+    self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
 }
 
 - (void)viewDidLoad
@@ -187,40 +190,31 @@
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"SetTime"];
     ES_SelectTimeViewController *selectTimeView = (ES_SelectTimeViewController *)newView;
     
-    NSLog(@"==== in settingTimeFor. selectTimeView is: %@",selectTimeView);
-    NSLog(@"==== activity event is: %@ and its start time is: %@",self.activityEvent,self.activityEvent.startTimestamp);
     NSDate *tmp =[NSDate dateWithTimeIntervalSince1970:[self.activityEvent.startTimestamp doubleValue]];
-    NSLog(@"==== tmp NSDate is: %@" ,tmp);
     selectTimeView.minDate = tmp;
-    NSLog(@"==== after setting minDate");
     selectTimeView.maxDate = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
     
-    NSLog(@"==== in settingTimeFor 2");
     
     selectTimeView.selectedDate = settingStartTime ? self.startTime : self.endTime;
-    NSLog(@"==== 3. selectedRef is %lu and its val is: %@",(uintptr_t)selectTimeView.selectedDate,selectTimeView.selectedDate);
     selectTimeView.timeName = settingStartTime ? @"start" : @"end";
 
     selectTimeView.isStartTime = settingStartTime;
     selectTimeView.delegate = self;
-    NSLog(@"==== 4");
     [self.navigationController pushViewController:selectTimeView animated:YES];
 }
 
 - (void) submitFeedback
 {
-    NSDate * startDateBeforeCahnge = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.startTimestamp doubleValue]];
-    NSDate * endDateBeforeChange = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
 
     ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
 
-    // Create an ES_Activity object for each minute in the original range:
-    for (NSDate *time = startDateBeforeCahnge; [time compare:endDateBeforeChange] != NSOrderedDescending; time = [time dateByAddingTimeInterval:60])
+    // Go over the minute activities of the original event:
+    for (id minuteActivityObj in self.activityEvent.minuteActivities)
     {
-        // Create an object for this minute:
-        ES_Activity *minuteActivity = [self.activityEvent.startActivity copy];
-        minuteActivity.timestamp = [NSNumber numberWithInt:(int)[time timeIntervalSince1970]];
+        // Get the original object for this minute:
+        ES_Activity *minuteActivity = (ES_Activity *)minuteActivityObj;
         
+        NSDate * time = [NSDate dateWithTimeIntervalSince1970:[minuteActivity.timestamp doubleValue]];
         // Is this minute now outside of the edited event's time period?
         if (([time compare:self.startTime] == NSOrderedAscending) || ([time compare:self.endTime] == NSOrderedDescending))
         {
@@ -234,10 +228,14 @@
             minuteActivity.userActivityLabels = self.activityEvent.userActivityLabels;
         }
         // Send this minute's data to the server:
+        NSLog(@"==== sending minute feedback");
         [appDelegate.networkAccessor sendFeedback:minuteActivity];
+        NSLog(@"==== after sending minute feedback for time: %@",time);
     }
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"==== before folding back from feebdack view");
+    [self.navigationController popViewControllerAnimated:YES];
+    NSLog(@"==== after folding back (failed)");
 }
 
 

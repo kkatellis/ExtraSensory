@@ -63,17 +63,12 @@
 
 - (void) refreshTable
 {
-    NSLog(@"==== refresh table 1");
     [self recalculateEventsFromPredictionList];
-    NSLog(@"==== after recalc. num events: %lu",(unsigned long)self.eventHistory.count);
-    NSLog(@"==== refresh table2");
     [self.tableView reloadData];
-    NSLog(@"==== refresh table3");
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    NSLog(@"==== viewWillAppear");
     [self refreshTable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTable) name:@"Activities" object:nil];
@@ -115,6 +110,8 @@
     // Read the prediction list of the user and group together consecutive timepoints with similar activities to unified activity events:
     ES_Activity *startOfActivity = nil;
     ES_Activity *endOfActivity = nil;
+    ES_ActivityEvent *currentEvent = nil;
+    NSMutableArray *minuteActivities = nil;
     for (id activityObject in [predictions reverseObjectEnumerator])
     {
         ES_Activity *currentActivity = (ES_Activity *)activityObject;
@@ -125,19 +122,22 @@
             if (startOfActivity)
             {
                 // Create an event from the start and end of the previous activity:
-                ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp startActivity:startOfActivity];
-                [self.eventHistory addObject:event];
+                currentEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
+                [self.eventHistory addObject:currentEvent];
             }
             
             //update the new "start" for the current activity:
+            minuteActivities = [[NSMutableArray alloc] initWithCapacity:1];
             startOfActivity = currentActivity;
         }
+        // Add teh minute activity object to the list of minutes of the current event:
+        [minuteActivities addObject:currentActivity];
         endOfActivity = currentActivity;
     }
     if (endOfActivity)
     {
         // Create the last event from the start and end of activity:
-        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp startActivity:startOfActivity];
+        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:startOfActivity.userActivityLabels startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
         [self.eventHistory addObject:event];
     }
     
@@ -235,9 +235,7 @@
 {
     ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    NSLog(@"==== cell is: %@",cell);
     ES_ActivityEvent *activityEvent = cell.activityEvent;
-    NSLog(@"==== didselect. activity event given is: %@",activityEvent);
     
     [self segueToEditEvent:activityEvent];
 }
@@ -251,9 +249,6 @@
     activityFeedback.activityEvent = activityEvent;
     activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
     activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
-    NSLog(@"==== fb view initialized is: %@",activityFeedback);
-    NSLog(@"==== and it has activity event: %@",activityFeedback.activityEvent);
-    NSLog(@"==== now segueying..........");
     
     [self.navigationController pushViewController:activityFeedback animated:YES];
 }

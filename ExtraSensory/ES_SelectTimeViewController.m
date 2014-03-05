@@ -50,7 +50,6 @@
 }
 
 - (IBAction)setButtonTouchedDown:(id)sender {
-    NSLog(@"==== tuch button");
     [self setTheTimeAndGoBack];
 }
 
@@ -58,8 +57,6 @@
 {
     self.selectedDate = self.timePicker.date;
     [self.delegate receiveTime:self.timePicker.date for:self.isStartTime];
-    NSLog(@"==== tuch button. after set selected data, before folding back");
-    NSLog(@"==== after setting time ref: %lu and val: %@",(uintptr_t)self.selectedDate,self.selectedDate);
     [self.navigationController popViewControllerAnimated:YES];
 }
 

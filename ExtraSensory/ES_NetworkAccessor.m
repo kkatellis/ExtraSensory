@@ -68,6 +68,7 @@
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"uuid",activity.user.uuid]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"timestamp",activity.timestamp]];
     
+    NSLog(@"===== sending api call with data: %@",dataValues);
     //NSString *combined = [[params objectForKey:key] componentsJoinedByString:@","];
     
     // setup final API url
