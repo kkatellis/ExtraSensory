@@ -78,6 +78,16 @@
     }
 
     self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
+    
+    if (self.activityEvent.userActivityLabels)
+    {
+        self.otherActivitiesCell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.userActivityLabels];
+    }
+    
+    if (self.activityEvent.mood)
+    {
+        self.moodCell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.mood];
+    }
 }
 
 - (void)viewDidLoad
@@ -166,24 +176,39 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
     UIStoryboard *listSelectionStoryboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    UIViewController *newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
-    ES_MainActivityViewController *activitySelection = (ES_MainActivityViewController *)newView;
+    UIViewController *newView = nil;
+    ES_MainActivityViewController *activitySelection = nil;
     
     switch (indexPath.section) {
         case MAIN_ACTIVITY_SEC:
-            [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection ? self.activityEvent.userCorrection : self.activityEvent.serverPrediction)]];
+            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
+            activitySelection = (ES_MainActivityViewController *)newView;
+
+            [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection)]];
             [activitySelection setChoices:[ES_ActivitiesStrings mainActivities]];
             [activitySelection setCategory:MAIN_ACTIVITY];
             [self.navigationController pushViewController:activitySelection animated:YES];
             break;
         case USER_ACTIVITIES_SEC:
-            [activitySelection setAppliedLabels: [NSMutableSet setWithSet: self.activityEvent.userActivityLabels]];
+            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"SecondaryActivitiesSelection"];
+            activitySelection = (ES_MainActivityViewController *)newView;
+
+            if (self.activityEvent.userActivityLabels)
+            {
+                [activitySelection setAppliedLabels: [NSMutableSet setWithSet: self.activityEvent.userActivityLabels]];
+            }
             [activitySelection setChoices:[ES_ActivitiesStrings secondaryActivities]];
             [activitySelection setCategory:SECONDARY_ACTIVITIES];
             [self.navigationController pushViewController:activitySelection animated:YES];
             break;
         case MOOD_SEC:
-            [activitySelection setAppliedLabels:[NSMutableSet setWithObject:self.activityEvent.mood]];
+            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MoodSelection"];
+            activitySelection = (ES_MainActivityViewController *)newView;
+
+            if (self.activityEvent.mood)
+            {
+                [activitySelection setAppliedLabels:[NSMutableSet setWithObject:self.activityEvent.mood]];
+            }
             [activitySelection setChoices:[ES_ActivitiesStrings moods]];
             [activitySelection setCategory:MOOD];
             [self.navigationController pushViewController:activitySelection animated:YES];
@@ -276,12 +301,26 @@
         }
         else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
         {
-            self.activityEvent.userActivityLabels = [NSSet setWithArray: [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]]];
+            if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
+            {
+                self.activityEvent.userActivityLabels = [NSSet setWithArray: [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]]];
+            }
+            else
+            {
+                self.activityEvent.userActivityLabels = nil;
+            }
             NSLog(@"==== set the user activities to: %@",self.activityEvent.userActivityLabels);
         }
         else if ([mavc.category isEqualToString:MOOD])
         {
-            self.activityEvent.mood = (NSString *)[NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
+            {
+                self.activityEvent.mood = (NSString *)[NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            }
+            else
+            {
+                self.activityEvent.mood = nil;
+            }
             NSLog(@"=== set the mood to: %@",self.activityEvent.mood);
         }
     }
