@@ -9,13 +9,18 @@
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_NetworkAccessor.h"
-//#import "ES_SelectTimeViewController.h"
+#import "ES_MainActivityViewController.h"
+#import "ES_ActivitiesStrings.h"
 
 #define MAIN_ACTIVITY_SEC (int)0
 #define USER_ACTIVITIES_SEC (int)1
 #define MOOD_SEC (int)2
 #define TIMES_SEC (int)3
 #define SEND_SEC (int)4
+
+#define MAIN_ACTIVITY @"Main Activity"
+#define SECONDARY_ACTIVITIES @"Secondary Activities"
+#define MOOD @"Mood"
 
 @interface ES_ActivityEventFeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *mainActivityCell;
@@ -55,7 +60,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     // Get the current info of the relevant activity event:
-    
+    NSLog(@"==== in viewWillAppear");
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"hh:mm"];
     NSString *startString = [dateFormatter stringFromDate:self.startTime];
@@ -160,7 +165,29 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
+    UIStoryboard *listSelectionStoryboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
+    UIViewController *newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
+    ES_MainActivityViewController *activitySelection = (ES_MainActivityViewController *)newView;
+    
     switch (indexPath.section) {
+        case MAIN_ACTIVITY_SEC:
+            [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection ? self.activityEvent.userCorrection : self.activityEvent.serverPrediction)]];
+            [activitySelection setChoices:[ES_ActivitiesStrings mainActivities]];
+            [activitySelection setCategory:MAIN_ACTIVITY];
+            [self.navigationController pushViewController:activitySelection animated:YES];
+            break;
+        case USER_ACTIVITIES_SEC:
+            [activitySelection setAppliedLabels: [NSMutableSet setWithSet: self.activityEvent.userActivityLabels]];
+            [activitySelection setChoices:[ES_ActivitiesStrings secondaryActivities]];
+            [activitySelection setCategory:SECONDARY_ACTIVITIES];
+            [self.navigationController pushViewController:activitySelection animated:YES];
+            break;
+        case MOOD_SEC:
+            [activitySelection setAppliedLabels:[NSMutableSet setWithObject:self.activityEvent.mood]];
+            [activitySelection setChoices:[ES_ActivitiesStrings moods]];
+            [activitySelection setCategory:MOOD];
+            [self.navigationController pushViewController:activitySelection animated:YES];
+            break;
         case TIMES_SEC:
             switch (indexPath.row) {
                 case 0:
@@ -228,14 +255,36 @@
             minuteActivity.userActivityLabels = self.activityEvent.userActivityLabels;
         }
         // Send this minute's data to the server:
-        NSLog(@"==== sending minute feedback");
         [appDelegate.networkAccessor sendFeedback:minuteActivity];
-        NSLog(@"==== after sending minute feedback for time: %@",time);
     }
     
-    NSLog(@"==== before folding back from feebdack view");
     [self.navigationController popViewControllerAnimated:YES];
-    NSLog(@"==== after folding back (failed)");
+}
+
+-(IBAction)editedLabels:(UIStoryboardSegue *)segue
+{
+    NSLog(@"==== in editedLabels from segue: %@", segue);
+    if ([segue.sourceViewController isKindOfClass:[ES_MainActivityViewController class]])
+    {
+        ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
+        NSLog(@"==== segue unwinded back from selecting : %@" , mavc.category);
+        NSLog(@"==== appliedlabels are: %@ and choises are: %@",mavc.appliedLabels,mavc.choices);
+        if ([mavc.category isEqualToString:MAIN_ACTIVITY])
+        {
+            self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][0];
+            NSLog(@"==== set the main activity to : %@", self.activityEvent.userCorrection);
+        }
+        else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
+        {
+            self.activityEvent.userActivityLabels = [NSSet setWithArray: [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]]];
+            NSLog(@"==== set the user activities to: %@",self.activityEvent.userActivityLabels);
+        }
+        else if ([mavc.category isEqualToString:MOOD])
+        {
+            self.activityEvent.mood = (NSString *)[NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            NSLog(@"=== set the mood to: %@",self.activityEvent.mood);
+        }
+    }
 }
 
 
