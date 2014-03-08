@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ES_PieChartView : UIView
+@interface ES_PieChartView : UIView {
+    
+}
+
+@property (nonatomic, assign) CGFloat circleRadius;
+@property (nonatomic, retain) NSArray *sliceArray;
+@property (nonatomic, retain) NSArray *colorsArray;
 
 @property NSArray *activityPercentages;
 
