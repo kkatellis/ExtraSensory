@@ -18,6 +18,7 @@
 #import "ES_ActiveFeedbackViewController.h"
 
 @interface ES_HomeViewController ()
+@property (strong, nonatomic) IBOutlet UISwitch *schedulerSwitch;
 
 @property (weak, nonatomic) IBOutlet UILabel *sampleFrequencyLabel;
 
@@ -53,9 +54,12 @@
 @synthesize settings = _settings;
 @synthesize activitiesButton = _activitiesButton;
 
+#define RECORDING_TEXT @"ON"
+#define NOT_RECORDING_TEXT @"OFF"
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateCounts)
                                                  name:@"Activities"
@@ -128,22 +132,17 @@
     return appDelegate.scheduler;
 }
 
-#define RECORDING_TEXT @"ON"
-#define NOT_RECORDING_TEXT @"OFF"
-
 - (IBAction)startScheduler:(UISwitch *)sender
 {
     if (sender.isOn)
     {
-        [self.scheduler setIsOn: YES];
-        [self.scheduler sampleSaveSendCycler: self ];
         [self.indicatorLabel setText: RECORDING_TEXT];
-    }
+        [self.scheduler setIsOn: YES];
+        [self.scheduler sampleSaveSendCycler: self ];    }
     else
     {
-        [self.scheduler setIsOn:NO];
         [self.indicatorLabel setText: NOT_RECORDING_TEXT];
-    }
+        [self.scheduler setIsOn:NO];    }
     
 }
 
@@ -152,6 +151,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (self.schedulerSwitch.on)
+    {
+        [self.indicatorLabel setText: RECORDING_TEXT];
+        [self.scheduler setIsOn: YES];
+        [self.scheduler sampleSaveSendCycler: self ];
+    }
+    else
+    {
+        [self.indicatorLabel setText: NOT_RECORDING_TEXT];
+        [self.scheduler setIsOn: NO];
+    }
 	// Do any additional setup after loading the view.
 }
 

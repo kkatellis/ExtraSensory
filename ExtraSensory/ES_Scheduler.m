@@ -212,6 +212,7 @@
 {
     if (!self.isOn)
     {
+        NSLog(@"not On");
         [self.timer invalidate];
         return;
     }
