@@ -9,13 +9,18 @@
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_NetworkAccessor.h"
-#import "ES_SelectTimeViewController.h"
+#import "ES_MainActivityViewController.h"
+#import "ES_ActivitiesStrings.h"
 
 #define MAIN_ACTIVITY_SEC (int)0
 #define USER_ACTIVITIES_SEC (int)1
 #define MOOD_SEC (int)2
 #define TIMES_SEC (int)3
 #define SEND_SEC (int)4
+
+#define MAIN_ACTIVITY @"Main Activity"
+#define SECONDARY_ACTIVITIES @"Secondary Activities"
+#define MOOD @"Mood"
 
 @interface ES_ActivityEventFeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *mainActivityCell;
@@ -28,9 +33,20 @@
 
 @end
 
+
 @implementation ES_ActivityEventFeedbackViewController
 
-
+- (void) receiveTime:(NSDate *)selectedTime for:(BOOL)startTime
+{
+    if (startTime)
+    {
+        self.startTime = selectedTime;
+    }
+    else
+    {
+        self.endTime = selectedTime;
+    }
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -43,20 +59,35 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    NSLog(@"==== fb: viewWill. what is activity event: %@",self.activityEvent);
     // Get the current info of the relevant activity event:
-    
+    NSLog(@"==== in viewWillAppear");
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"hh:mm"];
     NSString *startString = [dateFormatter stringFromDate:self.startTime];
     NSString *endString = [dateFormatter stringFromDate:self.endTime];
     
-    NSLog(@"====fb: viewWillAppear start: %@. end: %@",startString,endString);
     self.startTimeCell.detailTextLabel.text = startString;
     self.endTimeCell.detailTextLabel.text =
         endString;
+    
+    // Did the user already correcte the activity:
+    if (!self.activityEvent.userCorrection)
+    {
+        // If not, initialize the user correction to the initial guess (the server prediction):
+        self.activityEvent.userCorrection = self.activityEvent.serverPrediction;
+    }
 
-    self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection ? self.activityEvent.userCorrection : self.activityEvent.serverPrediction;
+    self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
+    
+    if (self.activityEvent.userActivityLabels)
+    {
+        self.otherActivitiesCell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.userActivityLabels];
+    }
+    
+    if (self.activityEvent.mood)
+    {
+        self.moodCell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.mood];
+    }
 }
 
 - (void)viewDidLoad
@@ -144,7 +175,44 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
+    UIStoryboard *listSelectionStoryboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
+    UIViewController *newView = nil;
+    ES_MainActivityViewController *activitySelection = nil;
+    
     switch (indexPath.section) {
+        case MAIN_ACTIVITY_SEC:
+            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
+            activitySelection = (ES_MainActivityViewController *)newView;
+
+            [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection)]];
+            [activitySelection setChoices:[ES_ActivitiesStrings mainActivities]];
+            [activitySelection setCategory:MAIN_ACTIVITY];
+            [self.navigationController pushViewController:activitySelection animated:YES];
+            break;
+        case USER_ACTIVITIES_SEC:
+            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"SecondaryActivitiesSelection"];
+            activitySelection = (ES_MainActivityViewController *)newView;
+
+            if (self.activityEvent.userActivityLabels)
+            {
+                [activitySelection setAppliedLabels: [NSMutableSet setWithSet: self.activityEvent.userActivityLabels]];
+            }
+            [activitySelection setChoices:[ES_ActivitiesStrings secondaryActivities]];
+            [activitySelection setCategory:SECONDARY_ACTIVITIES];
+            [self.navigationController pushViewController:activitySelection animated:YES];
+            break;
+        case MOOD_SEC:
+            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MoodSelection"];
+            activitySelection = (ES_MainActivityViewController *)newView;
+
+            if (self.activityEvent.mood)
+            {
+                [activitySelection setAppliedLabels:[NSMutableSet setWithObject:self.activityEvent.mood]];
+            }
+            [activitySelection setChoices:[ES_ActivitiesStrings moods]];
+            [activitySelection setCategory:MOOD];
+            [self.navigationController pushViewController:activitySelection animated:YES];
+            break;
         case TIMES_SEC:
             switch (indexPath.row) {
                 case 0:
@@ -174,39 +242,31 @@
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"SetTime"];
     ES_SelectTimeViewController *selectTimeView = (ES_SelectTimeViewController *)newView;
     
-    NSLog(@"==== in settingTimeFor. selectTimeView is: %@",selectTimeView);
-    NSLog(@"==== activity event is: %@ and its start time is: %@",self.activityEvent,self.activityEvent.startTimestamp);
     NSDate *tmp =[NSDate dateWithTimeIntervalSince1970:[self.activityEvent.startTimestamp doubleValue]];
-    NSLog(@"==== tmp NSDate is: %@" ,tmp);
     selectTimeView.minDate = tmp;
-    NSLog(@"==== after setting minDate");
     selectTimeView.maxDate = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
     
-    NSLog(@"==== in settingTimeFor 2");
     
     selectTimeView.selectedDate = settingStartTime ? self.startTime : self.endTime;
-    NSLog(@"==== 3");
     selectTimeView.timeName = settingStartTime ? @"start" : @"end";
 
-    NSLog(@"==== 4");
+    selectTimeView.isStartTime = settingStartTime;
+    selectTimeView.delegate = self;
     [self.navigationController pushViewController:selectTimeView animated:YES];
-    
 }
 
 - (void) submitFeedback
 {
-    NSDate * startDateBeforeCahnge = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.startTimestamp doubleValue]];
-    NSDate * endDateBeforeChange = [NSDate dateWithTimeIntervalSince1970:[self.activityEvent.endTimestamp doubleValue]];
 
     ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
 
-    // Create an ES_Activity object for each minute in the original range:
-    for (NSDate *time = startDateBeforeCahnge; [time compare:endDateBeforeChange] != NSOrderedDescending; time = [time dateByAddingTimeInterval:60])
+    // Go over the minute activities of the original event:
+    for (id minuteActivityObj in self.activityEvent.minuteActivities)
     {
-        // Create an object for this minute:
-        ES_Activity *minuteActivity = [self.activityEvent.startActivity copy];
-        minuteActivity.timestamp = [NSNumber numberWithInt:(int)[time timeIntervalSince1970]];
+        // Get the original object for this minute:
+        ES_Activity *minuteActivity = (ES_Activity *)minuteActivityObj;
         
+        NSDate * time = [NSDate dateWithTimeIntervalSince1970:[minuteActivity.timestamp doubleValue]];
         // Is this minute now outside of the edited event's time period?
         if (([time compare:self.startTime] == NSOrderedAscending) || ([time compare:self.endTime] == NSOrderedDescending))
         {
@@ -223,8 +283,49 @@
         [appDelegate.networkAccessor sendFeedback:minuteActivity];
     }
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
+-(IBAction)editedLabels:(UIStoryboardSegue *)segue
+{
+    NSLog(@"==== in editedLabels from segue: %@", segue);
+    if ([segue.sourceViewController isKindOfClass:[ES_MainActivityViewController class]])
+    {
+        ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
+        NSLog(@"==== segue unwinded back from selecting : %@" , mavc.category);
+        NSLog(@"==== appliedlabels are: %@ and choises are: %@",mavc.appliedLabels,mavc.choices);
+        if ([mavc.category isEqualToString:MAIN_ACTIVITY])
+        {
+            self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][0];
+            NSLog(@"==== set the main activity to : %@", self.activityEvent.userCorrection);
+        }
+        else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
+        {
+            if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
+            {
+                self.activityEvent.userActivityLabels = [NSSet setWithArray: [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]]];
+            }
+            else
+            {
+                self.activityEvent.userActivityLabels = nil;
+            }
+            NSLog(@"==== set the user activities to: %@",self.activityEvent.userActivityLabels);
+        }
+        else if ([mavc.category isEqualToString:MOOD])
+        {
+            if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
+            {
+                self.activityEvent.mood = (NSString *)[NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            }
+            else
+            {
+                self.activityEvent.mood = nil;
+            }
+            NSLog(@"=== set the mood to: %@",self.activityEvent.mood);
+        }
+    }
+}
+
 
 /*
 #pragma mark - Navigation

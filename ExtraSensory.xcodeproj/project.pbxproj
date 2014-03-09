@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
 		70228E3018B19FFE00189063 /* ES_MainActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */; };
@@ -137,6 +138,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1025D75618CB15BA00D854BE /* ES_PieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_PieViewController.h; sourceTree = "<group>"; };
+		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SoundWaveProcessor.m; sourceTree = "<group>"; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
@@ -540,6 +543,8 @@
 				934377B417FF94E200521B0D /* ES_FeedbackViewController.m */,
 				93AC71A5180878A000D58E77 /* ES_SettingsViewController.h */,
 				93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */,
+				1025D75618CB15BA00D854BE /* ES_PieViewController.h */,
+				1025D75718CB15BA00D854BE /* ES_PieViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -579,8 +584,8 @@
 		939562FE1806482200BF448E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				939562FC1806481800BF448E /* ES_PieChartView.m */,
 				939562FB1806481800BF448E /* ES_PieChartView.h */,
+				939562FC1806481800BF448E /* ES_PieChartView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -805,6 +810,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				93146B8E18024A9D00F2AAC7 /* ES_UserActivityLabel.m in Sources */,
+				1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */,
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				70228E3018B19FFE00189063 /* ES_MainActivityViewController.m in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,

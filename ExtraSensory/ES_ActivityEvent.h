@@ -15,13 +15,17 @@
 
 @property (nonatomic, retain) NSString * serverPrediction;
 @property (nonatomic, retain) NSString * userCorrection;
-@property (nonatomic, retain) NSSet *userActivityLabels;
+@property (nonatomic, retain) NSSet * userActivityLabels;
+@property (nonatomic, retain) NSString * mood;
 
 @property (nonatomic, retain) NSNumber * startTimestamp;
 @property (nonatomic, retain) NSNumber * endTimestamp;
 
-@property (nonatomic, retain) ES_Activity * startActivity;
+//@property (nonatomic, retain) ES_Activity * startActivity;
 
-- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp startActivity:(ES_Activity *)startActivity;
+@property (nonatomic, retain) NSMutableArray *minuteActivities;
+
+//- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp startActivity:(ES_Activity *)startActivity;
+- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities;
 
 @end

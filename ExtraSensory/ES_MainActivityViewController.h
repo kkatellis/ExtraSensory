@@ -15,4 +15,6 @@
 @property NSMutableSet *appliedLabels; // the labels that the user has chosen
 @property NSArray *choices; // the possible label choices
 
+@property NSString *category; // Name of the category for which the selection list is presented
+
 @end

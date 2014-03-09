@@ -8,11 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SetTimeDelegate
+
+- (void)receiveTime:(NSDate *)selectedTime for:(BOOL)startTime;
+@end
+
 @interface ES_SelectTimeViewController : UIViewController
+
+@property (nonatomic) id<SetTimeDelegate> delegate;
 
 @property (nonatomic) NSDate *selectedDate;
 @property (nonatomic) NSDate *minDate;
 @property (nonatomic) NSDate *maxDate;
 @property (nonatomic) NSString *timeName;
+@property (nonatomic) BOOL isStartTime;
 
 @end
