@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class ES_HomeViewController, ES_User;
+@class ES_HomeViewController, ES_User, ES_Activity;
 
 @interface ES_Scheduler : NSObject
 
@@ -19,5 +19,7 @@
 @property (nonatomic, weak) ES_User* user;
 
 - (void) sampleSaveSendCycler: (ES_HomeViewController *) homeViewController;
+- (void) activeFeedback: (ES_Activity *) activity;
+- (id) init;
 
 @end

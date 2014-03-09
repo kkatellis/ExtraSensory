@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ES_Activity.h"
+#import "ES_Scheduler.h"
 
 
 @interface ES_ActiveFeedbackViewController : UITableViewController

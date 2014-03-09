@@ -10,6 +10,8 @@
 #import "ES_MainActivityViewController.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_ActivitiesStrings.h"
+#import "ES_Scheduler.h"
+#import "ES_AppDelegate.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -25,6 +27,7 @@
 @end
 
 @implementation ES_ActiveFeedbackViewController
+
 
 - (IBAction)Cancel:(UIBarButtonItem *)sender {
     NSLog(@"Cancel button was pressed");
@@ -55,7 +58,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"Active Feedback View Did Load");
+    //NSLog(@"Active Feedback View Did Load");
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -164,9 +167,16 @@
     }
 }
 
+- (ES_Scheduler *)scheduler
+{
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    return appDelegate.scheduler;
+}
+
 - (void) SubmitFeedback
 {
     NSLog(@"Submit Feedback");
+    [self.scheduler activeFeedback:self.activity];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:NULL];
     //[self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -205,13 +215,17 @@
 
 -(IBAction)editedLabels:(UIStoryboardSegue *)segue
 {
-    NSLog(@"editedLabels: %@", segue.identifier);
+    //NSLog(@"editedLabels: %@", segue.identifier);
     if ([segue.sourceViewController isKindOfClass:[ES_MainActivityViewController class]])
     {
         ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
         if ([segue.identifier isEqualToString:MAIN_ACTIVITY])
         {
             self.mainActivity = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            if (self.mainActivity)
+            {
+                self.activity.userCorrection = self.mainActivity.firstObject;
+            }
         }
         else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
         {

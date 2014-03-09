@@ -59,6 +59,12 @@
 
 @synthesize user = _user;
 
+-(id) init {
+    self = [super init];
+    [self setIsReady: YES];
+    return self;
+}
+
 - (ES_User *) user
 {
     if (!_user)
@@ -123,7 +129,7 @@
     self.homeViewController = homeViewController;
     
     NSLog( @"\n\nStart" );
-    
+    NSLog(@"[sampleSaveSendCycler] Is ready? %d", self.isReady);
     self.counter = 0;
     
     
@@ -149,7 +155,7 @@
             NSLog(@"Running in the background\n");
             while(TRUE)
             {
-                NSLog(@"Background time Remaining: %f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
+                //NSLog(@"Background time Remaining: %f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
                 [NSThread sleepForTimeInterval:30]; //wait for 30 sec
             }
             //#### background task ends
@@ -184,6 +190,23 @@
     }
 }
 
+- (void) activeFeedback: (ES_Activity *) activity
+{
+    NSLog( @"\n\nStart active feedback sample" );
+    
+    self.counter = 0;
+    [self.timer invalidate]; //turn off auto-sampling timer
+    [self setIsReady:NO];
+    NSLog(@"[active feedback] Is ready? %d", self.isReady);
+    [self firstOpActive: activity];
+    // turn auto-sampling timer back on
+    self.timer = [NSTimer scheduledTimerWithTimeInterval: [self.user.settings.timeBetweenSampling doubleValue]
+                                                      target: self
+                                                    selector: @selector(firstOp)
+                                                    userInfo: nil
+                                                     repeats: YES];
+}
+
 
 -(void) firstOp
 {
@@ -202,13 +225,35 @@
     
     NSTimer *timer;
     
-    // every 25 seconds call secondOp which will upload data to network
+    // after 25 seconds call secondOp which will upload data to network
     timer = [NSTimer scheduledTimerWithTimeInterval: 25
                                              target: self
                                            selector: @selector(secondOp)
                                            userInfo: nil
                                             repeats: NO];
     
+    
+}
+
+-(void) firstOpActive: (ES_Activity *) activity
+{
+    NSLog(@"Record Sensors");
+    
+    [self.sensorManager setCurrentActivity: activity];
+    [self.sensorManager record];
+    [self.sensorManager _prepStage:HF_DUR_FNAME];
+    
+    
+    NSLog(@"Back from sensor Recording");
+    
+    NSTimer *timer;
+    
+    // after 25 seconds call secondOp which will upload data to network
+    timer = [NSTimer scheduledTimerWithTimeInterval: 25
+                                             target: self
+                                           selector: @selector(secondOp)
+                                           userInfo: nil
+                                            repeats: NO];
     
 }
 

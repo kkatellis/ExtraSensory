@@ -134,10 +134,8 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"ES_Activity" inManagedObjectContext:[self context]];
     [fetchRequest setEntity:entity];
-    
-    NSString *attributeValue = [NSString stringWithFormat: @"%@", time];
-    
-    NSLog(@"attributeValue = %@", attributeValue );
+        
+    //NSLog(@"attributeValue = %@", [NSString stringWithFormat: @"%@", time] );
     
     //NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(timestamp == %@)", attributeValue ];
     
@@ -147,7 +145,7 @@
     
     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
     
-    NSLog(@"nubmer of results = %lu", (unsigned long)[results count]);
+    //NSLog(@"nubmer of results = %lu", (unsigned long)[results count]);
     
     ES_Activity *resultActivity;
     
@@ -155,7 +153,7 @@
     {
         NSNumber *t = a.timestamp;
         
-        NSLog(@"time = %@, t = %@", time, t );
+        //NSLog(@"time = %@, t = %@", time, t );
         
         if ( [t intValue] == [time intValue] ) resultActivity = a;
         
@@ -172,10 +170,10 @@
     }
     else return nil;
     
-    for ( id a in results )
-    {
-        NSLog(@"result: %@", a);
-    }
+//    for ( id a in results )
+//    {
+//        NSLog(@"result: %@", a);
+//    }
 }
 
 + (void) save
@@ -231,11 +229,12 @@
     return directory;
 }
 
-+ (NSString *) zipFileName2: (NSString *)time
++ (NSString *) zipFileName2: (NSNumber *)time
 {
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSLog(@"time for zip name = %0.0f", [time doubleValue] );
-    return [NSString stringWithFormat:@"/%@-%@", time, appDelegate.user.uuid];
+    //NSLog(@"time for zip name = %0.0f", [time doubleValue] );
+    //[NSString stringWithFormat:@"%0.0f", [time doubleValue]]
+    return [NSString stringWithFormat:@"/%0.0f-%@.zip", [time doubleValue], appDelegate.user.uuid];
 }
 
 
@@ -251,9 +250,8 @@
     if ([fileManager fileExistsAtPath:exportPath isDirectory:&isDir] && isDir){
         subpaths = [fileManager subpathsAtPath:exportPath];
     }
-    NSString *zipFile = [[self zipFileName2: [timer userInfo] ] stringByAppendingString:@".zip"];
     
-    NSLog(@"zipFile name = %@", zipFile );
+    NSString *zipFile = [timer userInfo];
     
     NSString *archivePath = [[self zipDirectory] stringByAppendingString: zipFile ];
     
@@ -285,23 +283,21 @@
 
 + (void) writeActivity: (ES_Activity *)activity
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [self writeData: [self arrayFromActivity: activity]];
+    NSLog(@"activity labels: %@", activity.userCorrection);
+    if (activity.userCorrection)
+    {
+        [self writeLabel: activity.userCorrection];
+    }
     
-    
-    NSLog(@"activity timestamp = %@", activity.timestamp);
-    
-    NSString *zipFileName = [[NSString stringWithFormat: @"/%0.0f-%@", [activity.timestamp doubleValue], appDelegate.user.uuid ] stringByAppendingString:@".zip"];
+    NSString *zipFileName = [self zipFileName2: activity.timestamp];
+    activity.zipFilePath = [[self zipDirectory] stringByAppendingString:zipFileName ];
 
-    activity.zipFilePath = [[self zipDirectory] stringByAppendingString:zipFileName];
-    
-    NSLog( @"activity.zipfilepath = %@", activity.zipFilePath);
-    
     NSTimer *timer;
     timer = [NSTimer scheduledTimerWithTimeInterval: 2
                                              target: self
                                            selector: @selector(zipFilesWithTimer: )
-                                           userInfo: [NSString stringWithFormat:@"%0.0f", [activity.timestamp doubleValue] ]
+                                           userInfo: zipFileName
                                             repeats: NO];
 
 }
@@ -335,19 +331,19 @@
     // write contents of url to data object
     soundData = [NSData dataWithContentsOfURL: soundFileURLDur];
     
-    NSLog(@"soundFileURLDur is %@", soundFileURLDur);
+    //NSLog(@"soundFileURLDur is %@", soundFileURLDur);
  
     NSError *error;
     
     // deleting any old contents in sound file path
     BOOL soundFileExists = [fileManager fileExistsAtPath:soundFileStringPath];
-    NSLog(@"Path to sound file: %@", soundFileStringPath);
-    NSLog(@"Sound File exists: %d", soundFileExists);
-    NSLog(@"Is deletable sound file at path: %d", [fileManager isDeletableFileAtPath:soundFileStringPath]);
+    //NSLog(@"Path to sound file: %@", soundFileStringPath);
+    //NSLog(@"Sound File exists: %d", soundFileExists);
+    //NSLog(@"Is deletable sound file at path: %d", [fileManager isDeletableFileAtPath:soundFileStringPath]);
     
     if(soundFileExists)
     {
-        NSLog(@"previous sound file existed there");
+        //NSLog(@"previous sound file existed there");
         BOOL success = [fileManager removeItemAtPath:soundFileStringPath error:&error];
         if (!success) NSLog(@"Error: %@", [error localizedDescription]);
     }
@@ -365,9 +361,9 @@
     
     // deleting any old contents in sensor data path
     BOOL fileExists = [fileManager fileExistsAtPath:filePath];
-    NSLog(@"Path to file: %@", filePath);
-    NSLog(@"File exists: %d", fileExists);
-    NSLog(@"Is deletable file at path: %d", [fileManager isDeletableFileAtPath:filePath]);
+    //NSLog(@"Path to file: %@", filePath);
+    //NSLog(@"File exists: %d", fileExists);
+    //NSLog(@"Is deletable file at path: %d", [fileManager isDeletableFileAtPath:filePath]);
     
     if (fileExists)
     {
@@ -387,6 +383,33 @@
     }
 
 }
+
++ (void) writeLabel:(NSString *)label
+{
+    NSError *error = [NSError new];
+    NSDictionary *feedback = [[NSDictionary alloc] initWithObjects:@[label] forKeys:@[@"label"]];
+    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
+    NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/label.txt"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    BOOL fileExists = [fileManager fileExistsAtPath:filePath];
+    if (fileExists)
+    {
+        BOOL success = [fileManager removeItemAtPath:filePath error:&error];
+        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+    }
+    BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
+    if (writeFileSuccess)
+    {
+        NSLog(@"Label successfully written to file");
+    }
+    else
+    {
+        NSLog(@"Error writing label to file!!");
+    }
+    
+}
+
 
 + (NSArray *) arrayFromActivity: (ES_Activity *)activity
 {

@@ -9,6 +9,7 @@
 
 #import "ES_AppDelegate.h"
 #import "ES_SensorManager.h"
+#import "ES_Scheduler.h"
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_User.h"
@@ -134,6 +135,16 @@
         _sensorManager = [ES_SensorManager new];
     }
     return _sensorManager;
+}
+
+- (ES_Scheduler *)scheduler
+{
+    if (!_scheduler)
+    {
+        _scheduler = [ES_Scheduler new];
+        NSLog(@"created new sheduler!");
+    }
+    return _scheduler;
 }
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application

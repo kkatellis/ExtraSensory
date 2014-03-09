@@ -15,6 +15,7 @@
 #import "ES_Settings.h"
 #import "ES_PieChartView.h"
 #import "ES_ActivityStatistic.h"
+#import "ES_ActiveFeedbackViewController.h"
 
 @interface ES_HomeViewController ()
 
@@ -28,8 +29,6 @@
 @property NSMutableArray *activityCountArray;
 
 @property (weak, nonatomic) IBOutlet UILabel *indicatorLabel;
-
-@property (strong, nonatomic) ES_Scheduler *scheduler;
 
 @property (weak, nonatomic) IBOutlet UILabel *lyingTime;
 
@@ -52,21 +51,8 @@
 @implementation ES_HomeViewController
 
 @synthesize settings = _settings;
-@synthesize scheduler = _scheduler;
 @synthesize activitiesButton = _activitiesButton;
 
-
-
-- (ES_Scheduler *) scheduler
-{
-    if (!_scheduler)
-    {
-        _scheduler = [ES_Scheduler new];
-        _scheduler.isReady = YES;
-        NSLog(@"Scheduler Created!");
-    }
-    return _scheduler;
-}
 
 - (void) viewDidAppear:(BOOL)animated
 {
@@ -76,7 +62,6 @@
                                                object:nil];
     
     [ES_DataBaseAccessor save];
-
     
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
@@ -137,6 +122,12 @@
     return appDelegate.sensorManager;
 }
 
+- (ES_Scheduler *)scheduler
+{
+    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    return appDelegate.scheduler;
+}
+
 #define RECORDING_TEXT @"ON"
 #define NOT_RECORDING_TEXT @"OFF"
 
@@ -184,8 +175,7 @@
 - (IBAction)Compose:(UIBarButtonItem *)sender {
     
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    UIViewController* initialView = [storyboard instantiateInitialViewController];
-    
+    ES_ActiveFeedbackViewController* initialView = [storyboard instantiateInitialViewController];
     initialView.modalPresentationStyle = UIModalPresentationFormSheet;
     [self presentViewController:initialView animated:YES completion:nil];
 }

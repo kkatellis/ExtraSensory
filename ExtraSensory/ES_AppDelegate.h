@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class ES_SensorManager, ES_NetworkAccessor, ES_User;
+@class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler;
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -25,6 +25,8 @@
 @property (strong, nonatomic) NSUUID *uuid;
 
 @property (strong, nonatomic) ES_SensorManager *sensorManager;
+
+@property (strong, nonatomic) ES_Scheduler *scheduler;
 
 @property (strong, atomic) NSMutableArray *networkStack;
 
