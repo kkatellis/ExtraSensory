@@ -12,6 +12,7 @@
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
 		70228E3018B19FFE00189063 /* ES_MainActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */; };
 		70228E3118B19FFE00189063 /* ES_ActiveFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */; };
+		707762E018CF7C9800ED0134 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 707762DF18CF7C9800ED0134 /* Reachability.m */; };
 		70F883311806FAEF00F02411 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882EC1806FAEE00F02411 /* 100-coffee.png */; };
 		70F883321806FAEF00F02411 /* 25-weather.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882ED1806FAEE00F02411 /* 25-weather.png */; };
 		70F883331806FAEF00F02411 /* 32-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F882EE1806FAEE00F02411 /* 32-iphone.png */; };
@@ -147,6 +148,8 @@
 		70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_MainActivityViewController.h; sourceTree = "<group>"; };
 		70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActiveFeedbackViewController.m; sourceTree = "<group>"; };
 		70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActiveFeedbackViewController.h; sourceTree = "<group>"; };
+		707762DE18CF7C9800ED0134 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		707762DF18CF7C9800ED0134 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		70F882EC1806FAEE00F02411 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
 		70F882ED1806FAEE00F02411 /* 25-weather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "25-weather.png"; sourceTree = "<group>"; };
 		70F882EE1806FAEE00F02411 /* 32-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "32-iphone.png"; sourceTree = "<group>"; };
@@ -322,6 +325,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		707762DD18CF7C9800ED0134 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				707762DE18CF7C9800ED0134 /* Reachability.h */,
+				707762DF18CF7C9800ED0134 /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		70F882EA1806FAEE00F02411 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -604,6 +616,7 @@
 		93F659DF17F6B299000638CB /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				707762DD18CF7C9800ED0134 /* Reachability */,
 				93F659DC17F6B280000638CB /* ES_NetworkAccessor.h */,
 				93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */,
 			);
@@ -819,6 +832,7 @@
 				934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
+				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
 				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,

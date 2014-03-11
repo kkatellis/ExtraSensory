@@ -27,6 +27,7 @@
     
     @private
     //-// HF Data Management
+    NSMutableArray      *HFDataBundle;      // Holds data over entire interval of HF Sampling, sends after full
     NSString            *HFFilePath;        // Path that will eventually hold HFDataBundle;
 }
 
@@ -40,6 +41,7 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
 @property (nonatomic) double sampleFrequency; // Hertz
+@property (nonatomic) double interval; // seconds
 @property (nonatomic) double sampleDuration;  // Seconds
 
 @property (nonatomic, strong) NSNumber *isReady;
@@ -49,7 +51,7 @@
 @property (nonatomic, strong) ES_Activity *currentActivity;
 
 - (BOOL) record;
-
+-(void) turnOffRecording;
 -(void) _prepStage:(NSString*) fileName;
 
 //- (void) packHFData:(NSTimer *)timer;

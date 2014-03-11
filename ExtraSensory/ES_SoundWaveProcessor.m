@@ -24,6 +24,18 @@
     return HF_SOUND_FILE_DUR;
 }
 
+-(NSURL*) dataPath
+{
+    //--// Grab the user document's directory
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory
+                                          inDomain: NSUserDomainMask
+                                 appropriateForURL: nil
+                                            create: YES
+                                             error: nil];
+    return [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:@"data"]];
+}
+
 -(id) init {
     self = [super init];
     
@@ -32,17 +44,9 @@
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
         
-        //--// Grab the user document's directory
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory
-                                              inDomain: NSUserDomainMask
-                                     appropriateForURL: nil
-                                                create: YES
-                                                 error: nil];
+        //soundFileURLPre = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_PRE]];
         
-        soundFileURLPre = [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_PRE]];
-        
-        soundFileURLDur = [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_DUR]];
+        soundFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_DUR]];
         
         //--// Initialize high freq recorder
         // See here: http://developer.apple.com/library/ios/#DOCUMENTATION/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html
@@ -59,13 +63,13 @@
                                         [NSNumber numberWithInt: 1],                    AVNumberOfChannelsKey,
                                         [NSNumber numberWithInt: AVAudioQualityMedium], AVEncoderAudioQualityKey, nil];
         
-        NSError *hferrorPre = nil;
-        hfRecorderPre = [[AVAudioRecorder alloc] initWithURL: soundFileURLPre
-                                                    settings: recordSettings
-                                                       error: &hferrorPre];
-        if( hferrorPre != nil ) {
-            NSLog( @"[SoundWaveProcessor] ERROR: %@", [hferrorPre localizedDescription] );
-        }
+        //NSError *hferrorPre = nil;
+        //hfRecorderPre = [[AVAudioRecorder alloc] initWithURL: soundFileURLPre
+        //                                            settings: recordSettings
+        //                                               error: &hferrorPre];
+        //if( hferrorPre != nil ) {
+        //    NSLog( @"[SoundWaveProcessor] ERROR: %@", [hferrorPre localizedDescription] );
+        //}
         
         NSError *hferrorDur = nil;
         // records to the url of soundFileURLDur
@@ -79,13 +83,13 @@
         }
         
         
-        [hfRecorderPre setDelegate:self];
+        //[hfRecorderPre setDelegate:self];
         [hfRecorderDur setDelegate:self];
         
-        [hfRecorderPre prepareToRecord];
+        //[hfRecorderPre prepareToRecord];
         [hfRecorderDur prepareToRecord];
         
-        hfRecorderPre.meteringEnabled = YES;
+        //hfRecorderPre.meteringEnabled = YES;
         hfRecorderDur.meteringEnabled = YES;
         
     }
@@ -105,7 +109,7 @@
 
 - (void) startDurRecording {
     if( ![hfRecorderDur isRecording] ) {
-        [hfRecorderDur recordForDuration:20];
+        [hfRecorderDur recordForDuration:25];
     }
 }
 

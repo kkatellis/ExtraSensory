@@ -142,7 +142,8 @@
     else
     {
         [self.indicatorLabel setText: NOT_RECORDING_TEXT];
-        [self.scheduler setIsOn:NO];    }
+        [self.scheduler turnOffRecording];
+    }
     
 }
 
@@ -160,7 +161,7 @@
     else
     {
         [self.indicatorLabel setText: NOT_RECORDING_TEXT];
-        [self.scheduler setIsOn: NO];
+        [self.scheduler setIsOn:NO];
     }
 	// Do any additional setup after loading the view.
 }

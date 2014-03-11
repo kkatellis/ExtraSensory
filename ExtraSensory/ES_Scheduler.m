@@ -9,7 +9,6 @@
 
 #import "ES_Scheduler.h"
 #import "ES_SensorManager.h"
-#import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_HomeViewController.h"
 #import "ES_AppDelegate.h"
@@ -25,8 +24,6 @@
 @interface ES_Scheduler()
 
 @property (nonatomic, strong) ES_SensorManager *sensorManager;
-
-@property (nonatomic, strong) ES_NetworkAccessor *networkAccessor;
 
 @property int counter;
 
@@ -45,12 +42,6 @@
 
 @synthesize sensorManager = _sensorManager;
 
-@synthesize networkAccessor = _networkAccessor;
-
-@synthesize counter = _counter;
-
-@synthesize isReady = _isReady;
-
 @synthesize waitTime = _waitTime;
 
 @synthesize predictions = _predictions;
@@ -58,12 +49,6 @@
 @synthesize timer = _timer;
 
 @synthesize user = _user;
-
--(id) init {
-    self = [super init];
-    [self setIsReady: YES];
-    return self;
-}
 
 - (ES_User *) user
 {
@@ -109,29 +94,16 @@
     return _sensorManager;
 }
 
-- (ES_NetworkAccessor *) networkAccessor
-{
-    if (!_networkAccessor)
-    {
-        _networkAccessor = [ES_NetworkAccessor new];
-    }
-    return _networkAccessor;
-}
-
 - (ES_AppDelegate *) appDelegate
 {
     return (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
-
 
 - (void) sampleSaveSendCycler: (ES_HomeViewController *) homeViewController
 {
     self.homeViewController = homeViewController;
     
     NSLog( @"\n\nStart" );
-    NSLog(@"[sampleSaveSendCycler] Is ready? %d", self.isReady);
-    self.counter = 0;
-    
     
     //2)Making background task Asynchronous
     if([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)])
@@ -170,36 +142,8 @@
         NSLog(@"Multitasking Not Supported");
     }
     
-    if (self.isReady)
-    {
-        [self setIsReady:NO];
-        
-        [self firstOp];
-        
-        NSLog( @"time between sampling = %f", [self.user.settings.timeBetweenSampling doubleValue] );
-        
-        self.timer = [NSTimer scheduledTimerWithTimeInterval: [self.user.settings.timeBetweenSampling doubleValue]
-                                                      target: self
-                                                    selector: @selector(firstOp)
-                                                    userInfo: nil
-                                                     repeats: YES];
-    }
-    else
-    {
-        NSLog(@"not ready!");
-    }
-}
-
-- (void) activeFeedback: (ES_Activity *) activity
-{
-    NSLog( @"\n\nStart active feedback sample" );
-    
-    self.counter = 0;
-    [self.timer invalidate]; //turn off auto-sampling timer
-    [self setIsReady:NO];
-    NSLog(@"[active feedback] Is ready? %d", self.isReady);
-    [self firstOpActive: activity];
-    // turn auto-sampling timer back on
+    [self firstOp];
+    NSLog( @"time between sampling = %f", [self.user.settings.timeBetweenSampling doubleValue] );
     self.timer = [NSTimer scheduledTimerWithTimeInterval: [self.user.settings.timeBetweenSampling doubleValue]
                                                       target: self
                                                     selector: @selector(firstOp)
@@ -207,71 +151,45 @@
                                                      repeats: YES];
 }
 
+- (void) turnOffRecording
+{
+    NSLog(@"[scheduler] turnOffRecording");
+    [self setIsOn: NO];
+    [self.sensorManager turnOffRecording];
+    [self.timer invalidate];
+    self.timer = nil;
+    
+}
+
+- (void) activeFeedback: (ES_Activity *) activity
+{
+    NSLog( @"\n\nStart active feedback sample" );
+    
+    [self.timer invalidate]; //turn off auto-sampling timer
+    self.timer = nil;
+    [self firstOpActive: activity];
+    
+    // turn auto-sampling timer back on
+    self.timer = [NSTimer scheduledTimerWithTimeInterval: [self.user.settings.timeBetweenSampling doubleValue]
+                                                      target: self
+                                                selector: @selector(firstOp)
+                                                    userInfo: nil
+                                                     repeats: YES];
+}
 
 -(void) firstOp
 {
-    if (!self.isOn)
-    {
-        NSLog(@"not On");
-        [self.timer invalidate];
-        return;
-    }
-    
     NSLog(@"Record Sensors");
-    
+    [self.sensorManager setCurrentActivity: nil];
     [self.sensorManager record];
-    [self.sensorManager _prepStage:HF_DUR_FNAME];
-    
-    NSLog(@"Back from sensor Recording");
-    
-    NSTimer *timer;
-    
-    // after 25 seconds call secondOp which will upload data to network
-    timer = [NSTimer scheduledTimerWithTimeInterval: 25
-                                             target: self
-                                           selector: @selector(secondOp)
-                                           userInfo: nil
-                                            repeats: NO];
-    
-    
 }
 
 -(void) firstOpActive: (ES_Activity *) activity
 {
     NSLog(@"Record Sensors");
-    
     [self.sensorManager setCurrentActivity: activity];
     [self.sensorManager record];
-    [self.sensorManager _prepStage:HF_DUR_FNAME];
-    
-    
-    NSLog(@"Back from sensor Recording");
-    
-    NSTimer *timer;
-    
-    // after 25 seconds call secondOp which will upload data to network
-    timer = [NSTimer scheduledTimerWithTimeInterval: 25
-                                             target: self
-                                           selector: @selector(secondOp)
-                                           userInfo: nil
-                                            repeats: NO];
-    
 }
-
-
--(void) secondOp
-{
-    NSLog(@"upload");
-    
-    [self.networkAccessor upload];
-    
-    NSLog(@"back from uploading");
-    
-    [self setIsReady: YES];
-}
-
-
-
 
 
 @end

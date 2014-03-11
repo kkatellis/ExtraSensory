@@ -12,14 +12,11 @@
 
 @interface ES_Scheduler : NSObject
 
-@property BOOL isReady;
-
 @property BOOL isOn;
-
 @property (nonatomic, weak) ES_User* user;
 
 - (void) sampleSaveSendCycler: (ES_HomeViewController *) homeViewController;
+- (void) turnOffRecording;
 - (void) activeFeedback: (ES_Activity *) activity;
-- (id) init;
 
 @end

@@ -22,6 +22,8 @@
 + (NSString *) dataDirectory;
 + (NSString *) zipDirectory;
 + (void) writeData: (NSArray *)data;
++ (void) clearHFDataFile;
++ (void) clearLabelFile;
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
 + (void) deleteActivity: (ES_Activity *) activity;

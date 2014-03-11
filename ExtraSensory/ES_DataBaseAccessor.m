@@ -277,13 +277,12 @@
     }
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate pushOnNetworkStack: zipFile];
-
-    
+    [appDelegate.networkAccessor upload]; //upload the new file
 }
 
 + (void) writeActivity: (ES_Activity *)activity
 {
-    [self writeData: [self arrayFromActivity: activity]];
+    //[self writeData: [self arrayFromActivity: activity]];
     NSLog(@"activity labels: %@", activity.userCorrection);
     if (activity.userCorrection)
     {
@@ -302,8 +301,9 @@
 
 }
 
-+ (void) writeData:(NSArray *)array
++ (void) writeData2:(NSArray *)array
 {
+    //old version, use writeData:
     NSError * error1 = [NSError new];
     
     NSURL *soundFileURLDur;
@@ -382,6 +382,45 @@
         NSLog(@"Error writing data to file!!");
     }
 
+}
+
++ (void) writeData:(NSArray *)array
+{
+    NSError *error = [NSError new];
+    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: array options:0 error:&error];
+    NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
+    
+    BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
+    if (writeFileSuccess)
+    {
+        NSLog(@"Data successfully written to file");
+    }
+    else
+    {
+        NSLog(@"Error writing data to file!!");
+    }
+}
+
++ (void) clearHFDataFile
+{
+    NSError *error = [NSError new];
+    NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/HF_DUR_DATA.txt"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+    {
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+    }
+}
+
++ (void) clearLabelFile
+{
+    NSError *error = [NSError new];
+    NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/label.txt"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+    {
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+    }
 }
 
 + (void) writeLabel:(NSString *)label

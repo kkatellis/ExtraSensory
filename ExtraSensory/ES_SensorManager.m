@@ -22,9 +22,6 @@
 #define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
 #define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
 
-#define MIC_AVG         @"mic_avg_db"
-#define MIC_PEAK        @"mic_peak_db"
-
 @interface ES_SensorManager()
 
 @property NSTimer *timer;
@@ -37,28 +34,32 @@
 @implementation ES_SensorManager
 
 @synthesize soundProcessor = _soundProcessor;
-
 @synthesize currentLocation = _currentLocation;
-
 @synthesize motionManager = _motionManager;
-
 @synthesize locationManager = _locationManager;
-
 @synthesize timer = _timer;
-
 @synthesize soundTimer = _soundTimer;
-
 @synthesize counter = _counter;
-
 @synthesize sampleFrequency = _sampleFrequency;
-
+@synthesize interval = _interval;
 @synthesize sampleDuration = _sampleDuration;
-
 @synthesize isReady = _isReady;
-
 @synthesize user = _user;
-
 @synthesize currentActivity = _currentActivity;
+
+//--// API data keys
+#define LAT             @"lat"
+#define LNG             @"long"
+#define SPEED           @"speed"
+#define TIMESTAMP       @"timestamp"
+
+#define ACC_X           @"acc_x"
+#define ACC_Y           @"acc_y"
+#define ACC_Z           @"acc_z"
+
+#define GYR_X           @"gyro_x"
+#define GYR_Y           @"gyro_y"
+#define GYR_Z           @"gyro_z"
 
 -(ES_SoundWaveProcessor *) soundProcessor
 {
@@ -71,6 +72,7 @@
 
 - (ES_Activity *) currentActivity
 {
+    NSLog(@"[sensorManager] current activity getter");
     if (!_currentActivity)
     {
         _currentActivity = [ES_DataBaseAccessor newActivity];
@@ -113,6 +115,15 @@
     return _sampleFrequency;
 }
 
+- (double) interval
+{
+    if (!_interval)
+    {
+        _interval = 1 / [self.user.settings.sampleRate doubleValue];
+    }
+    return _interval;
+}
+
 - (int) samplesPerBatch
 {
     return (int)(self.sampleDuration * self.sampleFrequency);
@@ -150,25 +161,30 @@
         [[NSFileManager defaultManager] removeItemAtPath:HFFilePath error:nil];
         NSLog(@"removed any old sound file in direc");
     }
-
 }
 
 - (BOOL) record
 {
-    if (!self.isReady)
-    {
-        return NO;
+    // Setup HFData array
+    if( HFDataBundle) {
+        NSLog(@"clearing old HFDataBundle");
+        [HFDataBundle removeAllObjects];
     }
+    else {
+        HFDataBundle = [[NSMutableArray alloc] init];
+    }
+    [ES_DataBaseAccessor clearHFDataFile];
+    [ES_DataBaseAccessor clearLabelFile];
     
-    //NSLog( @"record" );
+    //NSLog( @"[sensorManager] current activity? %@", self.currentActivity );
+    //if (self.currentActivity == nil)
+   // /{
+    //    self.currentActivity = [ES_DataBaseAccessor newActivity];
+   // }
+    self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[[NSDate date] timeIntervalSince1970]];
     
-    double interval = 1 / [self.user.settings.sampleRate doubleValue];
-    NSLog(@"Sample interval = %f", interval);
-    
-    
-    self.motionManager.accelerometerUpdateInterval = interval;
-    self.motionManager.gyroUpdateInterval = interval;
-    
+    self.motionManager.accelerometerUpdateInterval = self.interval;
+    self.motionManager.gyroUpdateInterval = self.interval;
     
     [self.locationManager setDelegate: self];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
@@ -176,20 +192,17 @@
     [self.locationManager setPausesLocationUpdatesAutomatically: NO];
     [self.locationManager startUpdatingLocation];
     
-    
-    NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
-    
-    
+    //NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
     
     [self.motionManager startDeviceMotionUpdates];
     [self.motionManager startAccelerometerUpdates];
     [self.motionManager startGyroUpdates];
     
-    self.counter = 0;
-    
-    self.timer = [NSTimer scheduledTimerWithTimeInterval: interval
+    [self.soundProcessor startDurRecording];
+    [self.timer invalidate];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval: self.interval
                                                   target: self
-                                                selector: @selector(readSensorsIntoDictionary)
+                                                selector: @selector(packHFData)
                                                 userInfo: nil
                                                  repeats: YES];
     
@@ -198,7 +211,7 @@
 
 - (void) readSensorsIntoDictionary
 {
-    
+    // using the new function packHFData
     ES_SensorSample *sample = [ES_DataBaseAccessor newSensorSample];
     
     sample.speed       = [NSNumber numberWithDouble: self.currentLocation.speed ];
@@ -246,6 +259,60 @@
     }
 }
 
+-(void) turnOffRecording
+{
+    NSLog(@"[sensorManager] turnOffRecording");
+    if (self.currentActivity)
+    {
+        [ES_DataBaseAccessor deleteActivity:self.currentActivity]; //clean up the database
+        [self setCurrentActivity: nil];
+    }
+    [self.timer invalidate];
+    self.timer = nil;
+    [self.locationManager stopUpdatingLocation];
+    [self.motionManager stopAccelerometerUpdates];
+    [self.motionManager stopGyroUpdates];
+    [self.soundProcessor pauseDurRecording];
+}
+
+-(void) packHFData
+{
+    //--// Pack most recent data and place it within Data Bundle
+    if( [HFDataBundle count] % 100 == 0 ) {
+        NSLog( @"Collected %lu HF samples", (unsigned long)[HFDataBundle count]);
+    }
+    if ([HFDataBundle count] == self.samplesPerBatch )
+    {
+        [self.timer invalidate];
+        self.timer = nil;
+        NSLog(@"invalidated timer %@", self.timer);
+        
+        [self.locationManager stopUpdatingLocation];
+        [self.motionManager stopAccelerometerUpdates];
+        [self.motionManager stopGyroUpdates];
+        
+        [ES_DataBaseAccessor writeData: HFDataBundle];
+        [ES_DataBaseAccessor writeActivity: self.currentActivity];
+    }
+    
+    NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:10];
+    
+    [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.speed ] forKey: SPEED];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ] forKey: LNG];
+    
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ] forKey: TIMESTAMP];
+    
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ] forKey: GYR_X];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ] forKey: ACC_X];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ] forKey: GYR_Y];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ] forKey: ACC_Y];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ] forKey: GYR_Z];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ] forKey: ACC_Z];
+    
+    [HFDataBundle addObject:HFDataList];
+    
+}
 
 
 

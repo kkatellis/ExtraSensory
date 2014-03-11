@@ -27,7 +27,6 @@
 
 @interface ES_NetworkAccessor()
 
-
 @end
 
 @implementation ES_NetworkAccessor
@@ -35,6 +34,18 @@
 @synthesize recievedData = _recievedData;
 
 @synthesize predictions = _predictions;
+
+-(id) init
+{
+    self = [super init];
+    if( self != nil ) {
+    
+        //--// Set up reachability class for wifi check
+        wifiReachable = [Reachability reachabilityForLocalWiFi];
+        isReady = YES;
+    }
+    return self;
+}
 
 - (NSMutableArray *) predictions
 {
@@ -90,12 +101,16 @@
  */
 - (void) upload
 {
+    if (!isReady)
+    {
+        NSLog(@"[networkAccessor] notReady");
+        return;
+    }
+    isReady = NO;
     ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
     NSString *file = [appDelegate getFirstOnNetworkStack];
     
     NSLog( @"upload: %@", file);
-    
     if (!file)
     {
         NSLog( @"Nil file, not sending!");
@@ -103,35 +118,38 @@
     }
         
     NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
-    
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
     appDelegate.currentZipFilePath = fullPath;
     
     NSLog( @"[DataUploader] Attempting to upload %@", file );
-    
-    NSData *data = [NSData dataWithContentsOfFile: fullPath];
-    
-    if( !data || [data length] == 0 )
+    if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi )
     {
-        NSLog(@"no data!");
-    }
     
-    NSURL *url = [NSURL URLWithString: API_UPLOAD];
+        NSData *data = [NSData dataWithContentsOfFile: fullPath];
     
-    NSURLRequest *urlRequest = [self postRequestWithURL: url
+        if( !data || [data length] == 0 )
+        {
+            NSLog(@"no data!");
+        }
+    
+        NSURL *url = [NSURL URLWithString: API_UPLOAD];
+        NSURLRequest *urlRequest = [self postRequestWithURL: url
                                                 boundry: BOUNDARY
                                                    data: data
                                                fileName: file];
-    if( !urlRequest ) {
-        NSLog( @"url request failed");
-    }
+        if( !urlRequest ) {
+            NSLog( @"url request failed");
+        }
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest: urlRequest
+        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest: urlRequest
                                                                    delegate: appDelegate.networkAccessor];
     
-    if (!connection) {
-        NSLog( @"Connection Failed");
+        if (!connection) {
+            NSLog( @"Connection Failed");
+        }
+    } else {
+        NSLog(@"No Wifi, not uploading");
     }
     
     // Now wait for the URL connection to call us back.
@@ -258,10 +276,9 @@
         [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
 
         [appDelegate removeFirstOnNetworkStack];
-    
+        isReady = YES;
+        
         NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
-    
-    
         if ( [appDelegate.networkStack count] > 0 ){
             [self upload];
         }
