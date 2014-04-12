@@ -10,6 +10,7 @@
 #import "ES_AppDelegate.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_User.h"
+#import "ES_DataBaseAccessor.h"
 
 @implementation ES_PieChartView
 
@@ -56,7 +57,7 @@
     
     [self drawPieGraphAtPoint:midPoint withRadius:size andPercentages: self.activityPercentages inContext:context];*/
     
-    ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    //ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
     
     // Set up the slices
     /*NSArray *slices = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.4],
@@ -65,7 +66,18 @@
                        [NSNumber numberWithFloat:0.3],
                        nil];*/
     
-    NSArray *slices = [NSArray arrayWithObjects:appDelegate.user.activityStatistics.countLying,appDelegate.user.activityStatistics.countSitting, appDelegate.user.activityStatistics.countStanding, appDelegate.user.activityStatistics.countWalking,appDelegate.user.activityStatistics.countRunning,appDelegate.user.activityStatistics.countBicycling,appDelegate.user.activityStatistics.countDriving, nil];
+    NSMutableDictionary *activityCounts = [ES_DataBaseAccessor getTodaysCounts];
+    NSArray *slices = [NSArray arrayWithObjects:
+                       activityCounts[@"Lying down"],
+                       activityCounts[@"Sitting"],
+                       activityCounts[@"Standing"],
+                       activityCounts[@"Walking"],
+                       activityCounts[@"Running"],
+                       activityCounts[@"Bicycling"],
+                       activityCounts[@"Driving"],
+                       nil];
+    
+    //NSArray *slices = [NSArray arrayWithObjects:appDelegate.user.activityStatistics.countLying,appDelegate.user.activityStatistics.countSitting, appDelegate.user.activityStatistics.countStanding, appDelegate.user.activityStatistics.countWalking,appDelegate.user.activityStatistics.countRunning,appDelegate.user.activityStatistics.countBicycling,appDelegate.user.activityStatistics.countDriving, nil];
     
     self.sliceArray = slices;
     // Set up the colors for the slices
@@ -73,7 +85,7 @@
                        (id)[UIColor blueColor].CGColor,
                        (id)[UIColor greenColor].CGColor,
                        (id)[UIColor yellowColor].CGColor,(id)[UIColor orangeColor].CGColor,(id)[UIColor redColor].CGColor,(id)[UIColor whiteColor].CGColor, nil];
-    
+        
     self.colorsArray = colors;
     
     self.sliceArray = [self countsToPercentages:slices];
@@ -111,7 +123,7 @@
     CGPoint circleCenter = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
     
     // Set the radius of your pie chart
-    self.circleRadius = 125;
+    self.circleRadius = 115;
     
     for (int i = 0; i < [_sliceArray count]; i++) {
         

@@ -14,8 +14,8 @@
 #import "ES_User.h"
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
-#import "ES_SensorSample.h"
-#import "ES_UserActivityLabel.h"
+#import "ES_ActivitiesStrings.h"
+#import "ES_UserActivityLabels.h"
 
 @implementation ES_DataBaseAccessor
 
@@ -44,7 +44,6 @@
         user.activityStatistics = [NSEntityDescription insertNewObjectForEntityForName:@"ES_ActivityStatistics" inManagedObjectContext:[self context]];
         user.uuid = [[NSUUID UUID] UUIDString];
         user.activityStatistics.timeSamplingBegan = [NSNumber numberWithDouble: [[NSDate date] timeIntervalSince1970]];
-        
         [self save];
     }
     else if ([users count] == 1)
@@ -81,100 +80,143 @@
 
 + (ES_Activity *) newActivity
 {
+    NSLog(@"[databaseAccessor] creating new activity!");
     return [NSEntityDescription insertNewObjectForEntityForName: @"ES_Activity" inManagedObjectContext:[self context]];
 }
 
 + (void) deleteActivity: (ES_Activity *) activity
 {
-    NSLog(@"deleting activity at %@", activity.timestamp);
+    NSLog(@"[databaseAccessor] deleting activity at %@", activity.timestamp);
     [[self context] deleteObject:activity];
 }
 
-+ (ES_SensorSample *) newSensorSample
++ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity
 {
-    return [NSEntityDescription insertNewObjectForEntityForName:@"ES_SensorSample" inManagedObjectContext:[self context]];
+    NSSet *oldlabels = activity.userActivityLabels;
+    
+    if ([oldlabels count] > 0)
+    {
+        [activity removeUserActivityLabels:oldlabels];
+    }
+    
+    NSMutableSet *newlabels = [NSMutableSet new];
+    
+    for (NSString* label in labels)
+    {
+        ES_UserActivityLabels* newlabel = [self getUserActivityLabelWithName:label];
+        [newlabels addObject:newlabel];
+    }
+    [activity addUserActivityLabels:newlabels];
+    
 }
 
-+ (ES_UserActivityLabel *) getUserActivityLabel: (NSString *)label
++ (ES_UserActivityLabels*) getUserActivityLabelWithName:(NSString*)label
 {
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabel"];
     NSError *error = [NSError new];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabels"];
+    [fetchRequest setFetchLimit:1];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name = %@", label]];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
     
-    if ([[self context] countForFetchRequest:fetchRequest error:&error])
+    if ([results count] > 0)
     {
-        ES_UserActivityLabel *UserActivityLabel = [[[self context] executeFetchRequest:fetchRequest error:&error] firstObject];
-        NSLog(@"found UserActivityLabel: %@", UserActivityLabel.name);
-        return UserActivityLabel;
+        return [results firstObject];
     }
     // if not exists, just insert a new entity
     else
     {
-        ES_UserActivityLabel *UserActivityLabel = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabel"
-                                              inManagedObjectContext:[self context]];
-        UserActivityLabel.name = label;
-        NSLog(@"added a new entry for UserActivityLabel: %@", UserActivityLabel.name);
-        return UserActivityLabel;
+        ES_UserActivityLabels *userActivity = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabels"
+                                                                                inManagedObjectContext:[self context]];
+        userActivity.name = label;
+        return userActivity;
     }
-}
-
-+ (void)addUserActivityLabel:(NSString *)label toActivity:(ES_Activity *)activity
-{
-    ES_UserActivityLabel *UserActivityLabel = [self getUserActivityLabel:label];
-    [activity addUserActivityLabelsObject:UserActivityLabel];
-}
-
-+ (void)removeUserActivityLabel:(NSString *)label fromActivity:(ES_Activity *)activity
-{
-    ES_UserActivityLabel *UserActivityLabel = [self getUserActivityLabel:label];
-    [activity removeUserActivityLabelsObject:UserActivityLabel];
 }
 
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time
 {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ES_Activity" inManagedObjectContext:[self context]];
-    [fetchRequest setEntity:entity];
-        
-    //NSLog(@"attributeValue = %@", [NSString stringWithFormat: @"%@", time] );
-    
-    //NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(timestamp == %@)", attributeValue ];
-    
-    //[fetchRequest setPredicate:predicate];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
+    [fetchRequest setFetchLimit:1];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat: @"(timestamp = %@)", time ]];
     
     NSError *error = [NSError new];
-    
     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
     
-    //NSLog(@"nubmer of results = %lu", (unsigned long)[results count]);
-    
-    ES_Activity *resultActivity;
-    
-    for (ES_Activity *a in results)
+    if ([results count])
     {
-        NSNumber *t = a.timestamp;
-        
-        //NSLog(@"time = %@, t = %@", time, t );
-        
-        if ( [t intValue] == [time intValue] ) resultActivity = a;
-        
-            
-    }
-    
-    
-    NSLog(@"number of matching hits = %lu", (unsigned long)[results count]);
-   // NSLog(@"error: %@", [error localizedDescription]);
-    
-    if ([results count] > 0 )
-    {
-        return resultActivity;
+        return [results firstObject];
     }
     else return nil;
-    
-//    for ( id a in results )
-//    {
-//        NSLog(@"result: %@", a);
-//    }
 }
+
++ (ES_Activity *) getMostRecentActivity
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
+    [fetchRequest setFetchLimit:10];
+    NSNumber *past = [NSNumber numberWithInt:(int)[NSDate dateWithTimeIntervalSinceNow:-5*60]]; //in seconds
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp > %@", past]];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    
+    NSError *error = [NSError new];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+        
+    NSLog(@"number of matching hits = %lu", (unsigned long)[results count]);
+    for (ES_Activity *activity in results)
+    {
+        if (activity.serverPrediction || activity.userCorrection)
+        {
+            return activity;
+        }
+    }
+    return nil;
+}
+
++ (NSMutableDictionary *) getTodaysCounts
+{
+    NSArray *mainActivities = [ES_ActivitiesStrings mainActivities];
+    NSMutableDictionary *counts = [NSMutableDictionary new];
+    for (NSString *act in mainActivities)
+    {
+        [counts setObject:[NSNumber numberWithInt:0] forKey:act];
+    }
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
+    [fetchRequest setFetchLimit:0];
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *date = [NSDate date];
+    NSDateComponents *comps = [cal components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
+                                     fromDate:date];
+    NSDate *today = [cal dateFromComponents:comps];
+    NSNumber *todayNum = [NSNumber numberWithInt:(int)today];
+    
+    //NSNumber *yesterday = [NSNumber numberWithInt:(int)[NSDate dateWithTimeIntervalSinceNow:-24*60*60]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp > %@", todayNum]];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    
+    NSError *error = [NSError new];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+    
+    for (ES_Activity *activity in results)
+    {
+        if (activity.userCorrection)
+        {
+            //count the userCorrection if there is one
+            int newCount = (int)[counts[activity.userCorrection] integerValue] + 1;
+            counts[activity.userCorrection]  = [NSNumber numberWithInt:newCount];
+        }
+        else if (activity.serverPrediction)
+        {
+            //otherwise count the serverPrediction
+            int newCount = (int)[counts[activity.serverPrediction] integerValue] + 1;
+            counts[activity.serverPrediction]  = [NSNumber numberWithInt:newCount];
+        }
+    }
+    //NSLog(@"Today's counts: %@", counts);
+    return counts;
+}
+
+
+
 
 + (void) save
 {
@@ -286,11 +328,11 @@
     NSLog(@"activity labels: %@", activity.userCorrection);
     if (activity.userCorrection)
     {
-        [self writeLabel: activity.userCorrection];
+        [self writeLabels: activity];
     }
     
     NSString *zipFileName = [self zipFileName2: activity.timestamp];
-    activity.zipFilePath = [[self zipDirectory] stringByAppendingString:zipFileName ];
+    //activity.zipFilePath = [[self zipDirectory] stringByAppendingString:zipFileName ];
 
     NSTimer *timer;
     timer = [NSTimer scheduledTimerWithTimeInterval: 2
@@ -423,10 +465,34 @@
     }
 }
 
-+ (void) writeLabel:(NSString *)label
++ (void) writeLabels:(ES_Activity*)activity
 {
     NSError *error = [NSError new];
-    NSDictionary *feedback = [[NSDictionary alloc] initWithObjects:@[label] forKeys:@[@"label"]];
+    
+    NSMutableArray* keys = [NSMutableArray arrayWithArray:@[@"mainActivity"]];
+    NSMutableArray* values = [NSMutableArray arrayWithArray:@[activity.userCorrection]];
+    
+    if (activity.userActivityLabels)
+    {
+        NSMutableArray *secondaryLabels = [NSMutableArray new];
+        for (ES_UserActivityLabels* label in activity.userActivityLabels)
+        {
+            [secondaryLabels addObject:label.name];
+        }
+        [keys addObject:@"secondaryActivities"];
+        [values addObject:secondaryLabels];
+    }
+    if (activity.mood)
+    {
+        [keys addObject:@"mood"];
+        [values addObject:activity.mood];
+    }
+    
+    NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values
+                                                           forKeys: keys];
+    
+    NSLog(@"feedback dictionary: %@", feedback);
+    
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
     NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/label.txt"];
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -450,27 +516,27 @@
 }
 
 
-+ (NSArray *) arrayFromActivity: (ES_Activity *)activity
-{
-    NSArray *objects = [NSArray new];
-    
-    NSArray *samplesArray = [activity.sensorSamples array];
-    
-    NSArray *keysArray = [NSArray arrayWithObjects: @"speed", @"lat", @"longitude", @"time", @"gyro_x", @"acc_x", @"gyro_y", @"acc_y", @"gyro_z", @"acc_z", @"mic_peak_db",  @"mic_avg_db", nil ];
-    
-    for ( ES_SensorSample *s in samplesArray )
-    {
-        NSDictionary *dict = [s dictionaryWithValuesForKeys: keysArray ];
-        NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary: dict];
-        
-        [mDict setValue: [dict objectForKey: @"longitude"] forKey: @"long"];
-        
-        [mDict removeObjectForKey: @"longitude"];
-        
-        objects = [objects arrayByAddingObject: mDict];
-    }
-    
-    return objects;
-}
+//+ (NSArray *) arrayFromActivity: (ES_Activity *)activity
+//{
+//    NSArray *objects = [NSArray new];
+//    
+//    NSArray *samplesArray = [activity.sensorSamples array];
+//    
+//    NSArray *keysArray = [NSArray arrayWithObjects: @"speed", @"lat", @"longitude", @"time", @"gyro_x", @"acc_x", @"gyro_y", @"acc_y", @"gyro_z", @"acc_z", @"mic_peak_db",  @"mic_avg_db", nil ];
+//    
+//    for ( ES_SensorSample *s in samplesArray )
+//    {
+//        NSDictionary *dict = [s dictionaryWithValuesForKeys: keysArray ];
+//        NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary: dict];
+//        
+//        [mDict setValue: [dict objectForKey: @"longitude"] forKey: @"long"];
+//        
+//        [mDict removeObjectForKey: @"longitude"];
+//        
+//        objects = [objects arrayByAddingObject: mDict];
+//    }
+//    
+//    return objects;
+//}
 
 @end

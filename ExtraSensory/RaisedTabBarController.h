@@ -10,4 +10,6 @@
 
 @interface RaisedTabBarController : UITabBarController
 
+-(void) addCenterButtonWithImage:(UIImage*)buttonImage highlightImage:(UIImage*)highlightImage;
+
 @end

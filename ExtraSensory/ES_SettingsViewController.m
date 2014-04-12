@@ -9,13 +9,29 @@
 #import "ES_SettingsViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
+#import "ES_Scheduler.h"
 
 @interface ES_SettingsViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
+@property (strong, nonatomic) IBOutlet UISwitch *schedulerSwitch;
+@property (strong, nonatomic) IBOutlet UILabel *indicatorLabel;
+@property (strong, nonatomic) ES_AppDelegate* appDelegate;
 @end
 
+#define RECORDING_TEXT @"ON"
+#define NOT_RECORDING_TEXT @"OFF"
+
 @implementation ES_SettingsViewController
+
+- (ES_AppDelegate *) appDelegate
+{
+    if (!_appDelegate)
+    {
+        _appDelegate = [[UIApplication sharedApplication] delegate];
+    }
+    return _appDelegate;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -29,10 +45,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [self.uuidLabel setText: appDelegate.user.uuid];
-
+    [self.uuidLabel setText: self.appDelegate.user.uuid];
 	// Do any additional setup after loading the view.
 }
 
@@ -40,6 +53,26 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (ES_Scheduler *)scheduler
+{
+    return self.appDelegate.scheduler;
+}
+
+- (IBAction)startScheduler:(UISwitch *)sender
+{
+    if (sender.isOn)
+    {
+        [self.indicatorLabel setText: RECORDING_TEXT];
+        self.appDelegate.dataCollectionOn = YES;
+        [[self scheduler] sampleSaveSendCycler];    }
+    else
+    {
+        [self.indicatorLabel setText: NOT_RECORDING_TEXT];
+        [[self scheduler] turnOffRecording];
+    }
+    
 }
 
 @end

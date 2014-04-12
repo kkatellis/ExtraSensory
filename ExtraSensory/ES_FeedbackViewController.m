@@ -85,9 +85,7 @@
     ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
     
     int newCount = [[appDelegate.user.activityStatistics valueForKey: self.databaseReferenceString] intValue];
-    
     newCount++;
-    
     [appDelegate.user.activityStatistics setValue: [NSNumber numberWithInt: newCount] forKey: self.databaseReferenceString];
     NSLog(@"activity:%@",self.fromCell.activity);
     [appDelegate.networkAccessor sendFeedback:self.fromCell.activity];

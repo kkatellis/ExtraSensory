@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5063" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ES_Activity" representedClassName="ES_Activity" syncable="YES">
-        <attribute name="hasBeenSent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isPredictionCorrect" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="isPredictionVerified" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="numberOfSamples" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="sampleFrequency" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="isPredictionVerified" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="mood" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="serverPrediction" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="userCorrection" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="zipFilePath" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="sensorSamples" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="ES_SensorSample" inverseName="activity" inverseEntity="ES_SensorSample" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_User" inverseName="activities" inverseEntity="ES_User" syncable="YES"/>
-        <relationship name="userActivityLabels" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_UserActivityLabel" inverseName="activity" inverseEntity="ES_UserActivityLabel" syncable="YES"/>
+        <relationship name="userActivityLabels" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_UserActivityLabels" inverseName="activity" inverseEntity="ES_UserActivityLabels" syncable="YES"/>
     </entity>
     <entity name="ES_ActivityStatistics" representedClassName="ES_ActivityStatistic" syncable="YES">
         <attribute name="countActivities" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -27,22 +23,6 @@
         <attribute name="timeSamplingBegan" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="timeSpentSampling" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_User" inverseName="activityStatistics" inverseEntity="ES_User" syncable="YES"/>
-    </entity>
-    <entity name="ES_SensorSample" representedClassName="ES_SensorSample" syncable="YES">
-        <attribute name="acc_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="acc_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="acc_z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="gyro_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="gyro_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="gyro_z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="mic_avg_db" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="mic_peak_db" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_Activity" inverseName="sensorSamples" inverseEntity="ES_Activity" syncable="YES"/>
     </entity>
     <entity name="ES_Settings" representedClassName="ES_Settings" syncable="YES">
         <attribute name="sampleDuration" attributeType="Double" minValueString="5" defaultValueString="20" syncable="YES"/>
@@ -58,20 +38,19 @@
         <relationship name="settings" maxCount="1" deletionRule="Nullify" destinationEntity="ES_Settings" inverseName="user" inverseEntity="ES_Settings" syncable="YES"/>
         <relationship name="userPopulation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_UserPopulation" inverseName="users" inverseEntity="ES_UserPopulation" syncable="YES"/>
     </entity>
-    <entity name="ES_UserActivityLabel" representedClassName="ES_UserActivityLabel" syncable="YES">
+    <entity name="ES_UserActivityLabels" representedClassName="ES_UserActivityLabels" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_Activity" inverseName="userActivityLabels" inverseEntity="ES_Activity" syncable="YES"/>
+        <relationship name="activity" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_Activity" inverseName="userActivityLabels" inverseEntity="ES_Activity" syncable="YES"/>
     </entity>
     <entity name="ES_UserPopulation" representedClassName="ES_UserPopulation" syncable="YES">
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_User" inverseName="userPopulation" inverseEntity="ES_User" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ES_Activity" positionX="-173" positionY="-18" width="128" height="208"/>
-        <element name="ES_ActivityStatistics" positionX="-182" positionY="225" width="128" height="208"/>
-        <element name="ES_SensorSample" positionX="-2" positionY="-81" width="128" height="253"/>
-        <element name="ES_Settings" positionX="-549" positionY="113" width="128" height="103"/>
-        <element name="ES_User" positionX="-371" positionY="101" width="128" height="133"/>
-        <element name="ES_UserActivityLabel" positionX="-2" positionY="197" width="128" height="73"/>
-        <element name="ES_UserPopulation" positionX="-416" positionY="284" width="128" height="58"/>
+        <element name="ES_Activity" positionX="7" positionY="26" width="146" height="178"/>
+        <element name="ES_ActivityStatistics" positionX="430" positionY="-99" width="128" height="210"/>
+        <element name="ES_Settings" positionX="378" positionY="-222" width="128" height="105"/>
+        <element name="ES_User" positionX="187" positionY="-171" width="128" height="135"/>
+        <element name="ES_UserPopulation" positionX="171" positionY="-297" width="128" height="60"/>
+        <element name="ES_UserActivityLabels" positionX="225" positionY="81" width="128" height="73"/>
     </elements>
 </model>

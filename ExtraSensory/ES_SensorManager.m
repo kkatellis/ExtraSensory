@@ -12,7 +12,6 @@
 #import "ES_User.h"
 #import "ES_AppDelegate.h"
 #import "ES_Settings.h"
-#import "ES_SensorSample.h"
 #import "ES_Activity.h"
 #import "ES_SoundWaveProcessor.h"
 
@@ -26,8 +25,9 @@
 
 @property NSTimer *timer;
 @property NSTimer *soundTimer;
-
 @property NSNumber *counter;
+
+@property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
 @end
 
@@ -72,7 +72,6 @@
 
 - (ES_Activity *) currentActivity
 {
-    NSLog(@"[sensorManager] current activity getter");
     if (!_currentActivity)
     {
         _currentActivity = [ES_DataBaseAccessor newActivity];
@@ -84,10 +83,18 @@
 {
     if (!_user)
     {
-        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        _user = appDelegate.user;
+        _user = self.appDelegate.user;
     }
     return _user;
+}
+
+- (ES_AppDelegate *) appDelegate
+{
+    if (!_appDelegate)
+    {
+        _appDelegate = [[UIApplication sharedApplication] delegate];
+    }
+    return _appDelegate;
 }
 
 
@@ -165,6 +172,8 @@
 
 - (BOOL) record
 {
+    //[ES_DataBaseAccessor getMostRecentActivity];
+    
     // Setup HFData array
     if( HFDataBundle) {
         NSLog(@"clearing old HFDataBundle");
@@ -176,11 +185,6 @@
     [ES_DataBaseAccessor clearHFDataFile];
     [ES_DataBaseAccessor clearLabelFile];
     
-    //NSLog( @"[sensorManager] current activity? %@", self.currentActivity );
-    //if (self.currentActivity == nil)
-   // /{
-    //    self.currentActivity = [ES_DataBaseAccessor newActivity];
-   // }
     self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[[NSDate date] timeIntervalSince1970]];
     
     self.motionManager.accelerometerUpdateInterval = self.interval;
@@ -209,63 +213,66 @@
     return YES;
 }
 
-- (void) readSensorsIntoDictionary
-{
-    // using the new function packHFData
-    ES_SensorSample *sample = [ES_DataBaseAccessor newSensorSample];
-    
-    sample.speed       = [NSNumber numberWithDouble: self.currentLocation.speed ];
-    sample.lat         = [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ];
-    sample.longitude   = [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ];
-    
-    sample.time        = [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ];
-    
-    
-    sample.gyro_x      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ];
-    sample.acc_x       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ];
-    sample.gyro_y      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ];
-    sample.acc_y       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ];
-    sample.gyro_z      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ];
-    sample.acc_z       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ];
-    
-    // add samples for avg and peak db
-    
-    
-    [self.currentActivity addSensorSamplesObject: sample];
-    
-    self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
-    
-    if ([self.counter integerValue] >= 800 )
-    {
-        self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[[NSDate date] timeIntervalSince1970]];
-        [self.timer invalidate];
-        
-        self.counter = 0;
-        
-        [self.locationManager stopUpdatingLocation];
-        [self.motionManager stopAccelerometerUpdates];
-        [self.motionManager stopGyroUpdates];
-       // [self.soundProcessor pauseDurRecording];
-       // stop recording sound
-        
-        [ES_DataBaseAccessor writeActivity: self.currentActivity];
-        
-        [self.user addActivitiesObject: self.currentActivity];
-        
-        self.currentActivity = [ES_DataBaseAccessor newActivity];
-        
-        self.isReady = [NSNumber numberWithBool: YES];
-        
-    }
-}
+//- (void) readSensorsIntoDictionary
+//{
+//    // using the new function packHFData
+//    ES_SensorSample *sample = [ES_DataBaseAccessor newSensorSample];
+//    
+//    sample.speed       = [NSNumber numberWithDouble: self.currentLocation.speed ];
+//    sample.lat         = [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ];
+//    sample.longitude   = [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ];
+//    
+//    sample.time        = [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ];
+//    
+//    
+//    sample.gyro_x      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ];
+//    sample.acc_x       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ];
+//    sample.gyro_y      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ];
+//    sample.acc_y       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ];
+//    sample.gyro_z      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ];
+//    sample.acc_z       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ];
+//    
+//    // add samples for avg and peak db
+//    
+//    
+//    [self.currentActivity addSensorSamplesObject: sample];
+//    
+//    self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
+//    
+//    if ([self.counter integerValue] >= 800 )
+//    {
+//        self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[[NSDate date] timeIntervalSince1970]];
+//        [self.timer invalidate];
+//        
+//        self.counter = 0;
+//        
+//        [self.locationManager stopUpdatingLocation];
+//        [self.motionManager stopAccelerometerUpdates];
+//        [self.motionManager stopGyroUpdates];
+//       // [self.soundProcessor pauseDurRecording];
+//       // stop recording sound
+//        
+//        [ES_DataBaseAccessor writeActivity: self.currentActivity];
+//        
+//        [self.user addActivitiesObject: self.currentActivity];
+//        
+//        self.currentActivity = [ES_DataBaseAccessor newActivity];
+//        self.isReady = [NSNumber numberWithBool: YES];
+//        
+//    }
+//}
 
 -(void) turnOffRecording
 {
     NSLog(@"[sensorManager] turnOffRecording");
-    if (self.currentActivity)
+    if (!self.appDelegate.currentlyUploading)
     {
-        [ES_DataBaseAccessor deleteActivity:self.currentActivity]; //clean up the database
-        [self setCurrentActivity: nil];
+        if (self.currentActivity)
+        {
+            // delete a partially created activity
+            [ES_DataBaseAccessor deleteActivity:self.currentActivity];
+            [self setCurrentActivity: nil];
+        }
     }
     [self.timer invalidate];
     self.timer = nil;

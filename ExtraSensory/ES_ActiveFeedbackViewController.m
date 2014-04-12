@@ -12,6 +12,9 @@
 #import "ES_ActivitiesStrings.h"
 #import "ES_Scheduler.h"
 #import "ES_AppDelegate.h"
+#import "ES_User.h"
+#import "ES_ActivityStatistic.h"
+
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -177,6 +180,10 @@
 {
     NSLog(@"Submit Feedback");
     [self.scheduler activeFeedback:self.activity];
+    //ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    //int newCount = [[appDelegate.user.activityStatistics valueForKey: self.activity.userCorrection] intValue];
+    //newCount++;
+    //[appDelegate.user.activityStatistics setValue: [NSNumber numberWithInt: newCount] forKey: self.activity.userCorrection];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:NULL];
     //[self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -222,18 +229,31 @@
         if ([segue.identifier isEqualToString:MAIN_ACTIVITY])
         {
             self.mainActivity = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
-            if (self.mainActivity)
+            if ([self.mainActivity count] > 0)
             {
-                self.activity.userCorrection = self.mainActivity.firstObject;
+                self.activity.userCorrection = [self.mainActivity firstObject];
+            }
+            else
+            {
+                self.activity.userCorrection = nil;
             }
         }
         else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
         {
             self.secondaryActivities = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            [ES_DataBaseAccessor setSecondaryActivities:self.secondaryActivities forActivity:self.activity];
         }
         else if ([segue.identifier isEqualToString:MOOD])
         {
             self.mood = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            if ([self.mood count] > 0)
+            {
+                self.activity.mood = [self.mood firstObject];
+            }
+            else
+            {
+                self.activity.mood = nil;
+            }
         }
     }
 }

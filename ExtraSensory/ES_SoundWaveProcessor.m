@@ -7,6 +7,9 @@
 //
 //
 #import "ES_SoundWaveProcessor.h"
+#import "ES_AppDelegate.h"
+#import "ES_User.h"
+#import "ES_Settings.h"
 
 #define HF_SOUND_FILE_PRE   @"HF_SOUNDWAVE_PRE"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
@@ -15,6 +18,17 @@
 
 @synthesize soundFileURLPre, soundFileURLDur;
 @synthesize hfRecorderPre, hfRecorderDur;
+@synthesize sampleDuration = _sampleDuration;
+
+- (double) sampleDuration
+{
+    if (!_sampleDuration)
+    {
+        ES_AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        _sampleDuration = [delegate.user.settings.sampleDuration doubleValue];
+    }
+    return _sampleDuration;
+}
 
 + (NSString*) hfSoundFileNamePre {
     return HF_SOUND_FILE_PRE;
@@ -77,7 +91,6 @@
                                                     settings: recordSettings
                                                        error: &hferrorDur];
         
-        NSLog(@" the url of sound file being written to is :%@", soundFileURLDur);
         if( hferrorDur != nil ) {
             NSLog( @"[SoundWaveProcessor] ERROR: %@", [hferrorDur localizedDescription] );
         }
@@ -109,7 +122,7 @@
 
 - (void) startDurRecording {
     if( ![hfRecorderDur isRecording] ) {
-        [hfRecorderDur recordForDuration:25];
+        [hfRecorderDur recordForDuration:self.sampleDuration];
     }
 }
 

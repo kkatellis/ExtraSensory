@@ -7,9 +7,11 @@
 //
 
 #import "ES_SwapViewController.h"
+#import "ES_ContainerViewController.h"
 
 @interface ES_SwapViewController ()
-
+@property (nonatomic, weak) ES_ContainerViewController *containerViewController;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @end
 
 @implementation ES_SwapViewController
@@ -33,6 +35,16 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"embedContainer"]) {
+        self.containerViewController = segue.destinationViewController;
+    }
+}
+- (IBAction)swap:(UISegmentedControl *)sender {
+    [self.containerViewController swapViewControllers];
 }
 
 @end

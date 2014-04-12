@@ -14,6 +14,4 @@
 
 @property (nonatomic, strong) ES_SettingsModel *settings;
 
-
-
 @end

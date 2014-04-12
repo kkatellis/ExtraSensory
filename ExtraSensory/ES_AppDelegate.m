@@ -37,6 +37,8 @@
 
 @synthesize activitiesToUpload = _activitiesToUpload;
 
+@synthesize mostRecentActivity = _mostRecentActivity;
+
 - (NSMutableArray *)activitiesToUpload
 {
     if (!_activitiesToUpload)
@@ -162,11 +164,9 @@
     [self.locationManager startUpdatingLocation];
     UIImage *navBackgroundImage = [UIImage imageNamed:@"iOS7-blue"];
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
-    
-    //[self redirectNSLogToDocuments];
+
+    [self.scheduler sampleSaveSendCycler];
 }
-
-
 
 - (NSUUID *)uuid
 {

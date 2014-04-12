@@ -9,10 +9,15 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
+#import "ES_Activity.h"
 
 @class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler;
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate>
+
+@property BOOL dataCollectionOn;
+
+@property BOOL currentlyUploading;
 
 @property (strong, nonatomic) UIWindow *window;
 
@@ -44,10 +49,10 @@
 
 @property (strong, nonatomic) NSMutableArray *activitiesToUpload;
 
+@property (strong, nonatomic) ES_Activity *mostRecentActivity;
+
 - (NSString *) getFirstOnNetworkStack;
-
 - (void) removeFirstOnNetworkStack;
-
 - (void) pushOnNetworkStack: (NSString *) file;
 - (NSString *) popOffNetworkStack;
 

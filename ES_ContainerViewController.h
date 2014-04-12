@@ -10,4 +10,6 @@
 
 @interface ES_ContainerViewController : UIViewController
 
+-(void)swapViewControllers;
+
 @end

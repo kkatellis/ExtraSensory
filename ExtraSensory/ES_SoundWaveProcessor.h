@@ -22,6 +22,7 @@
 @property (nonatomic, retain) AVAudioRecorder   *hfRecorderDur;
 @property (nonatomic, retain) NSURL             *soundFileURLPre;
 @property (nonatomic, retain) NSURL             *soundFileURLDur;
+@property (nonatomic) double sampleDuration;  // Seconds
 
 + (NSString*) hfSoundFileNamePre;
 + (NSString*) hfSoundFileNameDur;

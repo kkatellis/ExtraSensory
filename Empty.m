@@ -10,4 +10,9 @@
 
 @implementation Empty
 
+-(void) perform
+{
+    
+}
+
 @end

@@ -27,6 +27,8 @@
 
 @interface ES_NetworkAccessor()
 
+@property (nonatomic, strong) ES_AppDelegate* appDelegate;
+
 @end
 
 @implementation ES_NetworkAccessor
@@ -45,6 +47,15 @@
         isReady = YES;
     }
     return self;
+}
+
+-(ES_AppDelegate*) appDelegate
+{
+    if (!_appDelegate)
+    {
+        _appDelegate = [[UIApplication sharedApplication] delegate];
+    }
+    return _appDelegate;
 }
 
 - (NSMutableArray *) predictions
@@ -107,20 +118,20 @@
         return;
     }
     isReady = NO;
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSString *file = [appDelegate getFirstOnNetworkStack];
+    NSString *file = [self.appDelegate getFirstOnNetworkStack];
     
     NSLog( @"upload: %@", file);
     if (!file)
     {
         NSLog( @"Nil file, not sending!");
+        isReady = YES;
         return;
     }
         
     NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
-    appDelegate.currentZipFilePath = fullPath;
+    self.appDelegate.currentZipFilePath = fullPath;
     
     NSLog( @"[DataUploader] Attempting to upload %@", file );
     if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi )
@@ -143,13 +154,16 @@
         }
     
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest: urlRequest
-                                                                   delegate: appDelegate.networkAccessor];
-    
+                                                                   delegate: self.appDelegate.networkAccessor];
+        self.appDelegate.currentlyUploading = YES;
         if (!connection) {
             NSLog( @"Connection Failed");
+            isReady = YES;
+            self.appDelegate.currentlyUploading = NO;
         }
     } else {
         NSLog(@"No Wifi, not uploading");
+        isReady = YES;
     }
     
     // Now wait for the URL connection to call us back.
@@ -208,17 +222,17 @@
 
 - (void) connection: (NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
+    NSLog( @"Network Stack size = %lu", (unsigned long)[self.appDelegate.networkStack count]);
     connection = nil;
     self.recievedData = nil;
     NSLog( @"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLErrorKey]);
+    self.appDelegate.currentlyUploading = NO;
+    isReady = YES;
 }
 
 - (void) connectionDidFinishLoading: (NSURLConnection *)connection
 {
     NSError *error;
-    
     
     // Convert recieved data from data into characters, store in reply
     NSString *reply = [[NSString alloc] initWithData: self.recievedData
@@ -232,14 +246,13 @@
     if (predictedActivity){
         NSNumber *time = [NSNumber numberWithDouble: [[response objectForKey: @"timestamp"] doubleValue]];
     
-        [self updateCounts: predictedActivity];
+        //[self updateCounts: predictedActivity];
     
         NSLog(@"time = %@", time);
     
         NSDateFormatter *dateFormatter = [NSDateFormatter new];
         [dateFormatter setDateFormat:@"hh:mm"];
         NSString *dateString = [NSString stringWithFormat: @"%@ - ", [dateFormatter stringFromDate: [NSDate date]]];
-    
         NSString *predictionAndDate = [dateString stringByAppendingString: predictedActivity];
     
         NSLog( @"Prediction: %@", predictionAndDate );
@@ -247,131 +260,130 @@
         //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
         ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    
         ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
 
-        [appDelegate.predictions insertObject:activity atIndex:0];
-
+        if (activity)
+        {
+            [appDelegate.predictions insertObject:activity atIndex:0];
     
-        NSLog(@"prediction: %@", [appDelegate.predictions objectAtIndex: 0]);
+            //NSLog(@"prediction: %@", [appDelegate.predictions objectAtIndex: 0]);
+            //NSLog(@"time = %f", [time doubleValue]);
     
-        NSLog(@"time = %f", [time doubleValue]);
-    
-        // set the predicted activity for our local Activity object
-        [activity setValue: time forKey: @"timestamp"];
-    
-        [activity setValue: predictedActivity forKey: @"serverPrediction" ];
-    
-        connection = nil;
-    
-        NSFileManager *fileMgr = [NSFileManager defaultManager];
+            // set the predicted activity for our local Activity object
+            [activity setValue: predictedActivity forKey: @"serverPrediction" ];
         
-        if (![fileMgr removeItemAtPath: appDelegate.currentZipFilePath error:&error]){
-            NSLog(@"Unable to delete file: %@", [error localizedDescription]);
-        } else {
-            NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
-        }
+            connection = nil;
     
-        [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
-
-        [appDelegate removeFirstOnNetworkStack];
-        isReady = YES;
+            NSFileManager *fileMgr = [NSFileManager defaultManager];
         
-        NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
-        if ( [appDelegate.networkStack count] > 0 ){
-            [self upload];
+            if (![fileMgr removeItemAtPath: appDelegate.currentZipFilePath error:&error]){
+                NSLog(@"Unable to delete file: %@", [error localizedDescription]);
+            } else {
+                NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
+            }
+    
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
+
+            [appDelegate removeFirstOnNetworkStack];
+            appDelegate.mostRecentActivity = activity;
+            isReady = YES;
+        
+            NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
+            if ( [appDelegate.networkStack count] > 0 && self.appDelegate.dataCollectionOn){
+                [self upload];
+            }
         }
     }
+    self.appDelegate.currentlyUploading = NO;
 }
 
-#define act1 @"LYING DOWN"
-#define act2 @"SITTING"
-#define act3 @"STANDING"
-#define act4 @"WALKING"
-#define act5 @"RUNNING"
-#define act6 @"BICYCLING"
-#define act7 @"DRIVING"
-
-- (void) updateCounts: (NSString *)predictedActivity
-{
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-
-    NSNumber *count;
-    
-    //NSMutableArray *countArray = appDelegate.countLySiStWaRuBiDr;
-    
-    NSLog(@"predicted activity = %@", predictedActivity);
-    
-    if ([predictedActivity  isEqualToString: act1])
-    {
-        NSLog(@"%@", act1);
-//        count = [countArray objectAtIndex:0];
-//        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
-//        [countArray setObject: count atIndexedSubscript:0];
-        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countLying"] intValue] + 1];
-        [appDelegate.user.activityStatistics setValue: count forKey: @"countLying"];
-    }
-    else if ([predictedActivity isEqualToString: act2])
-    {
-        NSLog(@"%@", act2);
-//        count = [countArray objectAtIndex:1];
-//        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
-//        [countArray setObject: count atIndexedSubscript:1];
-        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countSitting"] intValue] + 1];
-        [appDelegate.user.activityStatistics setValue: count forKey: @"countSitting"];
-    }
-    else if ([predictedActivity isEqualToString: act3])
-    {
-        NSLog(@"%@", act3);
-//        count = [countArray objectAtIndex:2];
-//        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
-//        [countArray setObject: count atIndexedSubscript:2];
-        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countStanding"] intValue] + 1];
-        [appDelegate.user.activityStatistics setValue: count forKey: @"countStanding"];
-    }
-    else if ([predictedActivity isEqualToString: act4])
-    {
-        NSLog(@"%@", act4);
-//        count = [countArray objectAtIndex:3];
-//        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
-//        [countArray setObject: count atIndexedSubscript:3];
-        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countWalking"] intValue] + 1];
-        [appDelegate.user.activityStatistics setValue: count forKey: @"countWalking"];
-    }
-    else if ([predictedActivity isEqualToString: act5])
-    {
-        NSLog(@"%@", act5);
-//        count = [countArray objectAtIndex:4];
-//        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
-//        [countArray setObject: count atIndexedSubscript:4];
-        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countRunning"] intValue] + 1];
-        [appDelegate.user.activityStatistics setValue: count forKey: @"countRunning"];
-    }
-    else if ([predictedActivity isEqualToString: act6])
-    {
-        NSLog(@"%@", act6);
-//        count = [countArray objectAtIndex:5];
-//        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
-//        [countArray setObject: count atIndexedSubscript:5];
-        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countBicycling"] intValue] + 1];
-        [appDelegate.user.activityStatistics setValue: count forKey: @"countBicycling"];
-    }
-    else if ([predictedActivity isEqualToString: act7])
-    {
-        NSLog(@"%@", act7);
-//        count = [countArray objectAtIndex:6];
-//        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
-//        [countArray setObject: count atIndexedSubscript:6];
-        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countDriving"] intValue] + 1];
-        [appDelegate.user.activityStatistics setValue: count forKey: @"countDriving"];
-    }
-    //appDelegate.countLySiStWaRuBiDr = countArray;
-
-    
-    NSLog(@"count array = %@", appDelegate.countLySiStWaRuBiDr);
-}
-
+//#define act1 @"LYING DOWN"
+//#define act2 @"SITTING"
+//#define act3 @"STANDING"
+//#define act4 @"WALKING"
+//#define act5 @"RUNNING"
+//#define act6 @"BICYCLING"
+//#define act7 @"DRIVING"
+//
+//- (void) updateCounts: (NSString *)predictedActivity
+//{
+//    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+//
+//    NSNumber *count;
+//    
+//    //NSMutableArray *countArray = appDelegate.countLySiStWaRuBiDr;
+//    
+//    NSLog(@"predicted activity = %@", predictedActivity);
+//    
+//    if ([predictedActivity  isEqualToString: act1])
+//    {
+//        NSLog(@"%@", act1);
+////        count = [countArray objectAtIndex:0];
+////        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+////        [countArray setObject: count atIndexedSubscript:0];
+//        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countLying"] intValue] + 1];
+//        [appDelegate.user.activityStatistics setValue: count forKey: @"countLying"];
+//    }
+//    else if ([predictedActivity isEqualToString: act2])
+//    {
+//        NSLog(@"%@", act2);
+////        count = [countArray objectAtIndex:1];
+////        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+////        [countArray setObject: count atIndexedSubscript:1];
+//        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countSitting"] intValue] + 1];
+//        [appDelegate.user.activityStatistics setValue: count forKey: @"countSitting"];
+//    }
+//    else if ([predictedActivity isEqualToString: act3])
+//    {
+//        NSLog(@"%@", act3);
+////        count = [countArray objectAtIndex:2];
+////        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+////        [countArray setObject: count atIndexedSubscript:2];
+//        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countStanding"] intValue] + 1];
+//        [appDelegate.user.activityStatistics setValue: count forKey: @"countStanding"];
+//    }
+//    else if ([predictedActivity isEqualToString: act4])
+//    {
+//        NSLog(@"%@", act4);
+////        count = [countArray objectAtIndex:3];
+////        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+////        [countArray setObject: count atIndexedSubscript:3];
+//        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countWalking"] intValue] + 1];
+//        [appDelegate.user.activityStatistics setValue: count forKey: @"countWalking"];
+//    }
+//    else if ([predictedActivity isEqualToString: act5])
+//    {
+//        NSLog(@"%@", act5);
+////        count = [countArray objectAtIndex:4];
+////        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+////        [countArray setObject: count atIndexedSubscript:4];
+//        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countRunning"] intValue] + 1];
+//        [appDelegate.user.activityStatistics setValue: count forKey: @"countRunning"];
+//    }
+//    else if ([predictedActivity isEqualToString: act6])
+//    {
+//        NSLog(@"%@", act6);
+////        count = [countArray objectAtIndex:5];
+////        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+////        [countArray setObject: count atIndexedSubscript:5];
+//        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countBicycling"] intValue] + 1];
+//        [appDelegate.user.activityStatistics setValue: count forKey: @"countBicycling"];
+//    }
+//    else if ([predictedActivity isEqualToString: act7])
+//    {
+//        NSLog(@"%@", act7);
+////        count = [countArray objectAtIndex:6];
+////        count = [NSNumber numberWithInt: ([count integerValue] + 1)];
+////        [countArray setObject: count atIndexedSubscript:6];
+//        count = [[NSNumber alloc] initWithInt: [(NSNumber*)[appDelegate.user.activityStatistics valueForKey: @"countDriving"] intValue] + 1];
+//        [appDelegate.user.activityStatistics setValue: count forKey: @"countDriving"];
+//    }
+//    //appDelegate.countLySiStWaRuBiDr = countArray;
+//
+//    
+//    NSLog(@"count array = %@", appDelegate.countLySiStWaRuBiDr);
+//}
+//
 
 
 @end

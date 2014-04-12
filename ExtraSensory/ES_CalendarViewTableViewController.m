@@ -50,8 +50,8 @@
     
     self.predictions = appDelegate.predictions;
     
-    NSLog(@"activities = %@", [self.user.activities description]);
-    NSLog(@"number of activities = %lu", (unsigned long)[self.user.activities count] );
+    //NSLog(@"activities = %@", [self.user.activities description]);
+    //NSLog(@"number of activities = %lu", (unsigned long)[self.user.activities count] );
     
     
     

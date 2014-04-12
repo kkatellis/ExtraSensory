@@ -7,8 +7,13 @@
 //
 
 #import "ES_SummaryViewController.h"
+#import "ES_ActivitiesStrings.h"
+#import "ES_DataBaseAccessor.h"
+#import "ES_ContainerViewController.h"
 
 @interface ES_SummaryViewController ()
+@property (nonatomic, weak) ES_ContainerViewController *containerViewController;
+@property (nonatomic, strong) NSMutableDictionary *activityCounts;
 
 @end
 
@@ -34,6 +39,12 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.activityCounts = [ES_DataBaseAccessor getTodaysCounts];
+    [self.tableView reloadData];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -44,24 +55,42 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [[ES_ActivitiesStrings mainActivities] count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"Today's activity counts";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
+    NSString *activity = [[self.activityCounts allKeys] objectAtIndex:indexPath.row];
+    cell.textLabel.text = activity;
+    int mins = (int) self.activityCounts[activity];
+    if (mins >= 60)
+    {
+        int hrs = mins / 60;
+        mins = mins - 60 * hrs;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d hr %d min", hrs, mins];
+        
+    } else {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d min", mins];
+    }
+    
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     return cell;
 }

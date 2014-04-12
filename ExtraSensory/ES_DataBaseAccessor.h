@@ -27,10 +27,10 @@
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
 + (void) deleteActivity: (ES_Activity *) activity;
-+ (ES_SensorSample *) newSensorSample;
++ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity;
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time;
-+ (void)addUserActivityLabel:(NSString *)label toActivity:(ES_Activity *)activity;
-+ (void)removeUserActivityLabel:(NSString *)label fromActivity:(ES_Activity *)activity;
++ (ES_Activity *) getMostRecentActivity;
++ (NSMutableDictionary *) getTodaysCounts;
 + (void) writeActivity: (ES_Activity *)activity;
 
 

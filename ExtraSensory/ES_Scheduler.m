@@ -13,7 +13,6 @@
 #import "ES_HomeViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
-#import "ES_SensorSample.h"
 #import "ES_Activity.h"
 #import "ES_Settings.h"
 #import "ES_SoundWaveProcessor.h"
@@ -29,7 +28,7 @@
 
 @property double waitTime;
 
-@property (nonatomic, strong) ES_HomeViewController *homeViewController;
+@property (nonatomic, strong) ES_AppDelegate *appDelegate;
 
 @property (nonatomic, strong) NSMutableArray *predictions;
 
@@ -54,8 +53,7 @@
 {
     if (!_user)
     {
-        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        _user = appDelegate.user;
+        _user = self.appDelegate.user;
     }
     return _user;
 }
@@ -96,13 +94,15 @@
 
 - (ES_AppDelegate *) appDelegate
 {
-    return (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (!_appDelegate)
+    {
+        _appDelegate = [[UIApplication sharedApplication] delegate];
+    }
+    return _appDelegate;
 }
 
-- (void) sampleSaveSendCycler: (ES_HomeViewController *) homeViewController
+- (void) sampleSaveSendCycler
 {
-    self.homeViewController = homeViewController;
-    
     NSLog( @"\n\nStart" );
     
     //2)Making background task Asynchronous
@@ -154,7 +154,7 @@
 - (void) turnOffRecording
 {
     NSLog(@"[scheduler] turnOffRecording");
-    [self setIsOn: NO];
+    self.appDelegate.dataCollectionOn = NO;
     [self.sensorManager turnOffRecording];
     [self.timer invalidate];
     self.timer = nil;
@@ -163,7 +163,8 @@
 
 - (void) activeFeedback: (ES_Activity *) activity
 {
-    NSLog( @"\n\nStart active feedback sample" );
+    NSLog( @"\n\nStart active feedback sample");
+    self.appDelegate.mostRecentActivity = activity;
     
     [self.timer invalidate]; //turn off auto-sampling timer
     self.timer = nil;

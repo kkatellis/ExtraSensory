@@ -8,7 +8,6 @@
 
 #import "ES_MainActivityViewController.h"
 #import "ES_Activity.h"
-#import "ES_UserActivityLabel.h"
 #import "ES_DataBaseAccessor.h"
 
 @interface ES_MainActivityViewController ()
