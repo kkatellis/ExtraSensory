@@ -80,10 +80,10 @@
     self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
     
     NSLog(@"=== before presenting useractivitys");
-    NSLog(@"=== user activities are: %@", self.activityEvent.userActivityLabels);
+    NSLog(@"=== user activities are: %@", [self.activityEvent.userActivityLabels allObjects]);
     if (self.activityEvent.userActivityLabels)
     {
-        NSLog(@"==== in view appear before displaying useractivities: %@",self.activityEvent.userActivityLabels);
+//        NSLog(@"==== in view appear before displaying useractivities: %@",self.activityEvent.userActivityLabels);
         NSString *presentableUserActivities = [[self.activityEvent.userActivityLabels allObjects] componentsJoinedByString:@", "];
         NSLog(@"=== string looks like this: %@",presentableUserActivities);
         self.otherActivitiesCell.detailTextLabel.text = presentableUserActivities;
@@ -275,6 +275,7 @@
     // Go over the minute activities of the original event:
     for (id minuteActivityObj in self.activityEvent.minuteActivities)
     {
+        NSLog(@"=== type of object from collection is: %@",NSStringFromClass([minuteActivityObj class]));
         // Get the original object for this minute:
         ES_Activity *minuteActivity = (ES_Activity *)minuteActivityObj;
         
@@ -294,7 +295,8 @@
             // Copy the chosen labels from the edited activity event:
             minuteActivity.userCorrection = self.activityEvent.userCorrection;
             NSLog(@"==== after set user correction, before set useractitivies: %@",self.activityEvent.userActivityLabels);
-            [minuteActivity addUserActivityLabels:self.activityEvent.userActivityLabels];
+            minuteActivity.userActivityLabels = [NSSet setWithSet:self.activityEvent.userActivityLabels];
+//            [minuteActivity addUserActivityLabels:self.activityEvent.userActivityLabels];
             
         }
         // Send this minute's data to the server:
