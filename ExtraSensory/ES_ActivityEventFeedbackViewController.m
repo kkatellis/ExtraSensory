@@ -79,10 +79,21 @@
 
     self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
     
+    NSLog(@"=== before presenting useractivitys");
+    NSLog(@"=== user activities are: %@", self.activityEvent.userActivityLabels);
     if (self.activityEvent.userActivityLabels)
     {
-        self.otherActivitiesCell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.userActivityLabels];
+        NSLog(@"==== in view appear before displaying useractivities: %@",self.activityEvent.userActivityLabels);
+        NSString *presentableUserActivities = [[self.activityEvent.userActivityLabels allObjects] componentsJoinedByString:@", "];
+        NSLog(@"=== string looks like this: %@",presentableUserActivities);
+        self.otherActivitiesCell.detailTextLabel.text = presentableUserActivities;
+        NSLog(@"=== after setting text to present user activities");
     }
+    else{
+        NSLog(@"=== useractivity is null");
+        self.otherActivitiesCell.detailTextLabel.text = @"belllla";
+    }
+    NSLog(@"=== after user activity presenting");
     
     if (self.activityEvent.mood)
     {
@@ -258,6 +269,7 @@
 - (void) submitFeedback
 {
 
+    NSLog(@"=== in submit feedback");
     ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
 
     // Go over the minute activities of the original event:
@@ -267,22 +279,30 @@
         ES_Activity *minuteActivity = (ES_Activity *)minuteActivityObj;
         
         NSDate * time = [NSDate dateWithTimeIntervalSince1970:[minuteActivity.timestamp doubleValue]];
+        NSLog(@"=== working on minute: %@" , time);
         // Is this minute now outside of the edited event's time period?
         if (([time compare:self.startTime] == NSOrderedAscending) || ([time compare:self.endTime] == NSOrderedDescending))
         {
+            NSLog(@"=== this time is outside boutnds");
             // Remove the userCorrection label, and leave the rest:
-            minuteActivity.userCorrection = nil;
+            [minuteActivity addUserActivityLabels:nil];
+//            minuteActivity.userCorrection = nil;
         }
         else
         {
+            NSLog(@"=== this time should be updated with main: %@ and useractivities %@",self.activityEvent.userCorrection,self.activityEvent.userActivityLabels);
             // Copy the chosen labels from the edited activity event:
             minuteActivity.userCorrection = self.activityEvent.userCorrection;
-            minuteActivity.userActivityLabels = self.activityEvent.userActivityLabels;
+            NSLog(@"==== after set user correction, before set useractitivies: %@",self.activityEvent.userActivityLabels);
+            [minuteActivity addUserActivityLabels:self.activityEvent.userActivityLabels];
+            
         }
         // Send this minute's data to the server:
+        NSLog(@"=== send feedback for time %@",time);
         [appDelegate.networkAccessor sendFeedback:minuteActivity];
     }
     
+    NSLog(@"=== popping back from feedback");
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -313,6 +333,7 @@
         }
         else if ([mavc.category isEqualToString:MOOD])
         {
+            NSLog(@"=== back from select mood applied labels: %@" , mavc.appliedLabels);
             if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
             {
                 self.activityEvent.mood = (NSString *)[NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
