@@ -1,0 +1,9 @@
+<map id="ES_AppDelegate" name="ES_AppDelegate">
+<area shape="rect" id="node4" href="$d7/d67/interface_e_s___sensor_manager.html" title="ES_SensorManager" alt="" coords="475,273,616,298"/>
+<area shape="rect" id="node11" href="$d6/da7/interface_e_s___sound_wave_processor.html" title="ES_SoundWaveProcessor" alt="" coords="248,171,427,197"/>
+<area shape="rect" id="node14" href="$d7/db6/interface_e_s___network_accessor.html" title="ES_NetworkAccessor" alt="" coords="148,222,297,247"/>
+<area shape="rect" id="node7" href="$db/db3/interface_e_s___user.html" title="ES_User" alt="" coords="920,83,995,109"/>
+<area shape="rect" id="node9" href="$d9/d31/interface_e_s___settings.html" title="ES_Settings" alt="" coords="926,171,1020,197"/>
+<area shape="rect" id="node10" href="$d0/de8/interface_e_s___activity_statistic.html" title="ES_ActivityStatistic" alt="" coords="1159,171,1293,197"/>
+<area shape="rect" id="node13" href="$d0/dca/interface_e_s___activity.html" title="ES_Activity" alt="" coords="501,171,589,197"/>
+</map>

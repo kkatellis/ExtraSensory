@@ -1,0 +1,548 @@
+\hypertarget{interface_e_s___data_base_accessor}{\section{E\+S\+\_\+\+Data\+Base\+Accessor Class Reference}
+\label{interface_e_s___data_base_accessor}\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+}
+
+
+{\ttfamily \#import $<$E\+S\+\_\+\+Data\+Base\+Accessor.\+h$>$}
+
+
+
+Inheritance diagram for E\+S\+\_\+\+Data\+Base\+Accessor\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{d9/df7/interface_e_s___data_base_accessor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for E\+S\+\_\+\+Data\+Base\+Accessor\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{d6/d9e/interface_e_s___data_base_accessor__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Class Methods}
+\begin{DoxyCompactItemize}
+\item 
+(N\+S\+Array $\ast$) + \hyperlink{interface_e_s___data_base_accessor_a1f57d49ccc93c468c502e4644e546052}{read\+:}
+\item 
+(void) + \hyperlink{interface_e_s___data_base_accessor_a0f344c04f579b32134fc134711726165}{save}
+\item 
+(N\+S\+String $\ast$) + \hyperlink{interface_e_s___data_base_accessor_ae6fd9bb34a2eb8ebca9fce80db8580f5}{application\+Documents\+Directory}
+\item 
+(N\+S\+String $\ast$) + \hyperlink{interface_e_s___data_base_accessor_a062c949cf23e1a93e8141f0aa385aa42}{data\+Directory}
+\item 
+(N\+S\+String $\ast$) + \hyperlink{interface_e_s___data_base_accessor_a43f88ef88358f73172e5991b7d3f154d}{zip\+Directory}
+\item 
+(void) + \hyperlink{interface_e_s___data_base_accessor_a13349405c9a70f3ca2e3c1d7c386bb7b}{write\+Data\+:}
+\item 
+(\hyperlink{interface_e_s___user}{E\+S\+\_\+\+User} $\ast$) + \hyperlink{interface_e_s___data_base_accessor_a56762a8737ae98bf4baf9f6b7afa00ff}{user}
+\item 
+(\hyperlink{interface_e_s___activity}{E\+S\+\_\+\+Activity} $\ast$) + \hyperlink{interface_e_s___data_base_accessor_a79a5b4644598b8df9c40bf58e298ce48}{new\+Activity}
+\item 
+(void) + \hyperlink{interface_e_s___data_base_accessor_aaad97415d1728b4b4c6a82c11bd9b64d}{delete\+Activity\+:}
+\item 
+(\hyperlink{interface_e_s___sensor_sample}{E\+S\+\_\+\+Sensor\+Sample} $\ast$) + \hyperlink{interface_e_s___data_base_accessor_aace083c0d4a0e2cfc30d9b1607e07139}{new\+Sensor\+Sample}
+\item 
+(\hyperlink{interface_e_s___activity}{E\+S\+\_\+\+Activity} $\ast$) + \hyperlink{interface_e_s___data_base_accessor_ad739f38d4c9830e1c54629f2dee3f813}{get\+Activity\+With\+Time\+:}
+\item 
+(void) + \hyperlink{interface_e_s___data_base_accessor_a76357942f1c5a38b75aa8afb39eda365}{add\+User\+Activity\+Label\+:to\+Activity\+:}
+\item 
+(void) + \hyperlink{interface_e_s___data_base_accessor_a8213f97ef962ea7902de5669af9b77dc}{remove\+User\+Activity\+Label\+:from\+Activity\+:}
+\item 
+(void) + \hyperlink{interface_e_s___data_base_accessor_a2d4c9e685d7a2b6971023861e6ffde9e}{write\+Activity\+:}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 15 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+h.
+
+
+
+\subsection{Method Documentation}
+\hypertarget{interface_e_s___data_base_accessor_a76357942f1c5a38b75aa8afb39eda365}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!add\+User\+Activity\+Label\+:to\+Activity\+:@{add\+User\+Activity\+Label\+:to\+Activity\+:}}
+\index{add\+User\+Activity\+Label\+:to\+Activity\+:@{add\+User\+Activity\+Label\+:to\+Activity\+:}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{add\+User\+Activity\+Label\+:to\+Activity\+:}]{\setlength{\rightskip}{0pt plus 5cm}+ (void) add\+User\+Activity\+Label\+: 
+\begin{DoxyParamCaption}
+\item[{(N\+S\+String $\ast$)}]{label}
+\item[{toActivity:({\bf E\+S\+\_\+\+Activity} $\ast$)}]{activity}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a76357942f1c5a38b75aa8afb39eda365}
+
+
+Definition at line 120 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+120                             :(NSString *)label toActivity:(\hyperlink{interface_e_s___activity}{ES\_Activity} *)activity
+121 \{
+122     \hyperlink{interface_e_s___user_activity_label}{ES\_UserActivityLabel} *UserActivityLabel = [\textcolor{keyword}{self} getUserActivityLabel:label];
+123     [activity \hyperlink{interface_e_s___activity_a98e8184d80b2da8c43f789c20074b9c1}{addUserActivityLabelsObject}:UserActivityLabel];
+124 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_ae6fd9bb34a2eb8ebca9fce80db8580f5}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!application\+Documents\+Directory@{application\+Documents\+Directory}}
+\index{application\+Documents\+Directory@{application\+Documents\+Directory}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{application\+Documents\+Directory}]{\setlength{\rightskip}{0pt plus 5cm}+ (N\+S\+String $\ast$) application\+Documents\+Directory 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_ae6fd9bb34a2eb8ebca9fce80db8580f5}
+
+
+Definition at line 191 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+192 \{
+193     \textcolor{keywordflow}{return} [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+194 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a062c949cf23e1a93e8141f0aa385aa42}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!data\+Directory@{data\+Directory}}
+\index{data\+Directory@{data\+Directory}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{data\+Directory}]{\setlength{\rightskip}{0pt plus 5cm}+ (N\+S\+String $\ast$) data\+Directory 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a062c949cf23e1a93e8141f0aa385aa42}
+
+
+Definition at line 196 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+197 \{
+198     NSString *directory = [[\textcolor{keyword}{self} applicationDocumentsDirectory] stringByAppendingString: @"/data"];
+199     
+200     NSFileManager *fileManager= [NSFileManager defaultManager];
+201     
+202     BOOL isDir;
+203     
+204     \textcolor{keywordflow}{if} (![fileManager fileExistsAtPath:directory isDirectory: &isDir ])
+205     \{
+206         NSError *error = nil;
+207         \textcolor{keywordflow}{if}(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil 
+      error:&error])
+208         \{
+209             NSLog(\textcolor{stringliteral}{@"Failed to create directory \(\backslash\)"}%@\(\backslash\)\textcolor{stringliteral}{". Error: %@"}, directory, error);
+210         \}
+211     \}
+212     \textcolor{keywordflow}{return} directory;
+213 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_aaad97415d1728b4b4c6a82c11bd9b64d}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!delete\+Activity\+:@{delete\+Activity\+:}}
+\index{delete\+Activity\+:@{delete\+Activity\+:}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{delete\+Activity\+:}]{\setlength{\rightskip}{0pt plus 5cm}+ (void) delete\+Activity\+: 
+\begin{DoxyParamCaption}
+\item[{({\bf E\+S\+\_\+\+Activity} $\ast$)}]{activity}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_aaad97415d1728b4b4c6a82c11bd9b64d}
+
+
+Definition at line 87 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+87                        : (\hyperlink{interface_e_s___activity}{ES\_Activity} *) activity
+88 \{
+89     NSLog(\textcolor{stringliteral}{@"deleting activity at %@"}, activity.\hyperlink{interface_e_s___activity_a92c04ad06e9e97b2631df34fb00debff}{timestamp});
+90     [[\textcolor{keyword}{self} context] deleteObject:activity];
+91 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_ad739f38d4c9830e1c54629f2dee3f813}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!get\+Activity\+With\+Time\+:@{get\+Activity\+With\+Time\+:}}
+\index{get\+Activity\+With\+Time\+:@{get\+Activity\+With\+Time\+:}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{get\+Activity\+With\+Time\+:}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf E\+S\+\_\+\+Activity} $\ast$) get\+Activity\+With\+Time\+: 
+\begin{DoxyParamCaption}
+\item[{(N\+S\+Number $\ast$)}]{time}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_ad739f38d4c9830e1c54629f2dee3f813}
+
+
+Definition at line 132 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+132                                      : (NSNumber *)time
+133 \{
+134     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+135     NSEntityDescription *entity = [NSEntityDescription entityForName:@"ES\_Activity" inManagedObjectContext:
+      [\textcolor{keyword}{self} context]];
+136     [fetchRequest setEntity:entity];
+137     
+138     NSString *attributeValue = [NSString stringWithFormat: @"%@", time];
+139     
+140     NSLog(\textcolor{stringliteral}{@"attributeValue = %@"}, attributeValue );
+141     
+142     \textcolor{comment}{//NSPredicate *predicate = [NSPredicate predicateWithFormat: @"(timestamp == %@)", attributeValue ];}
+143     
+144     \textcolor{comment}{//[fetchRequest setPredicate:predicate];}
+145     
+146     NSError *error = [NSError new];
+147     
+148     NSArray *results = [[\textcolor{keyword}{self} context] executeFetchRequest:fetchRequest error:&error];
+149     
+150     NSLog(\textcolor{stringliteral}{@"nubmer of results = %lu"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})[results count]);
+151     
+152     \hyperlink{interface_e_s___activity}{ES\_Activity} *resultActivity;
+153     
+154     \textcolor{keywordflow}{for} (\hyperlink{interface_e_s___activity}{ES\_Activity} *a in results)
+155     \{
+156         NSNumber *t = a.\hyperlink{interface_e_s___activity_a92c04ad06e9e97b2631df34fb00debff}{timestamp};
+157         
+158         NSLog(\textcolor{stringliteral}{@"time = %@, t = %@"}, time, t );
+159         
+160         \textcolor{keywordflow}{if} ( [t intValue] == [time intValue] ) resultActivity = a;
+161         
+162             
+163     \}
+164     
+165     
+166     NSLog(\textcolor{stringliteral}{@"number of matching hits = %lu"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})[results count]);
+167    \textcolor{comment}{// NSLog(@"error: %@", [error localizedDescription]);}
+168     
+169     \textcolor{keywordflow}{if} ([results count] > 0 )
+170     \{
+171         \textcolor{keywordflow}{return} resultActivity;
+172     \}
+173     \textcolor{keywordflow}{else} \textcolor{keywordflow}{return} nil;
+174     
+175     \textcolor{keywordflow}{for} ( \textcolor{keywordtype}{id} a in results )
+176     \{
+177         NSLog(\textcolor{stringliteral}{@"result: %@"}, a);
+178     \}
+179 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a79a5b4644598b8df9c40bf58e298ce48}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!new\+Activity@{new\+Activity}}
+\index{new\+Activity@{new\+Activity}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{new\+Activity}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf E\+S\+\_\+\+Activity} $\ast$) new\+Activity 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a79a5b4644598b8df9c40bf58e298ce48}
+
+
+Definition at line 82 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+83 \{
+84     \textcolor{keywordflow}{return} [NSEntityDescription insertNewObjectForEntityForName: @"ES\_Activity" inManagedObjectContext:[\textcolor{keyword}{
+      self} context]];
+85 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_aace083c0d4a0e2cfc30d9b1607e07139}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!new\+Sensor\+Sample@{new\+Sensor\+Sample}}
+\index{new\+Sensor\+Sample@{new\+Sensor\+Sample}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{new\+Sensor\+Sample}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf E\+S\+\_\+\+Sensor\+Sample} $\ast$) new\+Sensor\+Sample 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_aace083c0d4a0e2cfc30d9b1607e07139}
+
+
+Definition at line 93 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+94 \{
+95     \textcolor{keywordflow}{return} [NSEntityDescription insertNewObjectForEntityForName:@"ES\_SensorSample" inManagedObjectContext:[\textcolor{keyword}{
+      self} context]];
+96 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a1f57d49ccc93c468c502e4644e546052}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!read\+:@{read\+:}}
+\index{read\+:@{read\+:}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{read\+:}]{\setlength{\rightskip}{0pt plus 5cm}+ (N\+S\+Array $\ast$) read\+: 
+\begin{DoxyParamCaption}
+\item[{(N\+S\+String $\ast$)}]{entity\+Description}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a1f57d49ccc93c468c502e4644e546052}
+
+
+Definition at line 69 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+69                   : (NSString *)entityDescription
+70 \{
+71     NSError *error = [[NSError alloc] init];
+72     
+73     NSFetchRequest *request = [[NSFetchRequest alloc] init];
+74     
+75     NSEntityDescription *entity = [NSEntityDescription entityForName:entityDescription 
+      inManagedObjectContext:[\textcolor{keyword}{self} context]];
+76     
+77     [request setEntity:entity];
+78     
+79     \textcolor{keywordflow}{return} [[\textcolor{keyword}{self} context] executeFetchRequest:request error:&error];
+80 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a8213f97ef962ea7902de5669af9b77dc}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!remove\+User\+Activity\+Label\+:from\+Activity\+:@{remove\+User\+Activity\+Label\+:from\+Activity\+:}}
+\index{remove\+User\+Activity\+Label\+:from\+Activity\+:@{remove\+User\+Activity\+Label\+:from\+Activity\+:}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{remove\+User\+Activity\+Label\+:from\+Activity\+:}]{\setlength{\rightskip}{0pt plus 5cm}+ (void) remove\+User\+Activity\+Label\+: 
+\begin{DoxyParamCaption}
+\item[{(N\+S\+String $\ast$)}]{label}
+\item[{fromActivity:({\bf E\+S\+\_\+\+Activity} $\ast$)}]{activity}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a8213f97ef962ea7902de5669af9b77dc}
+
+
+Definition at line 126 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+126                                :(NSString *)label fromActivity:(\hyperlink{interface_e_s___activity}{ES\_Activity} *)activity
+127 \{
+128     \hyperlink{interface_e_s___user_activity_label}{ES\_UserActivityLabel} *UserActivityLabel = [\textcolor{keyword}{self} getUserActivityLabel:label];
+129     [activity \hyperlink{interface_e_s___activity_a3341590aa3005b61e997c5a50452ad92}{removeUserActivityLabelsObject}:UserActivityLabel];
+130 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a0f344c04f579b32134fc134711726165}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!save@{save}}
+\index{save@{save}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{save}]{\setlength{\rightskip}{0pt plus 5cm}+ (void) save 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a0f344c04f579b32134fc134711726165}
+
+
+Definition at line 181 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+182 \{
+183     NSError *error = [[NSError alloc] init];
+184     
+185     \textcolor{keywordflow}{if} (![[\textcolor{keyword}{self} context] \hyperlink{interface_e_s___data_base_accessor_a0f344c04f579b32134fc134711726165}{save}:&error])
+186     \{
+187         NSLog(\textcolor{stringliteral}{@"%@"}, [error localizedDescription]);
+188     \}
+189 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a56762a8737ae98bf4baf9f6b7afa00ff}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!user@{user}}
+\index{user@{user}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{user}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf E\+S\+\_\+\+User} $\ast$) user 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a56762a8737ae98bf4baf9f6b7afa00ff}
+
+
+Definition at line 25 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+26 \{
+27     \hyperlink{interface_e_s___user}{ES\_User} *\hyperlink{interface_e_s___data_base_accessor_a56762a8737ae98bf4baf9f6b7afa00ff}{user};
+28     
+29     NSError *error = [NSError new];
+30     
+31     NSFetchRequest *request = [NSFetchRequest new];
+32     
+33     NSEntityDescription *entity = [NSEntityDescription entityForName: ROOT\_DATA\_OBJECT 
+      inManagedObjectContext: [\textcolor{keyword}{self} context]];
+34     
+35     [request setEntity:entity];
+36     
+37     NSArray *users = [[\textcolor{keyword}{self} context] executeFetchRequest:request error:&error];
+38     
+39     \textcolor{keywordflow}{if} ([users count] == 0)
+40     \{
+41         NSLog(\textcolor{stringliteral}{@"Initializing user for the first time!"});
+42         user = [NSEntityDescription insertNewObjectForEntityForName: ROOT\_DATA\_OBJECT 
+      inManagedObjectContext: [\textcolor{keyword}{self} context]];
+43         user.\hyperlink{interface_e_s___user_a86bad01b84ccb6a091253696509f54ff}{settings} = [NSEntityDescription insertNewObjectForEntityForName: @"ES\_Settings" 
+      inManagedObjectContext:[\textcolor{keyword}{self} context]];
+44         user.\hyperlink{interface_e_s___user_a744640d9a7656b1a333275b3ac89d0ce}{activityStatistics} = [NSEntityDescription insertNewObjectForEntityForName:@"
+      ES\_ActivityStatistics" inManagedObjectContext:[\textcolor{keyword}{self} context]];
+45         user.\hyperlink{interface_e_s___user_aedbce3d5006a7599ea5c027a64b6b6bb}{uuid} = [[NSUUID UUID] UUIDString];
+46         user.\hyperlink{interface_e_s___user_a744640d9a7656b1a333275b3ac89d0ce}{activityStatistics}.\hyperlink{interface_e_s___activity_statistic_abfd03c43c917a0cac6dea842970db82b}{timeSamplingBegan} = [NSNumber 
+      numberWithDouble: [[NSDate date] timeIntervalSince1970]];
+47         
+48         [\textcolor{keyword}{self} save];
+49     \}
+50     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ([users count] == 1)
+51     \{
+52         NSLog(\textcolor{stringliteral}{@"Getting user from database"});
+53         user = [users objectAtIndex: 0];
+54     \}
+55     \textcolor{keywordflow}{else}
+56     \{
+57         NSLog( \textcolor{stringliteral}{@"Why are there %lu users in the database??"}, (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long})[users count] );
+58     \}
+59     \textcolor{keywordflow}{return} \hyperlink{interface_e_s___data_base_accessor_a56762a8737ae98bf4baf9f6b7afa00ff}{user};
+60 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a2d4c9e685d7a2b6971023861e6ffde9e}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!write\+Activity\+:@{write\+Activity\+:}}
+\index{write\+Activity\+:@{write\+Activity\+:}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{write\+Activity\+:}]{\setlength{\rightskip}{0pt plus 5cm}+ (void) write\+Activity\+: 
+\begin{DoxyParamCaption}
+\item[{({\bf E\+S\+\_\+\+Activity} $\ast$)}]{activity}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a2d4c9e685d7a2b6971023861e6ffde9e}
+
+
+Definition at line 286 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+286                       : (\hyperlink{interface_e_s___activity}{ES\_Activity} *)activity
+287 \{
+288     \hyperlink{interface_e_s___app_delegate}{ES\_AppDelegate} *appDelegate = [[UIApplication sharedApplication] delegate];
+289     [\textcolor{keyword}{self} writeData: [\textcolor{keyword}{self} arrayFromActivity: activity]];
+290     
+291     
+292     NSLog(\textcolor{stringliteral}{@"activity timestamp = %@"}, activity.\hyperlink{interface_e_s___activity_a92c04ad06e9e97b2631df34fb00debff}{timestamp});
+293     
+294     NSString *zipFileName = [[NSString stringWithFormat: @"/%0.0f-%@", [activity.timestamp doubleValue], 
+      appDelegate.user.uuid ] stringByAppendingString:@".zip"];
+295 
+296     activity.\hyperlink{interface_e_s___activity_ad428e875c7511ddbc1b3df65bdabeef7}{zipFilePath} = [[\textcolor{keyword}{self} zipDirectory] stringByAppendingString:zipFileName];
+297     
+298     NSLog( \textcolor{stringliteral}{@"activity.zipfilepath = %@"}, activity.\hyperlink{interface_e_s___activity_ad428e875c7511ddbc1b3df65bdabeef7}{zipFilePath});
+299     
+300     NSTimer *timer;
+301     timer = [NSTimer scheduledTimerWithTimeInterval: 2
+302                                              target: self
+303                                            selector: @selector(zipFilesWithTimer: )
+304                                            userInfo: [NSString stringWithFormat:@"%0.0f", [activity.
+      timestamp doubleValue] ]
+305                                             repeats: NO];
+306 
+307 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a13349405c9a70f3ca2e3c1d7c386bb7b}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!write\+Data\+:@{write\+Data\+:}}
+\index{write\+Data\+:@{write\+Data\+:}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{write\+Data\+:}]{\setlength{\rightskip}{0pt plus 5cm}+ (void) write\+Data\+: 
+\begin{DoxyParamCaption}
+\item[{(N\+S\+Array $\ast$)}]{data}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a13349405c9a70f3ca2e3c1d7c386bb7b}
+
+
+Definition at line 309 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+309                   :(NSArray *)array
+310 \{
+311     NSError * error1 = [NSError new];
+312     
+313     NSURL *soundFileURLDur;
+314     
+315     NSData *soundData;
+316     
+317     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: array options:0 error:&error1];
+318 
+319     NSString *filePath = [[\textcolor{keyword}{self} dataDirectory] stringByAppendingString: @"/HF\_DUR\_DATA.txt"];
+320     
+321     \textcolor{comment}{// path to which sound file will be saved to along with the other data sensors}
+322     NSString *soundFileStringPath = [[\textcolor{keyword}{self} dataDirectory] stringByAppendingString:HF\_SOUND\_FILE\_DUR];
+323     
+324     NSFileManager *fileManager = [NSFileManager defaultManager];
+325     
+326     NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory
+327                                           inDomain: NSUserDomainMask
+328                                  appropriateForURL: nil
+329                                             create: YES
+330                                              error: nil];
+331     
+332     \textcolor{comment}{// grab the sound file url path which was created in sensor manager}
+333     soundFileURLDur = [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:
+      HF\_SOUND\_FILE\_DUR]];
+334     
+335     \textcolor{comment}{// write contents of url to data object}
+336     soundData = [NSData dataWithContentsOfURL: soundFileURLDur];
+337     
+338     NSLog(\textcolor{stringliteral}{@"soundFileURLDur is %@"}, soundFileURLDur);
+339  
+340     NSError *error;
+341     
+342     \textcolor{comment}{// deleting any old contents in sound file path}
+343     BOOL soundFileExists = [fileManager fileExistsAtPath:soundFileStringPath];
+344     NSLog(\textcolor{stringliteral}{@"Path to sound file: %@"}, soundFileStringPath);
+345     NSLog(\textcolor{stringliteral}{@"Sound File exists: %d"}, soundFileExists);
+346     NSLog(\textcolor{stringliteral}{@"Is deletable sound file at path: %d"}, [fileManager isDeletableFileAtPath:soundFileStringPath]);
+347     
+348     \textcolor{keywordflow}{if}(soundFileExists)
+349     \{
+350         NSLog(\textcolor{stringliteral}{@"previous sound file existed there"});
+351         BOOL success = [fileManager removeItemAtPath:soundFileStringPath error:&error];
+352         \textcolor{keywordflow}{if} (!success) NSLog(\textcolor{stringliteral}{@"Error: %@"}, [error localizedDescription]);
+353     \}
+354     
+355     BOOL writeSoundFileSuccess = [soundData writeToFile:soundFileStringPath atomically:YES];
+356     
+357     \textcolor{keywordflow}{if} (writeSoundFileSuccess)
+358     \{
+359         NSLog(\textcolor{stringliteral}{@"Sound file successfully written to new url"});
+360     \}
+361     \textcolor{keywordflow}{else}
+362     \{
+363         NSLog(\textcolor{stringliteral}{@"Error writing sound data to file!!"});
+364     \}
+365     
+366     \textcolor{comment}{// deleting any old contents in sensor data path}
+367     BOOL fileExists = [fileManager fileExistsAtPath:filePath];
+368     NSLog(\textcolor{stringliteral}{@"Path to file: %@"}, filePath);
+369     NSLog(\textcolor{stringliteral}{@"File exists: %d"}, fileExists);
+370     NSLog(\textcolor{stringliteral}{@"Is deletable file at path: %d"}, [fileManager isDeletableFileAtPath:filePath]);
+371     
+372     \textcolor{keywordflow}{if} (fileExists)
+373     \{
+374         BOOL success = [fileManager removeItemAtPath:filePath error:&error];
+375         \textcolor{keywordflow}{if} (!success) NSLog(\textcolor{stringliteral}{@"Error: %@"}, [error localizedDescription]);
+376     \}
+377 
+378     
+379     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
+380     \textcolor{keywordflow}{if} (writeFileSuccess)
+381     \{
+382         NSLog(\textcolor{stringliteral}{@"Data successfully written to file"});
+383     \}
+384     \textcolor{keywordflow}{else}
+385     \{
+386         NSLog(\textcolor{stringliteral}{@"Error writing data to file!!"});
+387     \}
+388 
+389 \}
+\end{DoxyCode}
+\hypertarget{interface_e_s___data_base_accessor_a43f88ef88358f73172e5991b7d3f154d}{\index{E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}!zip\+Directory@{zip\+Directory}}
+\index{zip\+Directory@{zip\+Directory}!E\+S\+\_\+\+Data\+Base\+Accessor@{E\+S\+\_\+\+Data\+Base\+Accessor}}
+\subsubsection[{zip\+Directory}]{\setlength{\rightskip}{0pt plus 5cm}+ (N\+S\+String $\ast$) zip\+Directory 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_e_s___data_base_accessor_a43f88ef88358f73172e5991b7d3f154d}
+
+
+Definition at line 215 of file E\+S\+\_\+\+Data\+Base\+Accessor.\+m.
+
+
+\begin{DoxyCode}
+216 \{
+217     NSString *directory = [[\textcolor{keyword}{self} applicationDocumentsDirectory] stringByAppendingString: @"/zip"];
+218     
+219     NSFileManager *fileManager= [NSFileManager defaultManager];
+220     
+221     BOOL isDir;
+222     
+223     \textcolor{keywordflow}{if} (![fileManager fileExistsAtPath:directory isDirectory: &isDir ])
+224     \{
+225         NSError *error = nil;
+226         \textcolor{keywordflow}{if}(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil 
+      error:&error])
+227         \{
+228             NSLog(\textcolor{stringliteral}{@"Failed to create directory \(\backslash\)"}%@\(\backslash\)\textcolor{stringliteral}{". Error: %@"}, directory, error);
+229         \}
+230     \}
+231     \textcolor{keywordflow}{return} directory;
+232 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Extra\+Sensory/\hyperlink{_e_s___data_base_accessor_8h}{E\+S\+\_\+\+Data\+Base\+Accessor.\+h}\item 
+Extra\+Sensory/\hyperlink{_e_s___data_base_accessor_8m}{E\+S\+\_\+\+Data\+Base\+Accessor.\+m}\end{DoxyCompactItemize}
