@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['size_5fcomment',['size_comment',['../db/d9c/structunz__global__info__s.html#a10b58ab57b62301de813ecac0e974363',1,'unz_global_info_s']]],
-  ['size_5ffile_5fcomment',['size_file_comment',['../dc/dbc/structunz__file__info__s.html#afa9feffb3b9c9c03e02599118d5f548e',1,'unz_file_info_s']]],
-  ['size_5ffile_5fextra',['size_file_extra',['../dc/dbc/structunz__file__info__s.html#a479402dcb3555c922e3ce87c8f967990',1,'unz_file_info_s']]],
-  ['size_5ffilename',['size_filename',['../dc/dbc/structunz__file__info__s.html#ae4f2f81a5301f7df9014838a56a496c6',1,'unz_file_info_s']]]
+  ['opaque',['opaque',['../da/dfc/structzlib__filefunc__def__s.html#a494b6d634b61bdc7fc7caed8e4fbe3f4',1,'zlib_filefunc_def_s']]],
+  ['oursession',['ourSession',['../d6/da7/interface_e_s___sound_wave_processor.html#a029e97ffd5fcd9fe9c92e8e661dce50a',1,'ES_SoundWaveProcessor']]]
 ];

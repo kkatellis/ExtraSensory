@@ -2334,7 +2334,8 @@ SOURCE_BROWSER=YES
 INLINE_SOURCES= YES 
 MAX_DOT_GRAPH_DEPTH    = 20
 DOT_GRAPH_MAX_NODES    = 500
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
 GENERATE_LATEX         = NO
-
 #usage: >doxygen Doxyfile
 #reqirements: doxygen, dot (Graphviz)
