@@ -18,9 +18,12 @@
 #define TIMES_SEC (int)3
 #define SEND_SEC (int)4
 
-#define MAIN_ACTIVITY @"Main Activity"
-#define SECONDARY_ACTIVITIES @"Secondary Activities"
+#define MAIN_ACTIVITY @"Main activity"
+#define SECONDARY_ACTIVITIES @"Secondary activities"
 #define MOOD @"Mood"
+#define SUBMIT_FEEDBACK @"Submit feedback"
+#define START_TIME @"Start time"
+#define END_TIME @"End time"
 
 @interface ES_ActivityEventFeedbackViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *mainActivityCell;
@@ -28,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *moodCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *startTimeCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *endTimeCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *submitCell;
 
 
 
@@ -61,44 +65,7 @@
 {
     // Get the current info of the relevant activity event:
     NSLog(@"==== in viewWillAppear");
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    [dateFormatter setDateFormat:@"hh:mm"];
-    NSString *startString = [dateFormatter stringFromDate:self.startTime];
-    NSString *endString = [dateFormatter stringFromDate:self.endTime];
-    
-    self.startTimeCell.detailTextLabel.text = startString;
-    self.endTimeCell.detailTextLabel.text =
-        endString;
-    
-    // Did the user already correcte the activity:
-    if (!self.activityEvent.userCorrection)
-    {
-        // If not, initialize the user correction to the initial guess (the server prediction):
-        self.activityEvent.userCorrection = self.activityEvent.serverPrediction;
-    }
-
-    self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
-    
-    NSLog(@"=== before presenting useractivitys");
-    NSLog(@"=== user activities are: %@", [self.activityEvent.userActivityLabels allObjects]);
-    if (self.activityEvent.userActivityLabels)
-    {
-//        NSLog(@"==== in view appear before displaying useractivities: %@",self.activityEvent.userActivityLabels);
-        NSString *presentableUserActivities = [[self.activityEvent.userActivityLabels allObjects] componentsJoinedByString:@", "];
-        NSLog(@"=== string looks like this: %@",presentableUserActivities);
-        self.otherActivitiesCell.detailTextLabel.text = presentableUserActivities;
-        NSLog(@"=== after setting text to present user activities");
-    }
-    else{
-        NSLog(@"=== useractivity is null");
-        self.otherActivitiesCell.detailTextLabel.text = @"belllla";
-    }
-    NSLog(@"=== after user activity presenting");
-    
-    if (self.activityEvent.mood)
-    {
-        self.moodCell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.mood];
-    }
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
@@ -121,30 +88,104 @@
 
 #pragma mark - Table view data source
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//#warning Potentially incomplete method implementation.
-//    // Return the number of sections.
-//    return 0;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//#warning Incomplete method implementation.
-//    // Return the number of rows in the section.
-//    return 0;
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-//    
-//    // Configure the cell...
-//    
-//    return cell;
-//}
-//
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 5;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    if (section == TIMES_SEC)
+    {
+        return 2;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell;
+    
+    if (indexPath.section == MAIN_ACTIVITY_SEC)
+    {
+        cell = self.mainActivityCell;
+        cell.textLabel.text = MAIN_ACTIVITY;
+        // Did the user already correcte the activity:
+        if (!self.activityEvent.userCorrection)
+        {
+            // If not, initialize the user correction to the initial guess (the server prediction):
+            self.activityEvent.userCorrection = self.activityEvent.serverPrediction;
+        }
+        
+        self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
+    }
+    else if (indexPath.section == USER_ACTIVITIES_SEC)
+    {
+        cell = self.otherActivitiesCell;
+        cell.textLabel.text = SECONDARY_ACTIVITIES;
+        if (self.activityEvent.userActivityLabels)
+        {
+            NSString *presentableUserActivities = [[self.activityEvent.userActivityLabels allObjects] componentsJoinedByString:@", "];
+            cell.detailTextLabel.text = presentableUserActivities;
+        }
+        else
+        {
+            cell.detailTextLabel.text = @"";
+        }
+    }
+    else if (indexPath.section == MOOD_SEC)
+    {
+        cell = self.moodCell;
+        cell.textLabel.text = MOOD;
+        if (self.activityEvent.mood)
+        {
+            NSLog(@"=== got mood: %@",self.activityEvent.mood);
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.mood];
+        }
+        else
+        {
+            NSLog(@"=== got no mood (field is null)");
+            cell.detailTextLabel.text = @"";
+        }
+    }
+    else if (indexPath.section == TIMES_SEC)
+    {
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        [dateFormatter setDateFormat:@"hh:mm"];
+        NSString *startString = [dateFormatter stringFromDate:self.startTime];
+        NSString *endString = [dateFormatter stringFromDate:self.endTime];
+        
+        if (indexPath.row == 0)
+        {
+            cell = self.startTimeCell;
+            cell.detailTextLabel.text = startString;
+        }
+        else if (indexPath.row == 1)
+        {
+            cell = self.endTimeCell;
+            cell.detailTextLabel.text = endString;
+        }
+    }
+    else if (indexPath.section == SEND_SEC)
+    {
+        cell = self.submitCell;
+        cell.textLabel.text = SUBMIT_FEEDBACK;
+    }
+    else
+    {
+        NSLog(@"===!!! no match for section");
+    }
+    
+    // Configure the cell...
+    
+    return cell;
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -213,12 +254,16 @@
             [self.navigationController pushViewController:activitySelection animated:YES];
             break;
         case MOOD_SEC:
-            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MoodSelection"];
+            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
             activitySelection = (ES_MainActivityViewController *)newView;
 
             if (self.activityEvent.mood)
             {
                 [activitySelection setAppliedLabels:[NSMutableSet setWithObject:self.activityEvent.mood]];
+            }
+            else
+            {
+                [activitySelection setAppliedLabels:[NSMutableSet set]];
             }
             [activitySelection setChoices:[ES_ActivitiesStrings moods]];
             [activitySelection setCategory:MOOD];
@@ -296,6 +341,7 @@
             minuteActivity.userCorrection = self.activityEvent.userCorrection;
             NSLog(@"==== after set user correction, before set useractitivies: %@",self.activityEvent.userActivityLabels);
             minuteActivity.userActivityLabels = [NSSet setWithSet:self.activityEvent.userActivityLabels];
+            NSLog(@"==== after set useractivities. Now: %@",minuteActivity.userActivityLabels);
 //            [minuteActivity addUserActivityLabels:self.activityEvent.userActivityLabels];
             
         }
@@ -310,16 +356,12 @@
 
 -(IBAction)editedLabels:(UIStoryboardSegue *)segue
 {
-    NSLog(@"==== in editedLabels from segue: %@", segue);
     if ([segue.sourceViewController isKindOfClass:[ES_MainActivityViewController class]])
     {
         ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
-        NSLog(@"==== segue unwinded back from selecting : %@" , mavc.category);
-        NSLog(@"==== appliedlabels are: %@ and choises are: %@",mavc.appliedLabels,mavc.choices);
         if ([mavc.category isEqualToString:MAIN_ACTIVITY])
         {
             self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][0];
-            NSLog(@"==== set the main activity to : %@", self.activityEvent.userCorrection);
         }
         else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
         {
@@ -331,20 +373,21 @@
             {
                 self.activityEvent.userActivityLabels = nil;
             }
-            NSLog(@"==== set the user activities to: %@",self.activityEvent.userActivityLabels);
         }
         else if ([mavc.category isEqualToString:MOOD])
         {
-            NSLog(@"=== back from select mood applied labels: %@" , mavc.appliedLabels);
             if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
             {
-                self.activityEvent.mood = (NSString *)[NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+                self.activityEvent.mood = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][0];
             }
             else
             {
                 self.activityEvent.mood = nil;
             }
-            NSLog(@"=== set the mood to: %@",self.activityEvent.mood);
+        }
+        else
+        {
+            NSLog(@"!!! in edited labels. No match for category: %@",mavc.category);
         }
     }
 }
