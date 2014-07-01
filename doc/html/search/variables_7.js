@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['internal_5ffa',['internal_fa',['../dc/dbc/structunz__file__info__s.html#aa20738bf82bca71cc950b9475b5d8c3c',1,'unz_file_info_s::internal_fa()'],['../d6/d5a/structzip__fileinfo.html#a396175a434b86115ce5600ab1dbb1644',1,'zip_fileinfo::internal_fa()']]]
+  ['opaque',['opaque',['../da/dfc/structzlib__filefunc__def__s.html#a494b6d634b61bdc7fc7caed8e4fbe3f4',1,'zlib_filefunc_def_s']]],
+  ['oursession',['ourSession',['../d6/da7/interface_e_s___sound_wave_processor.html#a029e97ffd5fcd9fe9c92e8e661dce50a',1,'ES_SoundWaveProcessor']]]
 ];

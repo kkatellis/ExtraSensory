@@ -84,7 +84,6 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Instance Methods</a> &#124;
 <a href="#properties">Properties</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="../../df/d2a/class_e_s___sensor_manager-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ES_SensorManager Class Reference</div>  </div>
@@ -96,6 +95,8 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 Inheritance diagram for ES_SensorManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d5/dd0/interface_e_s___sensor_manager__inherit__graph.png" border="0" usemap="#_e_s___sensor_manager_inherit__map" alt="Inheritance graph"/></div>
+<map name="_e_s___sensor_manager_inherit__map" id="_e_s___sensor_manager_inherit__map">
+</map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for ES_SensorManager:</div>
@@ -134,11 +135,6 @@ Properties</h2></td></tr>
 <tr class="separator:a487cebc582f9d0fb56c4a4650cf61f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a142171a0db25411f1ec3b2d6699029d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/dca/interface_e_s___activity.html">ES_Activity</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d67/interface_e_s___sensor_manager.html#a142171a0db25411f1ec3b2d6699029d7">currentActivity</a></td></tr>
 <tr class="separator:a142171a0db25411f1ec3b2d6699029d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:adf7e41ad94da107933da2bafcb4859e3"><td class="memItemLeft" align="right" valign="top">NSString *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d67/interface_e_s___sensor_manager.html#adf7e41ad94da107933da2bafcb4859e3">HFFilePath</a></td></tr>
-<tr class="separator:adf7e41ad94da107933da2bafcb4859e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -174,16 +170,15 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        [<span class="keyword">self</span>.soundProcessor startDurRecording];</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    </div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="comment">//--// Append our file name to the directory path</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <a class="code" href="../../d7/d67/interface_e_s___sensor_manager.html#adf7e41ad94da107933da2bafcb4859e3">HFFilePath</a> = [[dataPath path] stringByAppendingPathComponent: fileName];</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    HFFilePath = [[dataPath path] stringByAppendingPathComponent: fileName];</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    </div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment">// Remove any old data</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordflow">if</span>( [[NSFileManager defaultManager] fileExistsAtPath:<a class="code" href="../../d7/d67/interface_e_s___sensor_manager.html#adf7e41ad94da107933da2bafcb4859e3">HFFilePath</a>] ) {</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordflow">if</span>( [[NSFileManager defaultManager] fileExistsAtPath:HFFilePath] ) {</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        [[NSFileManager defaultManager] removeItemAtPath:HFFilePath error:nil];</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        NSLog(<span class="stringliteral">@&quot;removed any old sound file in direc&quot;</span>);</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    }</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;}</div>
-<div class="ttc" id="interface_e_s___sensor_manager_html_adf7e41ad94da107933da2bafcb4859e3"><div class="ttname"><a href="../../d7/d67/interface_e_s___sensor_manager.html#adf7e41ad94da107933da2bafcb4859e3">ES_SensorManager::HFFilePath</a></div><div class="ttdeci">NSString * HFFilePath</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/ddc/_e_s___sensor_manager_8h_source.html#l00031">ES_SensorManager.h:31</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -244,29 +239,6 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;}</div>
 <div class="ttc" id="interface_e_s___sensor_manager_html_a87228331e9e81eb8b0aba211bafac0d5"><div class="ttname"><a href="../../d7/d67/interface_e_s___sensor_manager.html#a87228331e9e81eb8b0aba211bafac0d5">ES_SensorManager::isReady</a></div><div class="ttdeci">NSNumber * isReady</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/ddc/_e_s___sensor_manager_8h_source.html#l00046">ES_SensorManager.h:46</a></div></div>
 </div><!-- fragment -->
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="adf7e41ad94da107933da2bafcb4859e3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">- (NSString*) HFFilePath</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="../../d9/ddc/_e_s___sensor_manager_8h_source.html#l00031">31</a> of file <a class="el" href="../../d9/ddc/_e_s___sensor_manager_8h_source.html">ES_SensorManager.h</a>.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
@@ -497,7 +469,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 28 2014 02:12:27 for ExtraSensory by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jun 30 2014 19:40:27 for ExtraSensory by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

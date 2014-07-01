@@ -232,10 +232,10 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        [<span class="keyword">self</span>.soundProcessor startDurRecording];</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    </div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="comment">//--// Append our file name to the directory path</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <a class="code" href="../../d7/d67/interface_e_s___sensor_manager.html#adf7e41ad94da107933da2bafcb4859e3">HFFilePath</a> = [[dataPath path] stringByAppendingPathComponent: fileName];</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    HFFilePath = [[dataPath path] stringByAppendingPathComponent: fileName];</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    </div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment">// Remove any old data</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordflow">if</span>( [[NSFileManager defaultManager] fileExistsAtPath:<a class="code" href="../../d7/d67/interface_e_s___sensor_manager.html#adf7e41ad94da107933da2bafcb4859e3">HFFilePath</a>] ) {</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordflow">if</span>( [[NSFileManager defaultManager] fileExistsAtPath:HFFilePath] ) {</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        [[NSFileManager defaultManager] removeItemAtPath:HFFilePath error:nil];</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        NSLog(<span class="stringliteral">@&quot;removed any old sound file in direc&quot;</span>);</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    }</div>
@@ -383,7 +383,6 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 <div class="ttc" id="interface_e_s___sensor_manager_html_a2f2ebc527955f5ab7373c6d21b6f894e"><div class="ttname"><a href="../../d7/d67/interface_e_s___sensor_manager.html#a2f2ebc527955f5ab7373c6d21b6f894e">-[ES_SensorManager record]</a></div><div class="ttdeci">BOOL record()</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/d0a/_e_s___sensor_manager_8m_source.html#l00156">ES_SensorManager.m:156</a></div></div>
 <div class="ttc" id="interface_e_s___sensor_manager_html_ae7f8aa8184fb028d3c50004d7f3fbe07"><div class="ttname"><a href="../../d7/d67/interface_e_s___sensor_manager.html#ae7f8aa8184fb028d3c50004d7f3fbe07">ES_SensorManager::locationManager</a></div><div class="ttdeci">CLLocationManager * locationManager</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/ddc/_e_s___sensor_manager_8h_source.html#l00025">ES_SensorManager.h:25</a></div></div>
 <div class="ttc" id="interface_e_s___data_base_accessor_html_aace083c0d4a0e2cfc30d9b1607e07139"><div class="ttname"><a href="../../d0/d91/interface_e_s___data_base_accessor.html#aace083c0d4a0e2cfc30d9b1607e07139">+[ES_DataBaseAccessor newSensorSample]</a></div><div class="ttdeci">ES_SensorSample * newSensorSample()</div><div class="ttdef"><b>Definition:</b> <a href="../../d1/da5/_e_s___data_base_accessor_8m_source.html#l00093">ES_DataBaseAccessor.m:93</a></div></div>
-<div class="ttc" id="interface_e_s___sensor_manager_html_adf7e41ad94da107933da2bafcb4859e3"><div class="ttname"><a href="../../d7/d67/interface_e_s___sensor_manager.html#adf7e41ad94da107933da2bafcb4859e3">ES_SensorManager::HFFilePath</a></div><div class="ttdeci">NSString * HFFilePath</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/ddc/_e_s___sensor_manager_8h_source.html#l00031">ES_SensorManager.h:31</a></div></div>
 <div class="ttc" id="_e_s___app_delegate_8h_html"><div class="ttname"><a href="../../d2/d67/_e_s___app_delegate_8h.html">ES_AppDelegate.h</a></div></div>
 <div class="ttc" id="_e_s___user_8h_html"><div class="ttname"><a href="../../d4/d50/_e_s___user_8h.html">ES_User.h</a></div></div>
 <div class="ttc" id="interface_e_s___app_delegate_html"><div class="ttname"><a href="../../db/d2f/interface_e_s___app_delegate.html">ES_AppDelegate</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d2/d67/_e_s___app_delegate_8h_source.html#l00015">ES_AppDelegate.h:15</a></div></div>
@@ -404,7 +403,7 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 28 2014 02:12:24 for ExtraSensory by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jun 30 2014 19:40:27 for ExtraSensory by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>
