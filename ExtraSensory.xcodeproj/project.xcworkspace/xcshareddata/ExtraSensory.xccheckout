@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>07B94C54-CE16-4640-99D5-8DD2412CCDCF</string>
+	<string>EB1F44D2-871D-496B-B3CA-6165D739B54D</string>
 	<key>IDESourceControlProjectName</key>
 	<string>ExtraSensory</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>0C4A5C0C-E2BF-40B6-A7C8-89567C41C895</key>
-		<string>https://github.com/bagrounds/ExtraSensory</string>
+		<key>C19B4725-1797-4CAE-A6B0-708DA1CC0CE1</key>
+		<string>https://github.com/kkatellis/ExtraSensory.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>ExtraSensory.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>0C4A5C0C-E2BF-40B6-A7C8-89567C41C895</key>
+		<key>C19B4725-1797-4CAE-A6B0-708DA1CC0CE1</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/bagrounds/ExtraSensory</string>
+	<string>https://github.com/kkatellis/ExtraSensory.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>0C4A5C0C-E2BF-40B6-A7C8-89567C41C895</string>
+	<string>C19B4725-1797-4CAE-A6B0-708DA1CC0CE1</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>0C4A5C0C-E2BF-40B6-A7C8-89567C41C895</string>
+			<string>C19B4725-1797-4CAE-A6B0-708DA1CC0CE1</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ExtraSensory</string>
 		</dict>

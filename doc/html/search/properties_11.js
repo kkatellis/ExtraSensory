@@ -1,0 +1,11 @@
+var searchData=
+[
+  ['uniqueid',['uniqueID',['../d7/d80/interface_e_s___sensor_sample.html#aee98559de7d5f09aa17493cdaa459cc4',1,'ES_SensorSample']]],
+  ['user',['user',['../d0/dca/interface_e_s___activity.html#ac57db029bedd775a342f6eed16b61a90',1,'ES_Activity::user()'],['../d0/de8/interface_e_s___activity_statistic.html#ad38284d32f9bb2d9a1ef1fcf6b28d446',1,'ES_ActivityStatistic::user()'],['../d9/d31/interface_e_s___settings.html#a337f820d30530c3423390ac4f57feca6',1,'ES_Settings::user()'],['../db/d2f/interface_e_s___app_delegate.html#abe1e22079167d44f4bede0952f700c52',1,'ES_AppDelegate::user()'],['../dc/d69/category_e_s___calendar_view_table_view_controller_07_08.html#ad51ebca1237a8c0677b286bf1fbe832c',1,'ES_CalendarViewTableViewController()::user()'],['../dd/d3c/interface_e_s___scheduler.html#ab0c6af0137b6225db72428f83f4cf2e0',1,'ES_Scheduler::user()'],['../d7/d67/interface_e_s___sensor_manager.html#a487cebc582f9d0fb56c4a4650cf61f1d',1,'ES_SensorManager::user()']]],
+  ['useractivitylabels',['userActivityLabels',['../d0/dca/interface_e_s___activity.html#a31cda9e2e1eeed6ab17af9dc2032d263',1,'ES_Activity::userActivityLabels()'],['../d6/d7e/interface_e_s___activity_event.html#a35041c5e0ff9f74fc2bcf29e0cc4e548',1,'ES_ActivityEvent::userActivityLabels()']]],
+  ['usercorrection',['userCorrection',['../d0/dca/interface_e_s___activity.html#a4845c6fe9c100e0cd7c631b4e38714be',1,'ES_Activity::userCorrection()'],['../d6/d7e/interface_e_s___activity_event.html#a24bd94d18e8d80df31ca1e876de3b468',1,'ES_ActivityEvent::userCorrection()']]],
+  ['userpopulation',['userPopulation',['../db/db3/interface_e_s___user.html#a7b71663678fccdcad1762451b378ec1b',1,'ES_User']]],
+  ['users',['users',['../dd/da3/interface_e_s___user_population.html#aa827a2bdfa5cad22bf91e677ea30eb2c',1,'ES_UserPopulation']]],
+  ['uuid',['uuid',['../d0/dca/interface_e_s___activity.html#a256b873f15c1fe13c3391c60c2717472',1,'ES_Activity::uuid()'],['../db/d2f/interface_e_s___app_delegate.html#a8ee3cd0a248c6c4278d7a47f1a209de8',1,'ES_AppDelegate::uuid()'],['../db/db3/interface_e_s___user.html#aedbce3d5006a7599ea5c027a64b6b6bb',1,'ES_User::uuid()']]],
+  ['uuidlabel',['uuidLabel',['../d0/d44/category_e_s___settings_view_controller_07_08.html#a24697c82b7812a5cc34e51064f3abd7c',1,'ES_SettingsViewController()']]]
+];
