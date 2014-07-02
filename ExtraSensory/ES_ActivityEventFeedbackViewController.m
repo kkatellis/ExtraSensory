@@ -311,12 +311,26 @@
     [self.navigationController pushViewController:selectTimeView animated:YES];
 }
 
+- (NSDate *) removeSecondsFromDate:(NSDate *)date
+{
+    int referenceTimeInterval = (int)[date timeIntervalSinceReferenceDate];
+    int timeWithoutSeconds = 60 * (referenceTimeInterval / 60);
+    NSDate *rounded = [NSDate dateWithTimeIntervalSinceReferenceDate:(NSTimeInterval)timeWithoutSeconds];
+    
+    NSLog(@"=== rouding time %@ to %@",date,rounded);
+    return rounded;
+}
+
 - (void) submitFeedback
 {
 
     NSLog(@"=== in submit feedback");
     ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
 
+    NSDate *eventStartTime = [self removeSecondsFromDate:self.startTime];
+    NSDate *eventEndTime = [self removeSecondsFromDate:self.endTime];
+    NSLog(@"=== event start: %@, end: %@",eventStartTime,eventEndTime);
+    
     // Go over the minute activities of the original event:
     for (id minuteActivityObj in self.activityEvent.minuteActivities)
     {
@@ -325,9 +339,10 @@
         ES_Activity *minuteActivity = (ES_Activity *)minuteActivityObj;
         
         NSDate * time = [NSDate dateWithTimeIntervalSince1970:[minuteActivity.timestamp doubleValue]];
-        NSLog(@"=== working on minute: %@" , time);
+        time = [self removeSecondsFromDate:time];
+        
         // Is this minute now outside of the edited event's time period?
-        if (([time compare:self.startTime] == NSOrderedAscending) || ([time compare:self.endTime] == NSOrderedDescending))
+        if (([time compare:eventStartTime] == NSOrderedAscending) || ([time compare:eventEndTime] == NSOrderedDescending))
         {
             NSLog(@"=== this time is outside boutnds");
             // Remove the userCorrection label, and leave the rest:
@@ -336,13 +351,18 @@
         }
         else
         {
+            // Update this minute's activity according to the whole even's activity:
             NSLog(@"=== this time should be updated with main: %@ and useractivities %@",self.activityEvent.userCorrection,self.activityEvent.userActivityLabels);
-            // Copy the chosen labels from the edited activity event:
+            
+            // Main activity:
             minuteActivity.userCorrection = self.activityEvent.userCorrection;
             NSLog(@"==== after set user correction, before set useractitivies: %@",self.activityEvent.userActivityLabels);
-            minuteActivity.userActivityLabels = [NSSet setWithSet:self.activityEvent.userActivityLabels];
+            
+            // Secondary activities:
+            [minuteActivity addUserActivityLabels:[NSSet setWithSet:self.activityEvent.userActivityLabels]];
             NSLog(@"==== after set useractivities. Now: %@",minuteActivity.userActivityLabels);
-//            [minuteActivity addUserActivityLabels:self.activityEvent.userActivityLabels];
+
+            // Mood:
             
         }
         // Send this minute's data to the server:
