@@ -15,23 +15,21 @@
 @dynamic name;
 @dynamic activity;
 
+/*
+ * This is a helping utility function to convert an array of ES_UserActivityLabels objects into an array of Strings.
+ */
 + (NSMutableArray *) createStringArrayFromUserActivityLabelsAraay:(NSArray *)userActivityLabelsArray
 {
-    NSLog(@"=== in createStringArray1");
     NSMutableArray *result = [[NSMutableArray alloc] init];
-    NSLog(@"=== in createStringArray2");
     for (id obj in userActivityLabelsArray)
     {
-        NSLog(@"=== object in array: %@ with type %@",obj,[obj class]);
         if (![obj isKindOfClass:[ES_UserActivityLabels class]])
         {
             NSLog(@"!!! Array contains an item that is not ES_UserActivityLabels");
             return nil;
         }
         ES_UserActivityLabels *userActivityLabels = (ES_UserActivityLabels *)obj;
-        NSLog(@"=== createStrAr before add %@",userActivityLabels.name);
         [result addObject:userActivityLabels.name];
-        NSLog(@"=== createStrAr after add %@",userActivityLabels.name);
     }
     
     return result;

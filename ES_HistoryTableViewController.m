@@ -178,15 +178,23 @@
     cell.textLabel.text = dateString;
     cell.activityEvent = relevantEvent;
     
+    NSString *eventDetails;
     if (relevantEvent.userCorrection)
     {
-        cell.detailTextLabel.text = relevantEvent.userCorrection;
+        eventDetails = relevantEvent.userCorrection;
     }
     else
     {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@?",relevantEvent.serverPrediction];
+        eventDetails = [NSString stringWithFormat:@"%@?",relevantEvent.serverPrediction];
     }
     
+    if (relevantEvent.userActivityLabels && [relevantEvent.userActivityLabels count]>0)
+    {
+        NSString *secondaryStr = [NSString stringWithFormat:@"(%@)",[[relevantEvent.userActivityLabels allObjects] componentsJoinedByString:@", "]];
+        eventDetails = [NSString stringWithFormat:@"%@ %@",eventDetails,secondaryStr];
+    }
+    
+    cell.detailTextLabel.text = eventDetails;
     
     return cell;
 }

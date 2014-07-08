@@ -66,7 +66,6 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     // Get the current info of the relevant activity event:
-    NSLog(@"==== in viewWillAppear");
     [self.tableView reloadData];
 }
 
@@ -132,7 +131,6 @@
         cell.textLabel.text = SECONDARY_ACTIVITIES;
         if (self.activityEvent.userActivityLabels)
         {
-            NSLog(@"=== presenting user activities: %@",self.activityEvent.userActivityLabels);
             NSMutableArray *stringArray = [NSMutableArray arrayWithArray:[self.activityEvent.userActivityLabels allObjects]];
             
             NSString *presentableUserActivities = [stringArray componentsJoinedByString:@", "];
@@ -149,12 +147,10 @@
         cell.textLabel.text = MOOD;
         if (self.activityEvent.mood)
         {
-            NSLog(@"=== got mood: %@",self.activityEvent.mood);
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.activityEvent.mood];
         }
         else
         {
-            NSLog(@"=== got no mood (field is null)");
             cell.detailTextLabel.text = @"";
         }
     }
@@ -183,7 +179,7 @@
     }
     else
     {
-        NSLog(@"===!!! no match for section");
+        NSLog(@"!!! no match for section");
     }
     
     // Configure the cell...
@@ -329,17 +325,14 @@
 - (void) submitFeedback
 {
     
-    NSLog(@"=== in submit feedback");
     ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
     
     NSDate *eventStartTime = [self removeSecondsFromDate:self.startTime];
     NSDate *eventEndTime = [self removeSecondsFromDate:self.endTime];
-    NSLog(@"=== event start: %@, end: %@",eventStartTime,eventEndTime);
     
     // Go over the minute activities of the original event:
     for (id minuteActivityObj in self.activityEvent.minuteActivities)
     {
-        NSLog(@"=== type of object from collection is: %@",NSStringFromClass([minuteActivityObj class]));
         // Get the original object for this minute:
         ES_Activity *minuteActivity = (ES_Activity *)minuteActivityObj;
         
@@ -349,7 +342,6 @@
         // Is this minute now outside of the edited event's time period?
         if (([time compare:eventStartTime] == NSOrderedAscending) || ([time compare:eventEndTime] == NSOrderedDescending))
         {
-            NSLog(@"=== this time is outside boutnds");
             // Remove the userCorrection label, and leave the rest:
             [minuteActivity addUserActivityLabels:nil];
             //            minuteActivity.userCorrection = nil;
@@ -357,21 +349,17 @@
         else
         {
             // Update this minute's activity according to the whole even's activity:
-            NSLog(@"=== this time should be updated with main: %@ and useractivities %@",self.activityEvent.userCorrection,self.activityEvent.userActivityLabels);
             
             // Main activity:
             minuteActivity.userCorrection = self.activityEvent.userCorrection;
-            NSLog(@"==== after set user correction, before set useractitivies: %@",self.activityEvent.userActivityLabels);
             
             // Secondary activities:
             NSMutableArray *secondaryActivities = [NSMutableArray arrayWithArray:[self.activityEvent.userActivityLabels allObjects]];
             [ES_DataBaseAccessor setSecondaryActivities:secondaryActivities forActivity:minuteActivity];
-            NSLog(@"==== after set useractivities. Now: %@",minuteActivity.userActivityLabels);
             
             // Mood:
             if (self.activityEvent.mood)
             {
-                NSLog(@"=== settin mood to: %@",self.activityEvent.mood);
                 [minuteActivity setMood:self.activityEvent.mood];
                 //minuteActivity.mood = self.activityEvent.mood;
             }
@@ -379,11 +367,9 @@
         }
         // Send this minute's data to the server:
         NSLog(@"=== send feedback for time %@",time);
-        
         [appDelegate.networkAccessor sendFeedback:minuteActivity];
     }
     
-    NSLog(@"=== popping back from feedback");
     [self.navigationController popViewControllerAnimated:YES];
 }
 
