@@ -25,6 +25,7 @@
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
 + (void) deleteActivity: (ES_Activity *) activity;
++ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity;
 + (ES_SensorSample *) newSensorSample;
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time;
 + (void)addUserActivityLabel:(NSString *)label toActivity:(ES_Activity *)activity;

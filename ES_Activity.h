@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSOrderedSet *sensorSamples;
 @property (nonatomic, retain) ES_User *user;
 @property (nonatomic, retain) NSSet *userActivityLabels;
+@property (nonatomic, retain) NSString *mood;
 
 //-(id) copyWithZone: (NSZone *) zone;
 @end

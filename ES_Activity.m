@@ -27,6 +27,7 @@
 @dynamic sensorSamples;
 @dynamic user;
 @dynamic userActivityLabels;
+@dynamic mood;
 
 - (void)addSensorSamplesObject:(ES_SensorSample *)value
 {

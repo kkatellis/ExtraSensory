@@ -367,6 +367,7 @@
         }
         // Send this minute's data to the server:
         NSLog(@"=== send feedback for time %@",time);
+    
         [appDelegate.networkAccessor sendFeedback:minuteActivity];
     }
     

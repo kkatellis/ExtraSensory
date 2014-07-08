@@ -17,3 +17,12 @@
 @property (nonatomic, retain) ES_Activity *activity;
 
 @end
+
+@interface ES_UserActivityLabel (CoreDataGeneratedAccessors)
+
+- (void)addActivityObject:(ES_Activity *)value;
+- (void)removeActivityObject:(ES_Activity *)value;
+- (void)addActivity:(NSSet *)values;
+- (void)removeActivity:(NSSet *)values;
+
+@end

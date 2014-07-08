@@ -90,6 +90,48 @@
     [[self context] deleteObject:activity];
 }
 
++ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity
+{
+    NSSet *oldlabels = activity.userActivityLabels;
+    
+    if ([oldlabels count] > 0)
+    {
+        [activity removeUserActivityLabels:oldlabels];
+    }
+    
+    NSMutableSet *newlabels = [NSMutableSet new];
+    
+    for (NSString* label in labels)
+    {
+        ES_UserActivityLabel* newlabel = [self getUserActivityLabelWithName:label];
+        [newlabels addObject:newlabel];
+    }
+    [activity addUserActivityLabels:newlabels];
+    
+}
+
++ (ES_UserActivityLabel*) getUserActivityLabelWithName:(NSString*)label
+{
+    NSError *error = [NSError new];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabels"];
+    [fetchRequest setFetchLimit:1];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name = %@", label]];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+    
+    if ([results count] > 0)
+    {
+        return [results firstObject];
+    }
+    // if not exists, just insert a new entity
+    else
+    {
+        ES_UserActivityLabel *userActivity = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabels"
+                                                                            inManagedObjectContext:[self context]];
+        userActivity.name = label;
+        return userActivity;
+    }
+}
+
 + (ES_SensorSample *) newSensorSample
 {
     return [NSEntityDescription insertNewObjectForEntityForName:@"ES_SensorSample" inManagedObjectContext:[self context]];
