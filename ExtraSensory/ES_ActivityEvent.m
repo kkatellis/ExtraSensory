@@ -10,7 +10,7 @@
 
 @implementation ES_ActivityEvent
 
-- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities
+- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels mood:(NSString *)mood startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities
 {
     self = [super init];
     if (self) {
@@ -22,6 +22,7 @@
         self.endTimestamp = endTimestamp;
 //        self.startActivity = startActivity;
         self.minuteActivities = minuteActivities;
+        self.mood = mood;
     }
     return self;
 }

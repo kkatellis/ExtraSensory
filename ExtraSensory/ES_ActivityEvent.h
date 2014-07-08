@@ -26,6 +26,6 @@
 @property (nonatomic, retain) NSMutableArray *minuteActivities;
 
 //- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp startActivity:(ES_Activity *)startActivity;
-- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities;
+- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels mood:(NSString *)mood startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities;
 
 @end
