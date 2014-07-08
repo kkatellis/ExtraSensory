@@ -50,6 +50,7 @@
 
 - (BOOL) record;
 
+-(void) turnOffRecording;
 -(void) _prepStage:(NSString*) fileName;
 
 //- (void) packHFData:(NSTimer *)timer;

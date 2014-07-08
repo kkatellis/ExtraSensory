@@ -184,6 +184,32 @@
     }
 }
 
+- (void) turnOffRecording
+{
+    NSLog(@"[scheduler] turnOffRecording");
+    self.appDelegate.dataCollectionOn = NO;
+    [self.sensorManager turnOffRecording];
+    [self.timer invalidate];
+    self.timer = nil;
+    
+}
+
+- (void) activeFeedback: (ES_Activity *) activity
+{
+    NSLog( @"\n\nStart active feedback sample");
+    self.appDelegate.mostRecentActivity = activity;
+    
+    [self.timer invalidate]; //turn off auto-sampling timer
+    self.timer = nil;
+    [self firstOpActive: activity];
+    
+    // turn auto-sampling timer back on
+    self.timer = [NSTimer scheduledTimerWithTimeInterval: [self.user.settings.timeBetweenSampling doubleValue]
+                                                  target: self
+                                                selector: @selector(firstOp)
+                                                userInfo: nil
+                                                 repeats: YES];
+}
 
 -(void) firstOp
 {
@@ -210,6 +236,13 @@
                                             repeats: NO];
     
     
+}
+
+-(void) firstOpActive: (ES_Activity *) activity
+{
+    NSLog(@"Record Sensors");
+    [self.sensorManager setCurrentActivity: activity];
+    [self.sensorManager record];
 }
 
 

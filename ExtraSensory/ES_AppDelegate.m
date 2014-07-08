@@ -12,6 +12,7 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_User.h"
+#import "ES_Scheduler.h"
 
 @implementation ES_AppDelegate
 
@@ -35,6 +36,8 @@
 @synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
 
 @synthesize activitiesToUpload = _activitiesToUpload;
+
+@synthesize mostRecentActivity = _mostRecentActivity;
 
 - (NSMutableArray *)activitiesToUpload
 {
@@ -134,6 +137,16 @@
         _sensorManager = [ES_SensorManager new];
     }
     return _sensorManager;
+}
+
+- (ES_Scheduler *)scheduler
+{
+    if (!_scheduler)
+    {
+        _scheduler = [ES_Scheduler new];
+        NSLog(@"created new sheduler!");
+    }
+    return _scheduler;
 }
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application

@@ -31,6 +31,7 @@
 @property NSTimer *soundTimer;
 
 @property NSNumber *counter;
+@property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
 @end
 
@@ -88,6 +89,14 @@
     return _user;
 }
 
+- (ES_AppDelegate *) appDelegate
+{
+    if (!_appDelegate)
+    {
+        _appDelegate = [[UIApplication sharedApplication] delegate];
+    }
+    return _appDelegate;
+}
 
 - (NSNumber *) isReady
 {
@@ -246,7 +255,25 @@
     }
 }
 
-
+-(void) turnOffRecording
+{
+    NSLog(@"[sensorManager] turnOffRecording");
+    if (!self.appDelegate.currentlyUploading)
+    {
+        if (self.currentActivity)
+        {
+            // delete a partially created activity
+            [ES_DataBaseAccessor deleteActivity:self.currentActivity];
+            [self setCurrentActivity: nil];
+        }
+    }
+    [self.timer invalidate];
+    self.timer = nil;
+    [self.locationManager stopUpdatingLocation];
+    [self.motionManager stopAccelerometerUpdates];
+    [self.motionManager stopGyroUpdates];
+    [self.soundProcessor pauseDurRecording];
+}
 
 
 #pragma mark Location Manager Delegate Methods
