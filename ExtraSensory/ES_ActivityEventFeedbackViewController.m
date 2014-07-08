@@ -11,6 +11,7 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_MainActivityViewController.h"
 #import "ES_ActivitiesStrings.h"
+#import "ES_DataBaseAccessor.h"
 
 #define MAIN_ACTIVITY_SEC (int)0
 #define USER_ACTIVITIES_SEC (int)1
@@ -359,10 +360,16 @@
             NSLog(@"==== after set user correction, before set useractitivies: %@",self.activityEvent.userActivityLabels);
             
             // Secondary activities:
-            [minuteActivity addUserActivityLabels:[NSSet setWithSet:self.activityEvent.userActivityLabels]];
+            NSMutableArray *secondaryActivities = [NSMutableArray arrayWithArray:[self.activityEvent.userActivityLabels allObjects]];
+            [ES_DataBaseAccessor setSecondaryActivities:secondaryActivities forActivity:minuteActivity];
             NSLog(@"==== after set useractivities. Now: %@",minuteActivity.userActivityLabels);
 
             // Mood:
+            if (self.activityEvent.mood)
+            {
+                NSLog(@"=== settin mood to: %@",self.activityEvent.mood);
+                minuteActivity.mood = self.activityEvent.mood;
+            }
             
         }
         // Send this minute's data to the server:

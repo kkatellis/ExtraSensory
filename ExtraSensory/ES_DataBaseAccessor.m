@@ -113,7 +113,7 @@
 + (ES_UserActivityLabel*) getUserActivityLabelWithName:(NSString*)label
 {
     NSError *error = [NSError new];
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabels"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabel"];
     [fetchRequest setFetchLimit:1];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name = %@", label]];
     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
@@ -125,7 +125,7 @@
     // if not exists, just insert a new entity
     else
     {
-        ES_UserActivityLabel *userActivity = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabels"
+        ES_UserActivityLabel *userActivity = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabel"
                                                                             inManagedObjectContext:[self context]];
         userActivity.name = label;
         return userActivity;
