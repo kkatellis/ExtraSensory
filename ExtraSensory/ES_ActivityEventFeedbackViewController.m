@@ -12,6 +12,7 @@
 #import "ES_MainActivityViewController.h"
 #import "ES_ActivitiesStrings.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_UserActivityLabels.h"
 
 #define MAIN_ACTIVITY_SEC (int)0
 #define USER_ACTIVITIES_SEC (int)1
@@ -132,7 +133,9 @@
         if (self.activityEvent.userActivityLabels)
         {
             NSLog(@"=== presenting user activities: %@",self.activityEvent.userActivityLabels);
-            NSString *presentableUserActivities = [[self.activityEvent.userActivityLabels allObjects] componentsJoinedByString:@", "];
+            NSMutableArray *stringArray = [NSMutableArray arrayWithArray:[self.activityEvent.userActivityLabels allObjects]];
+            
+            NSString *presentableUserActivities = [stringArray componentsJoinedByString:@", "];
             cell.detailTextLabel.text = presentableUserActivities;
         }
         else
@@ -249,7 +252,7 @@
             
             if (self.activityEvent.userActivityLabels)
             {
-                [activitySelection setAppliedLabels: [NSMutableSet setWithSet: self.activityEvent.userActivityLabels]];
+                [activitySelection setAppliedLabels: [NSMutableSet setWithSet:self.activityEvent.userActivityLabels]];
             }
             [activitySelection setChoices:[ES_ActivitiesStrings secondaryActivities]];
             [activitySelection setCategory:SECONDARY_ACTIVITIES];

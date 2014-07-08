@@ -15,6 +15,8 @@
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSSet *activity;
+
++ (NSMutableArray *) createStringArrayFromUserActivityLabelsAraay:(NSArray *)userActivityLabelsArray;
 @end
 
 @interface ES_UserActivityLabels (CoreDataGeneratedAccessors)
