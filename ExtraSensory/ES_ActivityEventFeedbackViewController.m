@@ -368,7 +368,8 @@
             if (self.activityEvent.mood)
             {
                 NSLog(@"=== settin mood to: %@",self.activityEvent.mood);
-                minuteActivity.mood = self.activityEvent.mood;
+                [minuteActivity setMood:self.activityEvent.mood];
+                //minuteActivity.mood = self.activityEvent.mood;
             }
             
         }

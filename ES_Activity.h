@@ -23,12 +23,12 @@
 @property (nonatomic, retain) NSString * uuid;
 @property (nonatomic, retain) NSNumber * hasBeenSent;
 @property (nonatomic, retain) NSString * zipFilePath;
-@property (nonatomic, retain) NSOrderedSet *sensorSamples;
-@property (nonatomic, retain) ES_User *user;
-@property (nonatomic, retain) NSSet *userActivityLabels;
-@property (nonatomic, retain) NSString *mood;
+@property (nonatomic, retain) NSOrderedSet * sensorSamples;
+@property (nonatomic, retain) ES_User * user;
+@property (nonatomic, retain) NSSet * userActivityLabels;
+@property (nonatomic, retain) NSString * mood;
 
-//-(id) copyWithZone: (NSZone *) zone;
+-(void) setMood:(NSString *)mood;
 @end
 
 @interface ES_Activity (CoreDataGeneratedAccessors)

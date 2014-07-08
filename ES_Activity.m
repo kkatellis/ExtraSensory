@@ -27,7 +27,14 @@
 @dynamic sensorSamples;
 @dynamic user;
 @dynamic userActivityLabels;
-@dynamic mood;
+//@dynamic mood;
+
+@synthesize mood = _mood;
+
+- (void) setMood:(NSString *)moodToSet
+{
+    _mood = moodToSet;
+}
 
 - (void)addSensorSamplesObject:(ES_SensorSample *)value
 {
@@ -36,26 +43,6 @@
     self.sensorSamples = tempSet;
 }
 
-
-//-(id) copyWithZone: (NSZone *) zone
-//{
-//    ES_Activity *newCopy = [[ES_Activity allocWithZone:zone] initWithEntity:self.entity insertIntoManagedObjectContext:self.managedObjectContext];
-//    newCopy.isPredictionCorrect = self.isPredictionCorrect;
-//    newCopy.isPredictionVerified = self.isPredictionVerified;
-//    newCopy.numberOfSamples = self.numberOfSamples;
-//    newCopy.sampleFrequency = self.sampleFrequency;
-//    newCopy.serverPrediction = self.serverPrediction;
-//    newCopy.timestamp = self.timestamp;
-//    newCopy.userCorrection = self.userCorrection;
-//    newCopy.uuid = self.uuid;
-//    newCopy.hasBeenSent = self.hasBeenSent;
-//    newCopy.zipFilePath = self.zipFilePath;
-//    newCopy.sensorSamples = self.sensorSamples;
-//    newCopy.user = self.user;
-//    newCopy.userActivityLabels = self.userActivityLabels;
-//    
-//    return newCopy;
-//}
 
 
 @end
