@@ -27,7 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addCenterButtonWithImage:[UIImage imageNamed:@"Add.png"] highlightImage:nil];
+    [self addCenterButtonWithImage:[UIImage imageNamed:@"text-plus-icon.png"] highlightImage:nil];
 	// Do any additional setup after loading the view.
 }
 
@@ -46,20 +46,20 @@
     CGContextTranslateCTM(context, 0, buttonImage.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
     
-    CGRect rect = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
+    //CGRect rect = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
     
     // image drawing code here
     // draw tint color
-    CGContextSetBlendMode(context, kCGBlendModeNormal);
-    [[UIColor redColor] setFill];
-    CGContextFillRect(context, rect);
+    //CGContextSetBlendMode(context, kCGBlendModeNormal);
+    //[[UIColor redColor] setFill];
+    //CGContextFillRect(context, rect);
     
     // mask by alpha values of original image
-    CGContextSetBlendMode(context, kCGBlendModeDestinationIn);
-    CGContextDrawImage(context, rect, buttonImage.CGImage);
+    //CGContextSetBlendMode(context, kCGBlendModeDestinationIn);
+    //CGContextDrawImage(context, rect, buttonImage.CGImage);
     
-    buttonImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    //buttonImage = UIGraphicsGetImageFromCurrentImageContext();
+    //UIGraphicsEndImageContext();
     //end tinting
     
     UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
