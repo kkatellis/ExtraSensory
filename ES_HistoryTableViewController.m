@@ -86,7 +86,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-+ (BOOL)isActivity:(ES_Activity *)activity1 similarToActivity:(ES_Activity *)activity2
++ (BOOL)doesActivity:(ES_Activity *)activity1 haveSameMainActivityAsActivity:(ES_Activity *)activity2
 {
     if (activity1.userCorrection)
     {
@@ -99,6 +99,45 @@
     }
     
     return [activity1.serverPrediction isEqualToString:activity2.serverPrediction];
+}
+
++ (BOOL)doesActivity:(ES_Activity *)activity1 haveSameSecondaryActivitiesAsActivity:(ES_Activity *)activity2
+{
+    NSMutableSet *userActivitiesStrings1 = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity1.userActivityLabels allObjects]]];
+    
+    NSMutableSet *userActivitiesStrings2 = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity2.userActivityLabels allObjects]]];
+    
+    if ([userActivitiesStrings1 count] != [userActivitiesStrings2 count])
+    {
+        return NO;
+    }
+    
+    NSMutableSet *diff = [NSMutableSet setWithSet:userActivitiesStrings1];
+    [diff minusSet:userActivitiesStrings2];
+    
+    return ![diff count];
+}
+
++ (BOOL)doesActivity:(ES_Activity *)activity1 haveSameMoodAsActivity:(ES_Activity *)activity2
+{
+    if (activity1.mood)
+    {
+        return [activity1.mood isEqualToString:activity2.mood];
+    }
+    
+    return !(activity2.mood);
+}
+
++ (BOOL)isActivity:(ES_Activity *)activity1 similarToActivity:(ES_Activity *)activity2
+{
+    BOOL sameMainActivity = [self doesActivity:activity1 haveSameMainActivityAsActivity:activity2];
+    
+    BOOL sameSecondary = [self doesActivity:activity1 haveSameSecondaryActivitiesAsActivity:activity2];
+
+    BOOL sameMood = [self doesActivity:activity1 haveSameMoodAsActivity:activity2];
+    
+    BOOL same = sameMainActivity && sameSecondary && sameMood;
+    return same;
 }
 
 - (void)recalculateEventsFromPredictionList
@@ -175,17 +214,29 @@
     [dateFormatter setDateFormat:@"hh:mm"];
     NSString *dateString = [NSString stringWithFormat:@"%@ - %@",[dateFormatter stringFromDate:startDate],[dateFormatter stringFromDate:endDate]];
 
-    cell.textLabel.text = dateString;
     cell.activityEvent = relevantEvent;
     
-    NSString *eventDetails;
+    NSString *mainActivityString;
     if (relevantEvent.userCorrection)
     {
-        eventDetails = relevantEvent.userCorrection;
+        mainActivityString = relevantEvent.userCorrection;
     }
     else
     {
-        eventDetails = [NSString stringWithFormat:@"%@?",relevantEvent.serverPrediction];
+        mainActivityString = [NSString stringWithFormat:@"%@?",relevantEvent.serverPrediction];
+    }
+    
+    NSString *mainText = [NSString stringWithFormat:@"%@   %@",dateString,mainActivityString];
+    cell.textLabel.text = mainText;
+    
+    NSString *eventDetails;
+    if (relevantEvent.mood)
+    {
+        eventDetails = relevantEvent.mood;
+    }
+    else
+    {
+        eventDetails = @"";
     }
     
     if (relevantEvent.userActivityLabels && [relevantEvent.userActivityLabels count]>0)
