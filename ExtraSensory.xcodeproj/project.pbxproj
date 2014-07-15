@@ -129,7 +129,6 @@
 		9F05D07318BBC7E20005C843 /* ES_SelectTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F05D07218BBC7E20005C843 /* ES_SelectTimeViewController.m */; };
 		9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
 		9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
-		9F90A5C718AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C618AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m */; };
 		9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */; };
 		9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */; };
 		9FD9D2F918AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FD9D2F818AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard */; };
@@ -308,8 +307,6 @@
 		9F05D07218BBC7E20005C843 /* ES_SelectTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SelectTimeViewController.m; sourceTree = "<group>"; };
 		9F59F66518A9A9C5002C94B9 /* ES_HistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_HistoryTableViewController.h; sourceTree = SOURCE_ROOT; };
 		9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_HistoryTableViewController.m; sourceTree = SOURCE_ROOT; };
-		9F90A5C518AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_EventEditAndFeedbackViewController.h; sourceTree = "<group>"; };
-		9F90A5C618AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_EventEditAndFeedbackViewController.m; sourceTree = "<group>"; };
 		9F90A5C818AD7A6700E6E29B /* ES_ActivityEventTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEventTableCell.h; sourceTree = "<group>"; };
 		9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEventTableCell.m; sourceTree = "<group>"; };
 		9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEvent.h; sourceTree = "<group>"; };
@@ -530,8 +527,6 @@
 				9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */,
 				9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */,
 				9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */,
-				9F90A5C518AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.h */,
-				9F90A5C618AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m */,
 				9F05D07118BBC7E20005C843 /* ES_SelectTimeViewController.h */,
 				9F05D07218BBC7E20005C843 /* ES_SelectTimeViewController.m */,
 			);
@@ -934,7 +929,6 @@
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
-				9F90A5C718AD6FE000E6E29B /* ES_EventEditAndFeedbackViewController.m in Sources */,
 				70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */,
 				70C156BE18D526EB007CCB39 /* ES_ContainerViewController.m in Sources */,
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
