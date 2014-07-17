@@ -42,6 +42,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.activityCounts = [ES_DataBaseAccessor getTodaysCounts];
+    NSLog(@"=== summary got activity counts: %@",self.activityCounts);
     [self.tableView reloadData];
 }
 
@@ -79,16 +80,19 @@
     // Configure the cell...
     NSString *activity = [[self.activityCounts allKeys] objectAtIndex:indexPath.row];
     cell.textLabel.text = activity;
-    int mins = (int) self.activityCounts[activity];
+    int mins = [self.activityCounts[activity] integerValue];
+    NSString *activityDuration;
     if (mins >= 60)
     {
         int hrs = mins / 60;
         mins = mins - 60 * hrs;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d hr %d min", hrs, mins];
+        activityDuration = [NSString stringWithFormat:@"%d hr %d min", hrs, mins];
         
     } else {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d min", mins];
+        activityDuration = [NSString stringWithFormat:@"%d min", mins];
     }
+    
+    cell.detailTextLabel.text = activityDuration;
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
