@@ -19,6 +19,9 @@
 		7070A64B18D7B9DF007D660D /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7070A64A18D7B9DF007D660D /* ES_Activity.m */; };
 		707762E018CF7C9800ED0134 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 707762DF18CF7C9800ED0134 /* Reachability.m */; };
 		707762E318D125BD00ED0134 /* ES_SummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 707762E218D125BD00ED0134 /* ES_SummaryViewController.m */; };
+		708D5FB2197C3778003FE7D3 /* Lying down.png in Resources */ = {isa = PBXBuildFile; fileRef = 708D5FAF197C3778003FE7D3 /* Lying down.png */; };
+		708D5FB3197C3778003FE7D3 /* Standing.png in Resources */ = {isa = PBXBuildFile; fileRef = 708D5FB0197C3778003FE7D3 /* Standing.png */; };
+		708D5FB4197C3778003FE7D3 /* Bicycling.png in Resources */ = {isa = PBXBuildFile; fileRef = 708D5FB1197C3778003FE7D3 /* Bicycling.png */; };
 		70B8A92D18F87D230076A4F5 /* 17-bar-chart.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B8A8E718F87D230076A4F5 /* 17-bar-chart.png */; };
 		70B8A92E18F87D230076A4F5 /* 100-coffee.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B8A8E918F87D230076A4F5 /* 100-coffee.png */; };
 		70B8A92F18F87D230076A4F5 /* 25-weather.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B8A8EA18F87D230076A4F5 /* 25-weather.png */; };
@@ -166,6 +169,9 @@
 		707762DF18CF7C9800ED0134 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		707762E118D125BD00ED0134 /* ES_SummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SummaryViewController.h; sourceTree = "<group>"; };
 		707762E218D125BD00ED0134 /* ES_SummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SummaryViewController.m; sourceTree = "<group>"; };
+		708D5FAF197C3778003FE7D3 /* Lying down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lying down.png"; sourceTree = "<group>"; };
+		708D5FB0197C3778003FE7D3 /* Standing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Standing.png; sourceTree = "<group>"; };
+		708D5FB1197C3778003FE7D3 /* Bicycling.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bicycling.png; sourceTree = "<group>"; };
 		70B8A8E718F87D230076A4F5 /* 17-bar-chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "17-bar-chart.png"; sourceTree = "<group>"; };
 		70B8A8E918F87D230076A4F5 /* 100-coffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "100-coffee.png"; sourceTree = "<group>"; };
 		70B8A8EA18F87D230076A4F5 /* 25-weather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "25-weather.png"; sourceTree = "<group>"; };
@@ -354,6 +360,9 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				708D5FAF197C3778003FE7D3 /* Lying down.png */,
+				708D5FB0197C3778003FE7D3 /* Standing.png */,
+				708D5FB1197C3778003FE7D3 /* Bicycling.png */,
 				703B3667196E477500D5D80B /* text-plus-icon.png */,
 				703B3651196E3FD100D5D80B /* stats_pie_chart.png */,
 				703B364F196E3FA800D5D80B /* gear.png */,
@@ -811,12 +820,14 @@
 			files = (
 				70B8A96918F87D230076A4F5 /* primary-btn-bg.png in Resources */,
 				70B8A96B18F87D230076A4F5 /* rdio-logo@2x.png in Resources */,
+				708D5FB2197C3778003FE7D3 /* Lying down.png in Resources */,
 				70B8A94318F87D230076A4F5 /* indicator-sitting@2x.png in Resources */,
 				70B8A93C18F87D230076A4F5 /* indicator-housework.png in Resources */,
 				70B8A96418F87D230076A4F5 /* settings-icon.png in Resources */,
 				70B8A96D18F87D230076A4F5 /* smiley.png in Resources */,
 				70B8A93818F87D230076A4F5 /* indicator-driving.png in Resources */,
 				70B8A96218F87D230076A4F5 /* header-bg.png in Resources */,
+				708D5FB4197C3778003FE7D3 /* Bicycling.png in Resources */,
 				70B8A94718F87D230076A4F5 /* indicator-walking@2x.png in Resources */,
 				70B8A95F18F87D230076A4F5 /* music-note.png in Resources */,
 				70B8A96C18F87D230076A4F5 /* silent-on.png in Resources */,
@@ -827,6 +838,7 @@
 				70B8A92E18F87D230076A4F5 /* 100-coffee.png in Resources */,
 				70B8A96E18F87D230076A4F5 /* success-btn-bg.png in Resources */,
 				70B8A93518F87D230076A4F5 /* house.png in Resources */,
+				708D5FB3197C3778003FE7D3 /* Standing.png in Resources */,
 				70B8A95618F87D230076A4F5 /* success.png in Resources */,
 				70B8A95818F87D230076A4F5 /* black-linenold.png in Resources */,
 				70B8A95218F87D230076A4F5 /* album-art-small.png in Resources */,
