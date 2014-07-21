@@ -42,7 +42,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.activityCounts = [ES_DataBaseAccessor getTodaysCounts];
-    NSLog(@"=== summary got activity counts: %@",self.activityCounts);
     [self.tableView reloadData];
 }
 
