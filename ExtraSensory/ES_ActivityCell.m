@@ -68,7 +68,7 @@
         }];
         
         [self.time makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.title.bottom).offset(contentMargin-0.0);
+            make.top.equalTo(self.bottom).offset(contentMargin-17);
             make.left.equalTo(self.left).offset(contentPadding.left -33);
             make.right.equalTo(self.right).offset(-contentPadding.right);
             make.bottom.lessThanOrEqualTo(self.bottom).offset(-contentPadding.bottom );
