@@ -46,6 +46,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="calendarButton" destination="MpH-Qo-gh7" id="FQa-gi-X42"/>
                         <outlet property="mostRecentActivityImage" destination="RdZ-Fs-goq" id="3Ee-tQ-rBv"/>
                         <outlet property="mostRecentActivityLabel" destination="bga-qn-aaa" id="ev1-og-1JF"/>
                     </connections>

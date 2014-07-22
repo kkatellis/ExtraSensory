@@ -23,6 +23,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *mostRecentActivityLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *mostRecentActivityImage;
 - (IBAction)calendarButtonAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *calendarButton;
 
 @property NSMutableArray *activityCountArray;
 
