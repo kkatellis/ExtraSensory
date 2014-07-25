@@ -215,7 +215,43 @@
     return counts;
 }
 
-
++ (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities
+{
+    NSMutableDictionary *counts = [NSMutableDictionary new];
+    for (NSString *act in secondaryActivities)
+    {
+        [counts setObject:[NSNumber numberWithInt:0] forKey:act];
+    }
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
+    [fetchRequest setFetchLimit:0];
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *date = [NSDate date];
+    NSDateComponents *comps = [cal components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
+                                     fromDate:date];
+    NSDate *today = [cal dateFromComponents:comps];
+    NSNumber *todayNum = [NSNumber numberWithInt:(int)today];
+    
+    //NSNumber *yesterday = [NSNumber numberWithInt:(int)[NSDate dateWithTimeIntervalSinceNow:-24*60*60]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp > %@ AND userActivityLabel != nil", todayNum]];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    
+    NSError *error = [NSError new];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+    
+    for (ES_Activity *activity in results)
+    {
+        if (activity.userActivityLabels)
+        {
+            //count the userCorrection if there is one
+            int newCount = (int)[counts[activity.userCorrection] integerValue] + 1;
+            counts[activity.userCorrection]  = [NSNumber numberWithInt:newCount];
+        }
+    }
+    //NSLog(@"Today's counts: %@", counts);
+    return counts;
+}
 
 
 + (void) save
