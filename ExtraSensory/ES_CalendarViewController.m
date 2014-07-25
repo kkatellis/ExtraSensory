@@ -9,18 +9,20 @@
 #import "ES_CalendarViewController.h"
 #import "MSCollectionViewCalendarLayout.h"
 #import "ES_Activity.h"
+#import "ES_Activity+Day.h"
+
 // Collection View Reusable Views
 #import "MSGridline.h"
 #import "MSTimeRowHeaderBackground.h"
 #import "MSDayColumnHeaderBackground.h"
-#import "MSEventCell.h"
+#import "ES_ActivityCell.h"
 #import "MSDayColumnHeader.h"
 #import "MSTimeRowHeader.h"
 #import "MSCurrentTimeIndicator.h"
 #import "MSCurrentTimeGridline.h"
 #import "ES_ActiveFeedbackViewController.h"
 
-NSString * const MSEventCellReuseIdentifier = @"MSEventCellReuseIdentifier";
+NSString * const ESActivityCellReuseIdentifier = @"ESActivityCellReuseIdentifier";
 NSString * const MSDayColumnHeaderReuseIdentifier = @"MSDayColumnHeaderReuseIdentifier";
 NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifier";
 
@@ -31,13 +33,13 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *feedbackButton;
 @property (nonatomic, strong) UIButton *zoomButton;
-
 @end
 
 @implementation ES_CalendarViewController
-
+//@synthesize selectedCell=_selectedCell;
 - (id)init
 {
+    self.isDailyView=YES;
     self.collectionViewCalendarLayout = [[MSCollectionViewCalendarLayout alloc] init];
     self.collectionViewCalendarLayout.delegate = self;
     self = [super initWithCollectionViewLayout:self.collectionViewCalendarLayout];
@@ -45,21 +47,21 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
-    self.backButton.frame = CGRectMake(0.0, 5.0, 50.0, 40.0);
+    self.backButton.frame = CGRectMake(0.0, 5.0, 50.0, 20.0);
     self.	backButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.backButton];
     
     self.feedbackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.feedbackButton addTarget:self action:@selector(activeFeedback:) forControlEvents:UIControlEventTouchUpInside];
     [self.feedbackButton setTitle:@"Feedback" forState:UIControlStateNormal];
-    self.feedbackButton.frame = CGRectMake(235.0, 5.0, 100.0, 40.0);
+    self.feedbackButton.frame = CGRectMake(235.0, 5.0, 100.0, 20.0);
     self.feedbackButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.feedbackButton];
     
     self.zoomButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.zoomButton addTarget:self action:@selector(zoom:) forControlEvents:UIControlEventTouchUpInside];
-    [self.zoomButton setTitle:@"Zoom" forState:UIControlStateNormal];
-    self.zoomButton.frame = CGRectMake(235.0, 25.0, 100.0, 40.0);
+    [self.zoomButton setTitle:@"Hourly View" forState:UIControlStateNormal];
+    self.zoomButton.frame = CGRectMake(235.0, 25.0, 100.0, 20.0);
     self.zoomButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.zoomButton];
 
@@ -72,7 +74,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     
     self.collectionView.backgroundColor = [UIColor whiteColor];
     
-    [self.collectionView registerClass:MSEventCell.class forCellWithReuseIdentifier:MSEventCellReuseIdentifier];
+    [self.collectionView registerClass:ES_ActivityCell.class forCellWithReuseIdentifier:ESActivityCellReuseIdentifier];
     [self.collectionView registerClass:MSDayColumnHeader.class forSupplementaryViewOfKind:MSCollectionElementKindDayColumnHeader withReuseIdentifier:MSDayColumnHeaderReuseIdentifier];
     [self.collectionView registerClass:MSTimeRowHeader.class forSupplementaryViewOfKind:MSCollectionElementKindTimeRowHeader withReuseIdentifier:MSTimeRowHeaderReuseIdentifier];
     
@@ -86,12 +88,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"startTime" ascending:YES]];
-    // No events with undecided times or dates
-    //    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"(dateToBeDecided == NO) AND (timeToBeDecided == NO)"];
-    // Divide into sections by the "day" key path
     
-    ////////////////////////////////////////////////////////////////////
-//    NSString *storePath =@"/Users/arya/Downloads/ExtraSensory.sqlite";
     NSString *storePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ExtraSensory.sqlite"];
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
@@ -102,14 +99,10 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
     [RKManagedObjectStore setDefaultStore:managedObjectStore];
     
-    ////////////////////////////////////////////////////////////////////
-    
-    
+    // Divide into sections by the "day" key path
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:@"day" cacheName:nil];
     self.fetchedResultsController.delegate = self;
     [self.fetchedResultsController performFetch:nil];
-    
-    //    [self loadData];
 }
 -(void)back:(UIButton *)sender
 {
@@ -117,10 +110,17 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 }
 -(void) activeFeedback:(UIButton*)button
 {
+//
+    NSArray *indexPaths = [self.collectionView indexPathsForSelectedItems];
+    NSIndexPath *indexPath = [indexPaths objectAtIndex:0];
+
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    ES_ActiveFeedbackViewController* initialView = [storyboard instantiateInitialViewController];
+    ES_ActiveFeedbackViewController* initialView;// = [[ES_ActiveFeedbackViewController alloc] init];
+    initialView = [storyboard instantiateInitialViewController];
+
     initialView.modalPresentationStyle = UIModalPresentationFormSheet;
     [self presentViewController:initialView animated:YES completion:nil];
+//   initialView.activity=((ES_ActivityCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath]).activity;
 }
 
 -(void) zoom:(UIButton*)button
@@ -128,10 +128,13 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     NSLog(@"Before %d\n", self.collectionViewCalendarLayout.isDailyView);
     self.isDailyView=!self.isDailyView;
     [self.collectionViewCalendarLayout initialize:self.isDailyView];
-        NSLog(@"Aftee %d\n", self.collectionViewCalendarLayout.isDailyView);
-
+    if (self.isDailyView) {
+        [self.zoomButton setTitle:@"Hourly View" forState:UIControlStateNormal];
+    } else {
+        [self.zoomButton setTitle:@"Daily View" forState:UIControlStateNormal];
+    }
     [self viewDidLoad]; [self viewWillAppear:YES];
-       [self.collectionView reloadData];
+       [self.collectionView reloadData];    [self.collectionViewCalendarLayout scrollCollectionViewToClosetSectionToCurrentTimeAnimated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -180,9 +183,12 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    MSEventCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MSEventCellReuseIdentifier forIndexPath:indexPath];
+    ES_ActivityCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ESActivityCellReuseIdentifier forIndexPath:indexPath];
         cell.isDailyView=self.isDailyView;
     cell.activity = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    if (cell.selected) {
+//        self.selectedCell=cell;
+//    }
 
     return cell;
 }
@@ -218,26 +224,21 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout dayForSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
-    ES_Activity *event = [sectionInfo.objects firstObject];
-    NSLog(@"day:%@", event.day);
-    return event.day;
+    ES_Activity *activity = [sectionInfo.objects firstObject];
+    NSLog(@"day:%@", activity.day);
+    return activity.day;
 }
 
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout startTimeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ES_Activity *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"hh:mm"];
-//    event.location = [dateFormatter stringFromDate:event.start];
-
-    return event.startTime;
+    ES_Activity *activity = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    return activity.startTime;
 }
 
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout endTimeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ES_Activity *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    // Most sports last ~3 hours, and SeatGeek doesn't provide an end time
-    return [event.startTime dateByAddingTimeInterval:(60)];
+    ES_Activity *activity = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    return [activity.startTime dateByAddingTimeInterval:(60)];// every activity is 60 sec
 }
 
 - (NSDate *)currentTimeComponentsForCollectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout

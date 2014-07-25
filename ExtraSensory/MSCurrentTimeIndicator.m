@@ -27,7 +27,7 @@
         self.time = [UILabel new];
         self.time.font = [UIFont boldSystemFontOfSize:10.0];
         self.time.textColor = [UIColor colorWithHexString:@"fd3935"];
-        self.time.textColor = [UIColor greenColor];
+        self.time.textColor = [UIColor redColor];
 
         [self addSubview:self.time];
         

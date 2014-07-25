@@ -185,7 +185,8 @@
     [ES_DataBaseAccessor clearHFDataFile];
     [ES_DataBaseAccessor clearLabelFile];
     
-    self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[[NSDate date] timeIntervalSince1970]];
+    self.currentActivity.startTime = [NSDate date];
+    self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[self.currentActivity.startTime timeIntervalSince1970]];
     
     self.motionManager.accelerometerUpdateInterval = self.interval;
     self.motionManager.gyroUpdateInterval = self.interval;

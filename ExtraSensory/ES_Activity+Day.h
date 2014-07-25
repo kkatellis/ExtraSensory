@@ -9,5 +9,5 @@
 #import "ES_Activity.h"
 
 @interface ES_Activity (Day)
-
+- (NSDate *)day;
 @end

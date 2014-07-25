@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5063" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13A598" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ES_Activity" representedClassName="ES_Activity" syncable="YES">
         <attribute name="isPredictionCorrect" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isPredictionVerified" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="mood" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="serverPrediction" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="userCorrection" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
@@ -46,11 +47,11 @@
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_User" inverseName="userPopulation" inverseEntity="ES_User" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ES_Activity" positionX="7" positionY="26" width="146" height="178"/>
+        <element name="ES_Activity" positionX="7" positionY="26" width="146" height="195"/>
         <element name="ES_ActivityStatistics" positionX="430" positionY="-99" width="128" height="210"/>
         <element name="ES_Settings" positionX="378" positionY="-222" width="128" height="105"/>
         <element name="ES_User" positionX="187" positionY="-171" width="128" height="135"/>
-        <element name="ES_UserPopulation" positionX="171" positionY="-297" width="128" height="60"/>
         <element name="ES_UserActivityLabels" positionX="225" positionY="81" width="128" height="73"/>
+        <element name="ES_UserPopulation" positionX="171" positionY="-297" width="128" height="60"/>
     </elements>
 </model>

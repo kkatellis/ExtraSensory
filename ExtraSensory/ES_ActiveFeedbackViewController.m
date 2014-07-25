@@ -48,6 +48,9 @@
     }
     return _activity;
 }
+-(void)setActivity:(ES_Activity *)activity{
+    _activity=activity;
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {

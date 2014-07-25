@@ -9,5 +9,9 @@
 #import "ES_Activity+Day.h"
 
 @implementation ES_Activity (Day)
+- (NSDate *)day
+{
+    return [self.startTime beginningOfDay];
+}
 
 @end

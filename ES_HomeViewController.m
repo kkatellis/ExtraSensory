@@ -16,11 +16,13 @@
 #import "ES_PieChartView.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_ActiveFeedbackViewController.h"
+#import "ES_CalendarViewController.h"
 
 @interface ES_HomeViewController ()
 
 @property (strong, nonatomic) IBOutlet UILabel *mostRecentActivityLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *mostRecentActivityImage;
+- (IBAction)calendarButtonAction:(id)sender;
 
 @property NSMutableArray *activityCountArray;
 
@@ -155,5 +157,10 @@
     ES_ActiveFeedbackViewController* initialView = [storyboard instantiateInitialViewController];
     initialView.modalPresentationStyle = UIModalPresentationFormSheet;
     [self presentViewController:initialView animated:YES completion:nil];
+}
+- (IBAction)calendarButtonAction:(id)sender {
+    ES_CalendarViewController *calendarViewController = [[ES_CalendarViewController alloc] init];
+    [self presentViewController:calendarViewController animated:YES completion:nil];
+
 }
 @end

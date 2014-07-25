@@ -735,9 +735,9 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
     self.currentTimeHorizontalGridlineAttributes = [NSMutableDictionary new];
     self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 80.0 : 80.0);
     if (_isDailyView) {
-        self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 1000.0 : 1000.0);
-    } else {
         self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 80.0 : 80.0);
+    } else {
+        self.hourHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 1000.0 : 1000.0);
     }
     
     self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : 254.0);
@@ -864,42 +864,82 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
 
 - (void)scrollCollectionViewToClosetSectionToCurrentTimeAnimated:(BOOL)animated
 {
+    NSLog(@"#od Secs: %d",self.collectionView.numberOfSections);
     if (self.collectionView.numberOfSections != 0) {
-        NSInteger closestSectionToCurrentTime = [self closestSectionToCurrentTime];
-        CGPoint contentOffset;
-        CGRect currentTimeHorizontalGridlineattributesFrame = [self.currentTimeHorizontalGridlineAttributes[[NSIndexPath indexPathForItem:0 inSection:0]] frame];
-        if (self.sectionLayoutType == MSSectionLayoutTypeHorizontalTile) {
-            CGFloat yOffset;
-            if (!CGRectEqualToRect(currentTimeHorizontalGridlineattributesFrame, CGRectZero)) {
-                yOffset = nearbyintf(CGRectGetMinY(currentTimeHorizontalGridlineattributesFrame) - (CGRectGetHeight(self.collectionView.frame) / 2.0));
+        if(self.isDailyView){
+            NSInteger closestSectionToCurrentTime = [self closestSectionToCurrentTime];
+            CGPoint contentOffset;
+            CGRect currentTimeHorizontalGridlineattributesFrame = [self.currentTimeHorizontalGridlineAttributes[[NSIndexPath indexPathForItem:0 inSection:0]] frame];
+            if (self.sectionLayoutType == MSSectionLayoutTypeHorizontalTile) {
+                CGFloat yOffset;
+                if (!CGRectEqualToRect(currentTimeHorizontalGridlineattributesFrame, CGRectZero)) {
+                    yOffset = nearbyintf(CGRectGetMinY(currentTimeHorizontalGridlineattributesFrame) - (CGRectGetHeight(self.collectionView.frame) / 2.0));
+                } else {
+                    yOffset = 0.0;
+                }
+                CGFloat xOffset = self.contentMargin.left + ((self.sectionMargin.left + self.sectionWidth + self.sectionMargin.right) * closestSectionToCurrentTime);
+                contentOffset = CGPointMake(xOffset, yOffset);
             } else {
-                yOffset = 0.0;
+                CGFloat yOffset;
+                if (!CGRectEqualToRect(currentTimeHorizontalGridlineattributesFrame, CGRectZero)) {
+                    yOffset = fmaxf(nearbyintf(CGRectGetMinY(currentTimeHorizontalGridlineattributesFrame) - (CGRectGetHeight(self.collectionView.frame) / 2.0)), [self stackedSectionHeightUpToSection:closestSectionToCurrentTime]);
+                } else {
+                    yOffset = [self stackedSectionHeightUpToSection:closestSectionToCurrentTime];
+                }
+                contentOffset = CGPointMake(0.0, yOffset);
             }
-            CGFloat xOffset = self.contentMargin.left + ((self.sectionMargin.left + self.sectionWidth + self.sectionMargin.right) * closestSectionToCurrentTime);
-            contentOffset = CGPointMake(xOffset, yOffset);
-        } else {
-            CGFloat yOffset;
-            if (!CGRectEqualToRect(currentTimeHorizontalGridlineattributesFrame, CGRectZero)) {
-                yOffset = fmaxf(nearbyintf(CGRectGetMinY(currentTimeHorizontalGridlineattributesFrame) - (CGRectGetHeight(self.collectionView.frame) / 2.0)), [self stackedSectionHeightUpToSection:closestSectionToCurrentTime]);
+            // Prevent the content offset from forcing the scroll view content off its bounds
+            if (contentOffset.y > (self.collectionView.contentSize.height - self.collectionView.frame.size.height)) {
+                contentOffset.y = (self.collectionView.contentSize.height - self.collectionView.frame.size.height);
+            }
+            if (contentOffset.y < 0.0) {
+                contentOffset.y = 0.0;
+            }
+            if (contentOffset.x > (self.collectionView.contentSize.width - self.collectionView.frame.size.width)) {
+                contentOffset.x = (self.collectionView.contentSize.width - self.collectionView.frame.size.width);
+            }
+            if (contentOffset.x < 0.0) {
+                contentOffset.x = 0.0;
+            }
+            [self.collectionView setContentOffset:contentOffset animated:animated];
+        }else{
+            NSInteger closestSectionToCurrentTime = [self closestSectionToCurrentTime];
+            CGPoint contentOffset;
+            CGRect currentTimeHorizontalGridlineattributesFrame = [self.currentTimeHorizontalGridlineAttributes[[NSIndexPath indexPathForItem:0 inSection:0]] frame];
+            if (self.sectionLayoutType == MSSectionLayoutTypeHorizontalTile) {
+                CGFloat yOffset;
+                if (!CGRectEqualToRect(currentTimeHorizontalGridlineattributesFrame, CGRectZero)) {
+                    yOffset = nearbyintf(CGRectGetMinY(currentTimeHorizontalGridlineattributesFrame) - (CGRectGetHeight(self.collectionView.frame) / 2.0));
+                } else {
+                    yOffset = 0.0;
+                }
+                CGFloat xOffset = self.contentMargin.left + ((self.sectionMargin.left + self.sectionWidth + self.sectionMargin.right) * closestSectionToCurrentTime);
+                contentOffset = CGPointMake(xOffset, yOffset);
             } else {
-                yOffset = [self stackedSectionHeightUpToSection:closestSectionToCurrentTime];
+                CGFloat yOffset;
+                if (!CGRectEqualToRect(currentTimeHorizontalGridlineattributesFrame, CGRectZero)) {
+                    yOffset = fmaxf(nearbyintf(CGRectGetMinY(currentTimeHorizontalGridlineattributesFrame) - (CGRectGetHeight(self.collectionView.frame) / 2.0)), [self stackedSectionHeightUpToSection:closestSectionToCurrentTime]);
+                } else {
+                    yOffset = [self stackedSectionHeightUpToSection:closestSectionToCurrentTime];
+                }
+                contentOffset = CGPointMake(0.0, yOffset);
             }
-            contentOffset = CGPointMake(0.0, yOffset);
+            // Prevent the content offset from forcing the scroll view content off its bounds
+//            if (contentOffset.y > (self.collectionView.contentSize.height - self.collectionView.frame.size.height)) {
+//                contentOffset.y = (self.collectionView.contentSize.height - self.collectionView.frame.size.height);
+//            }
+            if (contentOffset.y < 0.0) {
+                contentOffset.y = 0.0;
+            }
+            if (contentOffset.x > (self.collectionView.contentSize.width - self.collectionView.frame.size.width)) {
+                contentOffset.x = (self.collectionView.contentSize.width - self.collectionView.frame.size.width);
+            }
+            if (contentOffset.x < 0.0) {
+                contentOffset.x = 0.0;
+            }
+            [self.collectionView setContentOffset:contentOffset animated:animated];
+        
         }
-        // Prevent the content offset from forcing the scroll view content off its bounds
-        if (contentOffset.y > (self.collectionView.contentSize.height - self.collectionView.frame.size.height)) {
-            contentOffset.y = (self.collectionView.contentSize.height - self.collectionView.frame.size.height);
-        }
-        if (contentOffset.y < 0.0) {
-            contentOffset.y = 0.0;
-        }
-        if (contentOffset.x > (self.collectionView.contentSize.width - self.collectionView.frame.size.width)) {
-            contentOffset.x = (self.collectionView.contentSize.width - self.collectionView.frame.size.width);
-        }
-        if (contentOffset.x < 0.0) {
-            contentOffset.x = 0.0;
-        }
-        [self.collectionView setContentOffset:contentOffset animated:animated];
     }
 }
 

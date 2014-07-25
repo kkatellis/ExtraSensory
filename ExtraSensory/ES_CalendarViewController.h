@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ES_ActivityCell.h"
 @interface ES_CalendarViewController : UICollectionViewController
 @property (nonatomic, assign) BOOL isDailyView;
 @end
