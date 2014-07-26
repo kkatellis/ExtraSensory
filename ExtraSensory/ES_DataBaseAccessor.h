@@ -31,6 +31,7 @@
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time;
 + (ES_Activity *) getMostRecentActivity;
 + (NSMutableDictionary *) getTodaysCounts;
++ (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities;
 + (void) writeActivity: (ES_Activity *)activity;
 
 

@@ -233,8 +233,7 @@
     NSDate *today = [cal dateFromComponents:comps];
     NSNumber *todayNum = [NSNumber numberWithInt:(int)today];
     
-    //NSNumber *yesterday = [NSNumber numberWithInt:(int)[NSDate dateWithTimeIntervalSinceNow:-24*60*60]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp > %@ AND userActivityLabel != nil", todayNum]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@ AND %K.@count > 0", @"timestamp",todayNum,@"userActivityLabels"]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     NSError *error = [NSError new];
@@ -244,9 +243,16 @@
     {
         if (activity.userActivityLabels)
         {
-            //count the userCorrection if there is one
-            int newCount = (int)[counts[activity.userCorrection] integerValue] + 1;
-            counts[activity.userCorrection]  = [NSNumber numberWithInt:newCount];
+            for (id actObj in activity.userActivityLabels)
+            {
+                NSString *activityName = [(ES_UserActivityLabels *)actObj name];
+                int newCount = (int)[counts[activityName] integerValue] + 1;
+                counts[activityName] = [NSNumber numberWithInt:newCount];
+            }
+        }
+        else
+        {
+            NSLog(@"=== fetch gave result with nil userActivityLabels");
         }
     }
     //NSLog(@"Today's counts: %@", counts);
