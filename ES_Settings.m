@@ -15,6 +15,7 @@
 @dynamic sampleDuration;
 @dynamic sampleRate;
 @dynamic timeBetweenSampling;
+//@dynamic timeBeforeNagUser;
 @dynamic user;
 
 @end

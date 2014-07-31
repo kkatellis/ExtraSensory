@@ -30,6 +30,7 @@
 + (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity;
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time;
 + (ES_Activity *) getMostRecentActivity;
++ (ES_Activity *) getLatestCorrectedActivityWithinTheLatest:(NSNumber *)seconds;
 + (NSMutableDictionary *) getTodaysCounts;
 + (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities;
 + (void) writeActivity: (ES_Activity *)activity;

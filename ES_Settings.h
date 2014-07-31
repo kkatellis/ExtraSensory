@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSNumber * sampleDuration;
 @property (nonatomic, retain) NSNumber * sampleRate;
 @property (nonatomic, retain) NSNumber * timeBetweenSampling;
+//@property (nonatomic, retain) NSNumber * timeBeforeNagUser;
 @property (nonatomic, retain) ES_User *user;
 
 @end

@@ -215,6 +215,34 @@
     return counts;
 }
 
+/*
+ * Check the recent period of time and return the latest activity that already has a user correction, or nil, if no such activity was found in the defined recent period.
+ */
++ (ES_Activity *) getLatestCorrectedActivityWithinTheLatest:(NSNumber *)seconds
+{
+    NSDate *sinceTime = [NSDate dateWithTimeIntervalSinceNow:(-[seconds integerValue])];
+    NSNumber *since = [NSNumber numberWithInt:(int)sinceTime];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
+    [fetchRequest setFetchLimit:0];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@",@"timestamp",since]];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    
+    NSError *error = [NSError new];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+    
+    // Go over the activities (from latest to earliest):
+    for (ES_Activity *activity in results)
+    {
+        // Check if this activity already has user-correction:
+        if (activity.userCorrection)
+        {
+            return activity;
+        }
+    }
+    
+    return nil;
+}
+
 + (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities
 {
     NSMutableDictionary *counts = [NSMutableDictionary new];

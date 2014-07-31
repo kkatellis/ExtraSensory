@@ -16,6 +16,7 @@
 #import "ES_Activity.h"
 #import "ES_Settings.h"
 #import "ES_SoundWaveProcessor.h"
+#import "ES_UserActivityLabels.h"
 
 #define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
 #define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
@@ -34,6 +35,8 @@
 
 @property NSTimer *timer;
 
+@property NSTimer *naggingTimer;
+
 @end
 
 
@@ -46,6 +49,8 @@
 @synthesize predictions = _predictions;
 
 @synthesize timer = _timer;
+
+@synthesize naggingTimer = _naggingTimer;
 
 @synthesize user = _user;
 
@@ -149,6 +154,9 @@
                                                     selector: @selector(firstOp)
                                                     userInfo: nil
                                                      repeats: YES];
+    
+    // Set the first timer for user-nagging mechanizm:
+    [self setTimerForNaggingCheckup];
 }
 
 - (void) turnOffRecording
@@ -159,6 +167,67 @@
     [self.timer invalidate];
     self.timer = nil;
     
+    [self.naggingTimer invalidate];
+    self.naggingTimer = nil;
+    
+}
+
+- (void) setTimerForNaggingCheckup
+{
+    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*3]; // This has to move to a property in user.settings (ES_Settings) ///////////////
+    
+    NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
+    self.naggingTimer = [NSTimer scheduledTimerWithTimeInterval:[timeBeforeNagCheckup doubleValue]
+                                                         target: self
+                                                       selector: @selector(userNaggingCheckup)
+                                                       userInfo: nil
+                                                        repeats: YES];
+   
+}
+
+- (void) userNaggingCheckup
+{
+    NSDate *now = [NSDate date];
+    NSLog(@"=== time: %@. Checking if it's time to nag the user",now);
+
+    if (!self.appDelegate.dataCollectionOn)
+    {
+        //NSLog(@"=== data collection is off. Don't nag user!");
+        //return;
+    }
+
+    // Look for latest user-corrected activity recently:
+    NSNumber *recentPeriod = [NSNumber numberWithInteger:60*15]; // This has to be taken from some property in user.settings///////////
+    ES_Activity *latestVerifiedActivity = [ES_DataBaseAccessor getLatestCorrectedActivityWithinTheLatest:recentPeriod];
+    
+    if (latestVerifiedActivity)
+    {
+        // Then ask user if they are still doing the same thing in the last x time:
+        NSString *mainActivity = latestVerifiedActivity.userCorrection;
+        NSSet *secondaryActivities = latestVerifiedActivity.userActivityLabels;
+        NSString *mood = latestVerifiedActivity.mood;
+        NSString *question = [NSString stringWithFormat:@"In the past %d minutes were you still %@",[recentPeriod integerValue]/60,mainActivity];
+        if (secondaryActivities && [secondaryActivities count]>0)
+        {
+            NSString *secondaryString = [[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[secondaryActivities allObjects]] componentsJoinedByString:@","];
+            question = [NSString stringWithFormat:@"%@ (%@)",question,secondaryString];
+        }
+        
+        if (mood)
+        {
+            question = [NSString stringWithFormat:@"%@ and feeling %@",question,mood];
+        }
+        question = [NSString stringWithFormat:@"%@?",question];
+        NSLog(@"=== should ask question:[%@]",question);
+    }
+    else
+    {
+        // Then ask the user to provide feedback:
+        NSString *question = @"Can you update what you're doing now?";
+        NSLog(@"=== should ask question: [%@]",question);
+    }
+    
+    [self setTimerForNaggingCheckup];
 }
 
 - (void) activeFeedback: (ES_Activity *) activity
