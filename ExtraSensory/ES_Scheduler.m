@@ -174,7 +174,7 @@
 
 - (void) setTimerForNaggingCheckup
 {
-    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*3]; // This has to move to a property in user.settings (ES_Settings) ///////////////
+    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*10]; // This has to move to a property in user.settings (ES_Settings) ///////////////
     
     NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
     self.naggingTimer = [NSTimer scheduledTimerWithTimeInterval:[timeBeforeNagCheckup doubleValue]
@@ -200,16 +200,23 @@
     NSNumber *recentPeriod = [NSNumber numberWithInteger:60*15]; // This has to be taken from some property in user.settings///////////
     ES_Activity *latestVerifiedActivity = [ES_DataBaseAccessor getLatestCorrectedActivityWithinTheLatest:recentPeriod];
     
+    NSString *question;
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:now forKey:@"nagCheckTime"];
+    
     if (latestVerifiedActivity)
     {
         // Then ask user if they are still doing the same thing in the last x time:
         NSString *mainActivity = latestVerifiedActivity.userCorrection;
         NSSet *secondaryActivities = latestVerifiedActivity.userActivityLabels;
         NSString *mood = latestVerifiedActivity.mood;
-        NSString *question = [NSString stringWithFormat:@"In the past %d minutes were you still %@",[recentPeriod integerValue]/60,mainActivity];
+        NSDate *latestVerifiedDate = [NSDate dateWithTimeIntervalSince1970:[latestVerifiedActivity.timestamp doubleValue]];
+        NSTimeInterval timePassed = [now timeIntervalSinceDate:latestVerifiedDate];
+        
+        question = [NSString stringWithFormat:@"In the past %d minutes were you still %@",(int)timePassed/60,mainActivity];
+        NSArray *secondaryActivitiesStrings = [ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[secondaryActivities allObjects]];
         if (secondaryActivities && [secondaryActivities count]>0)
         {
-            NSString *secondaryString = [[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[secondaryActivities allObjects]] componentsJoinedByString:@","];
+            NSString *secondaryString = [secondaryActivitiesStrings componentsJoinedByString:@","];
             question = [NSString stringWithFormat:@"%@ (%@)",question,secondaryString];
         }
         
@@ -218,16 +225,32 @@
             question = [NSString stringWithFormat:@"%@ and feeling %@",question,mood];
         }
         question = [NSString stringWithFormat:@"%@?",question];
-        NSLog(@"=== should ask question:[%@]",question);
+        
+        [userInfo setValue:mainActivity forKey:@"mainActivity"];
+        [userInfo setValue:secondaryActivitiesStrings forKey:@"secondaryActivitiesStrings"];
+        [userInfo setValue:mood forKey:@"mood"];
+        [userInfo setValue:latestVerifiedActivity.timestamp forKey:@"latestVerifiedTimestamp"];
     }
     else
     {
         // Then ask the user to provide feedback:
-        NSString *question = @"Can you update what you're doing now?";
-        NSLog(@"=== should ask question: [%@]",question);
+        question = @"Can you update what you're doing now?";
+        
     }
     
+    NSLog(@"=== should ask question: [%@]",question);
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    // Set the timer for next time, before sending immediate notification:
     [self setTimerForNaggingCheckup];
+    if (notification)
+    {
+        notification.fireDate = nil;//[NSDate date];
+        notification.alertAction = @"ExtraSensory";
+        notification.alertBody = question;
+        notification.userInfo = userInfo;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
 }
 
 - (void) activeFeedback: (ES_Activity *) activity
@@ -245,6 +268,9 @@
                                                 selector: @selector(firstOp)
                                                     userInfo: nil
                                                      repeats: YES];
+    
+    // The user just provided active feedback, so no need to nag them for a while. Set the nagging-timer starting now:
+    [self setTimerForNaggingCheckup];
 }
 
 -(void) firstOp
