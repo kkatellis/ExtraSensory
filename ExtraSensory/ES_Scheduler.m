@@ -174,7 +174,7 @@
 
 - (void) setTimerForNaggingCheckup
 {
-    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*10]; // This has to move to a property in user.settings (ES_Settings) ///////////////
+    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*2]; // This has to move to a property in user.settings (ES_Settings) ///////////////
     
     NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
     self.naggingTimer = [NSTimer scheduledTimerWithTimeInterval:[timeBeforeNagCheckup doubleValue]
@@ -188,6 +188,7 @@
 - (void) userNaggingCheckup
 {
     NSDate *now = [NSDate date];
+    NSNumber *nowTimestamp = [NSNumber numberWithDouble:[now timeIntervalSince1970]];
     NSLog(@"=== time: %@. Checking if it's time to nag the user",now);
 
     if (!self.appDelegate.dataCollectionOn)
@@ -201,7 +202,7 @@
     ES_Activity *latestVerifiedActivity = [ES_DataBaseAccessor getLatestCorrectedActivityWithinTheLatest:recentPeriod];
     
     NSString *question;
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:now forKey:@"nagCheckTime"];
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:nowTimestamp forKey:@"nagCheckTimestamp"];
     
     if (latestVerifiedActivity)
     {

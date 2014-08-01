@@ -13,6 +13,8 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_User.h"
+#import "ES_ActivityEventFeedbackViewController.h"
+#import "ES_ActivityEvent.h"
 
 @implementation ES_AppDelegate
 
@@ -166,6 +168,44 @@
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
 
     [self.scheduler sampleSaveSendCycler];
+}
+
+- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    if (!launchOptions)
+    {
+        [self applicationDidFinishLaunching:application];
+        return YES;
+    }
+    
+    NSLog(@"=== launched with options: %@",launchOptions);
+    return YES;
+}
+
+- (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSLog(@"=== caught local notification: %@",notification);
+}
+
+- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo
+{
+    // Create an ES_ActivityEvent object to initially describe what was presumably done in the recent period of time:
+    NSNumber *startTimestamp = [userInfo valueForKey:@"latestVerifiedTimestamp"];
+    NSNumber *endTimestamp = [userInfo valueForKey:@"nagCheckTimestamp"];
+    
+    NSMutableArray *minuteActivities = [NSMutableArray arrayWithArray:[ES_DataBaseAccessor getActivitiesFrom:startTimestamp to:endTimestamp]];
+    
+    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:[userInfo valueForKey:@"secondaryActivitiesStrings"] mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTime"] minuteActivities:minuteActivities];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
+    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
+    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
+    
+    activityFeedback.activityEvent = activityEvent;
+    activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
+    activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
+
+//    [self.navigationController pushViewController:activityFeedback animated:YES];
 }
 
 - (NSUUID *)uuid

@@ -585,6 +585,18 @@
     
 }
 
++ (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
+    [fetchRequest setFetchLimit:0];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@ AND %K < %@",@"timestamp",startTimestamp,@"timestamp",endTimestamp]];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
+     
+     NSError *error = [NSError new];
+     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+     
+     return results;
+}
 
 //+ (NSArray *) arrayFromActivity: (ES_Activity *)activity
 //{
