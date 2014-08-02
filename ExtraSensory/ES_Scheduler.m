@@ -174,7 +174,7 @@
 
 - (void) setTimerForNaggingCheckup
 {
-    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*2]; // This has to move to a property in user.settings (ES_Settings) ///////////////
+    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*1.5]; // This has to move to a property in user.settings (ES_Settings) ///////////////
     
     NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
     self.naggingTimer = [NSTimer scheduledTimerWithTimeInterval:[timeBeforeNagCheckup doubleValue]
@@ -202,7 +202,7 @@
     ES_Activity *latestVerifiedActivity = [ES_DataBaseAccessor getLatestCorrectedActivityWithinTheLatest:recentPeriod];
     
     NSString *question;
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:nowTimestamp forKey:@"nagCheckTimestamp"];
+    NSMutableDictionary *userInfo;
     
     if (latestVerifiedActivity)
     {
@@ -226,17 +226,14 @@
             question = [NSString stringWithFormat:@"%@ and feeling %@",question,mood];
         }
         question = [NSString stringWithFormat:@"%@?",question];
-        
-        [userInfo setValue:mainActivity forKey:@"mainActivity"];
-        [userInfo setValue:secondaryActivitiesStrings forKey:@"secondaryActivitiesStrings"];
-        [userInfo setValue:mood forKey:@"mood"];
-        [userInfo setValue:latestVerifiedActivity.timestamp forKey:@"latestVerifiedTimestamp"];
+    
+        userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:YES main:mainActivity secondary:secondaryActivitiesStrings mood:mood latestVerifiedTime:latestVerifiedActivity.timestamp];
     }
     else
     {
         // Then ask the user to provide feedback:
         question = @"Can you update what you're doing now?";
-        
+        userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:NO main:nil secondary:nil mood:nil latestVerifiedTime:nil];
     }
     
     NSLog(@"=== should ask question: [%@]",question);

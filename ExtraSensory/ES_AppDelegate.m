@@ -185,6 +185,30 @@
 - (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSLog(@"=== caught local notification: %@",notification);
+    if ([notification.userInfo valueForKey:@"foundVerified"])
+    {
+        [self pushActivityEventFeedbackViewWithUserInfo:notification.userInfo];
+    }
+}
+
+- (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings mood:(NSString *)mood latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp
+{
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:nagCheckTimestamp forKey:@"nagCheckTimestamp"];
+    
+    if (foundVerified)
+    {
+        [userInfo setValue:@1 forKey:@"foundVerified"];
+        [userInfo setValue:mainActivity forKey:@"mainActivity"];
+        [userInfo setValue:secondaryActivitiesStrings forKey:@"secondaryActivitiesStrings"];
+        [userInfo setValue:mood forKey:@"mood"];
+        [userInfo setValue:latestVerifiedTimestamp forKey:@"latestVerifiedTimestamp"];
+    }
+    else
+    {
+        [userInfo setValue:nil forKey:@"foundVerified"];
+    }
+    
+    return userInfo;
 }
 
 - (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo
@@ -205,7 +229,9 @@
     activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
     activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
 
-//    [self.navigationController pushViewController:activityFeedback animated:YES];
+    UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
+    UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
+    [nav pushViewController:activityFeedback animated:YES];
 }
 
 - (NSUUID *)uuid
