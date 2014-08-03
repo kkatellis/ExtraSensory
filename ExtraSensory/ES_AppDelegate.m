@@ -185,6 +185,8 @@
 - (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSLog(@"=== caught local notification: %@",notification);
+    NSLog(@"=== app.badge: %ld",(long)application.applicationIconBadgeNumber);
+    NSLog(@"=== notification badge: %ld",(long)notification.applicationIconBadgeNumber);
     if ([notification.userInfo valueForKey:@"foundVerified"])
     {
         [self pushActivityEventFeedbackViewWithUserInfo:notification.userInfo];
@@ -219,7 +221,7 @@
     
     NSMutableArray *minuteActivities = [NSMutableArray arrayWithArray:[ES_DataBaseAccessor getActivitiesFrom:startTimestamp to:endTimestamp]];
     
-    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:[userInfo valueForKey:@"secondaryActivitiesStrings"] mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTime"] minuteActivities:minuteActivities];
+    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:[userInfo valueForKey:@"secondaryActivitiesStrings"] mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];

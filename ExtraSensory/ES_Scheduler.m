@@ -174,9 +174,13 @@
 
 - (void) setTimerForNaggingCheckup
 {
-    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*1.5]; // This has to move to a property in user.settings (ES_Settings) ///////////////
+    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*10]; // This has to move to a property in user.settings (ES_Settings) ///////////////
     
     NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
+    if (self.naggingTimer)
+    {
+        [self.naggingTimer invalidate];
+    }
     self.naggingTimer = [NSTimer scheduledTimerWithTimeInterval:[timeBeforeNagCheckup doubleValue]
                                                          target: self
                                                        selector: @selector(userNaggingCheckup)
