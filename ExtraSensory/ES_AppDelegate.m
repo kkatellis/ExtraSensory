@@ -18,6 +18,10 @@
 #import "ES_AlertViewWithUserInfo.h"
 #import "ES_ActiveFeedbackViewController.h"
 
+// Some constants:
+#define FOUND_VERIFIED @"foundVerified"
+#define NOT_NOW_BUTTON_STR @"Not now!"
+
 @implementation ES_AppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -153,6 +157,10 @@
     return _scheduler;
 }
 
+
+
+
+
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
     NSLog( @"user = %@", self.user );
@@ -181,12 +189,31 @@
     }
     
     NSLog(@"=== launched with options: %@",launchOptions);
+    
+    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (notification)
+    {
+        if (notification.userInfo)
+        {
+            // Check if there was found a verified activity in the recent period of time:
+            if ([notification.userInfo valueForKey:FOUND_VERIFIED])
+            {
+                [self pushActivityEventFeedbackViewWithUserInfo:notification.userInfo];
+            }
+            else
+            {
+                [self pushActiveFeedbackView];
+            }
+        }
+    }
+    
+    
     return YES;
 }
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"Not now!" ])
+    if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:NOT_NOW_BUTTON_STR])
     {
         NSLog(@"=== User pressed cancel button");
         return;
@@ -201,7 +228,7 @@
         if (alert.userInfo)
         {
             // Check if there was found a verified activity in the recent period of time:
-            if ([alert.userInfo valueForKey:@"foundVerified"])
+            if ([alert.userInfo valueForKey:FOUND_VERIFIED])
             {
                 [self pushActivityEventFeedbackViewWithUserInfo:alert.userInfo];
             }
@@ -223,7 +250,7 @@
     
     if (notification.userInfo)
     {
-        ES_AlertViewWithUserInfo *alert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:@"ExtraSensory" message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:@"Not now!" otherButtonTitles:@"Update!",nil];
+        ES_AlertViewWithUserInfo *alert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:@"ExtraSensory" message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:NOT_NOW_BUTTON_STR otherButtonTitles:@"Update!",nil];
         
         [alert show];
     }
@@ -236,7 +263,7 @@
     
     if (foundVerified)
     {
-        [userInfo setValue:@1 forKey:@"foundVerified"];
+        [userInfo setValue:@1 forKey:FOUND_VERIFIED];
         [userInfo setValue:mainActivity forKey:@"mainActivity"];
         [userInfo setValue:secondaryActivitiesStrings forKey:@"secondaryActivitiesStrings"];
         [userInfo setValue:mood forKey:@"mood"];
@@ -244,7 +271,7 @@
     }
     else
     {
-        [userInfo setValue:nil forKey:@"foundVerified"];
+        [userInfo setValue:nil forKey:FOUND_VERIFIED];
     }
     
     return userInfo;
