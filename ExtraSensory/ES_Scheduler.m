@@ -174,7 +174,7 @@
 
 - (void) setTimerForNaggingCheckup
 {
-    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*10]; // This has to move to a property in user.settings (ES_Settings) ///////////////
+    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*1.5]; // This has to move to a property in user.settings (ES_Settings) ///////////////
     
     NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
     if (self.naggingTimer)
@@ -246,11 +246,10 @@
     [self setTimerForNaggingCheckup];
     if (notification)
     {
-        notification.fireDate = nil;//[NSDate date];
+        notification.fireDate = nil;//[[NSDate date] dateByAddingTimeInterval:5]; //nil;//[NSDate date];
         notification.alertAction = @"ExtraSensory";
         notification.alertBody = question;
         notification.userInfo = userInfo;
-        
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 }

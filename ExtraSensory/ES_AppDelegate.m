@@ -180,8 +180,19 @@
     [self.scheduler sampleSaveSendCycler];
 }
 
+- (void) applicationDidBecomeActive:(UIApplication *)application
+{
+    NSLog(@"=== app did become active");
+}
+
+- (void) applicationDidEnterBackground:(UIApplication *)application
+{
+    NSLog(@"=== app did enter background");
+}
+
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"=== application was launched (with options)");
     if (!launchOptions)
     {
         [self applicationDidFinishLaunching:application];
@@ -190,23 +201,23 @@
     
     NSLog(@"=== launched with options: %@",launchOptions);
     
-    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (notification)
-    {
-        if (notification.userInfo)
-        {
-            // Check if there was found a verified activity in the recent period of time:
-            if ([notification.userInfo valueForKey:FOUND_VERIFIED])
-            {
-                [self pushActivityEventFeedbackViewWithUserInfo:notification.userInfo];
-            }
-            else
-            {
-                [self pushActiveFeedbackView];
-            }
-        }
-    }
-    
+//    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+//    if (notification)
+//    {
+//        if (notification.userInfo)
+//        {
+//            // Check if there was found a verified activity in the recent period of time:
+//            if ([notification.userInfo valueForKey:FOUND_VERIFIED])
+//            {
+//                [self pushActivityEventFeedbackViewWithUserInfo:notification.userInfo];
+//            }
+//            else
+//            {
+//                [self pushActiveFeedbackView];
+//            }
+//        }
+//    }
+//    
     
     return YES;
 }
@@ -245,8 +256,6 @@
 - (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSLog(@"=== caught local notification: %@",notification);
-    NSLog(@"=== app.badge: %ld",(long)application.applicationIconBadgeNumber);
-    NSLog(@"=== notification badge: %ld",(long)notification.applicationIconBadgeNumber);
     
     if (notification.userInfo)
     {
@@ -282,12 +291,10 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     ES_ActiveFeedbackViewController* activeFeedbackInitial = [storyboard instantiateInitialViewController];
     activeFeedbackInitial.modalPresentationStyle = UIModalPresentationFormSheet;
-    //[self presentViewController:initialView animated:YES completion:nil];
     
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
     [nav presentViewController:activeFeedbackInitial animated:YES completion:nil];
-    //[nav pushViewController:activeFeedback animated:YES];
 }
 
 
@@ -299,7 +306,9 @@
     
     NSMutableArray *minuteActivities = [NSMutableArray arrayWithArray:[ES_DataBaseAccessor getActivitiesFrom:startTimestamp to:endTimestamp]];
     
-    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:[userInfo valueForKey:@"secondaryActivitiesStrings"] mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
+    NSSet *secondaryActivitiesStringsSet = [NSSet setWithArray:[userInfo valueForKey:@"secondaryActivitiesStrings"]];
+    
+    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:secondaryActivitiesStringsSet mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
