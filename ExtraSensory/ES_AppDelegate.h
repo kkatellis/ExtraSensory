@@ -13,7 +13,7 @@
 
 @class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler;
 
-@interface ES_AppDelegate : UIResponder <UIApplicationDelegate>
+@interface ES_AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
 @property BOOL dataCollectionOn;
 

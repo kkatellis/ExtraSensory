@@ -15,6 +15,8 @@
 #import "ES_User.h"
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_ActivityEvent.h"
+#import "ES_AlertViewWithUserInfo.h"
+#import "ES_ActiveFeedbackViewController.h"
 
 @implementation ES_AppDelegate
 
@@ -182,15 +184,50 @@
     return YES;
 }
 
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"Not now!" ])
+    {
+        NSLog(@"=== User pressed cancel button");
+        return;
+    }
+    
+    NSLog(@"=== User pressed %@ button",[alertView buttonTitleAtIndex:buttonIndex]);
+    
+    if ([alertView isKindOfClass:[ES_AlertViewWithUserInfo class]])
+    {
+        ES_AlertViewWithUserInfo *alert = (ES_AlertViewWithUserInfo *)alertView;
+        
+        if (alert.userInfo)
+        {
+            // Check if there was found a verified activity in the recent period of time:
+            if ([alert.userInfo valueForKey:@"foundVerified"])
+            {
+                [self pushActivityEventFeedbackViewWithUserInfo:alert.userInfo];
+            }
+            else
+            {
+                [self pushActiveFeedbackView];
+            }
+        }
+    }
+    
+    
+}
+
 - (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSLog(@"=== caught local notification: %@",notification);
     NSLog(@"=== app.badge: %ld",(long)application.applicationIconBadgeNumber);
     NSLog(@"=== notification badge: %ld",(long)notification.applicationIconBadgeNumber);
-    if ([notification.userInfo valueForKey:@"foundVerified"])
+    
+    if (notification.userInfo)
     {
-        [self pushActivityEventFeedbackViewWithUserInfo:notification.userInfo];
+        ES_AlertViewWithUserInfo *alert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:@"ExtraSensory" message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:@"Not now!" otherButtonTitles:@"Update!",nil];
+        
+        [alert show];
     }
+    
 }
 
 - (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings mood:(NSString *)mood latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp
@@ -212,6 +249,20 @@
     
     return userInfo;
 }
+
+- (void) pushActiveFeedbackView
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
+    ES_ActiveFeedbackViewController* activeFeedbackInitial = [storyboard instantiateInitialViewController];
+    activeFeedbackInitial.modalPresentationStyle = UIModalPresentationFormSheet;
+    //[self presentViewController:initialView animated:YES completion:nil];
+    
+    UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
+    UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
+    [nav presentViewController:activeFeedbackInitial animated:YES completion:nil];
+    //[nav pushViewController:activeFeedback animated:YES];
+}
+
 
 - (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo
 {
