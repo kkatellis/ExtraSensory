@@ -21,6 +21,13 @@
 // Some constants:
 #define FOUND_VERIFIED @"foundVerified"
 #define NOT_NOW_BUTTON_STR @"Not now!"
+#define ALERT_DISMISS_TIME 45
+
+@interface ES_AppDelegate()
+
+@property ES_AlertViewWithUserInfo *latestAlert;
+
+@end
 
 @implementation ES_AppDelegate
 
@@ -46,6 +53,7 @@
 @synthesize activitiesToUpload = _activitiesToUpload;
 
 @synthesize mostRecentActivity = _mostRecentActivity;
+
 
 - (NSMutableArray *)activitiesToUpload
 {
@@ -224,6 +232,11 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (alertView == self.latestAlert)
+    {
+        [self dismissLatestAlert];
+    }
+    
     if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:NOT_NOW_BUTTON_STR])
     {
         NSLog(@"=== User pressed cancel button");
@@ -235,22 +248,27 @@
     if ([alertView isKindOfClass:[ES_AlertViewWithUserInfo class]])
     {
         ES_AlertViewWithUserInfo *alert = (ES_AlertViewWithUserInfo *)alertView;
-        
-        if (alert.userInfo)
-        {
-            // Check if there was found a verified activity in the recent period of time:
-            if ([alert.userInfo valueForKey:FOUND_VERIFIED])
-            {
-                [self pushActivityEventFeedbackViewWithUserInfo:alert.userInfo];
-            }
-            else
-            {
-                [self pushActiveFeedbackView];
-            }
-        }
+        [self pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:alert.userInfo];
     }
     
     
+}
+
+- (void) pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:(NSDictionary *)userInfo
+{
+    if (userInfo)
+    {
+        // Check if there was found a verified activity in the recent period of time:
+        if ([userInfo valueForKey:FOUND_VERIFIED])
+        {
+            [self pushActivityEventFeedbackViewWithUserInfo:userInfo];
+        }
+        else
+        {
+            [self pushActiveFeedbackView];
+        }
+    }
+    // Else, ignore!
 }
 
 - (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -259,11 +277,35 @@
     
     if (notification.userInfo)
     {
-        ES_AlertViewWithUserInfo *alert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:@"ExtraSensory" message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:NOT_NOW_BUTTON_STR otherButtonTitles:@"Update!",nil];
+        // Check the application state we are in:
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+        {
+            // Then the app is in background, and the user already got a notification (with the relevant question), and selected to click on it, so there is no need to alert the user again with the same question, and we can directly move to the updating view:
+            [self pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:notification.userInfo];
+        }
+        else
+        {
+            // Then the app is open on foreground, and we need to ask user if it's o.k. to switch to this nagged update right now.
+            
+            // Use the single alert we maintain. First see if there is an open one that we need to dismiss:
+            [self dismissLatestAlert];
+            self.latestAlert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:@"ExtraSensory" message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:NOT_NOW_BUTTON_STR otherButtonTitles:@"Update!",nil];
         
-        [alert show];
+            [NSTimer scheduledTimerWithTimeInterval:ALERT_DISMISS_TIME target:self selector:@selector(dismissLatestAlert) userInfo:nil repeats:NO];
+            [self.latestAlert show];
+        }
     }
     
+}
+
+- (void) dismissLatestAlert
+{
+    if (self.latestAlert)
+    {
+        NSLog(@"=== dismissing alert.");
+        [self.latestAlert dismissWithClickedButtonIndex:self.latestAlert.cancelButtonIndex animated:NO];
+        self.latestAlert = nil;
+    }
 }
 
 - (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings mood:(NSString *)mood latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp
