@@ -174,8 +174,7 @@
 
 - (void) setTimerForNaggingCheckup
 {
-    NSNumber *timeBeforeNagCheckup = [NSNumber numberWithInt:60*1.5]; // This has to move to a property in user.settings (ES_Settings) ///////////////
-    
+    NSNumber *timeBeforeNagCheckup = self.user.settings.timeBetweenUserNags;
     NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
     if (self.naggingTimer)
     {
@@ -202,7 +201,7 @@
     }
 
     // Look for latest user-corrected activity recently:
-    NSNumber *recentPeriod = [NSNumber numberWithInteger:60*15]; // This has to be taken from some property in user.settings///////////
+    NSNumber *recentPeriod = self.user.settings.recentTimePeriod;
     ES_Activity *latestVerifiedActivity = [ES_DataBaseAccessor getLatestCorrectedActivityWithinTheLatest:recentPeriod];
     
     NSString *question;

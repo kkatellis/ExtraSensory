@@ -2,8 +2,8 @@
 //  ES_Settings.m
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 10/6/13.
-//  Copyright (c) 2013 Bryan Grounds. All rights reserved.
+//  Created by yonatan vaizman on 8/3/14.
+//  Copyright (c) 2014 Bryan Grounds. All rights reserved.
 //
 
 #import "ES_Settings.h"
@@ -15,7 +15,8 @@
 @dynamic sampleDuration;
 @dynamic sampleRate;
 @dynamic timeBetweenSampling;
-//@dynamic timeBeforeNagUser;
+@dynamic timeBetweenUserNags;
+@dynamic recentTimePeriod;
 @dynamic user;
 
 @end
