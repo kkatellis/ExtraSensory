@@ -21,6 +21,9 @@
 #import "MSCurrentTimeIndicator.h"
 #import "MSCurrentTimeGridline.h"
 #import "ES_ActiveFeedbackViewController.h"
+#import "ES_ActivityEventFeedbackViewController.h"
+#import "ES_ActivityEvent.h"
+#import "ES_UserActivityLabels.h"
 
 NSString * const ESActivityCellReuseIdentifier = @"ESActivityCellReuseIdentifier";
 NSString * const MSDayColumnHeaderReuseIdentifier = @"MSDayColumnHeaderReuseIdentifier";
@@ -46,22 +49,22 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     
     self.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
-    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
-    self.backButton.frame = CGRectMake(0.0, 5.0, 50.0, 20.0);
+    [self.backButton setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    self.backButton.frame = CGRectMake(0.0, 10.0, 25.0, 25.0);
     self.	backButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.backButton];
     
     self.feedbackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.feedbackButton addTarget:self action:@selector(activeFeedback:) forControlEvents:UIControlEventTouchUpInside];
-    [self.feedbackButton setTitle:@"Feedback" forState:UIControlStateNormal];
-    self.feedbackButton.frame = CGRectMake(235.0, 5.0, 100.0, 20.0);
+    [self.feedbackButton setBackgroundImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
+    self.feedbackButton.frame = CGRectMake(290.0, 10.0, 25.0, 25.0);
     self.feedbackButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.feedbackButton];
     
     self.zoomButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.zoomButton addTarget:self action:@selector(zoom:) forControlEvents:UIControlEventTouchUpInside];
-    [self.zoomButton setTitle:@"Hourly View" forState:UIControlStateNormal];
-    self.zoomButton.frame = CGRectMake(235.0, 25.0, 100.0, 20.0);
+    [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"zoom_in.png"] forState:UIControlStateNormal];
+    self.zoomButton.frame = CGRectMake(265.0, 10.0, 25.0, 25.0);
     self.zoomButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.zoomButton];
 
@@ -77,7 +80,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     [self.collectionView registerClass:ES_ActivityCell.class forCellWithReuseIdentifier:ESActivityCellReuseIdentifier];
     [self.collectionView registerClass:MSDayColumnHeader.class forSupplementaryViewOfKind:MSCollectionElementKindDayColumnHeader withReuseIdentifier:MSDayColumnHeaderReuseIdentifier];
     [self.collectionView registerClass:MSTimeRowHeader.class forSupplementaryViewOfKind:MSCollectionElementKindTimeRowHeader withReuseIdentifier:MSTimeRowHeaderReuseIdentifier];
-    
+
     // These are optional. If you don't want any of the decoration views, just don't register a class for them.
     [self.collectionViewCalendarLayout registerClass:MSCurrentTimeIndicator.class forDecorationViewOfKind:MSCollectionElementKindCurrentTimeIndicator];
     [self.collectionViewCalendarLayout registerClass:MSCurrentTimeGridline.class forDecorationViewOfKind:MSCollectionElementKindCurrentTimeHorizontalGridline];
@@ -88,7 +91,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"startTime" ascending:YES]];
-    
+
     NSString *storePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ExtraSensory.sqlite"];
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
@@ -98,49 +101,79 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     [managedObjectStore createManagedObjectContexts];
     managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
     [RKManagedObjectStore setDefaultStore:managedObjectStore];
-    
+
     // Divide into sections by the "day" key path
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:@"day" cacheName:nil];
     self.fetchedResultsController.delegate = self;
     [self.fetchedResultsController performFetch:nil];
+    
 }
 -(void)back:(UIButton *)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [self.tabBarController.tabBar setHidden:YES	];
+    for(UIView* subview in [self.tabBarController.view subviews])
+        if (subview.tag==111) {
+            [subview setHidden:YES];
+        }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+        [self.tabBarController.tabBar setHidden:NO	];
+    for(UIView* subview in [self.tabBarController.view subviews])
+        if (subview.tag==111) {
+            [subview setHidden:NO];
+        }
+}
+
+
 -(void) activeFeedback:(UIButton*)button
+
 {
-//
     NSArray *indexPaths = [self.collectionView indexPathsForSelectedItems];
+    if(![indexPaths count])
+        return;
     NSIndexPath *indexPath = [indexPaths objectAtIndex:0];
-
-    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    ES_ActiveFeedbackViewController* initialView;// = [[ES_ActiveFeedbackViewController alloc] init];
-    initialView = [storyboard instantiateInitialViewController];
-
-    initialView.modalPresentationStyle = UIModalPresentationFormSheet;
-    [self presentViewController:initialView animated:YES completion:nil];
-//   initialView.activity=((ES_ActivityCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath]).activity;
+    ES_Activity *startOfActivity=((ES_ActivityCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath]).activity;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
+    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
+    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
+    NSMutableArray *minuteActivities = [[NSMutableArray alloc] initWithCapacity:1];
+    NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
+    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:startOfActivity.timestamp minuteActivities:minuteActivities];
+    activityFeedback.activityEvent = activityEvent;
+    activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
+    activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
+    newView.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self.navigationController pushViewController:activityFeedback animated:YES];
 }
 
 -(void) zoom:(UIButton*)button
 {
-    NSLog(@"Before %d\n", self.collectionViewCalendarLayout.isDailyView);
     self.isDailyView=!self.isDailyView;
     [self.collectionViewCalendarLayout initialize:self.isDailyView];
     if (self.isDailyView) {
-        [self.zoomButton setTitle:@"Hourly View" forState:UIControlStateNormal];
+        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"zoom_in.png"] forState:UIControlStateNormal];
     } else {
-        [self.zoomButton setTitle:@"Daily View" forState:UIControlStateNormal];
+        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"zoom_out.png"] forState:UIControlStateNormal];
     }
-    [self viewDidLoad]; [self viewWillAppear:YES];
-       [self.collectionView reloadData];    [self.collectionViewCalendarLayout scrollCollectionViewToClosetSectionToCurrentTimeAnimated:YES];
+    [self viewDidLoad];
+    [self viewWillAppear:YES];
+    [self.collectionView.collectionViewLayout prepareLayout];
+    [self viewDidAppear:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.collectionViewCalendarLayout scrollCollectionViewToClosetSectionToCurrentTimeAnimated:NO];
+    [self.collectionViewCalendarLayout scrollCollectionViewToClosetSectionToCurrentTimeAnimated:YES];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -225,7 +258,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
     ES_Activity *activity = [sectionInfo.objects firstObject];
-    NSLog(@"day:%@", activity.day);
     return activity.day;
 }
 

@@ -77,6 +77,7 @@
         center.y = center.y - heightDifference/2.0 + 0.5;
         button.center = center;
     }
+    button.tag=111; // "a" number for finding this button in subviews, (in order to hide it)
     
     [button addTarget:self
                action:@selector(activeFeedback:)

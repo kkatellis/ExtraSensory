@@ -33,10 +33,10 @@
                     <navigationItem key="navigationItem" title="Home" id="G9S-O5-AV7">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="c76-3d-Fcj">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MpH-Qo-gh7">
-                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <rect key="frame" x="274" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Calendar">
+                                <state key="normal" backgroundImage="calendar.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -694,6 +694,7 @@
     </scenes>
     <resources>
         <image name="100-coffee.png" width="20" height="24"/>
+        <image name="calendar.png" width="128" height="128"/>
         <image name="gear.png" width="26" height="26"/>
         <image name="house.png" width="128" height="128"/>
         <image name="indicator-housework.png" width="32" height="32"/>
