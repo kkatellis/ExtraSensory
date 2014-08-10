@@ -61,6 +61,10 @@
 #define GYR_Y           @"gyro_y"
 #define GYR_Z           @"gyro_z"
 
+#define MAG_X           @"magnet_x"
+#define MAG_Y           @"magnet_y"
+#define MAG_Z           @"magnet_z"
+
 -(ES_SoundWaveProcessor *) soundProcessor
 {
     if(!_soundProcessor)
@@ -190,6 +194,7 @@
     
     self.motionManager.accelerometerUpdateInterval = self.interval;
     self.motionManager.gyroUpdateInterval = self.interval;
+    self.motionManager.magnetometerUpdateInterval = self.interval;
     
     [self.locationManager setDelegate: self];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
@@ -202,6 +207,7 @@
     [self.motionManager startDeviceMotionUpdates];
     [self.motionManager startAccelerometerUpdates];
     [self.motionManager startGyroUpdates];
+    [self.motionManager startMagnetometerUpdates];
     
     [self.soundProcessor startDurRecording];
     [self.timer invalidate];
@@ -280,6 +286,7 @@
     [self.locationManager stopUpdatingLocation];
     [self.motionManager stopAccelerometerUpdates];
     [self.motionManager stopGyroUpdates];
+    [self.motionManager stopMagnetometerUpdates];
     [self.soundProcessor pauseDurRecording];
 }
 
@@ -298,12 +305,13 @@
         [self.locationManager stopUpdatingLocation];
         [self.motionManager stopAccelerometerUpdates];
         [self.motionManager stopGyroUpdates];
+        [self.motionManager stopMagnetometerUpdates];
         
         [ES_DataBaseAccessor writeData: HFDataBundle];
         [ES_DataBaseAccessor writeActivity: self.currentActivity];
     }
     
-    NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:10];
+    NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:13];
     
     [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.speed ] forKey: SPEED];
     [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
@@ -313,10 +321,13 @@
     
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ] forKey: GYR_X];
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ] forKey: ACC_X];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.magnetometerData.magneticField.x] forKey:MAG_X];
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ] forKey: GYR_Y];
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ] forKey: ACC_Y];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.magnetometerData.magneticField.y] forKey:MAG_Y];
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ] forKey: GYR_Z];
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ] forKey: ACC_Z];
+    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.magnetometerData.magneticField.z] forKey:MAG_Z];
     
     [HFDataBundle addObject:HFDataList];
     
