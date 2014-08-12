@@ -2,7 +2,7 @@
 //  ES_Activity.m
 //  ExtraSensory
 //
-//  Created by Arya Iranmehr on 7/21/14.
+//  Created by Arya Iranmehr on 8/12/14.
 //  Copyright (c) 2014 Bryan Grounds. All rights reserved.
 //
 
@@ -17,10 +17,10 @@
 @dynamic isPredictionVerified;
 @dynamic mood;
 @dynamic serverPrediction;
+@dynamic startTime;
 @dynamic timestamp;
 @dynamic userCorrection;
 @dynamic uuid;
-@dynamic startTime;
 @dynamic user;
 @dynamic userActivityLabels;
 
