@@ -10,4 +10,6 @@
 
 @interface ES_Activity (Day)
 - (NSDate *)day;
++ (UIColor *)colorForActivity:(NSString*) activity;
+- (NSString *)getActivityTitle;
 @end

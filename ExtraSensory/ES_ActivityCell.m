@@ -8,6 +8,7 @@
 
 #import "ES_ActivityCell.h"
 #import "ES_Activity.h"
+#import "ES_Activity+Day.h"
 #import "ES_Format.h"
 
 @interface ES_ActivityCell ()
@@ -68,7 +69,7 @@
         }];
         
         [self.time makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.bottom).offset(contentMargin-17);
+            make.top.equalTo(self.bottom).offset(contentMargin-17	);
             make.left.equalTo(self.left).offset(contentPadding.left -33);
             make.right.equalTo(self.right).offset(-contentPadding.right);
             make.bottom.lessThanOrEqualTo(self.bottom).offset(-contentPadding.bottom );
@@ -103,8 +104,7 @@
 
 - (void)setActivity:(ES_Activity *)activity
 {
-     self.color= [UIColor blueColor];
-//    self.color= [ES_Format colorForActivity:activity.];
+    self.color= [ES_Activity colorForActivity:[activity getActivityTitle]];
     [self updateColors];
     _activity=activity;
     

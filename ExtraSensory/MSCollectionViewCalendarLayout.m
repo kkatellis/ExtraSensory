@@ -852,7 +852,7 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
             break;
     }
     NSDateComponents *dateComponents = [self dayForSection:indexPath.section];
-    dateComponents.hour = (earliestHour + indexPath.item);
+    dateComponents.hour = (earliestHour + indexPath.item		);
     return [[NSCalendar currentCalendar] dateFromComponents:dateComponents];
 }
 
@@ -926,7 +926,7 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
                 } else {
                     yOffset = [self stackedSectionHeightUpToSection:closestSectionToCurrentTime];
                 }
-                contentOffset = CGPointMake(0.0, yOffset);
+                contentOffset = CGPointMake(0.0, yOffset); // Now, index overflow
             }
             // Prevent the content offset from forcing the scroll view content off its bounds
 //            if (contentOffset.y > (self.collectionView.contentSize.height - self.collectionView.frame.size.height)) {

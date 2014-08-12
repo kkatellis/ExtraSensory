@@ -47,8 +47,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1059"
             endingLineNumber = "1059"
-            landmarkName = "-sectionHeight:"
-            landmarkType = "5">
+            landmarkName = "@implementation MSCollectionViewCalendarLayout"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -63,8 +63,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1042"
             endingLineNumber = "1042"
-            landmarkName = "-stackedSectionHeightUpToSection:"
-            landmarkType = "5">
+            landmarkName = "@implementation MSCollectionViewCalendarLayout"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "179"
             endingLineNumber = "179"
-            landmarkName = "-activeFeedback:"
+            landmarkName = "-willAnimateRotationToInterfaceOrientation:duration:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -335,7 +335,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "795"
             endingLineNumber = "795"
-            landmarkName = "-layoutAttributesForDecorationViewAtIndexPath:ofKind:withItemCache:"
+            landmarkName = "-layoutAttributesForSupplementaryViewAtIndexPath:ofKind:withItemCache:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
