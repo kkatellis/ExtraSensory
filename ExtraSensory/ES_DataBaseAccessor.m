@@ -80,8 +80,13 @@
 
 + (ES_Activity *) newActivity
 {
-    NSLog(@"[databaseAccessor] creating new activity!");
-    return [NSEntityDescription insertNewObjectForEntityForName: @"ES_Activity" inManagedObjectContext:[self context]];
+    id actObj = [NSEntityDescription insertNewObjectForEntityForName: @"ES_Activity" inManagedObjectContext:[self context]];
+    ES_Activity *act = (ES_Activity *)actObj;
+    act.user = [self user];
+    act.uuid = act.user.uuid;
+    NSLog(@"[databaseAccessor] created new activity with uuid: %@.",act.user.uuid);
+    
+    return act;
 }
 
 + (void) deleteActivity: (ES_Activity *) activity

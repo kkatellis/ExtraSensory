@@ -366,7 +366,7 @@
             
         }
         // Send this minute's data to the server:
-        NSLog(@"=== send feedback for time %@",time);
+        NSLog(@"=== send feedback for time %@. Activity has user: %@",time,minuteActivity.uuid);
         [appDelegate.networkAccessor sendFeedback:minuteActivity];
     }
     

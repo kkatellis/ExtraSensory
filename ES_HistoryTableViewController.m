@@ -153,6 +153,7 @@
     for (id activityObject in [predictions reverseObjectEnumerator])
     {
         ES_Activity *currentActivity = (ES_Activity *)activityObject;
+
         
         if (![[self class] isActivity:currentActivity similarToActivity:startOfActivity])
         {
