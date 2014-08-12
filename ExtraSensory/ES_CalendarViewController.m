@@ -138,10 +138,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
+-(void)fetch{
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"startTime" ascending:YES]];
     
@@ -149,10 +146,8 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[(ES_AppDelegate *)UIApplication.sharedApplication.delegate managedObjectContext] sectionNameKeyPath:@"day" cacheName:nil];
     self.fetchedResultsController.delegate = self;
     [self.fetchedResultsController performFetch:nil];
-    
-    [self recalculateEventsFromPredictionList];
-    
 }
+
 -(void)back:(UIButton *)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -163,13 +158,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 }
 -(void)remove:(UIButton *)sender
 {
-    NSArray *indexPaths = [self.collectionView indexPathsForSelectedItems];
-    if(![indexPaths count])
-        return;
-    NSIndexPath *indexPath = [indexPaths objectAtIndex:0];
-    ES_Activity *startOfActivity=((ES_ActivityCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath]).activity;
-    [ES_DataBaseAccessor deleteActivity:startOfActivity];
-    
     
 }
 -(void)help:(UIButton *)sender
@@ -177,10 +165,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 }
 -(void)refresh:(UIButton *)sender
 {
-    [self viewDidLoad];
-    [self viewWillAppear:YES];
-    [self.collectionView.collectionViewLayout prepareLayout];
-    [self viewDidAppear:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -237,10 +221,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     } else {
         [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"Zoom_out.png"] forState:UIControlStateNormal];
     }
-    [self viewDidLoad];
     [self viewWillAppear:YES];
-        [self.collectionView reloadData];
-    [self.collectionView.collectionViewLayout prepareLayout];
     [self viewDidAppear:YES];
 }
 
@@ -248,17 +229,16 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 {
     self.displayActivityEvents=!self.displayActivityEvents;
     [self.collectionViewCalendarLayout initialize:self.isDailyView];
-    [self viewDidLoad];
     [self viewWillAppear:YES];
-    [self.collectionView reloadData];
-    [self.collectionView.collectionViewLayout prepareLayout];
     [self viewDidAppear:YES];
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self fetch];
+        [self.collectionView.collectionViewLayout prepareLayout];
+    [self recalculateEventsFromPredictionList];
     [self.collectionViewCalendarLayout scrollCollectionViewToClosetSectionToCurrentTimeAnimated:YES];
 }
 
