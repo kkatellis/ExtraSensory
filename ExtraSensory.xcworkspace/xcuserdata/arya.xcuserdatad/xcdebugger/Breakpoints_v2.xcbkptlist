@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "274"
             endingLineNumber = "274"
-            landmarkName = "-willAnimateRotationToInterfaceOrientation:duration:"
+            landmarkName = "-prefersStatusBarHidden"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -623,8 +623,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "373"
             endingLineNumber = "373"
-            landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
-            landmarkType = "5">
+            landmarkName = "@implementation ES_CalendarViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -639,7 +639,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "360"
             endingLineNumber = "360"
-            landmarkName = "-collectionView:layout:startTimeForItemAtIndexPath:"
+            landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -655,7 +655,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "377"
             endingLineNumber = "377"
-            landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
+            landmarkName = "-currentTimeComponentsForCollectionView:layout:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -717,7 +717,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "383"
             endingLineNumber = "383"
-            landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
+            landmarkName = "-recalculateEventsFromPredictionList"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -797,7 +797,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "233"
             endingLineNumber = "233"
-            landmarkName = "-activeFeedback:"
+            landmarkName = "-zoom:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -861,7 +861,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "258"
             endingLineNumber = "258"
-            landmarkName = "-mergeActivities:"
+            landmarkName = "-viewDidAppear:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -877,7 +877,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "375"
             endingLineNumber = "375"
-            landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
+            landmarkName = "-currentTimeComponentsForCollectionView:layout:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -909,7 +909,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "374"
             endingLineNumber = "374"
-            landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
+            landmarkName = "-currentTimeComponentsForCollectionView:layout:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
