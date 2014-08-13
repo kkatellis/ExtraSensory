@@ -90,7 +90,10 @@
     else
     {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [self.appliedLabels addObject:cell.textLabel.text];
+        if(!self.appliedLabels) //this is for labling samples which is not labled by server (probably because the app is stoped)
+            self.appliedLabels=[NSMutableSet setWithObject:(cell.textLabel.text)];
+        else
+            [self.appliedLabels addObject:cell.textLabel.text];
     }
 }
 

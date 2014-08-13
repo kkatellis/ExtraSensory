@@ -26,7 +26,7 @@
 #import "ES_UserActivityLabels.h"
 #import "ES_HistoryTableViewController.h"
 #import "ES_DataBaseAccessor.h"
-
+#import "ES_AppDelegate.h"
 NSString * const ESActivityCellReuseIdentifier = @"ESActivityCellReuseIdentifier";
 NSString * const MSDayColumnHeaderReuseIdentifier = @"MSDayColumnHeaderReuseIdentifier";
 NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifier";
@@ -120,7 +120,8 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.removeButton.frame = CGRectMake(270.0, 5.0 +buttonWidth,  buttonWidth, buttonWidth);
     self.removeButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.removeButton];
-
+    
+    
     return self;
 }
 
@@ -128,41 +129,18 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 {
     [super viewDidLoad];
     
-    self.collectionView.backgroundColor = [UIColor whiteColor];
-    
-    [self.collectionView registerClass:ES_ActivityCell.class forCellWithReuseIdentifier:ESActivityCellReuseIdentifier];
-    [self.collectionView registerClass:MSDayColumnHeader.class forSupplementaryViewOfKind:MSCollectionElementKindDayColumnHeader withReuseIdentifier:MSDayColumnHeaderReuseIdentifier];
-    [self.collectionView registerClass:MSTimeRowHeader.class forSupplementaryViewOfKind:MSCollectionElementKindTimeRowHeader withReuseIdentifier:MSTimeRowHeaderReuseIdentifier];
+}
 
-    // These are optional. If you don't want any of the decoration views, just don't register a class for them.
-    [self.collectionViewCalendarLayout registerClass:MSCurrentTimeIndicator.class forDecorationViewOfKind:MSCollectionElementKindCurrentTimeIndicator];
-    [self.collectionViewCalendarLayout registerClass:MSCurrentTimeGridline.class forDecorationViewOfKind:MSCollectionElementKindCurrentTimeHorizontalGridline];
-    [self.collectionViewCalendarLayout registerClass:MSGridline.class forDecorationViewOfKind:MSCollectionElementKindVerticalGridline];
-    [self.collectionViewCalendarLayout registerClass:MSGridline.class forDecorationViewOfKind:MSCollectionElementKindHorizontalGridline];
-    [self.collectionViewCalendarLayout registerClass:MSTimeRowHeaderBackground.class forDecorationViewOfKind:MSCollectionElementKindTimeRowHeaderBackground];
-    [self.collectionViewCalendarLayout registerClass:MSDayColumnHeaderBackground.class forDecorationViewOfKind:MSCollectionElementKindDayColumnHeaderBackground];
-    
+-(void)fetch{
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"startTime" ascending:YES]];
-
-    NSString *storePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ExtraSensory.sqlite"];
-    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-    [managedObjectStore createPersistentStoreCoordinator];
-    NSLog(@"Store Path: %@\n",storePath);
-    [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:nil];
-    [managedObjectStore createManagedObjectContexts];
-    managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
-    [RKManagedObjectStore setDefaultStore:managedObjectStore];
-
+    
     // Divide into sections by the "day" key path
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:@"day" cacheName:nil];
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[(ES_AppDelegate *)UIApplication.sharedApplication.delegate managedObjectContext] sectionNameKeyPath:@"day" cacheName:nil];
     self.fetchedResultsController.delegate = self;
     [self.fetchedResultsController performFetch:nil];
-    
-    [self recalculateEventsFromPredictionList];
-    
 }
+
 -(void)back:(UIButton *)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -173,28 +151,43 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 }
 -(void)remove:(UIButton *)sender
 {
-    NSArray *indexPaths = [self.collectionView indexPathsForSelectedItems];
-    if(![indexPaths count])
-        return;
-    NSIndexPath *indexPath = [indexPaths objectAtIndex:0];
-    ES_Activity *startOfActivity=((ES_ActivityCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath]).activity;
-    [ES_DataBaseAccessor deleteActivity:startOfActivity];
-
-
+    
 }
 -(void)help:(UIButton *)sender
 {
 }
 -(void)refresh:(UIButton *)sender
 {
+    [self fetch];
+    [self.collectionViewCalendarLayout invalidateLayoutCache];
+    [self.collectionView reloadData];
     [self viewDidLoad];
     [self viewWillAppear:YES];
-    [self.collectionView.collectionViewLayout prepareLayout];
-    [self viewDidAppear:YES];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.collectionView.backgroundColor = [UIColor whiteColor];
+    
+    [self.collectionView registerClass:ES_ActivityCell.class forCellWithReuseIdentifier:ESActivityCellReuseIdentifier];
+    [self.collectionView registerClass:MSDayColumnHeader.class forSupplementaryViewOfKind:MSCollectionElementKindDayColumnHeader withReuseIdentifier:MSDayColumnHeaderReuseIdentifier];
+    [self.collectionView registerClass:MSTimeRowHeader.class forSupplementaryViewOfKind:MSCollectionElementKindTimeRowHeader withReuseIdentifier:MSTimeRowHeaderReuseIdentifier];
+    
+    // These are optional. If you don't want any of the decoration views, just don't register a class for them.
+    [self.collectionViewCalendarLayout registerClass:MSCurrentTimeIndicator.class forDecorationViewOfKind:MSCollectionElementKindCurrentTimeIndicator];
+    [self.collectionViewCalendarLayout registerClass:MSCurrentTimeGridline.class forDecorationViewOfKind:MSCollectionElementKindCurrentTimeHorizontalGridline];
+    [self.collectionViewCalendarLayout registerClass:MSGridline.class forDecorationViewOfKind:MSCollectionElementKindVerticalGridline];
+    [self.collectionViewCalendarLayout registerClass:MSGridline.class forDecorationViewOfKind:MSCollectionElementKindHorizontalGridline];
+    [self.collectionViewCalendarLayout registerClass:MSTimeRowHeaderBackground.class forDecorationViewOfKind:MSCollectionElementKindTimeRowHeaderBackground];
+    [self.collectionViewCalendarLayout registerClass:MSDayColumnHeaderBackground.class forDecorationViewOfKind:MSCollectionElementKindDayColumnHeaderBackground];
+    [self fetch];
+    [self.collectionView.collectionViewLayout prepareLayout];
+
+    [self.collectionViewCalendarLayout invalidateLayoutCache];
+    [self.collectionView reloadData];
+    
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [self.tabBarController.tabBar setHidden:YES	];
     for(UIView* subview in [self.tabBarController.view subviews])
@@ -206,7 +199,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
-        [self.tabBarController.tabBar setHidden:NO	];
+    [self.tabBarController.tabBar setHidden:NO	];
     for(UIView* subview in [self.tabBarController.view subviews])
         if (subview.tag==111) {
             [subview setHidden:NO];
@@ -226,11 +219,19 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
     NSMutableArray *minuteActivities = [[NSMutableArray alloc] initWithCapacity:1];
     [minuteActivities addObject:startOfActivity];
-    if (!startOfActivity.serverPrediction) {
-        startOfActivity.serverPrediction=@" ";
-    }
     NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
-    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:startOfActivity.timestamp minuteActivities:minuteActivities];
+    ES_ActivityEvent *activityEvent;
+    if (self.displayActivityEvents) {
+        for (id activityObject in [self.activityEvents reverseObjectEnumerator])
+        {
+            if([startOfActivity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
+                activityEvent= (ES_ActivityEvent *) activityObject;
+                break;
+            }
+        }
+    }else{
+        activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:startOfActivity.timestamp minuteActivities:minuteActivities];
+    }
     activityFeedback.activityEvent = activityEvent;
     activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
     activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
@@ -249,7 +250,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     }
     [self viewDidLoad];
     [self viewWillAppear:YES];
-    [self.collectionView.collectionViewLayout prepareLayout];
     [self viewDidAppear:YES];
 }
 
@@ -258,16 +258,15 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.displayActivityEvents=!self.displayActivityEvents;
     [self.collectionViewCalendarLayout initialize:self.isDailyView];
     [self viewDidLoad];
-    [self viewWillAppear:YES];
-    [self.collectionView reloadData];
-    [self.collectionView.collectionViewLayout prepareLayout];
-    [self viewDidAppear:YES];
 
+    [self viewWillAppear:YES];
+    [self viewDidAppear:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self recalculateEventsFromPredictionList];
     [self.collectionViewCalendarLayout scrollCollectionViewToClosetSectionToCurrentTimeAnimated:YES];
 }
 
@@ -315,7 +314,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     cell.isDailyView=self.isDailyView;
     cell.activity = [self.fetchedResultsController objectAtIndexPath:indexPath];
     return cell;
-
+    
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
@@ -378,6 +377,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
                 return [NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60];
             }
         }
+        return nil;
     }
     return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
 }
