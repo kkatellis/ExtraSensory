@@ -246,6 +246,8 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 {
     self.displayActivityEvents=!self.displayActivityEvents;
     [self.collectionViewCalendarLayout initialize:self.isDailyView];
+    [self viewDidLoad];
+
     [self viewWillAppear:YES];
     [self viewDidAppear:YES];
 }
@@ -364,6 +366,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
                 return [NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60];
             }
         }
+        return nil;
     }
     return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
 }
