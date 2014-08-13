@@ -259,8 +259,10 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     [self.collectionViewCalendarLayout initialize:self.isDailyView];
     [self viewDidLoad];
     [self viewWillAppear:YES];
+    [self.collectionView reloadData];
     [self.collectionView.collectionViewLayout prepareLayout];
     [self viewDidAppear:YES];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -356,16 +358,10 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
         {
             if([activity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
                 event= (ES_ActivityEvent *) activityObject;
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                dateFormatter.dateFormat = @"dd HH:mm";
-                NSLog(@"\n%@ Start time: %@\n",event.userCorrection,[dateFormatter stringFromDate:event.startTime]);
                 return event.startTime;
                 break;
             }
         }
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = @"dd HH:mm";
-        NSLog(@"\n##############################\n %@ time: %@\n##############################\n",activity.userCorrection, [dateFormatter stringFromDate:activity.startTime]);
         return nil;
     } else {
         return activity.startTime;
@@ -379,22 +375,11 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
         for (id activityObject in [self.activityEvents reverseObjectEnumerator])
         {
             if([activity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                dateFormatter.dateFormat = @"dd HH:mm";
-                NSLog(@"\n%@ End time: %@\n"	,((ES_ActivityEvent *) activityObject).userCorrection,[dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60]]);
-
                 return [NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60];
             }
         }
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = @"dd HH:mm";
-        NSLog(@"\n********************************\n %@ time: %@\n********************************\n",activity.userCorrection, [dateFormatter stringFromDate:activity.startTime]);
-                return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
-        return nil;
-    }else
-    {
-        return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
     }
+    return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
 }
 
 - (NSDate *)currentTimeComponentsForCollectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout
@@ -404,9 +389,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 
 - (void)recalculateEventsFromPredictionList
 {
-    // Empty the event history:
     [self.activityEvents removeAllObjects];
-    
     NSArray *activities = [self.fetchedResultsController fetchedObjects];
     // Read the prediction list of the user and group together consecutive timepoints with similar activities to unified activity events:
     ES_Activity *startOfActivity = nil;
@@ -416,12 +399,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     for (id activityObject in [activities objectEnumerator])
     {
         ES_Activity *currentActivity = (ES_Activity *)activityObject;
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss Z";
-//        NSLog(@"\nSystem time: %@\t%@\t%@\n\n\n",[dateFormatter stringFromDate:currentActivity.day],currentActivity.serverPrediction, currentActivity.userCorrection);
-//        if(currentActivity.serverPrediction)
-//                    NSLog(@"\n*************\n");
-        
         if (![[ES_HistoryTableViewController class] isActivity:currentActivity similarToActivity:startOfActivity])
         {
             // Then we've reached a new activity.
