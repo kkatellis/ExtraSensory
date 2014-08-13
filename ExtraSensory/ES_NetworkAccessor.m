@@ -12,6 +12,7 @@
 #import "ES_User.h"
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
+#import "ES_UserActivityLabels.h"
 
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
 
@@ -87,14 +88,21 @@
     NSMutableArray *dataValues = [[NSMutableArray alloc] init];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"predicted_activity",activity.serverPrediction]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"corrected_activity",activity.userCorrection]];
+    
+    NSString *secondaryActivitiesSingleString = [[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]] componentsJoinedByString:@","];
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"secondaryActivities",secondaryActivitiesSingleString]];
+    
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"mood",activity.mood]];
+    
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"uuid",activity.user.uuid]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"timestamp",activity.timestamp]];
     
-    NSLog(@"===== sending api call with data: %@",dataValues);
+    NSLog(@"[networkAccessor] sending api call with data: %@",dataValues);
     //NSString *combined = [[params objectForKey:key] componentsJoinedByString:@","];
     
     // setup final API url
     NSString *api_call = [dataValues componentsJoinedByString:@"&"];
+    api_call = [api_call stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     api_call = [NSString stringWithFormat:api, api_call];
     NSLog(@"API call: %@", api_call);
     
