@@ -89,8 +89,8 @@
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"predicted_activity",activity.serverPrediction]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"corrected_activity",activity.userCorrection]];
     
-    NSString *secondaryActivitiesSingleString = [[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]] componentsJoinedByString:@","];
-    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"secondaryActivities",secondaryActivitiesSingleString]];
+    NSString *secondaryActivitiesSingleString = [NSString stringWithFormat:@"%@",[[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]] componentsJoinedByString:@","]];
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"secondary_activities",secondaryActivitiesSingleString]];
     
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"mood",activity.mood]];
     
