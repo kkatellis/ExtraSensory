@@ -60,7 +60,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 - (id)init
 {
     int buttonWidth=20;
-    self.displayActivityEvents=NO;
     self.isDailyView=YES;
     self.collectionViewCalendarLayout = [[MSCollectionViewCalendarLayout alloc] init];
     self.collectionViewCalendarLayout.delegate = self;
@@ -357,10 +356,16 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
         {
             if([activity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
                 event= (ES_ActivityEvent *) activityObject;
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                dateFormatter.dateFormat = @"dd HH:mm";
+                NSLog(@"\n%@ Start time: %@\n",event.userCorrection,[dateFormatter stringFromDate:event.startTime]);
                 return event.startTime;
                 break;
             }
         }
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"dd HH:mm";
+        NSLog(@"\n##############################\n %@ time: %@\n##############################\n",activity.userCorrection, [dateFormatter stringFromDate:activity.startTime]);
         return nil;
     } else {
         return activity.startTime;
@@ -374,9 +379,17 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
         for (id activityObject in [self.activityEvents reverseObjectEnumerator])
         {
             if([activity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                dateFormatter.dateFormat = @"dd HH:mm";
+                NSLog(@"\n%@ End time: %@\n"	,((ES_ActivityEvent *) activityObject).userCorrection,[dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60]]);
+
                 return [NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60];
             }
         }
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"dd HH:mm";
+        NSLog(@"\n********************************\n %@ time: %@\n********************************\n",activity.userCorrection, [dateFormatter stringFromDate:activity.startTime]);
+                return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
         return nil;
     }else
     {
