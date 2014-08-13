@@ -220,7 +220,18 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     NSMutableArray *minuteActivities = [[NSMutableArray alloc] initWithCapacity:1];
     [minuteActivities addObject:startOfActivity];
     NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
-    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:startOfActivity.timestamp minuteActivities:minuteActivities];
+    ES_ActivityEvent *activityEvent;
+    if (self.displayActivityEvents) {
+        for (id activityObject in [self.activityEvents reverseObjectEnumerator])
+        {
+            if([startOfActivity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
+                activityEvent= (ES_ActivityEvent *) activityObject;
+                break;
+            }
+        }
+    }else{
+        activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:startOfActivity.timestamp minuteActivities:minuteActivities];
+    }
     activityFeedback.activityEvent = activityEvent;
     activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
     activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
