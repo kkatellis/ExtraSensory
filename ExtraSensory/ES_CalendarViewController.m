@@ -24,6 +24,7 @@
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_ActivityEvent.h"
 #import "ES_UserActivityLabels.h"
+#import "ES_HistoryTableViewController.h"
 
 NSString * const ESActivityCellReuseIdentifier = @"ESActivityCellReuseIdentifier";
 NSString * const MSDayColumnHeaderReuseIdentifier = @"MSDayColumnHeaderReuseIdentifier";
@@ -36,12 +37,29 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *feedbackButton;
 @property (nonatomic, strong) UIButton *zoomButton;
+@property (nonatomic, strong) UIButton *mergeActivitiesButton;
+@property (nonatomic, strong) UIButton *helpButton;
+@property (nonatomic, strong) UIButton *addButton;
+@property (nonatomic, strong) UIButton *removeButton;
+@property (nonatomic, strong) UIButton *refreshButton;
+@property (nonatomic, assign) bool displayActivityEvents;
+@property (nonatomic, retain) NSMutableArray * activityEvents;
 @end
 
 @implementation ES_CalendarViewController
-//@synthesize selectedCell=_selectedCell;
+- (NSMutableArray *)activityEvents
+{
+    if (!_activityEvents)
+    {
+        _activityEvents = [[NSMutableArray alloc] initWithCapacity:1];
+    }
+    return _activityEvents;
+}
+
 - (id)init
 {
+    int buttonWidth=20;
+    self.displayActivityEvents=NO;
     self.isDailyView=YES;
     self.collectionViewCalendarLayout = [[MSCollectionViewCalendarLayout alloc] init];
     self.collectionViewCalendarLayout.delegate = self;
@@ -49,24 +67,59 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     
     self.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
-    [self.backButton setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    self.backButton.frame = CGRectMake(0.0, 10.0, 25.0, 25.0);
+    [self.backButton setBackgroundImage:[UIImage imageNamed:@"Back.png"] forState:UIControlStateNormal];
+    self.backButton.frame = CGRectMake(5, 5, buttonWidth, buttonWidth);
     self.	backButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.backButton];
     
+    self.mergeActivitiesButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.mergeActivitiesButton addTarget:self action:@selector(mergeActivities:) forControlEvents:UIControlEventTouchUpInside];
+    [self.mergeActivitiesButton setBackgroundImage:[UIImage imageNamed:@"Merge.png"] forState:UIControlStateNormal];
+    self.mergeActivitiesButton.frame = CGRectMake(buttonWidth +10, 5,  buttonWidth, buttonWidth);
+    self.mergeActivitiesButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    [self.view addSubview:self.mergeActivitiesButton];
+    
     self.feedbackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.feedbackButton addTarget:self action:@selector(activeFeedback:) forControlEvents:UIControlEventTouchUpInside];
-    [self.feedbackButton setBackgroundImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
-    self.feedbackButton.frame = CGRectMake(290.0, 10.0, 25.0, 25.0);
+    [self.feedbackButton setBackgroundImage:[UIImage imageNamed:@"Edit.png"] forState:UIControlStateNormal];
+    self.feedbackButton.frame = CGRectMake(275.0+buttonWidth, 5.0,  buttonWidth, buttonWidth);
     self.feedbackButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.feedbackButton];
     
     self.zoomButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.zoomButton addTarget:self action:@selector(zoom:) forControlEvents:UIControlEventTouchUpInside];
-    [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"zoom_in.png"] forState:UIControlStateNormal];
-    self.zoomButton.frame = CGRectMake(265.0, 10.0, 25.0, 25.0);
+    [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"Zoom_in.png"] forState:UIControlStateNormal];
+    self.zoomButton.frame = CGRectMake(270.0, 5.0,  buttonWidth, buttonWidth);
     self.zoomButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.zoomButton];
+    
+    self.refreshButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.refreshButton addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventTouchUpInside];
+    [self.refreshButton setBackgroundImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
+    self.refreshButton.frame = CGRectMake(5, buttonWidth+5.0,  buttonWidth, buttonWidth);
+    self.refreshButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    [self.view addSubview:self.refreshButton];
+    
+    self.helpButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.helpButton addTarget:self action:@selector(help:) forControlEvents:UIControlEventTouchUpInside];
+    [self.helpButton setBackgroundImage:[UIImage imageNamed:@"Help.png"] forState:UIControlStateNormal];
+    self.helpButton.frame = CGRectMake(buttonWidth+10, buttonWidth+5.0,  buttonWidth, buttonWidth);
+    self.helpButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    [self.view addSubview:self.helpButton];
+    
+    self.addButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
+    [self.addButton setBackgroundImage:[UIImage imageNamed:@"AddAct.png"] forState:UIControlStateNormal];
+    self.addButton.frame = CGRectMake(275.0 + buttonWidth, 5.0 +buttonWidth,  buttonWidth, buttonWidth);
+    self.addButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    [self.view addSubview:self.addButton];
+    
+    self.removeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.removeButton addTarget:self action:@selector(remove:) forControlEvents:UIControlEventTouchUpInside];
+    [self.removeButton setBackgroundImage:[UIImage imageNamed:@"Remove.png"] forState:UIControlStateNormal];
+    self.removeButton.frame = CGRectMake(270.0, 5.0 +buttonWidth,  buttonWidth, buttonWidth);
+    self.removeButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    [self.view addSubview:self.removeButton];
 
     return self;
 }
@@ -107,10 +160,25 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.fetchedResultsController.delegate = self;
     [self.fetchedResultsController performFetch:nil];
     
+    [self recalculateEventsFromPredictionList];
+    
 }
 -(void)back:(UIButton *)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)add:(UIButton *)sender
+{
+}
+-(void)remove:(UIButton *)sender
+{
+}
+-(void)help:(UIButton *)sender
+{
+}
+-(void)refresh:(UIButton *)sender
+{
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -160,10 +228,20 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.isDailyView=!self.isDailyView;
     [self.collectionViewCalendarLayout initialize:self.isDailyView];
     if (self.isDailyView) {
-        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"zoom_in.png"] forState:UIControlStateNormal];
+        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"Zoom_in.png"] forState:UIControlStateNormal];
     } else {
-        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"zoom_out.png"] forState:UIControlStateNormal];
+        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"Zoom_out.png"] forState:UIControlStateNormal];
     }
+    [self viewDidLoad];
+    [self viewWillAppear:YES];
+    [self.collectionView.collectionViewLayout prepareLayout];
+    [self viewDidAppear:YES];
+}
+
+-(void) mergeActivities:(UIButton*)button
+{
+    self.displayActivityEvents=!self.displayActivityEvents;
+    [self.collectionViewCalendarLayout initialize:self.isDailyView];
     [self viewDidLoad];
     [self viewWillAppear:YES];
     [self.collectionView.collectionViewLayout prepareLayout];
@@ -217,21 +295,14 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ES_ActivityCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ESActivityCellReuseIdentifier forIndexPath:indexPath];
-        cell.isDailyView=self.isDailyView;
+    cell.isDailyView=self.isDailyView;
     cell.activity = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    if (cell.selected) {
-//        self.selectedCell=cell;
-//    }
-
     return cell;
+
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    //    if (section == albumSection) {
     return CGSizeMake(0, 100);
-    //    }
-    
-    return CGSizeZero;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -263,19 +334,91 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout startTimeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ES_Activity *activity = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    return activity.startTime;
+    ES_Activity *activity= [self.fetchedResultsController objectAtIndexPath:indexPath];;
+    if (self.displayActivityEvents) {
+        ES_ActivityEvent *event;
+        
+        for (id activityObject in [self.activityEvents reverseObjectEnumerator])
+        {
+            if([activity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
+                event= (ES_ActivityEvent *) activityObject;
+                break;
+            }
+        }
+        return event.startTime;
+    } else {
+        return activity.startTime;
+    }
 }
 
 - (NSDate *)collectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout endTimeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ES_Activity *activity = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    return [activity.startTime dateByAddingTimeInterval:(60)];// every activity is 60 sec
+    ES_Activity *activity= [self.fetchedResultsController objectAtIndexPath:indexPath];;
+    if (self.displayActivityEvents) {
+        for (id activityObject in [self.activityEvents reverseObjectEnumerator])
+        {
+            if([activity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
+                return [NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60];
+            }
+        }
+    }
+    return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
 }
 
 - (NSDate *)currentTimeComponentsForCollectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout
 {
     return [NSDate date];
+}
+
+- (void)recalculateEventsFromPredictionList
+{
+    // Empty the event history:
+    [self.activityEvents removeAllObjects];
+    
+    NSArray *activities = [self.fetchedResultsController fetchedObjects];
+    // Read the prediction list of the user and group together consecutive timepoints with similar activities to unified activity events:
+    ES_Activity *startOfActivity = nil;
+    ES_Activity *endOfActivity = nil;
+    ES_ActivityEvent *currentEvent = nil;
+    NSMutableArray *minuteActivities = nil;
+    for (id activityObject in [activities objectEnumerator])
+    {
+        ES_Activity *currentActivity = (ES_Activity *)activityObject;
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss Z";
+//        NSLog(@"\nSystem time: %@\t%@\t%@\n\n\n",[dateFormatter stringFromDate:currentActivity.day],currentActivity.serverPrediction, currentActivity.userCorrection);
+//        if(currentActivity.serverPrediction)
+//                    NSLog(@"\n*************\n");
+        
+        if (![[ES_HistoryTableViewController class] isActivity:currentActivity similarToActivity:startOfActivity])
+        {
+            // Then we've reached a new activity.
+            if (startOfActivity)
+            {
+                NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
+                // Create an event from the start and end of the previous activity:
+                currentEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
+                currentEvent.startTime=startOfActivity.startTime;
+                [self.activityEvents addObject:currentEvent];
+            }
+            
+            //update the new "start" for the current activity:
+            minuteActivities = [[NSMutableArray alloc] initWithCapacity:1];
+            startOfActivity = currentActivity;
+        }
+        // Add teh minute activity object to the list of minutes of the current event:
+        [minuteActivities addObject:currentActivity];
+        endOfActivity = currentActivity;
+    }
+    if (endOfActivity)
+    {
+        // Create the last event from the start and end of activity:
+        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
+        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
+        event.startTime=startOfActivity.startTime;
+        [self.activityEvents addObject:event];
+    }
+    
 }
 
 @end

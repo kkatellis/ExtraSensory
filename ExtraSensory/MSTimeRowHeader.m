@@ -16,7 +16,7 @@
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.title = [UILabel new];
-        self.title.backgroundColor = [UIColor clearColor];
+        self.title.backgroundColor = [UIColor whiteColor];
         self.title.font = [UIFont systemFontOfSize:12.0];
         [self addSubview:self.title];
         

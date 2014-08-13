@@ -13,7 +13,6 @@
 #import "ES_User.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_DataBaseAccessor.h"
-#import "ES_Activity.h"
 //#import "ES_CalendarViewCell.h"
 #import "ES_ActivityEvent.h"
 #import "ES_ActivityEventTableCell.h"
@@ -25,7 +24,6 @@
 
 @property (nonatomic, retain) NSMutableArray * eventHistory;
 
-+ (BOOL)isActivity:(ES_Activity *)activity1 similarToActivity:(ES_Activity *)activity2;
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
 @end

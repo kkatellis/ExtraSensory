@@ -27,7 +27,7 @@
     }else if ([activity isEqualToString:@"Standing"]){
         result = [UIColor cyanColor];
     }else if ([activity isEqualToString:@"Running"]){
-        result = [UIColor yellowColor];
+        result = [UIColor colorWithHexString:@"e5e500"]; 
     }else if ([activity isEqualToString:@"Walking"]){
         result = [UIColor greenColor];
     }else if ([activity isEqualToString:@"Bicycling"]){

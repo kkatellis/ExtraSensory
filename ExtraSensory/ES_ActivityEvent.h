@@ -17,7 +17,7 @@
 @property (nonatomic, retain) NSString * userCorrection;
 @property (nonatomic, retain) NSSet * userActivityLabels;
 @property (nonatomic, retain) NSString * mood;
-
+@property (nonatomic, retain) NSDate * startTime;
 @property (nonatomic, retain) NSNumber * startTimestamp;
 @property (nonatomic, retain) NSNumber * endTimestamp;
 

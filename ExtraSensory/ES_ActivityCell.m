@@ -67,10 +67,9 @@
             make.left.equalTo(self.left).offset(contentPadding.left);
             make.right.equalTo(self.right).offset(-contentPadding.right);
         }];
-        
         [self.time makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.bottom).offset(contentMargin-17	);
-            make.left.equalTo(self.left).offset(contentPadding.left -33);
+            make.top.equalTo(self.top).offset(contentMargin	+3);
+            make.left.equalTo(self.left).offset(contentPadding.left -30);
             make.right.equalTo(self.right).offset(-contentPadding.right);
             make.bottom.lessThanOrEqualTo(self.bottom).offset(-contentPadding.bottom );
         }];
@@ -115,7 +114,7 @@
         self.title.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:[self titleAttributesHighlighted:self.selected]];
     } else {
         self.time.attributedText =  [[NSAttributedString alloc] initWithString:[dateFormatter stringFromDate:_activity.startTime] attributes:[self titleAttributesHighlighted:self.selected]];
-        self.time.font=[UIFont systemFontOfSize:9.0]; self.time.textColor=[UIColor blackColor];
+        self.time.font=[UIFont systemFontOfSize:8.0]; self.time.textColor=[UIColor blackColor];
         
         if (_activity.userCorrection) {
             self.title.attributedText = [[NSAttributedString alloc] initWithString:_activity.userCorrection attributes:[self titleAttributesHighlighted:self.selected]];
@@ -134,8 +133,7 @@
     self.contentView.backgroundColor = [self backgroundColorHighlighted:self.selected];
     self.borderView.backgroundColor = [self borderColor];
     self.title.textColor = [self textColorHighlighted:self.selected];
-//    self.time.textColor = [self textColorHighlighted:self.selected];
-    self.time.font=[UIFont systemFontOfSize:9.0];self.time.textColor=[UIColor blackColor];
+    self.time.font=[UIFont systemFontOfSize:8.0];self.time.textColor=[UIColor blackColor];
 
 }
 

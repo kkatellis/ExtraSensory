@@ -107,7 +107,6 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
 @property (nonatomic, strong) NSMutableDictionary *verticalGridlineAttributes;
 @property (nonatomic, strong) NSMutableDictionary *currentTimeIndicatorAttributes;
 @property (nonatomic, strong) NSMutableDictionary *currentTimeHorizontalGridlineAttributes;
-@property (nonatomic, assign) NSInteger currentTimeOffset;
 // Minute Updates
 - (void)minuteTick:(id)sender;
 // Layout
@@ -458,7 +457,6 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
             CGFloat timeY = (calendarGridMinY + nearbyintf(((currentTimeDateComponents.hour - earliestHour) * self.hourHeight) + (currentTimeDateComponents.minute * self.minuteHeight)));
 
             CGFloat currentTimeIndicatorMinY = (timeY - nearbyintf(self.currentTimeIndicatorSize.height / 2.0));
-            self.currentTimeOffset=nearbyintf(currentTimeIndicatorMinY);
             CGFloat currentTimeIndicatorMinX = (self.timeRowHeaderWidth - self.currentTimeIndicatorSize.width);
             currentTimeIndicatorAttributes.frame = (CGRect){{currentTimeIndicatorMinX, currentTimeIndicatorMinY}, self.currentTimeIndicatorSize};
             currentTimeIndicatorAttributes.zIndex = [self zIndexForElementKind:MSCollectionElementKindCurrentTimeIndicator];
@@ -744,7 +742,7 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
     self.sectionWidth = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 194.0 : 254.0);
     self.dayColumnHeaderHeight = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 60.0 : 50.0);
     self.timeRowHeaderWidth = 56.0;
-    self.currentTimeIndicatorSize = CGSizeMake(self.timeRowHeaderWidth, 10.0);
+    self.currentTimeIndicatorSize = CGSizeMake(self.timeRowHeaderWidth, 30.0);
     self.currentTimeHorizontalGridlineHeight = 1.0;
     self.verticalGridlineWidth = (([[UIScreen mainScreen] scale] == 2.0) ? 0.5 : 1.0);
     self.horizontalGridlineHeight = (([[UIScreen mainScreen] scale] == 2.0) ? 0.5 : 1.0);;
@@ -887,9 +885,6 @@ NSUInteger const MSCollectionMinBackgroundZ = 0.0;
                 } else {
                     yOffset = [self stackedSectionHeightUpToSection:closestSectionToCurrentTime];
                 }
-                if(self.currentTimeOffset)
-                    yOffset=self.currentTimeOffset;
-
                 contentOffset = CGPointMake(0.0, yOffset);
             }
             // Prevent the content offset from forcing the scroll view content off its bounds
