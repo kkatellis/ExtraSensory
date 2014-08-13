@@ -236,8 +236,8 @@
         case MAIN_ACTIVITY_SEC:
             newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
             activitySelection = (ES_MainActivityViewController *)newView;
-            
-            [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection)]];
+            if(self.activityEvent.userCorrection) // for samples which are not labeled by server
+                [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection)]];
             [activitySelection setChoices:[ES_ActivitiesStrings mainActivities]];
             [activitySelection setCategory:MAIN_ACTIVITY];
             [self.navigationController pushViewController:activitySelection animated:YES];
@@ -380,7 +380,7 @@
         ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
         if ([mavc.category isEqualToString:MAIN_ACTIVITY])
         {
-            self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][0];
+            self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][[mavc.appliedLabels count] -1];  // it must be the last element in the list (the count is always 1 for main activities)
         }
         else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
         {
