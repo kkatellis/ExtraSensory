@@ -25,6 +25,7 @@
 #import "ES_ActivityEvent.h"
 #import "ES_UserActivityLabels.h"
 #import "ES_HistoryTableViewController.h"
+#import "ES_DataBaseAccessor.h"
 
 NSString * const ESActivityCellReuseIdentifier = @"ESActivityCellReuseIdentifier";
 NSString * const MSDayColumnHeaderReuseIdentifier = @"MSDayColumnHeaderReuseIdentifier";
@@ -173,12 +174,24 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 }
 -(void)remove:(UIButton *)sender
 {
+    NSArray *indexPaths = [self.collectionView indexPathsForSelectedItems];
+    if(![indexPaths count])
+        return;
+    NSIndexPath *indexPath = [indexPaths objectAtIndex:0];
+    ES_Activity *startOfActivity=((ES_ActivityCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath]).activity;
+    [ES_DataBaseAccessor deleteActivity:startOfActivity];
+
+
 }
 -(void)help:(UIButton *)sender
 {
 }
 -(void)refresh:(UIButton *)sender
 {
+    [self viewDidLoad];
+    [self viewWillAppear:YES];
+    [self.collectionView.collectionViewLayout prepareLayout];
+    [self viewDidAppear:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -203,7 +216,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 
 
 -(void) activeFeedback:(UIButton*)button
-
 {
     NSArray *indexPaths = [self.collectionView indexPathsForSelectedItems];
     if(![indexPaths count])
@@ -214,6 +226,10 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
     ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
     NSMutableArray *minuteActivities = [[NSMutableArray alloc] initWithCapacity:1];
+    [minuteActivities addObject:startOfActivity];
+    if (!startOfActivity.serverPrediction) {
+        startOfActivity.serverPrediction=@" ";
+    }
     NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
     ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:startOfActivity.timestamp minuteActivities:minuteActivities];
     activityFeedback.activityEvent = activityEvent;
@@ -337,15 +353,15 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     ES_Activity *activity= [self.fetchedResultsController objectAtIndexPath:indexPath];;
     if (self.displayActivityEvents) {
         ES_ActivityEvent *event;
-        
         for (id activityObject in [self.activityEvents reverseObjectEnumerator])
         {
             if([activity.startTime isEqualToDate: ((ES_ActivityEvent *) activityObject).startTime]){
                 event= (ES_ActivityEvent *) activityObject;
+                return event.startTime;
                 break;
             }
         }
-        return event.startTime;
+        return nil;
     } else {
         return activity.startTime;
     }
@@ -361,8 +377,11 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
                 return [NSDate dateWithTimeIntervalSince1970:[((ES_ActivityEvent *) activityObject).endTimestamp doubleValue] +60];
             }
         }
+        return nil;
+    }else
+    {
+        return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
     }
-    return [activity.startTime dateByAddingTimeInterval:60];// every activity is 60 sec
 }
 
 - (NSDate *)currentTimeComponentsForCollectionView:(UICollectionView *)collectionView layout:(MSCollectionViewCalendarLayout *)collectionViewCalendarLayout

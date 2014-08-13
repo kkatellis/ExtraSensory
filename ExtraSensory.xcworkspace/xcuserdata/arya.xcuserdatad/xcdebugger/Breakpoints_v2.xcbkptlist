@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
             landmarkName = "-willAnimateRotationToInterfaceOrientation:duration:"
             landmarkType = "5">
          </BreakpointContent>
@@ -490,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
+            startingLineNumber = "394"
+            endingLineNumber = "394"
             landmarkName = "-recalculateEventsFromPredictionList"
             landmarkType = "5">
          </BreakpointContent>
@@ -506,11 +506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
+            startingLineNumber = "403"
+            endingLineNumber = "403"
             landmarkName = "-recalculateEventsFromPredictionList"
             landmarkType = "5">
          </BreakpointContent>
@@ -522,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "378"
-            endingLineNumber = "378"
+            startingLineNumber = "397"
+            endingLineNumber = "397"
             landmarkName = "-recalculateEventsFromPredictionList"
             landmarkType = "5">
          </BreakpointContent>
@@ -538,11 +538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "386"
-            endingLineNumber = "386"
+            startingLineNumber = "405"
+            endingLineNumber = "405"
             landmarkName = "-recalculateEventsFromPredictionList"
             landmarkType = "5">
          </BreakpointContent>
@@ -554,11 +554,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
+            startingLineNumber = "414"
+            endingLineNumber = "414"
             landmarkName = "-recalculateEventsFromPredictionList"
             landmarkType = "5">
          </BreakpointContent>
@@ -570,11 +570,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "393"
-            endingLineNumber = "393"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
             landmarkName = "-recalculateEventsFromPredictionList"
             landmarkType = "5">
          </BreakpointContent>
@@ -586,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "338"
-            endingLineNumber = "338"
+            startingLineNumber = "354"
+            endingLineNumber = "354"
             landmarkName = "-collectionView:layout:startTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -602,11 +602,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
+            startingLineNumber = "353"
+            endingLineNumber = "353"
             landmarkName = "-collectionView:layout:startTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -618,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "356"
-            endingLineNumber = "356"
+            startingLineNumber = "372"
+            endingLineNumber = "372"
             landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -634,11 +634,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "359"
+            endingLineNumber = "359"
             landmarkName = "-collectionView:layout:startTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -650,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
+            startingLineNumber = "376"
+            endingLineNumber = "376"
             landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -712,11 +712,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
+            startingLineNumber = "385"
+            endingLineNumber = "385"
             landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -728,11 +728,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ExtraSensory/ES_CalendarViewController.m"
-            timestampString = "429558376.726861"
+            timestampString = "429605714.680537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "365"
-            endingLineNumber = "365"
+            startingLineNumber = "382"
+            endingLineNumber = "382"
             landmarkName = "-collectionView:layout:endTimeForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -782,6 +782,86 @@
             startingLineNumber = "477"
             endingLineNumber = "477"
             landmarkName = "-prepareVerticalTileSectionLayoutForSections:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ExtraSensory/ES_ActivityEventFeedbackViewController.m"
+            timestampString = "429602463.80116"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "330"
+            endingLineNumber = "330"
+            landmarkName = "-submitFeedback"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ExtraSensory/ES_CalendarViewController.m"
+            timestampString = "429605714.680537"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "-activeFeedback:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ExtraSensory/ES_ActivityEventFeedbackViewController.m"
+            timestampString = "429603722.353293"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "369"
+            endingLineNumber = "369"
+            landmarkName = "-submitFeedback"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ExtraSensory/ES_ActivityEventFeedbackViewController.m"
+            timestampString = "429604977.258506"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ExtraSensory/ES_ActivityEventFeedbackViewController.m"
+            timestampString = "429605017.166027"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "239"
+            endingLineNumber = "239"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
