@@ -26,13 +26,14 @@ def classify_zip(zip_in,upload_folder,classifier_path):
     zf.extractall(tmp_dir)
 
     #compute the features
-    feats_acc, feats_gyro, feats_gps = do_datafile(tmp_dir)
+    feats_acc, feats_magnet, feats_gyro, feats_gps = do_datafile(tmp_dir)
     # save features
     if not os.path.exists(os.path.join(classifier_path,'feats',UUID)):
          os.mkdir(os.path.join(classifier_path,'feats',UUID))
     if not os.path.exists(os.path.join(classifier_path,'feats',UUID,UTime)):
          os.mkdir(os.path.join(classifier_path,'feats',UUID,UTime))
     np.savetxt(os.path.join(classifier_path,'feats',UUID,UTime,'acc'),feats_acc)
+    np.savetxt(os.path.join(classifier_path,'feats',UUID,UTime,'magnet'),feats_magnet)
     np.savetxt(os.path.join(classifier_path,'feats',UUID,UTime,'gyro'),feats_gyro)
     np.savetxt(os.path.join(classifier_path,'feats',UUID,UTime,'gps'),feats_gps)
     shutil.rmtree(tmp_dir)
@@ -68,6 +69,7 @@ def do_datafile(tmp_dir):
 
 	# load data into arrays
 	acc = np.zeros((len(jlist),3))
+	magnet = np.zeros((len(jlist),3))
 	gyro = np.zeros((len(jlist),3))
 	gps = np.zeros((len(jlist),3))
 #	mic = np.zeros((len(jlist),2))
@@ -77,6 +79,9 @@ def do_datafile(tmp_dir):
 		acc[j,0] = jlist[j]['acc_x']
 		acc[j,1] = jlist[j]['acc_y']
 		acc[j,2] = jlist[j]['acc_z']
+		magnet[j,0] = jlist[j]['magnet_x']
+		magnet[j,1] = jlist[j]['magnet_y']
+		magnet[j,2] = jlist[j]['magnet_z']
 		gyro[j,0] = jlist[j]['gyro_x']
 		gyro[j,1] = jlist[j]['gyro_y']
 		gyro[j,2] = jlist[j]['gyro_z']
@@ -91,10 +96,11 @@ def do_datafile(tmp_dir):
 	if acc.shape[0] < feats.wins40:
 		raise Exception("Not enough data to make a feature (n = %i)" % acc.shape[0])
 	feats_acc = feats.feats_acc(acc,feats.wins40,feats.steps40) #accelerometer features
+	feats_magnet = feats.feats_magnet(magnet,feats.wins40,feats.steps40) #magnetometer features
 	feats_gyro = feats.feats_gyro(gyro,feats.wins40,feats.steps40) #gryo features
 	feats_gps = feats.feats_gps(gps,feats.wins40,feats.steps40) #gps features
 #	feats_mic = feats.feats_mic(mic,feats.wins40,feats.steps40) #mic dB features
-	return feats_acc, feats_gyro, feats_gps
+	return feats_acc, feats_magnet, feats_gyro, feats_gps
 
 def do_soundfile(tmp_dir):
 	# load sound file -  use command-line afconvert tool to convert to .wav

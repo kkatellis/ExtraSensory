@@ -19,6 +19,7 @@ import mfcc
 #import statsmodels.tsa.stattools as stattools
 
 dacc        = 44 #dimension of acc features
+dmagnet     = 44 #dimension of magnet features
 dgyro       = 44 #dimension of gyro features
 dgps        = 4 #dimension of GPS features
 dmic        = 10 #dimension of mic features
@@ -76,6 +77,9 @@ def main():
                      print '  -extracting mic features...'
                      fmic           = feats_mic(mic,wins40,steps40) #gps features
                      np.savetxt(join(featfile,'mic'),fmic)
+
+def feats_magnet(magnet,wins,steps):
+    return feats_acc(magnet,wins,steps)
 
 def feats_acc(acc,wins,steps):
     fstarts        = range(0,np.size(acc,0)-wins+1,steps) #index of feature window starts
