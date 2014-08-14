@@ -199,6 +199,10 @@ def handle_feedback():
 
         corrected_activity    - The activity the user corrected
 
+        secondary_activities - The set of user secondary activities (separated with commas)
+
+        mood - The mood of the user
+
         Results
         -------
         JSON success if all params are present and correctly parsed
@@ -219,11 +223,17 @@ def handle_feedback():
             raise Exception( 'Missing predicted_activity' )
         if 'corrected_activity' not in request.args:
             raise Exception( 'Missing corrected_activity' )
+        if 'secondary_activities' not in request.args:
+            raise Exception( 'Missing secondary_activities' )
+        if 'mood' not in request.args:
+            raise Exception( 'Missing mood' )
 
         fback[ 'uuid' ]                 	= request.args.get( 'uuid' )
         fback[ 'timestamp' ]		    	= request.args.get( 'timestamp' ) 
         fback[ 'predicted_activity' ]   	= request.args.get( 'predicted_activity' ).upper()
-        fback[ 'corrected_activity' ]     	= request.args.get( 'corrected_activity' ).upper().split( ',' )
+        fback[ 'corrected_activity' ]     	= request.args.get( 'corrected_activity' ).upper()
+        fback[ 'secondary_activities' ]         = request.args.get( 'secondary_activities' ).upper().split( ',' )
+        fback[ 'mood' ]                         = request.args.get( 'mood' ).upper()
 
         UUID 	= str(fback['uuid'])
         UTime 	= str(fback['timestamp'])
