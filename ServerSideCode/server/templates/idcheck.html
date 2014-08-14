@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>ID Check</title>
+	<script type='text/javascript' src=' https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+	<script type='text/javascript'>
+		function check() {
+			var artist = $( '#artist' ).val();
+			var track  = $( '#track' ).val();
+
+			$( '#results' ).html( 'Checking...' );
+
+			$.post( '/rmw/api/has_rdio_id', {'artist': artist, 'track': track }, function( data ) {
+				if( data.success == false ) {
+					$( '#results' ).html( 'Does not have ID available!' )
+				} else {
+					$( '#results' ).html( 'RDIO_ID = ' + data.id )
+				}
+			}, 'json' );
+		}
+	</script>
+</head>
+<body>
+<div>Artist: <input type='text' id='artist' size='30'></div>
+<div>Track: <input type='text' id='track' size='30'></div>
+<div><button onclick='check();'>Check</button>
+<div id='results'></div>
+</body>
+</html>

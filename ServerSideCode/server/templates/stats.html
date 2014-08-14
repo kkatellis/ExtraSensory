@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Rockmyworld - Stats</title>
+
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+	<style type="text/css">
+		strong {
+			color: #1691d8;
+		}
+
+		em {
+			color: #1691d8;
+		}
+	</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type='text/javascript'>
+		// Load Google Visualization API
+		google.load( 'visualization', '1.0', { 'packages': [ 'corechart' ] } );
+
+		$(function() {
+			$( '#search_btn' ).click( function() {
+
+				var date_begin = $( '#date_begin' ).val();
+				var date_end   = $( '#date_end' ).val();
+
+				$.get( '/stats/search', 
+						{ 'uuid': $( '#search' ).val(), 
+						'dbegin': date_begin, 
+						  'dend': date_end },
+					function( data ) {
+						$( '#feedback-search-results' ).html( data );
+					}
+				);
+			});
+		});
+
+		function clear_results() {
+			$( '#feedback-search-results' ).html( '' );
+			$( '#count_chart' ).html( '' );
+			$( '#day_chart' ).html( '' );
+			$( '#packets_chart' ).html( '' );
+		}
+	</script>
+	<script type='text/javascript'>
+		$( function() {
+			var data = new google.visualization.DataTable();
+			data.addColumn( 'string', 'Activity' );
+			data.addColumn( 'number', 'Count' );
+			data.addRows([
+				{% for key in activity_counts %}
+					[ '{{ key }}', {{ activity_counts[ key ] }} ],
+				{% endfor %}
+			]);
+			data.sort( {'column': 1, 'desc': true} );
+
+			var options = { 'title': 'Activity Counts', 'width': 300, 'height': 300, 'legend': { 'position': 'none' } };
+			var chart = new google.visualization.PieChart( document.getElementById( 'total_count_chart' ) );
+			chart.draw( data, options );
+
+			data = new google.visualization.DataTable();
+			data.addColumn( 'string', 'Date' );
+			data.addColumn( 'number', 'Activity Count' );
+			data.addRows([
+				{% for key in activity_per_day %}
+					[ '{{ key }}', {{ activity_per_day[ key ] }} ],
+				{% endfor %}
+			]);
+			data.sort( {'column': 0, 'desc': true} );
+
+			options = { 'title': 'Activities Per Day', 'width': 300, 'height': 300, 'legend': { 'position': 'none' } };
+			chart = new google.visualization.BarChart( document.getElementById( 'total_day_chart' ) );
+			chart.draw( data, options );
+
+			data = new google.visualization.DataTable();
+			data.addColumn( 'string', 'Date' );
+			data.addColumn( 'number', 'Packet Count' );
+			data.addRows([
+				{% for key in packets_per_day %}
+					[ '{{ key }}', {{ packets_per_day[ key ] }} ],
+				{% endfor %}
+			]);
+			data.sort( {'column': 0, 'desc': true} );
+
+			options = { 'title': 'Packets Per Day', 'width': 300, 'height': 300, 'colors': ['red'], 'legend': { 'position': 'none' } };
+			chart = new google.visualization.BarChart( document.getElementById( 'total_packets_chart' ) );
+			chart.draw( data, options );
+
+		});
+	</script>	
+</head>
+<body>
+<div class='container'>
+	<div class='row'>
+		<div class='span12'>
+			<h1>RMW - Statistics</h1>
+			<p class='lead'>
+				<strong>rockmyworld</strong> has collected a total of <strong>{{ count }}</strong> pieces of feedback.
+			</p>
+			<div class='form-horizontal'>
+				<div class='control-group'>
+					<label class='control-label' for='search'>Tester Search</label>
+					<div class='controls'>
+						<input type='text' class='input-xlarge' id='search' placeholder='Enter the first few characters of the UUID'>
+						<p class='help-block'>This will retrieve the last 100 feedback entries by a tester ( based on UUID ).</p>
+					</div>
+				</div>
+				<div class='control-group'>
+					<label class='control-label' for='search'>Date Range</label>
+					<div class='controls'>
+						<input type='text' class='input-small' id='date_begin' placeholder='05/01/2012'> to
+						<input type='text' class='input-small' id='date_end' placeholder='05/30/2012'>
+						<p class='help-block'>A date range to retrieve data. Leave blank to retrieve last 100 entries.</p>
+					</div>
+				</div>
+				<div class='control-group'>
+					<div class='controls'>
+						<button id='search_btn' class='btn btn-primary'>Search</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='row' style='margin-top:16px;'>
+		<div class='span4' id='count_chart'></div>
+		<div class='span4' id='day_chart'></div>
+		<div class='span4' id='packets_chart'></div>
+		<div class='span12' id='feedback-search-results'></div>
+
+		<div class='span12'>
+			<h2>Total Statistics</h2>
+		</div>
+		<div class='span4' id='total_count_chart'></div>
+		<div class='span4' id='total_day_chart'></div>
+		<div class='span4' id='total_packets_chart'></div>
+		<div class='span12' id='feedback-list'>
+			<h2>Recently Logged Feedback</h2>
+			<div style='margin-top:16px;'>
+			<table class='table table-bordered table-striped'>
+				<thead>
+					<tr>
+						<th>Time Received</th>
+						<th>UUID</th>
+						<th>Predicted Activity</th>
+						<th>Current Activity</th>
+						<th>Good for Activity?</th>
+						<th>Current Mood</th>
+						<th>Good for Mood?</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for stat in recent %}
+				<tr>
+					<td>{{ stat[ 'timestamp' ].strftime( '<em>%m/%d</em><br>%I:%M:%S %p' )|safe }}
+					<td>{{ stat[ 'uuid' ][0:15] }}</td>
+					<td>{{ stat[ 'PREDICTED_ACTIVITY' ] }}</td>
+					<td>{{ ', '.join( stat[ 'CURRENT_ACTIVITY' ] ) }}</td>
+					<td>{{ stat[ 'IS_GOOD_SONG_FOR_ACTIVITY'] }}</td>
+					<td>{{ stat[ 'CURRENT_MOOD' ] }}</td>
+					<td>{{ stat[ 'IS_GOOD_SONG_FOR_MOOD'] }}</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

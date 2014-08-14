@@ -1,0 +1,77 @@
+<div style='float:right;'>
+	<button class='btn btn-primary' onclick='clear_results();'>Clear</button>
+</div>
+<h2>Search Results for: {{ uuid }}</h2>
+<div style='margin-top:16px;'>
+<table class='table table-bordered table-striped'>
+	<thead>
+		<tr>
+			<th>Time Received</th>
+			<th>UUID</th>
+			<th>Predicted Activity</th>
+			<th>Current Activity</th>
+			<th>Good for Activity?</th>
+			<th>Current Mood</th>
+			<th>Good for Mood?</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for stat in results %}
+	<tr>
+		<td>{{ stat[ 'timestamp' ].strftime( '<em>%m/%d</em><br>%I:%M:%S %p' )|safe }}
+		<td>{{ stat[ 'uuid' ][0:15] }}</td>
+		<td>{{ stat[ 'PREDICTED_ACTIVITY' ] }}</td>
+		<td>{{ ', '.join( stat[ 'CURRENT_ACTIVITY' ] ) }}</td>
+		<td>{{ stat[ 'IS_GOOD_SONG_FOR_ACTIVITY'] }}</td>
+		<td>{{ stat[ 'CURRENT_MOOD' ] }}</td>
+		<td>{{ stat[ 'IS_GOOD_SONG_FOR_MOOD'] }}</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<script type='text/javascript'>
+	$( function() {
+		var data = new google.visualization.DataTable();
+		data.addColumn( 'string', 'Activity' );
+		data.addColumn( 'number', 'Count' );
+		data.addRows([
+			{% for key in activity_counts %}
+				[ '{{ key }}', {{ activity_counts[ key ] }} ],
+			{% endfor %}
+		]);
+		data.sort( {'column': 1, 'desc': true} );
+
+		var options = { 'title': 'Activity Counts', 'width': 400, 'height': 300, 'legend': { 'position': 'none' } };
+		var chart = new google.visualization.PieChart( document.getElementById( 'count_chart' ) );
+		chart.draw( data, options );
+
+		data = new google.visualization.DataTable();
+		data.addColumn( 'string', 'Date' );
+		data.addColumn( 'number', 'Activity Count' );
+		data.addRows([
+			{% for key in activity_per_day %}
+				[ '{{ key }}', {{ activity_per_day[ key ] }} ],
+			{% endfor %}
+		]);
+		data.sort( {'column': 0, 'desc': true} );
+
+		options = { 'title': 'Activities Per Day', 'width': 400, 'height': 300, 'legend': { 'position': 'none' } };
+		chart = new google.visualization.BarChart( document.getElementById( 'day_chart' ) );
+		chart.draw( data, options );
+
+		data = new google.visualization.DataTable();
+		data.addColumn( 'string', 'Date' );
+		data.addColumn( 'number', 'Packet Count' );
+		data.addRows([
+			{% for key in packets_per_day %}
+				[ '{{ key }}', {{ packets_per_day[ key ] }} ],
+			{% endfor %}
+		]);
+		data.sort( {'column': 0, 'desc': true} );
+
+		options = { 'title': 'Packets Per Day', 'width': 300, 'height': 300, 'colors': ['red'], 'legend': { 'position': 'none' } };
+		chart = new google.visualization.BarChart( document.getElementById( 'packets_chart' ) );
+		chart.draw( data, options );		
+	});
+</script>
+</div>
