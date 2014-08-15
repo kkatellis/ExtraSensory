@@ -20,6 +20,8 @@
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_UserActivityLabels.h"
 
+#define SECONDS_IN_24HRS 86400
+
 @interface ES_HistoryTableViewController ()
 
 @property (nonatomic, retain) NSMutableArray * eventHistory;
@@ -142,15 +144,19 @@
 {
     // Empty the event history:
     [self.eventHistory removeAllObjects];
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    NSMutableArray *predictions = appDelegate.predictions;
-    // Read the prediction list of the user and group together consecutive timepoints with similar activities to unified activity events:
+    // Read the atomic activities from the DB:
+    NSNumber *now = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+    NSNumber *historyStart = [NSNumber numberWithDouble:([now doubleValue] - SECONDS_IN_24HRS)];
+    
+    NSArray *activities = [ES_DataBaseAccessor getActivitiesFrom:historyStart to:now];
+
+    // Group together consecutive timepoints with similar activities to unified activity-events:
     ES_Activity *startOfActivity = nil;
     ES_Activity *endOfActivity = nil;
     ES_ActivityEvent *currentEvent = nil;
     NSMutableArray *minuteActivities = nil;
-    for (id activityObject in [predictions reverseObjectEnumerator])
+    for (id activityObject in activities)
     {
         ES_Activity *currentActivity = (ES_Activity *)activityObject;
 
