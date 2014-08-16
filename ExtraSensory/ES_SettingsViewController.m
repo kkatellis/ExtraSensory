@@ -10,12 +10,15 @@
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
 #import "ES_Scheduler.h"
+#import "ES_Settings.h"
 
 @interface ES_SettingsViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
 @property (strong, nonatomic) IBOutlet UISwitch *schedulerSwitch;
 @property (strong, nonatomic) IBOutlet UILabel *indicatorLabel;
+@property (weak, nonatomic) IBOutlet UISlider *reminderIntervalSlider;
+@property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *reminderIntervalSelectedVal;
 @property (strong, nonatomic) ES_AppDelegate* appDelegate;
 @end
 
@@ -46,6 +49,7 @@
 {
     [super viewDidLoad];
     [self.uuidLabel setText: self.appDelegate.user.uuid];
+    //[self.appDelegate.user.settings.timeBetweenUserNag]
 	// Do any additional setup after loading the view.
 }
 
