@@ -207,8 +207,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Reminder Interval (min):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V5J-LT-pac">
-                                <rect key="frame" x="21" y="108" width="191" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Reminder Interval:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V5J-LT-pac">
+                                <rect key="frame" x="21" y="108" width="151" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
@@ -229,9 +229,12 @@
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="9" minValue="2" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="pth-Bh-N7V">
                                 <rect key="frame" x="101" y="137" width="118" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="reminderSliderValueChanged:" destination="FhT-sF-lQK" eventType="valueChanged" id="8KH-jf-3rz"/>
+                                </connections>
                             </slider>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOv-hT-b5y">
-                                <rect key="frame" x="251" y="108" width="42" height="21"/>
+                                <rect key="frame" x="180" y="108" width="120" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -244,10 +247,10 @@
                     <navigationItem key="navigationItem" title="Settings" id="vya-3r-gup"/>
                     <connections>
                         <outlet property="indicatorLabel" destination="nwn-Gr-zvt" id="UGz-7q-F5u"/>
+                        <outlet property="reminderIntervalSelectedValue" destination="iOv-hT-b5y" id="pyU-2W-E1F"/>
                         <outlet property="reminderIntervalSlider" destination="pth-Bh-N7V" id="XQU-Zc-HiI"/>
                         <outlet property="schedulerSwitch" destination="gQB-h8-SNS" id="gbi-QR-8ea"/>
                         <outlet property="uuidLabel" destination="Na8-k5-VEU" id="gpE-zd-J1L"/>
-                        <outletCollection property="reminderIntervalSelectedVal" destination="iOv-hT-b5y" id="jM7-qs-3p0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j7w-GM-ILe" userLabel="First Responder" sceneMemberID="firstResponder"/>

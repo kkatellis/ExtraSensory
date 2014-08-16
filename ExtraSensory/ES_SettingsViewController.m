@@ -17,8 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
 @property (strong, nonatomic) IBOutlet UISwitch *schedulerSwitch;
 @property (strong, nonatomic) IBOutlet UILabel *indicatorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *reminderIntervalSelectedValue;
 @property (weak, nonatomic) IBOutlet UISlider *reminderIntervalSlider;
-@property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *reminderIntervalSelectedVal;
 @property (strong, nonatomic) ES_AppDelegate* appDelegate;
 @end
 
@@ -48,9 +48,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // UUID:
     [self.uuidLabel setText: self.appDelegate.user.uuid];
-    //[self.appDelegate.user.settings.timeBetweenUserNag]
+    
+    // Nag interval:
+    NSNumber *reminderIntervalMins = [NSNumber numberWithInteger:((int)[self.appDelegate.user.settings.timeBetweenUserNags doubleValue])/60];
+    [self setReminderIntervalSelectedValueWithMinutes:reminderIntervalMins];
+    self.reminderIntervalSlider.value = [reminderIntervalMins doubleValue];
 	// Do any additional setup after loading the view.
+}
+
+- (void)setReminderIntervalSelectedValueWithMinutes:(NSNumber *)minutes
+{
+    self.reminderIntervalSelectedValue.text = [NSString stringWithFormat:@"%@ minutes",minutes];
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,6 +73,13 @@
 - (ES_Scheduler *)scheduler
 {
     return self.appDelegate.scheduler;
+}
+
+- (IBAction)reminderSliderValueChanged:(id)sender {
+    NSNumber *minutes = [NSNumber numberWithInteger:(int)self.reminderIntervalSlider.value];
+    [self setReminderIntervalSelectedValueWithMinutes:minutes];
+    NSNumber *seconds = [NSNumber numberWithDouble:(double)([minutes intValue]*60)];
+    self.appDelegate.user.settings.timeBetweenUserNags = seconds;
 }
 
 - (IBAction)startScheduler:(UISwitch *)sender
