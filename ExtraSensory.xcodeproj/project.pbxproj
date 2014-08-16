@@ -9,16 +9,6 @@
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */; };
-		4291F1CB199A7F42008EDCA4 /* Calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1C5199A7F42008EDCA4 /* Calendar.png */; };
-		4291F1CC199A7F42008EDCA4 /* Edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1C6199A7F42008EDCA4 /* Edit.png */; };
-		4291F1CD199A7F42008EDCA4 /* Help.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1C7199A7F42008EDCA4 /* Help.png */; };
-		4291F1CE199A7F42008EDCA4 /* Merge.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1C8199A7F42008EDCA4 /* Merge.png */; };
-		4291F1CF199A7F42008EDCA4 /* Remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1C9199A7F42008EDCA4 /* Remove.png */; };
-		4291F1D0199A7F42008EDCA4 /* Zoom_in.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1CA199A7F42008EDCA4 /* Zoom_in.png */; };
-		4291F1D2199A8029008EDCA4 /* Back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1D1199A8029008EDCA4 /* Back.png */; };
-		4291F1D4199A8056008EDCA4 /* AddAct.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1D3199A8056008EDCA4 /* AddAct.png */; };
-		4291F1D6199A82A2008EDCA4 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1D5199A82A2008EDCA4 /* refresh.png */; };
-		4291F1D8199A8693008EDCA4 /* Zoom_out.png in Resources */ = {isa = PBXBuildFile; fileRef = 4291F1D7199A8693008EDCA4 /* Zoom_out.png */; };
 		4291F1DB199A8908008EDCA4 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4291F1DA199A8908008EDCA4 /* ES_Activity.m */; };
 		4294840C197E1BD000FF20B6 /* MSCollectionViewCalendarLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 429483FB197E1BD000FF20B6 /* MSCollectionViewCalendarLayout.m */; };
 		4294840D197E1BD000FF20B6 /* MSCurrentTimeGridline.m in Sources */ = {isa = PBXBuildFile; fileRef = 429483FD197E1BD000FF20B6 /* MSCurrentTimeGridline.m */; };
@@ -179,16 +169,6 @@
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SoundWaveProcessor.m; sourceTree = "<group>"; };
-		4291F1C5199A7F42008EDCA4 /* Calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calendar.png; sourceTree = "<group>"; };
-		4291F1C6199A7F42008EDCA4 /* Edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Edit.png; sourceTree = "<group>"; };
-		4291F1C7199A7F42008EDCA4 /* Help.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Help.png; sourceTree = "<group>"; };
-		4291F1C8199A7F42008EDCA4 /* Merge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Merge.png; sourceTree = "<group>"; };
-		4291F1C9199A7F42008EDCA4 /* Remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Remove.png; sourceTree = "<group>"; };
-		4291F1CA199A7F42008EDCA4 /* Zoom_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Zoom_in.png; sourceTree = "<group>"; };
-		4291F1D1199A8029008EDCA4 /* Back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back.png; sourceTree = "<group>"; };
-		4291F1D3199A8056008EDCA4 /* AddAct.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AddAct.png; sourceTree = "<group>"; };
-		4291F1D5199A82A2008EDCA4 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
-		4291F1D7199A8693008EDCA4 /* Zoom_out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Zoom_out.png; sourceTree = "<group>"; };
 		4291F1D9199A8908008EDCA4 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
 		4291F1DA199A8908008EDCA4 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
 		429483FA197E1BD000FF20B6 /* MSCollectionViewCalendarLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSCollectionViewCalendarLayout.h; sourceTree = "<group>"; };
@@ -417,16 +397,9 @@
 		4291F1C4199A7F29008EDCA4 /* calendar */ = {
 			isa = PBXGroup;
 			children = (
-				4291F1D7199A8693008EDCA4 /* Zoom_out.png */,
-				4291F1D5199A82A2008EDCA4 /* refresh.png */,
-				4291F1D3199A8056008EDCA4 /* AddAct.png */,
-				4291F1D1199A8029008EDCA4 /* Back.png */,
-				4291F1C5199A7F42008EDCA4 /* Calendar.png */,
-				4291F1C6199A7F42008EDCA4 /* Edit.png */,
-				4291F1C7199A7F42008EDCA4 /* Help.png */,
-				4291F1C8199A7F42008EDCA4 /* Merge.png */,
-				4291F1C9199A7F42008EDCA4 /* Remove.png */,
-				4291F1CA199A7F42008EDCA4 /* Zoom_in.png */,
+				429AC8AA19A3497000D4F607 /* merge.png */,
+				429AC8A419A348EF00D4F607 /* back.png */,
+				429AC8A519A348EF00D4F607 /* edit.png */,
 			);
 			name = calendar;
 			sourceTree = "<group>";
@@ -941,7 +914,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4291F1CC199A7F42008EDCA4 /* Edit.png in Resources */,
 				70B8A96918F87D230076A4F5 /* primary-btn-bg.png in Resources */,
 				70B8A96B18F87D230076A4F5 /* rdio-logo@2x.png in Resources */,
 				708D5FB2197C3778003FE7D3 /* Lying down.png in Resources */,
@@ -950,17 +922,14 @@
 				70B8A96418F87D230076A4F5 /* settings-icon.png in Resources */,
 				70B8A96D18F87D230076A4F5 /* smiley.png in Resources */,
 				70B8A93818F87D230076A4F5 /* indicator-driving.png in Resources */,
-				4291F1D0199A7F42008EDCA4 /* Zoom_in.png in Resources */,
 				70B8A96218F87D230076A4F5 /* header-bg.png in Resources */,
 				708D5FB4197C3778003FE7D3 /* Bicycling.png in Resources */,
 				70B8A94718F87D230076A4F5 /* indicator-walking@2x.png in Resources */,
 				70B8A95F18F87D230076A4F5 /* music-note.png in Resources */,
 				70B8A96C18F87D230076A4F5 /* silent-on.png in Resources */,
-				4291F1D8199A8693008EDCA4 /* Zoom_out.png in Resources */,
 				70B8A96318F87D230076A4F5 /* profile-icon.png in Resources */,
 				703B3650196E3FA800D5D80B /* gear.png in Resources */,
 				70B8A92F18F87D230076A4F5 /* 25-weather.png in Resources */,
-				4291F1D2199A8029008EDCA4 /* Back.png in Resources */,
 				70B8A94F18F87D230076A4F5 /* walking.png in Resources */,
 				70B8A92E18F87D230076A4F5 /* 100-coffee.png in Resources */,
 				70B8A96E18F87D230076A4F5 /* success-btn-bg.png in Resources */,
@@ -977,7 +946,6 @@
 				4E5C5D94199F6C7F00B801BC /* redCircle.png in Resources */,
 				70B8A93318F87D230076A4F5 /* driving.png in Resources */,
 				70B8A96818F87D230076A4F5 /* play_btn.png in Resources */,
-				4291F1D4199A8056008EDCA4 /* AddAct.png in Resources */,
 				70B8A95E18F87D230076A4F5 /* icon@2x.png in Resources */,
 				703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */,
 				70B8A94B18F87D230076A4F5 /* sitting.png in Resources */,
@@ -988,11 +956,10 @@
 				70B8A96A18F87D230076A4F5 /* rdio-logo.png in Resources */,
 				70B8A95918F87D230076A4F5 /* button-bg.png in Resources */,
 				9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */,
-				4291F1CB199A7F42008EDCA4 /* Calendar.png in Resources */,
-				4291F1CF199A7F42008EDCA4 /* Remove.png in Resources */,
 				70B8A93018F87D230076A4F5 /* 32-iphone.png in Resources */,
 				70B8A95118F87D230076A4F5 /* activity_button@2x.png in Resources */,
 				70B8A93218F87D230076A4F5 /* Bus-256.png in Resources */,
+				429AC8AB19A3497000D4F607 /* merge.png in Resources */,
 				9307CBBF17F1A78A00D95E05 /* InfoPlist.strings in Resources */,
 				70B8A94818F87D230076A4F5 /* party-small.png in Resources */,
 				70B8A95018F87D230076A4F5 /* activity_button.png in Resources */,
@@ -1005,12 +972,11 @@
 				70B8A93118F87D230076A4F5 /* biking.png in Resources */,
 				70B8A95718F87D230076A4F5 /* black-linen.png in Resources */,
 				70B8A96018F87D230076A4F5 /* favorite.png in Resources */,
+				429AC8A819A348EF00D4F607 /* edit.png in Resources */,
 				70B8A95B18F87D230076A4F5 /* default_playlist.json in Resources */,
 				9FD9D2F918AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard in Resources */,
 				70B8A95C18F87D230076A4F5 /* icon-ipad.png in Resources */,
-				4291F1CE199A7F42008EDCA4 /* Merge.png in Resources */,
 				70B8A93418F87D230076A4F5 /* exercising.png in Resources */,
-				4291F1CD199A7F42008EDCA4 /* Help.png in Resources */,
 				703B3668196E477500D5D80B /* text-plus-icon.png in Resources */,
 				9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */,
 				70B8A94618F87D230076A4F5 /* indicator-walking.png in Resources */,
@@ -1020,7 +986,6 @@
 				70B8A93718F87D230076A4F5 /* indicator-biking@2x.png in Resources */,
 				70B8A94918F87D230076A4F5 /* party.png in Resources */,
 				70B8A96118F87D230076A4F5 /* feed-icon.png in Resources */,
-				4291F1D6199A82A2008EDCA4 /* refresh.png in Resources */,
 				70B8A93F18F87D230076A4F5 /* indicator-party@2x.png in Resources */,
 				70B8A94518F87D230076A4F5 /* indicator-talking@2x.png in Resources */,
 				70B8A94218F87D230076A4F5 /* indicator-sitting.png in Resources */,
@@ -1028,6 +993,7 @@
 				70B8A95A18F87D230076A4F5 /* danger-btn-bg.png in Resources */,
 				70B8A93B18F87D230076A4F5 /* indicator-exercising@2x.png in Resources */,
 				70B8A92D18F87D230076A4F5 /* 17-bar-chart.png in Resources */,
+				429AC8A719A348EF00D4F607 /* back.png in Resources */,
 				70B8A93E18F87D230076A4F5 /* indicator-party.png in Resources */,
 				70B8A93618F87D230076A4F5 /* indicator-biking.png in Resources */,
 				70B8A93A18F87D230076A4F5 /* indicator-exercising.png in Resources */,

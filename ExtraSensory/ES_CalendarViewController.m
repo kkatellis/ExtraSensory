@@ -37,12 +37,8 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *feedbackButton;
-@property (nonatomic, strong) UIButton *zoomButton;
 @property (nonatomic, strong) UIButton *mergeActivitiesButton;
-@property (nonatomic, strong) UIButton *helpButton;
-@property (nonatomic, strong) UIButton *addButton;
-@property (nonatomic, strong) UIButton *removeButton;
-@property (nonatomic, strong) UIButton *refreshButton;
+@property (nonatomic, strong) UIPinchGestureRecognizer *pinch;
 @property (nonatomic, assign) bool displayActivityEvents;
 @property (nonatomic, retain) NSMutableArray * activityEvents;
 @end
@@ -59,7 +55,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 
 - (id)init
 {
-    int buttonWidth=20;
+    int buttonWidth=25;
     self.isDailyView=YES;
     self.collectionViewCalendarLayout = [[MSCollectionViewCalendarLayout alloc] init];
     self.collectionViewCalendarLayout.delegate = self;
@@ -68,59 +64,27 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     [self.backButton setBackgroundImage:[UIImage imageNamed:@"Back.png"] forState:UIControlStateNormal];
-    self.backButton.frame = CGRectMake(5, 5, buttonWidth, buttonWidth);
+    self.backButton.frame = CGRectMake(10, 12, buttonWidth, buttonWidth);
     self.	backButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.backButton];
     
     self.mergeActivitiesButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.mergeActivitiesButton addTarget:self action:@selector(mergeActivities:) forControlEvents:UIControlEventTouchUpInside];
     [self.mergeActivitiesButton setBackgroundImage:[UIImage imageNamed:@"Merge.png"] forState:UIControlStateNormal];
-    self.mergeActivitiesButton.frame = CGRectMake(buttonWidth +10, 5,  buttonWidth, buttonWidth);
+    self.mergeActivitiesButton.frame = CGRectMake(270, 12,  buttonWidth, buttonWidth);
     self.mergeActivitiesButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.mergeActivitiesButton];
     
     self.feedbackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.feedbackButton addTarget:self action:@selector(activeFeedback:) forControlEvents:UIControlEventTouchUpInside];
     [self.feedbackButton setBackgroundImage:[UIImage imageNamed:@"Edit.png"] forState:UIControlStateNormal];
-    self.feedbackButton.frame = CGRectMake(275.0+buttonWidth, 5.0,  buttonWidth, buttonWidth);
+    self.feedbackButton.frame = CGRectMake(270+buttonWidth, 12.0,  buttonWidth, buttonWidth);
     self.feedbackButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.feedbackButton];
     
-    self.zoomButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.zoomButton addTarget:self action:@selector(zoom:) forControlEvents:UIControlEventTouchUpInside];
-    [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"Zoom_in.png"] forState:UIControlStateNormal];
-    self.zoomButton.frame = CGRectMake(270.0, 5.0,  buttonWidth, buttonWidth);
-    self.zoomButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    [self.view addSubview:self.zoomButton];
     
-    self.refreshButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.refreshButton addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventTouchUpInside];
-    [self.refreshButton setBackgroundImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
-    self.refreshButton.frame = CGRectMake(5, buttonWidth+5.0,  buttonWidth, buttonWidth);
-    self.refreshButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    [self.view addSubview:self.refreshButton];
-    
-    self.helpButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.helpButton addTarget:self action:@selector(help:) forControlEvents:UIControlEventTouchUpInside];
-    [self.helpButton setBackgroundImage:[UIImage imageNamed:@"Help.png"] forState:UIControlStateNormal];
-    self.helpButton.frame = CGRectMake(buttonWidth+10, buttonWidth+5.0,  buttonWidth, buttonWidth);
-    self.helpButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    [self.view addSubview:self.helpButton];
-    
-    self.addButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
-    [self.addButton setBackgroundImage:[UIImage imageNamed:@"AddAct.png"] forState:UIControlStateNormal];
-    self.addButton.frame = CGRectMake(275.0 + buttonWidth, 5.0 +buttonWidth,  buttonWidth, buttonWidth);
-    self.addButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    [self.view addSubview:self.addButton];
-    
-    self.removeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.removeButton addTarget:self action:@selector(remove:) forControlEvents:UIControlEventTouchUpInside];
-    [self.removeButton setBackgroundImage:[UIImage imageNamed:@"Remove.png"] forState:UIControlStateNormal];
-    self.removeButton.frame = CGRectMake(270.0, 5.0 +buttonWidth,  buttonWidth, buttonWidth);
-    self.removeButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    [self.view addSubview:self.removeButton];
-    
+    self.pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchZoom:)];
+    [self.view addGestureRecognizer:self.pinch];
     
     return self;
 }
@@ -239,18 +203,26 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     [self.navigationController pushViewController:activityFeedback animated:YES];
 }
 
--(void) zoom:(UIButton*)button
+-(void) pinchZoom:(UIPinchGestureRecognizer*)sender
 {
-    self.isDailyView=!self.isDailyView;
-    [self.collectionViewCalendarLayout initialize:self.isDailyView];
-    if (self.isDailyView) {
-        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"Zoom_in.png"] forState:UIControlStateNormal];
+    CGFloat factor = [(UIPinchGestureRecognizer *) sender scale];
+    if (factor>1) { // zoom in
+        if (self.isDailyView) {
+            self.isDailyView=!self.isDailyView;
+            [self.collectionViewCalendarLayout initialize:self.isDailyView];
+            [self viewDidLoad];
+            [self viewWillAppear:YES];
+            [self viewDidAppear:YES];
+        }
     } else {
-        [self.zoomButton setBackgroundImage:[UIImage imageNamed:@"Zoom_out.png"] forState:UIControlStateNormal];
+        if (!self.isDailyView) {
+            self.isDailyView=!self.isDailyView;
+            [self.collectionViewCalendarLayout initialize:self.isDailyView];
+            [self viewDidLoad];
+            [self viewWillAppear:YES];
+            [self viewDidAppear:YES];
+        }
     }
-    [self viewDidLoad];
-    [self viewWillAppear:YES];
-    [self viewDidAppear:YES];
 }
 
 -(void) mergeActivities:(UIButton*)button
