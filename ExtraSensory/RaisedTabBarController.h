@@ -12,4 +12,8 @@
 
 -(void) addCenterButtonWithImage:(UIImage*)buttonImage highlightImage:(UIImage*)highlightImage;
 
+-(void) hidePlusImage;
+-(void) hideRecordingImage;
+-(void) showRecordingImage;
+
 @end

@@ -7,7 +7,10 @@
 //
 
 #import "RaisedTabBarController.h"
-# import "ES_ActiveFeedbackViewController.h"
+#import "ES_ActiveFeedbackViewController.h"
+
+#define PLUS_TAG 111
+#define RECORDING_TAG 222
 
 @interface RaisedTabBarController ()
 
@@ -38,33 +41,70 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (UIImage *)resizeImage:(UIImage *)image toHaveHeight:(CGFloat)newHeight
+{
+    CGFloat stretchRatio = newHeight / image.size.height;
+    CGFloat newWidth = stretchRatio * image.size.width;
+    CGSize newSize = CGSizeMake(newWidth, newHeight);
+    
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0.0, 0.0, newWidth, newHeight)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
+- (void) hideViewWithTag:(NSInteger)tag
+{
+    [[self.view viewWithTag:tag] setHidden:YES];
+}
+
+- (void) showViewWithTag:(NSInteger)tag
+{
+    [[self.view viewWithTag:tag] setHidden:NO];
+}
+
+- (void)hidePlusImage
+{
+    [self hideViewWithTag:PLUS_TAG];
+}
+
+- (void)hideRecordingImage
+{
+    [self hideViewWithTag:RECORDING_TAG];
+}
+
+- (void)showRecordingImage
+{
+    [self showViewWithTag:RECORDING_TAG];
+}
+
 -(void) addRecordingImage:(UIImage*)recordingImage
 {
     //begin tinting
-    UIGraphicsBeginImageContextWithOptions (recordingImage.size, NO, [[UIScreen mainScreen] scale]); // for correct resolution on retina, thanks @MobileVet
-    CGContextRef context = UIGraphicsGetCurrentContext();
+//    UIGraphicsBeginImageContextWithOptions (recordingImage.size, NO, [[UIScreen mainScreen] scale]); // for correct resolution on retina, thanks @MobileVet
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    
+//    CGContextTranslateCTM(context, 0, recordingImage.size.height);
+//    CGContextScaleCTM(context, 1.0, -1.0);
+//
+//    UIImageView *imageView = [[UIImageView alloc] initWithImage:recordingImage];
+//    NSLog(@"=== created imageView: %@ with image: %@",imageView,recordingImage);
     
-    CGContextTranslateCTM(context, 0, recordingImage.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:recordingImage];
-    NSLog(@"=== created imageView: %@ with image: %@",imageView,recordingImage);
+    UIImage *newImage = [self resizeImage:recordingImage toHaveHeight:self.tabBar.frame.size.height/4.0];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:newImage];
     
-    CGFloat heightDifference = recordingImage.size.height - self.tabBar.frame.size.height;
-    CGPoint center = self.tabBar.center;
-    center.x = center.x - 0.1;
-    if (heightDifference >= 0)
-    {
-        center.y = center.y - heightDifference/2.0 + 0.5;
-    }
+    // Set the position of the recording image:
+    UIView *plusView = [self.view viewWithTag:PLUS_TAG];
+    CGFloat origin_y = plusView.frame.origin.y;
+    CGFloat origin_x = plusView.frame.origin.x - newImage.size.width;
+    CGRect newFrame = CGRectMake(origin_x, origin_y, newImage.size.width, newImage.size.height);
+    imageView.frame = newFrame;
 
-    center.y = (CGFloat)(self.tabBar.frame.origin.y + recordingImage.size.height/2.0);
-    imageView.center = center;
-    imageView.tag=222; // "a" number for finding this image in subviews, (in order to hide it)
+    imageView.tag=RECORDING_TAG; // "a" number for finding this image in subviews, (in order to hide it)
  
-    NSLog(@"=== about to add the recording image...");
     [self.view addSubview:imageView];
-    NSLog(@"=== added the recording image...");
 }
 
 -(void) addCenterButtonWithImage:(UIImage*)buttonImage highlightImage:(UIImage*)highlightImage
@@ -107,7 +147,7 @@
         center.y = center.y - heightDifference/2.0 + 0.5;
         button.center = center;
     }
-    button.tag=111; // "a" number for finding this button in subviews, (in order to hide it)
+    button.tag=PLUS_TAG; // "a" number for finding this button in subviews, (in order to hide it)
     
     [button addTarget:self
                action:@selector(activeFeedback:)

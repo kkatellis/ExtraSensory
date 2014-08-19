@@ -154,6 +154,9 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [self.tabBarController.tabBar setHidden:YES	];
+    
+    
+    
     for(UIView* subview in [self.tabBarController.view subviews])
         if (subview.tag==111) {
             [subview setHidden:YES];
