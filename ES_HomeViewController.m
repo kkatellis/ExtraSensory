@@ -45,7 +45,8 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    //[self updateMostRecentActivity];
+    ES_Activity *mostRecentActivity = [ES_DataBaseAccessor getMostRecentActivity];
+    [self updateMostRecentActivity:mostRecentActivity];
 }
 
 - (void) updateMostRecentActivity:(ES_Activity*) activity;
@@ -72,6 +73,7 @@
             activityLabel = activity.serverPrediction;
         }
         
+        NSLog(@"[homeView] Drawing latest activity: %@ from time: %@",activityLabel,dateString);
     }
     // change the image & label
     if (activityLabel)
