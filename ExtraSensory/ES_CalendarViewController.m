@@ -27,6 +27,8 @@
 #import "ES_HistoryTableViewController.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_AppDelegate.h"
+#import "RaisedTabBarController.h"
+
 NSString * const ESActivityCellReuseIdentifier = @"ESActivityCellReuseIdentifier";
 NSString * const MSDayColumnHeaderReuseIdentifier = @"MSDayColumnHeaderReuseIdentifier";
 NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifier";
@@ -171,12 +173,17 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [self.tabBarController.tabBar setHidden:YES	];
     
-    
-    
-    for(UIView* subview in [self.tabBarController.view subviews])
-        if (subview.tag==111) {
-            [subview setHidden:YES];
-        }
+    RaisedTabBarController *rtbc = (RaisedTabBarController *)(self.tabBarController);
+    if (rtbc)
+    {
+        [rtbc hidePlusImage];
+        [rtbc hideRecordingImage];
+    }
+//    
+//    for(UIView* subview in [self.tabBarController.view subviews])
+//        if (subview.tag==111) {
+//            [subview setHidden:YES];
+//        }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
