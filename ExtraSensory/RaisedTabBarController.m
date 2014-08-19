@@ -65,7 +65,7 @@
     [[self.view viewWithTag:tag] setHidden:NO];
 }
 
-- (void)hidePlusImage
+- (void)hidePlusButton
 {
     [self hideViewWithTag:PLUS_TAG];
 }

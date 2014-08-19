@@ -176,7 +176,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     RaisedTabBarController *rtbc = (RaisedTabBarController *)(self.tabBarController);
     if (rtbc)
     {
-        [rtbc hidePlusImage];
+        [rtbc hidePlusButton];
         [rtbc hideRecordingImage];
     }
 //    

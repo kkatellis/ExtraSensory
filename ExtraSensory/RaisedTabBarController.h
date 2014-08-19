@@ -12,7 +12,7 @@
 
 -(void) addCenterButtonWithImage:(UIImage*)buttonImage highlightImage:(UIImage*)highlightImage;
 
--(void) hidePlusImage;
+-(void) hidePlusButton;
 -(void) hideRecordingImage;
 -(void) showRecordingImage;
 
