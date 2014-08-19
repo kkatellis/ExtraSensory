@@ -82,11 +82,47 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     self.feedbackButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.feedbackButton];
     
+    UIPinchGestureRecognizer *pinch;
+    UISwipeGestureRecognizer *swipeRight;
+    UISwipeGestureRecognizer *swipeLeft;
     
-    self.pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchZoom:)];
-    [self.view addGestureRecognizer:self.pinch];
+    pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchZoom:)];
+    [self.view addGestureRecognizer:pinch];
+    
+    swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRightHandle:)];
+    swipeRight.numberOfTouchesRequired=1;
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swipeRight];
+    
+    
+    swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeftHandle:)];
+    swipeLeft.numberOfTouchesRequired=1;
+    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeLeft];
+    
     
     return self;
+}
+
+
+-(void) swipeRightHandle:(UIPinchGestureRecognizer*)sender
+{
+    self.displayActivityEvents=!self.displayActivityEvents;
+    [self.collectionViewCalendarLayout initialize:self.isDailyView];
+    [self viewDidLoad];
+    
+    [self viewWillAppear:YES];
+    [self viewDidAppear:YES];
+}
+
+-(void) swipeLeftHandle:(UIPinchGestureRecognizer*)sender
+{
+    self.displayActivityEvents=!self.displayActivityEvents;
+    [self.collectionViewCalendarLayout initialize:self.isDailyView];
+    [self viewDidLoad];
+    
+    [self viewWillAppear:YES];
+    [self viewDidAppear:YES];
 }
 
 - (void)viewDidLoad
@@ -108,26 +144,6 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 -(void)back:(UIButton *)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
--(void)add:(UIButton *)sender
-{
-}
--(void)remove:(UIButton *)sender
-{
-    
-}
--(void)help:(UIButton *)sender
-{
-}
--(void)refresh:(UIButton *)sender
-{
-    [self fetch];
-    [self.collectionViewCalendarLayout invalidateLayoutCache];
-    [self.collectionView reloadData];
-    [self viewDidLoad];
-    [self viewWillAppear:YES];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
