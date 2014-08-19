@@ -19,6 +19,8 @@
 
 @property BOOL currentlyUploading;
 
+@property BOOL recordingRightNow;
+
 @property (strong, nonatomic) UIWindow *window;
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
@@ -51,6 +53,8 @@
 
 @property (strong, nonatomic) ES_Activity *mostRecentActivity;
 
+- (void) markRecordingRightNow;
+- (void) markNotRecordingRightNow;
 - (NSString *) getFirstOnNetworkStack;
 - (void) removeFirstOnNetworkStack;
 - (void) pushOnNetworkStack: (NSString *) file;

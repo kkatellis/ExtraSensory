@@ -17,6 +17,7 @@
 #import "ES_ActivityEvent.h"
 #import "ES_AlertViewWithUserInfo.h"
 #import "ES_ActiveFeedbackViewController.h"
+#import "RaisedTabBarController.h"
 
 // Some constants:
 #define FOUND_VERIFIED @"foundVerified"
@@ -374,7 +375,29 @@
     
 }
 
+- (void) markRecordingRightNow
+{
+    NSLog(@"=== Marking that we're recording now.");
+    self.recordingRightNow = YES;
+    RaisedTabBarController *rtbc = (RaisedTabBarController *)self.window.rootViewController;
+    
+    if (rtbc)
+    {
+        [rtbc showRecordingImage];
+    }
+}
 
+- (void) markNotRecordingRightNow
+{
+    NSLog(@"=== Marking that we're not recording now.");
+    self.recordingRightNow = NO;
+    RaisedTabBarController *rtbc = (RaisedTabBarController *)self.window.rootViewController;
+    
+    if (rtbc)
+    {
+        [rtbc hideRecordingImage];
+    }
+}
 
 #pragma mark -
 #pragma mark Core Data stack

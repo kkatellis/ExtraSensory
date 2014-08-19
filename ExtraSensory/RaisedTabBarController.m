@@ -8,6 +8,7 @@
 
 #import "RaisedTabBarController.h"
 #import "ES_ActiveFeedbackViewController.h"
+#import "ES_AppDelegate.h"
 
 #define PLUS_TAG 111
 #define RECORDING_TAG 222
@@ -32,6 +33,7 @@
     [super viewDidLoad];
     [self addCenterButtonWithImage:[UIImage imageNamed:@"text-plus-icon.png"] highlightImage:nil];
     [self addRecordingImage:[UIImage imageNamed:@"redCircle.png"]];
+    [self checkIfRecordingOrNot];
 	// Do any additional setup after loading the view.
 }
 
@@ -63,6 +65,7 @@
 - (void) showViewWithTag:(NSInteger)tag
 {
     [[self.view viewWithTag:tag] setHidden:NO];
+    
 }
 
 - (void)hidePlusButton
@@ -82,7 +85,23 @@
 
 - (void)showRecordingImage
 {
-    [self showViewWithTag:RECORDING_TAG];
+    if (!self.view.hidden)
+    {
+        [self showViewWithTag:RECORDING_TAG];
+    }
+}
+
+- (void)checkIfRecordingOrNot
+{
+    ES_AppDelegate *delegate = (ES_AppDelegate *)UIApplication.sharedApplication.delegate;
+    if (delegate.recordingRightNow)
+    {
+        [self showRecordingImage];
+    }
+    else
+    {
+        [self hideRecordingImage];
+    }
 }
 
 -(void) addRecordingImage:(UIImage*)recordingImage

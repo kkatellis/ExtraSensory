@@ -16,5 +16,6 @@
 -(void) showPlusButton;
 -(void) hideRecordingImage;
 -(void) showRecordingImage;
+- (void)checkIfRecordingOrNot;
 
 @end

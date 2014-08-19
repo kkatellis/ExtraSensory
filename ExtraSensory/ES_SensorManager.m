@@ -189,6 +189,9 @@
     [ES_DataBaseAccessor clearHFDataFile];
     [ES_DataBaseAccessor clearLabelFile];
     
+    // Mark begining recording:
+    [self.appDelegate markRecordingRightNow];
+    
     self.currentActivity.startTime = [NSDate date];
     self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[self.currentActivity.startTime timeIntervalSince1970]];
     
@@ -309,7 +312,11 @@
         
         [ES_DataBaseAccessor writeData: HFDataBundle];
         [ES_DataBaseAccessor writeActivity: self.currentActivity];
+        
+        // Mark finished recording:
+        [self.appDelegate markNotRecordingRightNow];
     }
+    
     
     NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:13];
     

@@ -189,7 +189,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     if (rtbc)
     {
         [rtbc showPlusButton];
-        [rtbc showRecordingImage];
+        [rtbc checkIfRecordingOrNot];
     }
 }
 
