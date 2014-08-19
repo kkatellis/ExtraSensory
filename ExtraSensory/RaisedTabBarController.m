@@ -70,6 +70,11 @@
     [self hideViewWithTag:PLUS_TAG];
 }
 
+- (void)showPlusButton
+{
+    [self showViewWithTag:PLUS_TAG];
+}
+
 - (void)hideRecordingImage
 {
     [self hideViewWithTag:RECORDING_TAG];

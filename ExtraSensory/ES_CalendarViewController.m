@@ -179,21 +179,18 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
         [rtbc hidePlusButton];
         [rtbc hideRecordingImage];
     }
-//    
-//    for(UIView* subview in [self.tabBarController.view subviews])
-//        if (subview.tag==111) {
-//            [subview setHidden:YES];
-//        }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self.tabBarController.tabBar setHidden:NO	];
-    for(UIView* subview in [self.tabBarController.view subviews])
-        if (subview.tag==111) {
-            [subview setHidden:NO];
-        }
+    RaisedTabBarController *rtbc = (RaisedTabBarController *)(self.tabBarController);
+    if (rtbc)
+    {
+        [rtbc showPlusButton];
+        [rtbc showRecordingImage];
+    }
 }
 
 
