@@ -96,7 +96,7 @@
 {
     if (!_appDelegate)
     {
-        _appDelegate = [[UIApplication sharedApplication] delegate];
+        _appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return _appDelegate;
 }

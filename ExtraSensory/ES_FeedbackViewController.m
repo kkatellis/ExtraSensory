@@ -82,7 +82,7 @@
     self.fromCell.activity.userCorrection = self.correctActivityLabel.text;
     
     
-    ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate* appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     int newCount = [[appDelegate.user.activityStatistics valueForKey: self.databaseReferenceString] intValue];
     newCount++;

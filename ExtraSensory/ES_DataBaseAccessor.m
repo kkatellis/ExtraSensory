@@ -348,7 +348,7 @@
 
 + (NSString *) zipFileName2: (NSNumber *)time
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     //NSLog(@"time for zip name = %0.0f", [time doubleValue] );
     //[NSString stringWithFormat:@"%0.0f", [time doubleValue]]
     return [NSString stringWithFormat:@"/%0.0f-%@.zip", [time doubleValue], appDelegate.user.uuid];
@@ -392,7 +392,7 @@
     {
         NSLog(@"Fail");
     }
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate pushOnNetworkStack: zipFile];
     [appDelegate.networkAccessor upload]; //upload the new file
 }

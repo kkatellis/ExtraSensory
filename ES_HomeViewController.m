@@ -38,6 +38,13 @@
 #define RECORDING_TEXT @"ON"
 #define NOT_RECORDING_TEXT @"OFF"
 
+
+- (ES_AppDelegate *)appDelegate
+{
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return appDelegate;
+}
+
 - (void) viewDidAppear:(BOOL)animated
 {
     [ES_DataBaseAccessor save];
@@ -99,7 +106,7 @@
 
 - (NSString *) timeString: (int) index
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = [self appDelegate];
     self.activityCountArray = appDelegate.countLySiStWaRuBiDr;
     
     NSNumber *time = appDelegate.user.settings.timeBetweenSampling;
@@ -122,14 +129,14 @@
 
 - (ES_SensorManager *)sensorManager
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = [self appDelegate];
     return appDelegate.sensorManager;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = [self appDelegate];
     [appDelegate addObserver:self
                   forKeyPath:@"mostRecentActivity"
                      options:NSKeyValueObservingOptionNew
@@ -147,7 +154,7 @@
 {
     if ([segue.identifier isEqualToString:@"ActivitiesButton"])
     {
-        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        ES_AppDelegate *appDelegate = [self appDelegate];
         [segue.destinationViewController setPredictions: appDelegate.predictions];
         NSLog(@"AppD predictions: %@", appDelegate.predictions );
     }

@@ -325,7 +325,7 @@
 - (void) submitFeedback
 {
     
-    ES_AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate* appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSDate *eventStartTime = [self removeSecondsFromDate:self.startTime];
     NSDate *eventEndTime = [self removeSecondsFromDate:self.endTime];

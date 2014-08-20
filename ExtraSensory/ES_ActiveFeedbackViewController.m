@@ -175,7 +175,7 @@
 
 - (ES_Scheduler *)scheduler
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     return appDelegate.scheduler;
 }
 

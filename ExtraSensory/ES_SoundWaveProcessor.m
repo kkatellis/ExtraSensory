@@ -24,7 +24,7 @@
 {
     if (!_sampleDuration)
     {
-        ES_AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        ES_AppDelegate *delegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
         _sampleDuration = [delegate.user.settings.sampleDuration doubleValue];
     }
     return _sampleDuration;

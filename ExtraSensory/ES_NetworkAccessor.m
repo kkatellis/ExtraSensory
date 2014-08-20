@@ -54,7 +54,7 @@
 {
     if (!_appDelegate)
     {
-        _appDelegate = [[UIApplication sharedApplication] delegate];
+        _appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return _appDelegate;
 }
@@ -267,7 +267,7 @@
     
         //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
     
-        ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        ES_AppDelegate *appDelegate = [self appDelegate];
         ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
 
         if (activity)
