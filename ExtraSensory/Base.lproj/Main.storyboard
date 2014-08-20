@@ -693,14 +693,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kFW-jM-Tyx">
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kFW-jM-Tyx">
                                 <rect key="frame" x="0.0" y="64" width="320" height="405"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
                                     <segue destination="3HX-oQ-k6i" kind="embed" identifier="embedContainer" id="58P-xX-HDv"/>
                                 </connections>
                             </containerView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XaH-Z5-PCW">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XaH-Z5-PCW">
                                 <rect key="frame" x="90" y="477" width="141" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
@@ -713,6 +713,14 @@
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="kFW-jM-Tyx" firstAttribute="centerX" secondItem="XaH-Z5-PCW" secondAttribute="centerX" id="HR3-bt-1pi"/>
+                            <constraint firstItem="Fct-VJ-wmy" firstAttribute="top" secondItem="XaH-Z5-PCW" secondAttribute="bottom" constant="14" id="MiF-Dm-2iQ"/>
+                            <constraint firstItem="XaH-Z5-PCW" firstAttribute="top" secondItem="kFW-jM-Tyx" secondAttribute="bottom" constant="8" symbolic="YES" id="Rs8-Le-m34"/>
+                            <constraint firstItem="kFW-jM-Tyx" firstAttribute="leading" secondItem="MOz-Re-aUd" secondAttribute="leading" id="WVf-sO-ui3"/>
+                            <constraint firstItem="kFW-jM-Tyx" firstAttribute="top" secondItem="Pmf-Cw-ccF" secondAttribute="bottom" id="mJJ-PT-Fuc"/>
+                            <constraint firstAttribute="trailing" secondItem="kFW-jM-Tyx" secondAttribute="trailing" id="xGk-10-hSW"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Summary" image="stats_pie_chart.png" id="MFR-Vj-JXj"/>
                     <toolbarItems/>
