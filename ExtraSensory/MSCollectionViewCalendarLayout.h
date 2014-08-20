@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger, MSHeaderLayoutType) {
 @protocol MSCollectionViewDelegateCalendarLayout;
 
 @interface MSCollectionViewCalendarLayout : UICollectionViewLayout
-- (void)initialize:(bool)isDailyView;
+- (void)initialize:(BOOL)isDailyView;
 
 @property (nonatomic, weak) id <MSCollectionViewDelegateCalendarLayout> delegate;
 
