@@ -25,9 +25,15 @@
 
 @synthesize predictions = _predictions;
 
+- (ES_AppDelegate *)appDelegate
+{
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return appDelegate;
+}
+
 - (ES_User *)user
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = [self appDelegate];
     return appDelegate.user;
 }
 
@@ -98,7 +104,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = [self appDelegate];
     
     
     self.predictions = appDelegate.predictions;
@@ -114,7 +120,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    ES_AppDelegate *appDelegate = [self appDelegate];
     self.predictions = appDelegate.predictions;
     
     static NSString *CellIdentifier = @"ActivityDescription";
