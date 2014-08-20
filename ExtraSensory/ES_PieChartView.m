@@ -123,7 +123,8 @@
     CGPoint circleCenter = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
     
     // Set the radius of your pie chart
-    self.circleRadius = 115;
+    CGFloat radius = (self.bounds.size.height < self.bounds.size.width) ? (self.bounds.size.height/2) : (self.bounds.size.width/2);
+    self.circleRadius = radius;
     
     for (int i = 0; i < [_sliceArray count]; i++) {
         
