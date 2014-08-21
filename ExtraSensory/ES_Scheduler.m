@@ -249,6 +249,7 @@
         notification.alertAction = @"ExtraSensory";
         notification.alertBody = question;
         notification.userInfo = userInfo;
+        notification.soundName = UILocalNotificationDefaultSoundName;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 }
