@@ -59,13 +59,14 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
 {
     int buttonWidth=25;
     self.isDailyView=YES;
+    self.displayActivityEvents = YES;
     self.collectionViewCalendarLayout = [[MSCollectionViewCalendarLayout alloc] init];
     self.collectionViewCalendarLayout.delegate = self;
     self = [super initWithCollectionViewLayout:self.collectionViewCalendarLayout];
     
     self.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.backButton addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
-    [self.backButton setBackgroundImage:[UIImage imageNamed:@"Back.png"] forState:UIControlStateNormal];
+    [self.backButton setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     self.backButton.frame = CGRectMake(10, 12, buttonWidth, buttonWidth);
     self.	backButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.backButton];
@@ -79,7 +80,7 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     
     self.feedbackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.feedbackButton addTarget:self action:@selector(activeFeedback:) forControlEvents:UIControlEventTouchUpInside];
-    [self.feedbackButton setBackgroundImage:[UIImage imageNamed:@"Edit.png"] forState:UIControlStateNormal];
+    [self.feedbackButton setBackgroundImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
     self.feedbackButton.frame = CGRectMake(270+buttonWidth, 12.0,  buttonWidth, buttonWidth);
     self.feedbackButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [self.view addSubview:self.feedbackButton];
@@ -171,26 +172,26 @@ NSString * const MSTimeRowHeaderReuseIdentifier = @"MSTimeRowHeaderReuseIdentifi
     [self.collectionView reloadData];
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-    [self.tabBarController.tabBar setHidden:YES	];
+    //[self.tabBarController.tabBar setHidden:YES	];
     
-    RaisedTabBarController *rtbc = (RaisedTabBarController *)(self.tabBarController);
-    if (rtbc)
-    {
-        [rtbc hidePlusButton];
-        [rtbc hideRecordingImage];
-    }
+//    RaisedTabBarController *rtbc = (RaisedTabBarController *)(self.tabBarController);
+//    if (rtbc)
+//    {
+//        [rtbc hidePlusButton];
+//        [rtbc hideRecordingImage];
+//    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [self.tabBarController.tabBar setHidden:NO	];
-    RaisedTabBarController *rtbc = (RaisedTabBarController *)(self.tabBarController);
-    if (rtbc)
-    {
-        [rtbc showPlusButton];
-        [rtbc checkIfRecordingOrNot];
-    }
+    //[self.tabBarController.tabBar setHidden:NO	];
+//    RaisedTabBarController *rtbc = (RaisedTabBarController *)(self.tabBarController);
+//    if (rtbc)
+//    {
+//        [rtbc showPlusButton];
+//        [rtbc checkIfRecordingOrNot];
+//    }
 }
 
 

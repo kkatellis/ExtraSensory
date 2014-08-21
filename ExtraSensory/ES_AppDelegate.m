@@ -433,6 +433,7 @@
     }
     
 	NSString *storePath = [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"ExtraSensory.sqlite"];
+    NSLog(@"[appDelegate] storePath: %@",storePath);
 	/*
 	 Set up the store.
 	 For the sake of illustration, provide a pre-populated default store.

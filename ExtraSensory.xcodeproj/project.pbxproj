@@ -24,6 +24,8 @@
 		4294841E197E1DA000FF20B6 /* ES_ActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4294841D197E1DA000FF20B6 /* ES_ActivityCell.m */; };
 		42948424197E21B800FF20B6 /* ES_Activity+Day.m in Sources */ = {isa = PBXBuildFile; fileRef = 42948423197E21B800FF20B6 /* ES_Activity+Day.m */; };
 		4E5C5D94199F6C7F00B801BC /* redCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5D93199F6C7F00B801BC /* redCircle.png */; };
+		4E5C5E6919A66D4A00B801BC /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6719A66D4A00B801BC /* back.png */; };
+		4E5C5E6A19A66D4A00B801BC /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6819A66D4A00B801BC /* edit.png */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
 		4EB52274198E922000BBC678 /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB52273198E922000BBC678 /* ES_Settings.m */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
@@ -196,6 +198,8 @@
 		42948422197E21B800FF20B6 /* ES_Activity+Day.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ES_Activity+Day.h"; sourceTree = "<group>"; };
 		42948423197E21B800FF20B6 /* ES_Activity+Day.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ES_Activity+Day.m"; sourceTree = "<group>"; };
 		4E5C5D93199F6C7F00B801BC /* redCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redCircle.png; sourceTree = "<group>"; };
+		4E5C5E6719A66D4A00B801BC /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
+		4E5C5E6819A66D4A00B801BC /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
 		4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_AlertViewWithUserInfo.h; sourceTree = "<group>"; };
 		4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_AlertViewWithUserInfo.m; sourceTree = "<group>"; };
 		4EB52272198E922000BBC678 /* ES_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Settings.h; sourceTree = SOURCE_ROOT; };
@@ -397,6 +401,8 @@
 		4291F1C4199A7F29008EDCA4 /* calendar */ = {
 			isa = PBXGroup;
 			children = (
+				4E5C5E6719A66D4A00B801BC /* back.png */,
+				4E5C5E6819A66D4A00B801BC /* edit.png */,
 			);
 			name = calendar;
 			sourceTree = "<group>";
@@ -944,6 +950,7 @@
 				70B8A93318F87D230076A4F5 /* Driving.png in Resources */,
 				70B8A96818F87D230076A4F5 /* play_btn.png in Resources */,
 				70B8A95E18F87D230076A4F5 /* icon@2x.png in Resources */,
+				4E5C5E6A19A66D4A00B801BC /* edit.png in Resources */,
 				703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */,
 				70B8A94B18F87D230076A4F5 /* Sitting.png in Resources */,
 				70B8A93918F87D230076A4F5 /* indicator-driving@2x.png in Resources */,
@@ -967,6 +974,7 @@
 				70B8A96718F87D230076A4F5 /* nav-menu-icon.png in Resources */,
 				70B8A93118F87D230076A4F5 /* biking.png in Resources */,
 				70B8A95718F87D230076A4F5 /* black-linen.png in Resources */,
+				4E5C5E6919A66D4A00B801BC /* back.png in Resources */,
 				70B8A96018F87D230076A4F5 /* favorite.png in Resources */,
 				70B8A95B18F87D230076A4F5 /* default_playlist.json in Resources */,
 				9FD9D2F918AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard in Resources */,
