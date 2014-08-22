@@ -296,6 +296,13 @@
             appDelegate.mostRecentActivity = activity;
             isReady = YES;
         
+            // Check if there is already some non-trivial labels that should be sent for this activity:
+            if ([self isThereUserUpdateForActivity:activity])
+            {
+                NSLog(@"=== Activity that just received prediction already has some user-labeling, so sending it now...");
+                [self sendFeedback:activity];
+            }
+            
             NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
             if ( [appDelegate.networkStack count] > 0 && self.appDelegate.dataCollectionOn){
                 [self upload];
@@ -305,6 +312,25 @@
     self.appDelegate.currentlyUploading = NO;
 }
 
+
+- (BOOL) isThereUserUpdateForActivity:(ES_Activity *)activity
+{
+    if (activity.userCorrection)
+    {
+        return YES;
+    }
+    if (activity.mood)
+    {
+        return YES;
+    }
+    if (activity.userActivityLabels && activity.userActivityLabels.count > 0)
+    {
+        return YES;
+    }
+    
+    return NO;
+    
+}
 //#define act1 @"LYING DOWN"
 //#define act2 @"SITTING"
 //#define act3 @"STANDING"
