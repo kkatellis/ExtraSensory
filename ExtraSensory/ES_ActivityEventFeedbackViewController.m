@@ -361,13 +361,19 @@
             if (self.activityEvent.mood)
             {
                 [minuteActivity setMood:self.activityEvent.mood];
-                //minuteActivity.mood = self.activityEvent.mood;
             }
             
         }
-        // Send this minute's data to the server:
-        NSLog(@"=== send feedback for time %@. Activity has user: %@",time,minuteActivity.uuid);
-        [appDelegate.networkAccessor sendFeedback:minuteActivity];
+        // If relevant, send this minute's data to the server:
+        if (minuteActivity.serverPrediction)
+        {
+            NSLog(@"=== send feedback for time %@.",time);
+            [appDelegate.networkAccessor sendFeedback:minuteActivity];
+        }
+        else
+        {
+            NSLog(@"=== activity of time %@ has no server prediction yet, so no point in sending label-feedback right now.",time);
+        }
     }
     
     [self.navigationController popViewControllerAnimated:YES];

@@ -24,5 +24,6 @@ BOOL isReady;   //only upload one at a time
 - (id)init;
 - (void) upload;
 - (void) sendFeedback: (ES_Activity *)feedback;
+- (void) unsentItemsCheck;
 
 @end

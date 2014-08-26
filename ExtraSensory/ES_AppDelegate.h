@@ -35,7 +35,7 @@
 
 @property (strong, nonatomic) ES_Scheduler *scheduler;
 
-@property (strong, atomic) NSMutableArray *networkStack;
+@property (strong, readonly, atomic) NSMutableArray *networkStack;
 
 @property (strong, nonatomic) ES_NetworkAccessor *networkAccessor;
 
@@ -55,6 +55,7 @@
 
 - (void) markRecordingRightNow;
 - (void) markNotRecordingRightNow;
+- (void) updateNetworkStackFromStorageFilesIfEmpty;
 - (NSString *) getFirstOnNetworkStack;
 - (void) removeFirstOnNetworkStack;
 - (void) pushOnNetworkStack: (NSString *) file;

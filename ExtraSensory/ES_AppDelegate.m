@@ -110,13 +110,49 @@
     return _networkAccessor;
 }
 
+- (NSMutableArray *) getUnsentZipFiles
+{
+    NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:storagePath error:nil];
+    NSPredicate *zipPredicate = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
+    NSMutableArray *zipFiles = [NSMutableArray arrayWithArray:[directoryContent filteredArrayUsingPredicate:zipPredicate]];
+    
+    return zipFiles;
+}
+
+- (void) updateNetworkStackFromStorageFilesIfEmpty
+{
+    if (self.networkStack.count <= 0)
+    {
+        NSLog(@"[appDelegate] Updating network stack (currently count zero) - adding the stored zip files");
+        NSMutableArray *zipFiles = [self getUnsentZipFiles];
+        for (NSString *filename in zipFiles)
+        {
+            [self pushOnNetworkStack:[NSString stringWithFormat:@"/%@",filename]];
+        }
+    }
+    
+    // If added files, call for upload operation:
+    if (self.networkStack.count > 0)
+    {
+        NSLog(@"[appDelegate] after adding stored unsent zip files to the network stack, calling for upload.");
+        [self.networkAccessor upload];
+    }
+}
+
+- (NSMutableArray *)networkStack
+{
+    if (_networkStack)
+    {
+        return _networkStack;
+    }
+    
+    _networkStack = [NSMutableArray new];
+    return _networkStack;
+}
 
 - (void) pushOnNetworkStack: (NSString *)file
 {
-    if (!self.networkStack)
-    {
-        [self setNetworkStack: [NSMutableArray new]];
-    }
     [self.networkStack addObject: file];
 }
 

@@ -112,6 +112,27 @@
 }
 
 
+- (void) unsentItemsCheck
+{
+    NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:storagePath error:nil];
+    NSPredicate *zipPredicate = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
+    NSArray *storedZipFiles = [directoryContent filteredArrayUsingPredicate:zipPredicate];
+    
+    NSLog(@"=== Storage path has %lu zip files and network stack has %lu files.",(unsigned long)storedZipFiles.count,(unsigned long)self.appDelegate.networkStack.count);
+    NSLog(@"=== Zip files in directory: %@",storedZipFiles);
+    NSLog(@"=== files in network stack: %@",self.appDelegate.networkStack);
+    
+    NSLog(@"=== files in dir with properties:");
+    for (id obj in storedZipFiles)
+    {
+        NSString *file = (NSString *)obj;
+        NSString *filepath = [NSString stringWithFormat:@"%@/%@",storagePath,file];
+        NSDictionary *fileAttributtes = [[NSFileManager defaultManager] attributesOfItemAtPath:filepath error:nil];
+        NSLog(@"====== %@  |  %@",filepath,[fileAttributtes objectForKey:NSFileSize]);
+    }
+}
+
 /**
  
  Uploads the given file. The file is compressed before beign uploaded.
@@ -303,6 +324,7 @@
                 [self sendFeedback:activity];
             }
             
+            //[appDelegate updateNetworkStackFromStorageFilesIfEmpty];
             NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
             if ( [appDelegate.networkStack count] > 0 && self.appDelegate.dataCollectionOn){
                 [self upload];

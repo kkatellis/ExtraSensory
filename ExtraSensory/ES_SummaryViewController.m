@@ -10,6 +10,8 @@
 #import "ES_ActivitiesStrings.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_ContainerViewController.h"
+#import "ES_NetworkAccessor.h"
+#import "ES_AppDelegate.h"
 
 @interface ES_SummaryViewController ()
 @property (nonatomic, weak) ES_ContainerViewController *containerViewController;
@@ -43,6 +45,9 @@
 {
     self.activityCounts = [ES_DataBaseAccessor getTodaysCounts];
     [self.tableView reloadData];
+    
+    ES_NetworkAccessor *na = ((ES_AppDelegate *)[[UIApplication sharedApplication] delegate]).networkAccessor;
+    [na unsentItemsCheck];
 }
 
 - (void)didReceiveMemoryWarning
