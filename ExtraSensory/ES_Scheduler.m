@@ -257,7 +257,6 @@
 - (void) activeFeedback: (ES_Activity *) activity
 {
     NSLog( @"\n\nStart active feedback sample");
-    self.appDelegate.mostRecentActivity = activity;
     
     [self.timer invalidate]; //turn off auto-sampling timer
     self.timer = nil;

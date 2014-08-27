@@ -49,8 +49,6 @@
 
 @synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
 
-@synthesize mostRecentActivity = _mostRecentActivity;
-
 
 
 // this should not exist. Use the ES_UserActivityStatistics

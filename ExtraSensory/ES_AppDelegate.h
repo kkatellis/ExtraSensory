@@ -47,7 +47,6 @@
 
 @property (strong, nonatomic) NSMutableArray *countLySiStWaRuBiDr;
 
-@property (strong, nonatomic) ES_Activity *mostRecentActivity;
 
 - (void) markRecordingRightNow;
 - (void) markNotRecordingRightNow;

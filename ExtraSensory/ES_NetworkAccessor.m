@@ -291,8 +291,6 @@
         
             [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
 
-            appDelegate.mostRecentActivity = activity;
-        
             // Check if there is already some non-trivial labels that should be sent for this activity:
             if ([self isThereUserUpdateForActivity:activity])
             {
