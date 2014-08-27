@@ -45,8 +45,6 @@
 
 @property (strong, nonatomic) ES_User *user;
 
-@property (strong, nonatomic) NSString *currentZipFilePath;
-
 @property (strong, nonatomic) NSMutableArray *countLySiStWaRuBiDr;
 
 @property (strong, nonatomic) NSMutableArray *activitiesToUpload;
@@ -57,9 +55,9 @@
 - (void) markNotRecordingRightNow;
 - (void) updateNetworkStackFromStorageFilesIfEmpty;
 - (NSString *) getFirstOnNetworkStack;
-- (void) removeFirstOnNetworkStack;
+- (BOOL) removeFromNetworkStackFile:(NSString *)filename;
+- (BOOL) removeFromeNetworkStackAndDeleteFile:(NSString *)filename;
 - (void) pushOnNetworkStack: (NSString *) file;
-- (NSString *) popOffNetworkStack;
 
 - (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings mood:(NSString *)mood latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp;
 @end

@@ -47,7 +47,7 @@
 
 @synthesize user = _user;
 
-@synthesize currentZipFilePath = _currentZipFilePath;
+//@synthesize currentZipFilePath = _currentZipFilePath;
 
 @synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
 
@@ -148,6 +148,7 @@
     }
     
     _networkStack = [NSMutableArray new];
+    //[self updateNetworkStackFromStorageFilesIfEmpty];
     return _networkStack;
 }
 
@@ -156,24 +157,52 @@
     [self.networkStack addObject: file];
 }
 
-- (NSString *) popOffNetworkStack
-{
-    NSString *result = [self.networkStack lastObject];
-    [self.networkStack removeLastObject];
-    
-    return result;
-}
 
 - (NSString *) getFirstOnNetworkStack
 {
     return [self.networkStack firstObject];
 }
 
-- (void) removeFirstOnNetworkStack
+- (BOOL) removeFromNetworkStackFile:(NSString *)filename
 {
-    [self.networkStack removeObjectAtIndex: 0];
+    for (int ii = 0; ii < [self.networkStack count]; ii++)
+    {
+        if ([filename isEqualToString:[self.networkStack objectAtIndex:ii]])
+        {
+            [self.networkStack removeObjectAtIndex:ii];
+            NSLog(@"[appDelegate] Removed file %@ (item %d) from the network stack",filename,ii);
+            return YES;
+        }
+    }
+    
+    NSLog(@"[appDelegate] File %@ was not found in the network stack, so can't remove it.",filename);
+    return NO;
 }
 
+- (BOOL) deleteFromStorageZipFile:(NSString *)filename
+{
+    NSFileManager *fileMgr = [NSFileManager defaultManager];
+    NSString *fullPath = [[ES_DataBaseAccessor zipDirectory] stringByAppendingString:filename];
+    NSError *error;
+    
+    if (![fileMgr removeItemAtPath:fullPath error:&error])
+    {
+        NSLog(@"[appDelegate] Failed deleting file %@ with error: %@",filename,[error localizedDescription]);
+        return NO;
+    }
+    else
+    {
+        NSLog(@"[appDelegate] Supposedly deleted file: %@",fullPath);
+        return YES;
+    }
+}
+
+- (BOOL) removeFromeNetworkStackAndDeleteFile:(NSString *)filename
+{
+    BOOL res1 = [self removeFromNetworkStackFile:filename];
+    BOOL res2 = [self deleteFromStorageZipFile:filename];
+    return res1 && res2;
+}
 
 
 

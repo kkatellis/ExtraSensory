@@ -16,15 +16,9 @@
 
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
 
-//#if TARGET_IPHONE_SIMULATOR
-//    #define API_URL         @"http://localhost:8000/api/analyze?%@"
-//    #define API_UPLOAD      @"http://localhost:8000/api/feedback_upload"
-//    #define API_FEEDBACK    @"http://localhost:8000/api/feedback?%@"
-//#else
-    #define API_URL         @"http://137.110.112.50:8080/api/analyze?%@"
-    #define API_UPLOAD      @"http://137.110.112.50:8080/api/feedback_upload"
-    #define API_FEEDBACK    @"http://137.110.112.50:8080/api/feedback?%@"
-//#endif
+#define API_PREFIX      @"http://137.110.112.50:8080/api/"
+#define API_UPLOAD      @"feedback_upload"
+#define API_FEEDBACK    @"feedback?%@"
 
 @interface ES_NetworkAccessor()
 
@@ -79,7 +73,7 @@
 
 - (void) sendFeedback: (ES_Activity *)activity
 {
-    [self apiCall:API_FEEDBACK withParams:activity];
+    [self apiCall:[NSString stringWithFormat:@"%@%@",API_PREFIX,API_FEEDBACK] withParams:activity];
     
 }
 
@@ -123,14 +117,6 @@
     NSLog(@"=== Zip files in directory: %@",storedZipFiles);
     NSLog(@"=== files in network stack: %@",self.appDelegate.networkStack);
     
-    NSLog(@"=== files in dir with properties:");
-    for (id obj in storedZipFiles)
-    {
-        NSString *file = (NSString *)obj;
-        NSString *filepath = [NSString stringWithFormat:@"%@/%@",storagePath,file];
-        NSDictionary *fileAttributtes = [[NSFileManager defaultManager] attributesOfItemAtPath:filepath error:nil];
-        NSLog(@"====== %@  |  %@",filepath,[fileAttributtes objectForKey:NSFileSize]);
-    }
 }
 
 /**
@@ -141,6 +127,7 @@
  */
 - (void) upload
 {
+    NSLog( @"[networkAccessor] called for upload. Current network Stack size = %lu", (unsigned long)[self.appDelegate.networkStack count]);
     if (!isReady)
     {
         NSLog(@"[networkAccessor] notReady");
@@ -160,7 +147,7 @@
     NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
-    self.appDelegate.currentZipFilePath = fullPath;
+//    self.appDelegate.currentZipFilePath = fullPath;
     
     NSLog( @"[DataUploader] Attempting to upload %@", file );
     if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi )
@@ -173,7 +160,7 @@
             NSLog(@"no data!");
         }
     
-        NSURL *url = [NSURL URLWithString: API_UPLOAD];
+        NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"%@%@",API_PREFIX,API_UPLOAD]];
         NSURLRequest *urlRequest = [self postRequestWithURL: url
                                                 boundry: BOUNDARY
                                                    data: data
@@ -271,13 +258,13 @@
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
-    NSString *predictedActivity = [response objectForKey:@"predicted_activity"];
-    if (predictedActivity){
+    NSString *api_type = [response objectForKey:@"api_type"];
+    if ([API_UPLOAD isEqualToString:api_type])
+    {
+        NSString *predictedActivity = [response objectForKey:@"predicted_activity"];
         NSNumber *time = [NSNumber numberWithDouble: [[response objectForKey: @"timestamp"] doubleValue]];
     
-        //[self updateCounts: predictedActivity];
-    
-        NSLog(@"time = %@", time);
+        NSLog(@"[networkAccessor] Got response from api upload_feedback for time %@, with predicted activity %@", time,predictedActivity);
     
         NSDateFormatter *dateFormatter = [NSDateFormatter new];
         [dateFormatter setDateFormat:@"hh:mm"];
@@ -286,34 +273,23 @@
     
         NSLog( @"Prediction: %@", predictionAndDate );
     
-        //NSDictionary *response = [[reply dataUsingEncoding: NSUTF8StringEncoding] objectFromJSONData];
-    
+        NSString *uploadedZipFile = [response objectForKey:@"filename"];
+        
         ES_AppDelegate *appDelegate = [self appDelegate];
         ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
 
         if (activity)
         {
             [appDelegate.predictions insertObject:activity atIndex:0];
-    
-            //NSLog(@"prediction: %@", [appDelegate.predictions objectAtIndex: 0]);
-            //NSLog(@"time = %f", [time doubleValue]);
-    
+        
             // set the predicted activity for our local Activity object
             [activity setValue: predictedActivity forKey: @"serverPrediction" ];
         
             connection = nil;
-    
-            NSFileManager *fileMgr = [NSFileManager defaultManager];
         
-            if (![fileMgr removeItemAtPath: appDelegate.currentZipFilePath error:&error]){
-                NSLog(@"Unable to delete file: %@", [error localizedDescription]);
-            } else {
-                NSLog(@"Supposedly deleted file: %@", appDelegate.currentZipFilePath);
-            }
-    
             [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
 
-            [appDelegate removeFirstOnNetworkStack];
+            [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
             appDelegate.mostRecentActivity = activity;
             isReady = YES;
         
@@ -330,6 +306,19 @@
                 [self upload];
             }
         }
+        else
+        {
+            NSLog(@"[networkAccessor] Didn't find an existing activity record for timestamp: %@ (%@).",time,[NSDate dateWithTimeIntervalSince1970:[time doubleValue]]);
+            NSLog(@"[networkAccessor] Assume this zip file is not relevant anymore. Delete it.");
+            [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
+            isReady = YES;
+        }
+        
+        NSLog(@"[networkAccessor] Current network stack size is %lu",(unsigned long)self.appDelegate.networkStack.count);
+    }
+    else
+    {
+        NSLog(@"=== not response from upload, but %@",api_type);
     }
     self.appDelegate.currentlyUploading = NO;
 }
