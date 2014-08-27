@@ -172,16 +172,20 @@ def feedback_upload():
 
         predicted_activity, UTime = activity_analyzer.classify_zip(filename, current_app.config['UPLOAD_FOLDER'], current_app.config['CLASSIFIER_FOLDER'])
         msg = ''
-	return json.dumps( {'success': True, 'predicted_activity': predicted_activity, 'timestamp': int(UTime), 'msg': msg } )
+        success = True;
+        pass;
     except Exception as e:
         predicted_activity = 'none'
 	msg = e.message
+        success = False;
         print msg
 	try:
 	    UTime = filename[:filename.find('-')]
 	except:
 	    UTime = 0
-	return json.dumps( {'success': False, 'predicted_activity': 'none', 'timestamp': int(UTime), 'msg': msg } )
+            pass;
+        pass;
+    return json.dumps( {'api_type':'feedback_upload','filename':uploaded_file.filename,'success': success, 'predicted_activity': predicted_activity, 'timestamp': int(UTime), 'msg': msg } )
 
 @analyzer_api.route( '/feedback' )
 def handle_feedback():
@@ -250,6 +254,6 @@ def handle_feedback():
     except Exception, exception:
         print exception
         sys.stdout.flush()
-        return json.dumps( {'success': False, 'msg': str( exception ) } )
+        return json.dumps( {'api_type':'feedback','success': False, 'timestamp': int(UTime), 'msg': str( exception ) } )
 
-    return json.dumps( {'success': True } ) 
+    return json.dumps( {'api_type':'feedback','success': True, 'timestamp': int(UTime) } ) 
