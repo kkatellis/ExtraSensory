@@ -147,7 +147,6 @@
     NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
-//    self.appDelegate.currentZipFilePath = fullPath;
     
     NSLog( @"[DataUploader] Attempting to upload %@", file );
     if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi )
@@ -276,6 +275,9 @@
         NSString *uploadedZipFile = [response objectForKey:@"filename"];
         
         ES_AppDelegate *appDelegate = [self appDelegate];
+        [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
+        isReady = YES;
+        
         ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
 
         if (activity)
@@ -289,9 +291,7 @@
         
             [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
 
-            [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
             appDelegate.mostRecentActivity = activity;
-            isReady = YES;
         
             // Check if there is already some non-trivial labels that should be sent for this activity:
             if ([self isThereUserUpdateForActivity:activity])
@@ -300,21 +300,20 @@
                 [self sendFeedback:activity];
             }
             
-            //[appDelegate updateNetworkStackFromStorageFilesIfEmpty];
-            NSLog( @"Network Stack size = %lu", (unsigned long)[appDelegate.networkStack count]);
-            if ( [appDelegate.networkStack count] > 0 && self.appDelegate.dataCollectionOn){
-                [self upload];
-            }
         }
         else
         {
             NSLog(@"[networkAccessor] Didn't find an existing activity record for timestamp: %@ (%@).",time,[NSDate dateWithTimeIntervalSince1970:[time doubleValue]]);
-            NSLog(@"[networkAccessor] Assume this zip file is not relevant anymore. Delete it.");
-            [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
-            isReady = YES;
         }
         
-        NSLog(@"[networkAccessor] Current network stack size is %lu",(unsigned long)self.appDelegate.networkStack.count);
+        //[appDelegate updateNetworkStackFromStorageFilesIfEmpty];
+        NSLog(@"[networkAccessor] network stack size (1): %lu",(unsigned long)appDelegate.networkStack.count);
+        if ( [appDelegate.networkStack count] > 0)
+        {
+            NSLog(@"[networkAccessor] Still items in network stack. Calling upload...");
+            [self upload];
+        }
+        NSLog(@"[networkAccessor] network stack size (2): %lu",(unsigned long)appDelegate.networkStack.count);
     }
     else
     {

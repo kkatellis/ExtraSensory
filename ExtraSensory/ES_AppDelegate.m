@@ -47,8 +47,6 @@
 
 @synthesize user = _user;
 
-//@synthesize currentZipFilePath = _currentZipFilePath;
-
 @synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
 
 @synthesize activitiesToUpload = _activitiesToUpload;
@@ -148,7 +146,7 @@
     }
     
     _networkStack = [NSMutableArray new];
-    //[self updateNetworkStackFromStorageFilesIfEmpty];
+    [self updateNetworkStackFromStorageFilesIfEmpty];
     return _networkStack;
 }
 
@@ -175,7 +173,7 @@
         }
     }
     
-    NSLog(@"[appDelegate] File %@ was not found in the network stack, so can't remove it.",filename);
+    NSLog(@"[appDelegate] !!! File %@ was not found in the network stack, so can't remove it.",filename);
     return NO;
 }
 
@@ -187,7 +185,7 @@
     
     if (![fileMgr removeItemAtPath:fullPath error:&error])
     {
-        NSLog(@"[appDelegate] Failed deleting file %@ with error: %@",filename,[error localizedDescription]);
+        NSLog(@"[appDelegate] !!! Failed deleting file %@ with error: %@",filename,[error localizedDescription]);
         return NO;
     }
     else
