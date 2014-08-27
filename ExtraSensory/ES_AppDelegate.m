@@ -49,19 +49,8 @@
 
 @synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
 
-@synthesize activitiesToUpload = _activitiesToUpload;
-
 @synthesize mostRecentActivity = _mostRecentActivity;
 
-
-- (NSMutableArray *)activitiesToUpload
-{
-    if (!_activitiesToUpload)
-    {
-        _activitiesToUpload = [NSMutableArray new];
-    }
-    return _activitiesToUpload;
-}
 
 
 // this should not exist. Use the ES_UserActivityStatistics
