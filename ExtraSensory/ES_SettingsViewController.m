@@ -16,9 +16,17 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *uuidLabel;
 @property (strong, nonatomic) IBOutlet UISwitch *schedulerSwitch;
+
 @property (strong, nonatomic) IBOutlet UILabel *indicatorLabel;
+
 @property (weak, nonatomic) IBOutlet UILabel *reminderIntervalSelectedValue;
 @property (weak, nonatomic) IBOutlet UISlider *reminderIntervalSlider;
+
+@property (weak, nonatomic) IBOutlet UILabel *numStoredSamplesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeCoveredByStorageLabel;
+@property (weak, nonatomic) IBOutlet UISlider *storageSlider;
+
+
 @property (strong, nonatomic) ES_AppDelegate* appDelegate;
 @end
 
