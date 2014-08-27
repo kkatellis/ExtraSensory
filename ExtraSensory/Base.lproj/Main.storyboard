@@ -31,7 +31,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" title="Home" id="G9S-O5-AV7">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="c76-3d-Fcj">
+                        <barButtonItem key="rightBarButtonItem" id="c76-3d-Fcj">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MpH-Qo-gh7">
                                 <rect key="frame" x="274" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
