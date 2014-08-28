@@ -69,6 +69,7 @@
     NSLog(@"=== init settings. before arranging storage part");
     NSNumber *numStoredSamples = self.appDelegate.user.settings.maxZipFilesStored;
     NSLog(@"=== got numstored samples from settings: %@",numStoredSamples);
+    NSLog(@"=== got user: %@ and user.settings: %@",self.appDelegate.user,self.appDelegate.user.settings);
     [self setStorageNumSamplesAndCoveredTimeLabelsWithSamples:numStoredSamples];
     self.storageSlider.value = [numStoredSamples doubleValue];
 }
@@ -76,7 +77,6 @@
 - (void) setStorageNumSamplesAndCoveredTimeLabelsWithSamples:(NSNumber *)samples
 {
     int numSamples = (int)[samples intValue];
-    NSLog(@"=== setting first label to have number %d",numSamples);
     self.numStoredSamplesLabel.text = [NSString stringWithFormat:@"%d",numSamples];
     
     // How much sample-time will that storage cover:
@@ -84,7 +84,6 @@
     int hours = numSamples / 60;
     int minutes = numSamples - 60*hours;
     
-    NSLog(@"=== calculated %d hours and %d minutes",hours,minutes);
     NSString *coverageTime;
     if (hours < 1)
     {
@@ -94,7 +93,6 @@
     {
         coverageTime = [NSString stringWithFormat:@"(~%d hrs %d mins)",hours,minutes];
     }
-    NSLog(@"=== setting second label to %@",coverageTime);
     self.timeCoveredByStorageLabel.text = coverageTime;
 }
 

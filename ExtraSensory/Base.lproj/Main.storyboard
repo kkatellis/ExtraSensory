@@ -310,9 +310,12 @@
                     <navigationItem key="navigationItem" title="Settings" id="vya-3r-gup"/>
                     <connections>
                         <outlet property="indicatorLabel" destination="nwn-Gr-zvt" id="UGz-7q-F5u"/>
+                        <outlet property="numStoredSamplesLabel" destination="aPH-BM-87r" id="iPb-fw-d5g"/>
                         <outlet property="reminderIntervalSelectedValue" destination="iOv-hT-b5y" id="pyU-2W-E1F"/>
                         <outlet property="reminderIntervalSlider" destination="pth-Bh-N7V" id="XQU-Zc-HiI"/>
                         <outlet property="schedulerSwitch" destination="gQB-h8-SNS" id="gbi-QR-8ea"/>
+                        <outlet property="storageSlider" destination="mMH-qN-2Ya" id="HFx-ob-n99"/>
+                        <outlet property="timeCoveredByStorageLabel" destination="ilA-AG-JEN" id="sVP-HK-jQR"/>
                         <outlet property="uuidLabel" destination="Na8-k5-VEU" id="gpE-zd-J1L"/>
                     </connections>
                 </viewController>
