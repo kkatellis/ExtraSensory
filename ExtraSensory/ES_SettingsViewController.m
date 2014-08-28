@@ -131,11 +131,21 @@
     if (sender.isOn)
     {
         [self.indicatorLabel setText: RECORDING_TEXT];
-        self.appDelegate.dataCollectionOn = YES;
-        [[self scheduler] sampleSaveSendCycler];    }
+        BOOL isDataCollectionReallyStarting = [self.appDelegate userTurnedOnDataCollection];
+        if (!isDataCollectionReallyStarting)
+        {
+            // Then user selected to activate the data collection mechanizm but probably there are too many zip files already in storage.
+            NSString *message = @"Data collection is still inactive since the storage is in full capacity right now.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:message delegate:self cancelButtonTitle:@"o.k." otherButtonTitles: nil];
+            [alert show];
+            
+        }
+        [[self scheduler] sampleSaveSendCycler];
+    }
     else
     {
         [self.indicatorLabel setText: NOT_RECORDING_TEXT];
+        [self.appDelegate userTurnedOffDataCollection];
         [[self scheduler] turnOffRecording];
     }
     

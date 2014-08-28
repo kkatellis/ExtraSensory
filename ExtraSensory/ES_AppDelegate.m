@@ -13,6 +13,7 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_User.h"
+#import "ES_Settings.h"
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_ActivityEvent.h"
 #import "ES_AlertViewWithUserInfo.h"
@@ -27,6 +28,7 @@
 @interface ES_AppDelegate()
 
 @property ES_AlertViewWithUserInfo *latestAlert;
+@property BOOL userSelectedDataCollectionOn;
 
 @end
 
@@ -222,9 +224,6 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
-    NSLog( @"user = %@", self.user );
-    NSLog( @"settings = %@", self.user.settings );
-    
     // Create a location manager instance to determine if location services are enabled. This manager instance will be
     // immediately released afterwards.
     self.locationManager = [CLLocationManager new];
@@ -264,25 +263,50 @@
     
     NSLog(@"=== launched with options: %@",launchOptions);
     
-//    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-//    if (notification)
-//    {
-//        if (notification.userInfo)
-//        {
-//            // Check if there was found a verified activity in the recent period of time:
-//            if ([notification.userInfo valueForKey:FOUND_VERIFIED])
-//            {
-//                [self pushActivityEventFeedbackViewWithUserInfo:notification.userInfo];
-//            }
-//            else
-//            {
-//                [self pushActiveFeedbackView];
-//            }
-//        }
-//    }
-//    
-    
     return YES;
+}
+
+- (void) userTurnedOffDataCollection
+{
+    self.userSelectedDataCollectionOn = NO;
+    [self turnOffDataCollection];
+}
+
+- (BOOL) userTurnedOnDataCollection
+{
+    self.userSelectedDataCollectionOn = YES;
+    return [self turnOnDataCollectionIfNeeded];
+}
+
+- (void) turnOffDataCollection
+{
+    [self.scheduler turnOffRecording];
+}
+
+- (BOOL) turnOnDataCollectionIfNeeded
+{
+    if ([self isDataCollectionOn])
+    {
+        [self.scheduler sampleSaveSendCycler];
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
+
+- (BOOL) isDataCollectionOn
+{
+    if (!self.userSelectedDataCollectionOn)
+    {
+        // Then shouldn't turn on
+        return NO;
+    }
+    
+    int inStack = (int)[self.networkStack count];
+    int limit = [self.user.settings.maxZipFilesStored intValue];
+    return (inStack < limit);
 }
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

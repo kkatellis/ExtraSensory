@@ -15,8 +15,6 @@
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
-@property BOOL dataCollectionOn;
-
 @property BOOL currentlyUploading;
 
 @property BOOL recordingRightNow;
@@ -47,6 +45,11 @@
 
 @property (strong, nonatomic) NSMutableArray *countLySiStWaRuBiDr;
 
+
+- (BOOL) userTurnedOnDataCollection;
+- (void) userTurnedOffDataCollection;
+- (void) turnOffDataCollection;
+- (BOOL) isDataCollectionOn;
 
 - (void) markRecordingRightNow;
 - (void) markNotRecordingRightNow;

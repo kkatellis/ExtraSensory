@@ -162,7 +162,6 @@
 - (void) turnOffRecording
 {
     NSLog(@"[scheduler] turnOffRecording");
-    self.appDelegate.dataCollectionOn = NO;
     [self.sensorManager turnOffRecording];
     [self.timer invalidate];
     self.timer = nil;
@@ -194,7 +193,7 @@
     NSNumber *nowTimestamp = [NSNumber numberWithDouble:[now timeIntervalSince1970]];
     NSLog(@"=== time: %@. Checking if it's time to nag the user",now);
 
-    if (!self.appDelegate.dataCollectionOn)
+    if (![self.appDelegate isDataCollectionOn])
     {
         //NSLog(@"=== data collection is off. Don't nag user!");
         //return;
@@ -245,7 +244,7 @@
     [self setTimerForNaggingCheckup];
     if (notification)
     {
-        notification.fireDate = nil;//[[NSDate date] dateByAddingTimeInterval:5]; //nil;//[NSDate date];
+        notification.fireDate = nil;
         notification.alertAction = @"ExtraSensory";
         notification.alertBody = question;
         notification.userInfo = userInfo;
