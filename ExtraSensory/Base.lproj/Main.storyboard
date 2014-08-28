@@ -249,8 +249,8 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Storage when no WiFi:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4FZ-bB-3Pg">
-                                <rect key="frame" x="20" y="175" width="183" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Storage capacity (when no WiFi):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4FZ-bB-3Pg">
+                                <rect key="frame" x="20" y="175" width="270" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -274,9 +274,12 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="mMH-qN-2Ya">
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="512" translatesAutoresizingMaskIntoConstraints="NO" id="mMH-qN-2Ya">
                                 <rect key="frame" x="101" y="233" width="118" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="storageSliderValueChanged:" destination="FhT-sF-lQK" eventType="valueChanged" id="ZOy-dL-aa5"/>
+                                </connections>
                             </slider>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -307,12 +310,9 @@
                     <navigationItem key="navigationItem" title="Settings" id="vya-3r-gup"/>
                     <connections>
                         <outlet property="indicatorLabel" destination="nwn-Gr-zvt" id="UGz-7q-F5u"/>
-                        <outlet property="numStoredSamplesLabel" destination="aPH-BM-87r" id="6EM-3F-tFH"/>
                         <outlet property="reminderIntervalSelectedValue" destination="iOv-hT-b5y" id="pyU-2W-E1F"/>
                         <outlet property="reminderIntervalSlider" destination="pth-Bh-N7V" id="XQU-Zc-HiI"/>
                         <outlet property="schedulerSwitch" destination="gQB-h8-SNS" id="gbi-QR-8ea"/>
-                        <outlet property="storageSlider" destination="mMH-qN-2Ya" id="KpD-aV-YS0"/>
-                        <outlet property="timeCoveredByStorageLabel" destination="ilA-AG-JEN" id="2e4-wr-ocx"/>
                         <outlet property="uuidLabel" destination="Na8-k5-VEU" id="gpE-zd-J1L"/>
                     </connections>
                 </viewController>

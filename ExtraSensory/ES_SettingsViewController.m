@@ -64,7 +64,38 @@
     NSNumber *reminderIntervalMins = [NSNumber numberWithInteger:((int)[self.appDelegate.user.settings.timeBetweenUserNags doubleValue])/60];
     [self setReminderIntervalSelectedValueWithMinutes:reminderIntervalMins];
     self.reminderIntervalSlider.value = [reminderIntervalMins doubleValue];
-	// Do any additional setup after loading the view.
+
+    // Storage capacity:
+    NSLog(@"=== init settings. before arranging storage part");
+    NSNumber *numStoredSamples = self.appDelegate.user.settings.maxZipFilesStored;
+    NSLog(@"=== got numstored samples from settings: %@",numStoredSamples);
+    [self setStorageNumSamplesAndCoveredTimeLabelsWithSamples:numStoredSamples];
+    self.storageSlider.value = [numStoredSamples doubleValue];
+}
+
+- (void) setStorageNumSamplesAndCoveredTimeLabelsWithSamples:(NSNumber *)samples
+{
+    int numSamples = (int)[samples intValue];
+    NSLog(@"=== setting first label to have number %d",numSamples);
+    self.numStoredSamplesLabel.text = [NSString stringWithFormat:@"%d",numSamples];
+    
+    // How much sample-time will that storage cover:
+    // Assume approximately sample per minute.
+    int hours = numSamples / 60;
+    int minutes = numSamples - 60*hours;
+    
+    NSLog(@"=== calculated %d hours and %d minutes",hours,minutes);
+    NSString *coverageTime;
+    if (hours < 1)
+    {
+        coverageTime = [NSString stringWithFormat:@"(~%d mins)",minutes];
+    }
+    else
+    {
+        coverageTime = [NSString stringWithFormat:@"(~%d hrs %d mins)",hours,minutes];
+    }
+    NSLog(@"=== setting second label to %@",coverageTime);
+    self.timeCoveredByStorageLabel.text = coverageTime;
 }
 
 - (void)setReminderIntervalSelectedValueWithMinutes:(NSNumber *)minutes
@@ -88,6 +119,13 @@
     [self setReminderIntervalSelectedValueWithMinutes:minutes];
     NSNumber *seconds = [NSNumber numberWithDouble:(double)([minutes intValue]*60)];
     self.appDelegate.user.settings.timeBetweenUserNags = seconds;
+}
+
+- (IBAction)storageSliderValueChanged:(id)sender {
+    // Round the value to integer:
+    NSNumber *numSamples = [NSNumber numberWithInt:(int)self.storageSlider.value];
+    [self setStorageNumSamplesAndCoveredTimeLabelsWithSamples:numSamples];
+    self.appDelegate.user.settings.maxZipFilesStored = [NSNumber numberWithDouble:[numSamples doubleValue]];
 }
 
 - (IBAction)startScheduler:(UISwitch *)sender
