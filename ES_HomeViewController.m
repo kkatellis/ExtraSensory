@@ -54,13 +54,13 @@
 {
     ES_Activity *mostRecentActivity = [ES_DataBaseAccessor getMostRecentActivity];
     [self updateMostRecentActivity:mostRecentActivity];
+    
+    // Register to listen to activity-change notifications:
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"Activities" object:nil];
 }
 
 - (void) updateMostRecentActivity:(ES_Activity*) activity;
 {
-    //ES_Activity *mostRecentActivity = [ES_DataBaseAccessor getMostRecentActivity];
-    //ES_AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    //ES_Activity *mostRecentActivity = appDelegate.mostRecentActivity;
     NSString *activityLabel;
     NSString *dateString;
     if (activity)
@@ -80,14 +80,25 @@
             activityLabel = activity.serverPrediction;
         }
         
+        if ([activityLabel isEqualToString:@"none"])
+        {
+            activityLabel = nil;
+        }
         NSLog(@"[homeView] Drawing latest activity: %@ from time: %@",activityLabel,dateString);
     }
     // change the image & label
     if (activityLabel)
     {
         self.mostRecentActivityImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png", activityLabel]];
-        //self.mostRecentActivityLabel.text = [NSString stringWithFormat:@"%@ at %@", activityLabel, dateString];
-        self.mostRecentActivityLabel.text = activityLabel;
+        if (activity.userCorrection)
+        {
+            self.mostRecentActivityLabel.text = activityLabel;
+        }
+        else
+        {
+            // Then the activity label is a guess.
+            self.mostRecentActivityLabel.text = [NSString stringWithFormat:@"%@?",activityLabel];
+        }
     }
     else
     {
@@ -98,10 +109,12 @@
 }
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-    if ([keyPath isEqual:@"mostRecentActivity"]) {
-        ES_Activity* changedActivity = [change objectForKey:NSKeyValueChangeNewKey];
-        [self updateMostRecentActivity:changedActivity];
-    }
+    
+//    NSLog(@"========== observer change: %@",change);
+//    if ([keyPath isEqual:@"mostRecentActivity"]) {
+//        ES_Activity* changedActivity = [change objectForKey:NSKeyValueChangeNewKey];
+//        [self updateMostRecentActivity:changedActivity];
+//    }
 }
 
 - (NSString *) timeString: (int) index
