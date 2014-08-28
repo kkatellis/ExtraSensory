@@ -142,6 +142,15 @@
 - (void) pushOnNetworkStack: (NSString *)file
 {
     [self.networkStack addObject: file];
+    
+    // Did we reach the limit of stack capacity:
+    if (self.networkStack.count > [self.user.settings.maxZipFilesStored intValue])
+    {
+        [self turnOffDataCollection];
+        NSString *message = @"Max storage capacity reached. Stopping data collection.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:message delegate:self cancelButtonTitle:@"o.k." otherButtonTitles: nil];
+        [alert show];
+    }
 }
 
 
@@ -158,6 +167,12 @@
         {
             [self.networkStack removeObjectAtIndex:ii];
             NSLog(@"[appDelegate] Removed file %@ (item %d) from the network stack",filename,ii);
+            
+            // Did we just go bellow the storage limit?
+            if ([self.networkStack count] == ([self.user.settings.maxZipFilesStored intValue]-1))
+            {
+                [self turnOnDataCollectionIfNeeded];
+            }
             return YES;
         }
     }
@@ -285,7 +300,7 @@
 
 - (BOOL) turnOnDataCollectionIfNeeded
 {
-    if ([self isDataCollectionOn])
+    if ([self isDataCollectionSupposedToBeOn])
     {
         [self.scheduler sampleSaveSendCycler];
         return YES;
@@ -296,7 +311,7 @@
     }
 }
 
-- (BOOL) isDataCollectionOn
+- (BOOL) isDataCollectionSupposedToBeOn
 {
     if (!self.userSelectedDataCollectionOn)
     {

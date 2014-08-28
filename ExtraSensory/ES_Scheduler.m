@@ -108,7 +108,7 @@
 
 - (void) sampleSaveSendCycler
 {
-    NSLog( @"\n\nStart" );
+    NSLog(@"[scheduler] turnOffRecording");
     
     //2)Making background task Asynchronous
     if([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)])
@@ -193,7 +193,7 @@
     NSNumber *nowTimestamp = [NSNumber numberWithDouble:[now timeIntervalSince1970]];
     NSLog(@"=== time: %@. Checking if it's time to nag the user",now);
 
-    if (![self.appDelegate isDataCollectionOn])
+    if (![self.appDelegate isDataCollectionSupposedToBeOn])
     {
         //NSLog(@"=== data collection is off. Don't nag user!");
         //return;

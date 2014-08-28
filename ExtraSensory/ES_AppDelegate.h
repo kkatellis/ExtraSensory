@@ -49,7 +49,8 @@
 - (BOOL) userTurnedOnDataCollection;
 - (void) userTurnedOffDataCollection;
 - (void) turnOffDataCollection;
-- (BOOL) isDataCollectionOn;
+- (BOOL) isDataCollectionSupposedToBeOn;
+- (BOOL) turnOnDataCollectionIfNeeded;
 
 - (void) markRecordingRightNow;
 - (void) markNotRecordingRightNow;

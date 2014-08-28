@@ -66,10 +66,7 @@
     self.reminderIntervalSlider.value = [reminderIntervalMins doubleValue];
 
     // Storage capacity:
-    NSLog(@"=== init settings. before arranging storage part");
     NSNumber *numStoredSamples = self.appDelegate.user.settings.maxZipFilesStored;
-    NSLog(@"=== got numstored samples from settings: %@",numStoredSamples);
-    NSLog(@"=== got user: %@ and user.settings: %@",self.appDelegate.user,self.appDelegate.user.settings);
     [self setStorageNumSamplesAndCoveredTimeLabelsWithSamples:numStoredSamples];
     self.storageSlider.value = [numStoredSamples doubleValue];
 }
@@ -124,6 +121,9 @@
     NSNumber *numSamples = [NSNumber numberWithInt:(int)self.storageSlider.value];
     [self setStorageNumSamplesAndCoveredTimeLabelsWithSamples:numSamples];
     self.appDelegate.user.settings.maxZipFilesStored = [NSNumber numberWithDouble:[numSamples doubleValue]];
+    
+    // Don't yet check turn on/off data collection.
+    // When the next push/remove comes to the network stack - then the check will be made.
 }
 
 - (IBAction)startScheduler:(UISwitch *)sender
@@ -135,7 +135,7 @@
         if (!isDataCollectionReallyStarting)
         {
             // Then user selected to activate the data collection mechanizm but probably there are too many zip files already in storage.
-            NSString *message = @"Data collection is still inactive since the storage is in full capacity right now.";
+            NSString *message = @"Data collection is still inactive since the storage is in full capacity right now (until WiFi is available).";
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:message delegate:self cancelButtonTitle:@"o.k." otherButtonTitles: nil];
             [alert show];
             
