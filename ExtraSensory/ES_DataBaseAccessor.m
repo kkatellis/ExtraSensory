@@ -349,8 +349,6 @@
 + (NSString *) zipFileName2: (NSNumber *)time
 {
     ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
-    //NSLog(@"time for zip name = %0.0f", [time doubleValue] );
-    //[NSString stringWithFormat:@"%0.0f", [time doubleValue]]
     return [NSString stringWithFormat:@"/%0.0f-%@.zip", [time doubleValue], appDelegate.user.uuid];
 }
 
@@ -400,7 +398,7 @@
 + (void) writeActivity: (ES_Activity *)activity
 {
     //[self writeData: [self arrayFromActivity: activity]];
-    NSLog(@"activity labels: %@", activity.userCorrection);
+    NSLog(@"activity label: %@", activity.userCorrection);
     if (activity.userCorrection)
     {
         [self writeLabels: activity];
@@ -514,7 +512,7 @@
     }
     else
     {
-        NSLog(@"Error writing data to file!!");
+        NSLog(@"!!! Error writing data to file!!");
     }
 }
 
@@ -585,7 +583,7 @@
     }
     else
     {
-        NSLog(@"Error writing label to file!!");
+        NSLog(@"!!! Error writing label to file!!");
     }
     
 }

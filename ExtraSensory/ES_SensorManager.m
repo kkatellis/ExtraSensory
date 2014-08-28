@@ -176,8 +176,6 @@
 
 - (BOOL) record
 {
-    //[ES_DataBaseAccessor getMostRecentActivity];
-    
     // Setup HFData array
     if( HFDataBundle) {
         NSLog(@"clearing old HFDataBundle");

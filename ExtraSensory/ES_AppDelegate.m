@@ -237,6 +237,10 @@
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
 
     [self.scheduler sampleSaveSendCycler];
+    
+    // Initialize the network stack:
+    NSMutableArray *ns = self.networkStack;
+    NSLog(@"[appDelegate] Network stack has items: %@",ns);
 }
 
 - (void) applicationDidBecomeActive:(UIApplication *)application
