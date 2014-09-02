@@ -289,6 +289,7 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.soundProcessor pauseDurRecording];
+    [self.appDelegate markNotRecordingRightNow];
 }
 
 -(void) packHFData

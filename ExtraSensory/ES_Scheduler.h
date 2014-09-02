@@ -14,6 +14,7 @@
 
 @property (nonatomic, weak) ES_User* user;
 
+- (BOOL) isPeriodicRecordingMechanismOn;
 - (void) sampleSaveSendCycler;
 - (void) turnOffRecording;
 - (void) activeFeedback: (ES_Activity *) activity;

@@ -37,6 +37,8 @@
 
 @property NSTimer *naggingTimer;
 
+@property (nonatomic) BOOL periodicRecordingMechanismIsOn;
+
 @end
 
 
@@ -106,9 +108,20 @@
     return _appDelegate;
 }
 
+- (BOOL) isPeriodicRecordingMechanismOn
+{
+    return self.isPeriodicRecordingMechanismOn;
+}
+
 - (void) sampleSaveSendCycler
 {
-    NSLog(@"[scheduler] turnOffRecording");
+    if (self.periodicRecordingMechanismIsOn)
+    {
+        NSLog(@"[scheduler] Asked to turn on recording, but no need - it is already on.");
+        return;
+    }
+    NSLog(@"[scheduler] turn On Recording");
+    self.periodicRecordingMechanismIsOn = YES;
     
     //2)Making background task Asynchronous
     if([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)])
@@ -161,7 +174,14 @@
 
 - (void) turnOffRecording
 {
+    if (!self.periodicRecordingMechanismIsOn)
+    {
+        NSLog(@"[scheduler] Asked to turn off recording, but no need - it is already off.");
+        return;
+    }
     NSLog(@"[scheduler] turnOffRecording");
+    self.periodicRecordingMechanismIsOn = NO;
+    
     [self.sensorManager turnOffRecording];
     [self.timer invalidate];
     self.timer = nil;

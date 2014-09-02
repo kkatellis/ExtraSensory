@@ -53,21 +53,6 @@
 
 
 
-// this should not exist. Use the ES_UserActivityStatistics
-/*- (NSMutableArray *)countLySiStWaRuBiDr
-{
-    if (!_countLySiStWaRuBiDr)
-    {
-        _countLySiStWaRuBiDr = [[NSMutableArray alloc] initWithCapacity:7];
-        for (int i = 0; i <7; i++)
-        {
-            [_countLySiStWaRuBiDr setObject: [NSNumber numberWithInt: 0] atIndexedSubscript: i];
-        }
-        NSLog( @"countArrayLength = %lu", (unsigned long)[_countLySiStWaRuBiDr count]);
-    }
-    return _countLySiStWaRuBiDr;
-}*/
-
 
 - (ES_User *)user
 {
@@ -171,7 +156,7 @@
             // Did we just go bellow the storage limit?
             if ([self.networkStack count] == ([self.user.settings.maxZipFilesStored intValue]-1))
             {
-                [self turnOnDataCollectionIfNeeded];
+                [self turnOnOrOffDataCollectionIfNeeded];
             }
             return YES;
         }
@@ -259,24 +244,24 @@
 
 - (void) applicationDidBecomeActive:(UIApplication *)application
 {
-    NSLog(@"=== app did become active");
+    NSLog(@"[appDelegate] App did become active");
 }
 
 - (void) applicationDidEnterBackground:(UIApplication *)application
 {
-    NSLog(@"=== app did enter background");
+    NSLog(@"[appDelegate] App did enter background");
 }
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSLog(@"=== application was launched (with options)");
+    NSLog(@"[appDelegate] Application was launched (with options)");
     if (!launchOptions)
     {
         [self applicationDidFinishLaunching:application];
         return YES;
     }
     
-    NSLog(@"=== launched with options: %@",launchOptions);
+    NSLog(@"[appDelegate] launched with options: %@",launchOptions);
     
     return YES;
 }
@@ -290,7 +275,7 @@
 - (BOOL) userTurnedOnDataCollection
 {
     self.userSelectedDataCollectionOn = YES;
-    return [self turnOnDataCollectionIfNeeded];
+    return [self turnOnOrOffDataCollectionIfNeeded];
 }
 
 - (void) turnOffDataCollection
@@ -298,7 +283,7 @@
     [self.scheduler turnOffRecording];
 }
 
-- (BOOL) turnOnDataCollectionIfNeeded
+- (BOOL) turnOnOrOffDataCollectionIfNeeded
 {
     if ([self isDataCollectionSupposedToBeOn])
     {
@@ -307,6 +292,7 @@
     }
     else
     {
+        [self.scheduler turnOffRecording];
         return NO;
     }
 }
@@ -367,7 +353,7 @@
 
 - (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    NSLog(@"=== caught local notification: %@",notification);
+    NSLog(@"[appDelegate] Caught local notification: %@",notification);
     
     if (notification.userInfo)
     {
@@ -470,7 +456,7 @@
 
 - (void) markRecordingRightNow
 {
-    NSLog(@"=== Marking that we're recording now.");
+    NSLog(@"[appDelegate] Marking that we're recording now.");
     self.recordingRightNow = YES;
     RaisedTabBarController *rtbc = (RaisedTabBarController *)self.window.rootViewController;
     
@@ -482,7 +468,7 @@
 
 - (void) markNotRecordingRightNow
 {
-    NSLog(@"=== Marking that we're not recording now.");
+    NSLog(@"[appDelegate] Marking that we're not recording now.");
     self.recordingRightNow = NO;
     RaisedTabBarController *rtbc = (RaisedTabBarController *)self.window.rootViewController;
     

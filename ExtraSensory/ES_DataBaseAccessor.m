@@ -164,7 +164,6 @@
     NSError *error = [NSError new];
     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
         
-    NSLog(@"number of matching hits = %lu", (unsigned long)[results count]);
     for (ES_Activity *activity in results)
     {
         if (activity.serverPrediction || activity.userCorrection)

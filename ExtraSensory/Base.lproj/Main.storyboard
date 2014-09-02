@@ -278,6 +278,8 @@
                                 <rect key="frame" x="101" y="233" width="118" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
+                                    <action selector="storageSliderTouchFinished:" destination="FhT-sF-lQK" eventType="touchUpInside" id="acv-1d-Czx"/>
+                                    <action selector="storageSliderTouchFinished:" destination="FhT-sF-lQK" eventType="touchDragOutside" id="cdW-nP-WJ5"/>
                                     <action selector="storageSliderValueChanged:" destination="FhT-sF-lQK" eventType="valueChanged" id="ZOy-dL-aa5"/>
                                 </connections>
                             </slider>

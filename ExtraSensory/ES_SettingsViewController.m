@@ -9,7 +9,6 @@
 #import "ES_SettingsViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
-#import "ES_Scheduler.h"
 #import "ES_Settings.h"
 
 @interface ES_SettingsViewController ()
@@ -125,6 +124,10 @@
     // Don't yet check turn on/off data collection.
     // When the next push/remove comes to the network stack - then the check will be made.
 }
+- (IBAction)storageSliderTouchFinished:(id)sender {
+    NSLog(@"[settings] Done dragging storage slider.");
+    [self.appDelegate turnOnOrOffDataCollectionIfNeeded];
+}
 
 - (IBAction)startScheduler:(UISwitch *)sender
 {
@@ -140,13 +143,11 @@
             [alert show];
             
         }
-        [[self scheduler] sampleSaveSendCycler];
     }
     else
     {
         [self.indicatorLabel setText: NOT_RECORDING_TEXT];
         [self.appDelegate userTurnedOffDataCollection];
-        [[self scheduler] turnOffRecording];
     }
     
 }
