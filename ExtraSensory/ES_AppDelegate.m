@@ -213,7 +213,7 @@
     if (!_scheduler)
     {
         _scheduler = [ES_Scheduler new];
-        NSLog(@"created new sheduler!");
+        NSLog(@"[appDelegate] Created new scheduler!");
     }
     return _scheduler;
 }
@@ -254,6 +254,7 @@
 - (void) applicationDidEnterBackground:(UIApplication *)application
 {
     NSLog(@"[appDelegate] App did enter background");
+    [ES_DataBaseAccessor save];
 }
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -459,6 +460,16 @@
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
     [nav pushViewController:activityFeedback animated:YES];
+}
+
+- (void) logNetworkStackAndZipFiles
+{
+    NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:storagePath error:nil];
+    NSPredicate *zipPredicate = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
+    NSArray *storedZipFiles = [directoryContent filteredArrayUsingPredicate:zipPredicate];
+    
+    NSLog(@"[appDelegate] Storage dir has =%lu= zip files and network stack has =%lu= files.",(unsigned long)storedZipFiles.count,(unsigned long)self.networkStack.count);
 }
 
 - (NSUUID *)uuid

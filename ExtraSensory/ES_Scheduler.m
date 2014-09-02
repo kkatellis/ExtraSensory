@@ -126,7 +126,7 @@
     //2)Making background task Asynchronous
     if([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)])
     {
-        NSLog(@"Multitasking Supported");
+        NSLog(@"[scheduler] Multitasking Supported");
         
         __block UIBackgroundTaskIdentifier background_task;
         background_task = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^ {
@@ -142,7 +142,7 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
             //### background task starts
-            NSLog(@"Running in the background\n");
+            NSLog(@"[scheduler] Running in the background\n");
             while(TRUE)
             {
                 //NSLog(@"Background time Remaining: %f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
@@ -157,7 +157,7 @@
     }
     else
     {
-        NSLog(@"Multitasking Not Supported");
+        NSLog(@"[scheduler] Multitasking Not Supported");
     }
     
     [self firstOp];
@@ -194,7 +194,7 @@
 - (void) setTimerForNaggingCheckup
 {
     NSNumber *timeBeforeNagCheckup = self.user.settings.timeBetweenUserNags;
-    NSLog(@"=== Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
+    NSLog(@"[scheduler] Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
     if (self.naggingTimer)
     {
         [self.naggingTimer invalidate];
@@ -275,7 +275,7 @@
 
 - (void) activeFeedback: (ES_Activity *) activity
 {
-    NSLog( @"\n\nStart active feedback sample");
+    NSLog( @"[scheduler] Start active feedback sample");
     
     [self.timer invalidate]; //turn off auto-sampling timer
     self.timer = nil;
@@ -294,14 +294,14 @@
 
 -(void) firstOp
 {
-    NSLog(@"Record Sensors");
+    NSLog(@"[scheduler] Record Sensors");
     [self.sensorManager setCurrentActivity: nil];
     [self.sensorManager record];
 }
 
 -(void) firstOpActive: (ES_Activity *) activity
 {
-    NSLog(@"Record Sensors");
+    NSLog(@"[scheduler] Record Sensors");
     [self.sensorManager setCurrentActivity: activity];
     [self.sensorManager record];
 }

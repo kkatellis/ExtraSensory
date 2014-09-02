@@ -22,6 +22,7 @@
 
 @interface ES_NetworkAccessor()
 
+
 @property (nonatomic, strong) ES_AppDelegate* appDelegate;
 
 @end
@@ -39,6 +40,9 @@
     
         //--// Set up reachability class for wifi check
         wifiReachable = [Reachability reachabilityForLocalWiFi];
+        [wifiReachable startNotifier];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityDidChange:) name:kReachabilityChangedNotification object:wifiReachable];
+        
         isReady = YES;
     }
     return self;
@@ -60,6 +64,19 @@
         _predictions = [NSMutableArray new];
     }
     return _predictions;
+}
+
+- (void)reachabilityDidChange:(NSNotification *)notification
+{
+    if ([wifiReachable currentReachabilityStatus] == ReachableViaWiFi)
+    {
+        NSLog(@"[networkAccessor] WiFi is now available. Set timer to call upload in 3 seconds.");
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(upload) userInfo:nil repeats:NO];
+    }
+    else
+    {
+        NSLog(@"[networkAccessor] Reachability change detected, but WiFi is not available.");
+    }
 }
 
 - (NSData *) recievedData
@@ -106,18 +123,6 @@
 }
 
 
-- (void) unsentItemsCheck
-{
-    NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
-    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:storagePath error:nil];
-    NSPredicate *zipPredicate = [NSPredicate predicateWithFormat:@"self ENDSWITH '.zip'"];
-    NSArray *storedZipFiles = [directoryContent filteredArrayUsingPredicate:zipPredicate];
-    
-    NSLog(@"=== Storage path has %lu zip files and network stack has %lu files.",(unsigned long)storedZipFiles.count,(unsigned long)self.appDelegate.networkStack.count);
-    NSLog(@"=== Zip files in directory: %@",storedZipFiles);
-    NSLog(@"=== files in network stack: %@",self.appDelegate.networkStack);
-    
-}
 
 /**
  
@@ -136,10 +141,9 @@
     isReady = NO;
     NSString *file = [self.appDelegate getFirstOnNetworkStack];
     
-    NSLog( @"upload: %@", file);
     if (!file)
     {
-        NSLog( @"Nil file, not sending!");
+        NSLog( @"[networkAccessor] No file to upload. Nothing to send.");
         isReady = YES;
         return;
     }
@@ -148,7 +152,7 @@
     NSString *fullPath = [ storagePath stringByAppendingString: file ];
     
     
-    NSLog( @"[DataUploader] Attempting to upload %@", file );
+    NSLog( @"[networkAccessor] Attempting to upload %@", file );
     if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi )
     {
     
@@ -156,7 +160,7 @@
     
         if( !data || [data length] == 0 )
         {
-            NSLog(@"no data!");
+            NSLog(@"[networkAccessor] !!! no data!");
         }
     
         NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"%@%@",API_PREFIX,API_UPLOAD]];
@@ -165,19 +169,21 @@
                                                    data: data
                                                fileName: file];
         if( !urlRequest ) {
-            NSLog( @"url request failed");
+            NSLog( @"[networkAccessor] url request failed");
         }
     
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest: urlRequest
                                                                    delegate: self.appDelegate.networkAccessor];
         self.appDelegate.currentlyUploading = YES;
         if (!connection) {
-            NSLog( @"Connection Failed");
+            NSLog( @"[networkAccessor] !!! Connection Failed");
             isReady = YES;
             self.appDelegate.currentlyUploading = NO;
         }
-    } else {
-        NSLog(@"No Wifi, not uploading");
+    }
+    else
+    {
+        NSLog(@"[networkAccessor] No Wifi, not uploading");
         isReady = YES;
     }
     
@@ -293,7 +299,7 @@
             // Check if there is already some non-trivial labels that should be sent for this activity:
             if ([self isThereUserUpdateForActivity:activity])
             {
-                NSLog(@"=== Activity that just received prediction already has some user-labeling, so sending it now...");
+                NSLog(@"[networkAccessor] Activity that just received prediction (timestamp %@) already has some user-labeling, so sending it now...",time);
                 [self sendFeedback:activity];
             }
             
@@ -314,7 +320,7 @@
     }
     else
     {
-        NSLog(@"=== not response from upload, but %@",api_type);
+        NSLog(@"[networkAccessor] Response is not for the 'upload' api, but '%@'",api_type);
     }
     self.appDelegate.currentlyUploading = NO;
 }

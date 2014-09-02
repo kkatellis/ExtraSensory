@@ -46,8 +46,7 @@
     self.activityCounts = [ES_DataBaseAccessor getTodaysCounts];
     [self.tableView reloadData];
     
-    ES_NetworkAccessor *na = ((ES_AppDelegate *)[[UIApplication sharedApplication] delegate]).networkAccessor;
-    [na unsentItemsCheck];
+    [(ES_AppDelegate *)[[UIApplication sharedApplication] delegate] logNetworkStackAndZipFiles];
 }
 
 - (void)didReceiveMemoryWarning

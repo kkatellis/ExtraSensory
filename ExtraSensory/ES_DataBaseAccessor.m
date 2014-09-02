@@ -48,12 +48,12 @@
     }
     else if ([users count] == 1)
     {
-        NSLog(@"Getting user from database");
+        NSLog(@"[databaseAccessor] Getting user from database");
         user = [users objectAtIndex: 0];
     }
     else
     {
-        NSLog( @"Why are there %lu users in the database??", (unsigned long)[users count] );
+        NSLog( @"[databaseAccessor] !!! Why are there %lu users in the database??", (unsigned long)[users count] );
     }
     return user;
 }
@@ -284,7 +284,7 @@
         }
         else
         {
-            NSLog(@"=== fetch gave result with nil userActivityLabels");
+            NSLog(@"[databaseAccessor] fetch gave result with nil userActivityLabels");
         }
     }
     //NSLog(@"Today's counts: %@", counts);
@@ -296,9 +296,13 @@
 {
     NSError *error = [[NSError alloc] init];
     
-    if (![[self context] save:&error])
+    if ([[self context] save:&error])
     {
-        NSLog(@"%@", [error localizedDescription]);
+        NSLog(@"[databaseAccessor] Saved DB.");
+    }
+    else
+    {
+        NSLog(@"[databaseAccessor] %@", [error localizedDescription]);
     }
 }
 
