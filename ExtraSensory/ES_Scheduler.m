@@ -161,7 +161,7 @@
     }
     
     [self firstOp];
-    NSLog( @"time between sampling = %f", [self.user.settings.timeBetweenSampling doubleValue] );
+    NSLog( @"[scheduler] Time between sampling = %.0f", [self.user.settings.timeBetweenSampling doubleValue] );
     self.timer = [NSTimer scheduledTimerWithTimeInterval: [self.user.settings.timeBetweenSampling doubleValue]
                                                       target: self
                                                     selector: @selector(firstOp)

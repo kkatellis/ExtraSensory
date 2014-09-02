@@ -161,7 +161,7 @@
                                              error: nil];
     
 
-        NSLog(@"Turning on Dur sound Processor...");
+        NSLog(@"[sensorManager] Turning on Dur sound Processor...");
         [self.soundProcessor startDurRecording];
     
     //--// Append our file name to the directory path
@@ -170,7 +170,7 @@
     // Remove any old data
     if( [[NSFileManager defaultManager] fileExistsAtPath:HFFilePath] ) {
         [[NSFileManager defaultManager] removeItemAtPath:HFFilePath error:nil];
-        NSLog(@"removed any old sound file in direc");
+        NSLog(@"[sensorManager] Removed any old sound file in directory.");
     }
 }
 
@@ -178,7 +178,7 @@
 {
     // Setup HFData array
     if( HFDataBundle) {
-        NSLog(@"clearing old HFDataBundle");
+        NSLog(@"[sensorManager] Clearing old HFDataBundle.");
         [HFDataBundle removeAllObjects];
     }
     else {
@@ -221,54 +221,6 @@
     return YES;
 }
 
-//- (void) readSensorsIntoDictionary
-//{
-//    // using the new function packHFData
-//    ES_SensorSample *sample = [ES_DataBaseAccessor newSensorSample];
-//    
-//    sample.speed       = [NSNumber numberWithDouble: self.currentLocation.speed ];
-//    sample.lat         = [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ];
-//    sample.longitude   = [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ];
-//    
-//    sample.time        = [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ];
-//    
-//    
-//    sample.gyro_x      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ];
-//    sample.acc_x       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ];
-//    sample.gyro_y      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ];
-//    sample.acc_y       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ];
-//    sample.gyro_z      = [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ];
-//    sample.acc_z       = [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ];
-//    
-//    // add samples for avg and peak db
-//    
-//    
-//    [self.currentActivity addSensorSamplesObject: sample];
-//    
-//    self.counter = [NSNumber numberWithInteger: [self.counter integerValue] + 1];
-//    
-//    if ([self.counter integerValue] >= 800 )
-//    {
-//        self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[[NSDate date] timeIntervalSince1970]];
-//        [self.timer invalidate];
-//        
-//        self.counter = 0;
-//        
-//        [self.locationManager stopUpdatingLocation];
-//        [self.motionManager stopAccelerometerUpdates];
-//        [self.motionManager stopGyroUpdates];
-//       // [self.soundProcessor pauseDurRecording];
-//       // stop recording sound
-//        
-//        [ES_DataBaseAccessor writeActivity: self.currentActivity];
-//        
-//        [self.user addActivitiesObject: self.currentActivity];
-//        
-//        self.currentActivity = [ES_DataBaseAccessor newActivity];
-//        self.isReady = [NSNumber numberWithBool: YES];
-//        
-//    }
-//}
 
 -(void) turnOffRecording
 {
@@ -296,13 +248,12 @@
 {
     //--// Pack most recent data and place it within Data Bundle
     if( [HFDataBundle count] % 100 == 0 ) {
-        NSLog( @"Collected %lu HF samples", (unsigned long)[HFDataBundle count]);
+        NSLog( @"[sensorManager] Collected %lu HF samples", (unsigned long)[HFDataBundle count]);
     }
     if ([HFDataBundle count] == self.samplesPerBatch )
     {
         [self.timer invalidate];
         self.timer = nil;
-        NSLog(@"invalidated timer %@", self.timer);
         
         [self.locationManager stopUpdatingLocation];
         [self.motionManager stopAccelerometerUpdates];
@@ -345,7 +296,7 @@
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    NSLog( @"status = %u", status);
+    NSLog( @"[sensorManager]:[locationManager] status = %u", status);
 }
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -355,7 +306,7 @@
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    NSLog(@"[locationManager] ERROR: %@ DOMAIN: %@ CODE: %ld", [error localizedDescription], [error domain], (long)[error code]);
+    NSLog(@"[sensorManager]:[locationManager] ERROR: %@ DOMAIN: %@ CODE: %ld", [error localizedDescription], [error domain], (long)[error code]);
 }
 
 

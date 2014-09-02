@@ -38,7 +38,7 @@
     
     if ([users count] == 0)
     {
-        NSLog(@"Initializing user for the first time!");
+        NSLog(@"[databaseAccessor] Initializing user for the first time!");
         user = [NSEntityDescription insertNewObjectForEntityForName: ROOT_DATA_OBJECT inManagedObjectContext: [self context]];
         user.settings = [NSEntityDescription insertNewObjectForEntityForName: @"ES_Settings" inManagedObjectContext:[self context]];
         user.activityStatistics = [NSEntityDescription insertNewObjectForEntityForName:@"ES_ActivityStatistics" inManagedObjectContext:[self context]];
@@ -84,14 +84,14 @@
     ES_Activity *act = (ES_Activity *)actObj;
     act.user = [self user];
     act.uuid = act.user.uuid;
-    NSLog(@"[databaseAccessor] created new activity with uuid: %@.",act.user.uuid);
+    NSLog(@"[databaseAccessor] Created new activity with uuid: %@.",act.user.uuid);
     
     return act;
 }
 
 + (void) deleteActivity: (ES_Activity *) activity
 {
-    NSLog(@"[databaseAccessor] deleting activity at %@", activity.timestamp);
+    NSLog(@"[databaseAccessor] Deleting activity at %@", activity.timestamp);
     [[self context] deleteObject:activity];
 }
 
@@ -324,7 +324,7 @@
         NSError *error = nil;
         if(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:&error])
         {
-            NSLog(@"Failed to create directory \"%@\". Error: %@", directory, error);
+            NSLog(@"[databaseAccessor] !!! Failed to create directory \"%@\". Error: %@", directory, error);
         }
     }
     return directory;
@@ -343,7 +343,7 @@
         NSError *error = nil;
         if(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:&error])
         {
-            NSLog(@"Failed to create directory \"%@\". Error: %@", directory, error);
+            NSLog(@"[databaseAccessor] !!! Failed to create directory \"%@\". Error: %@", directory, error);
         }
     }
     return directory;
@@ -377,7 +377,7 @@
     [archiver CreateZipFile2:archivePath];
     for(NSString *path in subpaths)
     {
-        NSLog(@"path in subpath: %@", path);
+        NSLog(@"[databaseAccessor] File to add to zip: %@", path);
         NSString *longPath = [exportPath stringByAppendingPathComponent:path];
         if([fileManager fileExistsAtPath:longPath isDirectory:&isDir] && !isDir)
         {
@@ -387,11 +387,11 @@
     BOOL successCompressing = [archiver CloseZipFile2];
     if(successCompressing)
     {
-        NSLog(@"Zipped Successfully!");
+        NSLog(@"[databaseAccessor] Zipped Successfully!");
     }
     else
     {
-        NSLog(@"Fail");
+        NSLog(@"[databaseAccessor] !!! Zip failed.");
     }
     ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate pushOnNetworkStack: zipFile];
@@ -401,7 +401,7 @@
 + (void) writeActivity: (ES_Activity *)activity
 {
     //[self writeData: [self arrayFromActivity: activity]];
-    NSLog(@"activity label: %@", activity.userCorrection);
+    NSLog(@"[databaseAccessor] Writing activity label: %@", activity.userCorrection);
     if (activity.userCorrection)
     {
         [self writeLabels: activity];
@@ -463,18 +463,18 @@
     {
         //NSLog(@"previous sound file existed there");
         BOOL success = [fileManager removeItemAtPath:soundFileStringPath error:&error];
-        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
     }
     
     BOOL writeSoundFileSuccess = [soundData writeToFile:soundFileStringPath atomically:YES];
     
     if (writeSoundFileSuccess)
     {
-        NSLog(@"Sound file successfully written to new url");
+        NSLog(@"[databaseAccessor] Sound file successfully written to new url");
     }
     else
     {
-        NSLog(@"Error writing sound data to file!!");
+        NSLog(@"[databaseAccessor] !!! Error writing sound data to file!!");
     }
     
     // deleting any old contents in sensor data path
@@ -486,18 +486,18 @@
     if (fileExists)
     {
         BOOL success = [fileManager removeItemAtPath:filePath error:&error];
-        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
     }
 
     
     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
     {
-        NSLog(@"Data successfully written to file");
+        NSLog(@"[databaseAccessor] Data successfully written to file");
     }
     else
     {
-        NSLog(@"Error writing data to file!!");
+        NSLog(@"[databaseAccessor] !!! Error writing data to file!!");
     }
 
 }
@@ -511,11 +511,11 @@
     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
     {
-        NSLog(@"Data successfully written to file");
+        NSLog(@"[databaseAccessor] Data successfully written to file");
     }
     else
     {
-        NSLog(@"!!! Error writing data to file!!");
+        NSLog(@"[databaseAccessor] !!! Error writing data to file!!");
     }
 }
 
@@ -537,7 +537,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
     {
         BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
     }
 }
 
@@ -567,8 +567,6 @@
     NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values
                                                            forKeys: keys];
     
-    NSLog(@"feedback dictionary: %@", feedback);
-    
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
     NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/label.txt"];
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -577,16 +575,16 @@
     if (fileExists)
     {
         BOOL success = [fileManager removeItemAtPath:filePath error:&error];
-        if (!success) NSLog(@"Error: %@", [error localizedDescription]);
+        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
     }
     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
     {
-        NSLog(@"Label successfully written to file");
+        NSLog(@"[databaseAccessor] Label successfully written to file");
     }
     else
     {
-        NSLog(@"!!! Error writing label to file!!");
+        NSLog(@"[databaseAccessor] !!! Error writing label to file!!");
     }
     
 }

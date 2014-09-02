@@ -336,11 +336,11 @@
     
     if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:NOT_NOW_BUTTON_STR])
     {
-        NSLog(@"=== User pressed cancel button");
+        NSLog(@"[appDelegate] User pressed cancel button");
         return;
     }
     
-    NSLog(@"=== User pressed %@ button",[alertView buttonTitleAtIndex:buttonIndex]);
+    NSLog(@"[appDelegate] User pressed %@ button",[alertView buttonTitleAtIndex:buttonIndex]);
     
     if ([alertView isKindOfClass:[ES_AlertViewWithUserInfo class]])
     {
@@ -370,7 +370,7 @@
 
 - (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    NSLog(@"[appDelegate] Caught local notification: %@",notification);
+    NSLog(@"[appDelegate] Caught local notification.");
     
     if (notification.userInfo)
     {
@@ -399,7 +399,7 @@
 {
     if (self.latestAlert)
     {
-        NSLog(@"=== dismissing alert.");
+        NSLog(@"[appDelegate] dismissing alert.");
         [self.latestAlert dismissWithClickedButtonIndex:self.latestAlert.cancelButtonIndex animated:NO];
         self.latestAlert = nil;
     }
