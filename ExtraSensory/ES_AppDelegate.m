@@ -224,6 +224,10 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
+    NSLog(@"[appDelegate] Application finished launching.");
+    
+    self.userSelectedDataCollectionOn = YES;
+    
     // Create a location manager instance to determine if location services are enabled. This manager instance will be
     // immediately released afterwards.
     self.locationManager = [CLLocationManager new];
@@ -301,13 +305,25 @@
 {
     if (!self.userSelectedDataCollectionOn)
     {
-        // Then shouldn't turn on
+        // Then shouldn't be on:
+        NSLog(@"[appDelegate] DataCollection mechanism supposed to be 'off' (user selected so).");
         return NO;
     }
     
     int inStack = (int)[self.networkStack count];
     int limit = [self.user.settings.maxZipFilesStored intValue];
-    return (inStack < limit);
+    NSLog(@"[appDelegate] Network stack has %lu items and storage limit is %@",(unsigned long)self.networkStack.count,self.user.settings.maxZipFilesStored);
+    
+    if (inStack < limit)
+    {
+        NSLog(@"[appDelegate] DataCollection mechanism should be on (user selected 'on' and network stack has less than limit).");
+        return YES;
+    }
+    else
+    {
+        NSLog(@"[appDelegate] DataCollection mechanism should be off (user selected 'on' but network stack reached storage limit).");
+        return NO;
+    }
 }
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

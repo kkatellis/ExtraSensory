@@ -211,12 +211,12 @@
 {
     NSDate *now = [NSDate date];
     NSNumber *nowTimestamp = [NSNumber numberWithDouble:[now timeIntervalSince1970]];
-    NSLog(@"=== time: %@. Checking if it's time to nag the user",now);
+    NSLog(@"[scheduler] time: %@. Checking if it's time to nag the user",now);
 
     if (![self.appDelegate isDataCollectionSupposedToBeOn])
     {
-        //NSLog(@"=== data collection is off. Don't nag user!");
-        //return;
+        NSLog(@"[scheduler] Data collection is off. Don't nag user and don't set timer for the next nag!");
+        return;
     }
 
     // Look for latest user-corrected activity recently:
@@ -258,7 +258,7 @@
         userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:NO main:nil secondary:nil mood:nil latestVerifiedTime:nil];
     }
     
-    NSLog(@"=== should ask question: [%@]",question);
+    NSLog(@"[scheduler] Should ask question: [%@]",question);
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     // Set the timer for next time, before sending immediate notification:
     [self setTimerForNaggingCheckup];
