@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeCoveredByStorageLabel;
 @property (weak, nonatomic) IBOutlet UISlider *storageSlider;
 
+@property (weak, nonatomic) IBOutlet UILabel *currentNetworkStackLabel;
 
 @property (strong, nonatomic) ES_AppDelegate* appDelegate;
 @end
@@ -52,9 +53,9 @@
     return self;
 }
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    [super viewWillAppear:animated];
     
     // UUID:
     [self.uuidLabel setText: self.appDelegate.user.uuid];
@@ -68,6 +69,10 @@
     NSNumber *numStoredSamples = self.appDelegate.user.settings.maxZipFilesStored;
     [self setStorageNumSamplesAndCoveredTimeLabelsWithSamples:numStoredSamples];
     self.storageSlider.value = [numStoredSamples doubleValue];
+    
+    // Network stack label:
+    NSString *networkString = [NSString stringWithFormat:@"Currently storing %lu samples.",(unsigned long)self.appDelegate.networkStack.count];
+    self.currentNetworkStackLabel.text = networkString;
 }
 
 - (void) setStorageNumSamplesAndCoveredTimeLabelsWithSamples:(NSNumber *)samples
