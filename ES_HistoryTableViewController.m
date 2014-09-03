@@ -225,7 +225,6 @@
         ES_Activity *currentActivity = (ES_Activity *)activityObject;
 
         
-//        if (![[self class] isActivity:currentActivity similarToActivity:startOfActivity])
         if (![[self class] shouldActivity:currentActivity beMergedToEventStartingWithActivity:startOfActivity RightAfterActivity:endOfActivity])
         {
             // Then we've reached a new activity.
@@ -315,7 +314,19 @@
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"hh:mm"];
-    NSString *dateString = [NSString stringWithFormat:@"%@ - %@",[dateFormatter stringFromDate:startDate],[dateFormatter stringFromDate:endDate]];
+    
+    NSString *startDateStr = [dateFormatter stringFromDate:startDate];
+    NSString *endDateStr = [dateFormatter stringFromDate:endDate];
+    
+    NSString *dateString = nil;
+    if ([endDateStr isEqualToString:startDateStr])
+    {
+        dateString = startDateStr;
+    }
+    else
+    {
+        dateString = [NSString stringWithFormat:@"%@ - %@",startDateStr,endDateStr];
+    }
 
     cell.activityEvent = relevantEvent;
     
