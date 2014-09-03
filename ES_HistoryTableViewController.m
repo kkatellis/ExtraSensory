@@ -26,6 +26,7 @@
 
 @property (nonatomic, retain) NSMutableArray * eventHistory;
 @property (nonatomic) BOOL editingActivityEvent;
+@property (nonatomic, retain) NSDate *timeInDayOfFocus;
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
@@ -80,16 +81,17 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self refreshTable];
-    
     if (self.editingActivityEvent)
     {
         // Then we're just back from the activityEventFeedback view.
         self.editingActivityEvent = NO;
+        [self refreshTable];
     }
     else
     {
         // Then we moved to this 'history' view from outside
+        self.timeInDayOfFocus = [NSDate date];
+        [self refreshTable];
         [self scrollToBottom];
     }
     
@@ -161,16 +163,28 @@
     return same;
 }
 
+- (NSNumber *) getTimestampOfStartOfDay:(NSDate *)date
+{
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:date];
+    NSDate *startOfDay = [[NSCalendar currentCalendar] dateFromComponents:components];
+
+    NSLog(@"[historyTableViewController] === rounding date %@ to date %@",[date descriptionWithLocale:[NSLocale currentLocale]],[startOfDay descriptionWithLocale:[NSLocale currentLocale]]);
+    
+    NSNumber *timestamp = [NSNumber numberWithDouble:[startOfDay timeIntervalSince1970]];
+    
+    return timestamp;
+}
+
 - (void)recalculateEventsFromPredictionList
 {
     // Empty the event history:
     [self.eventHistory removeAllObjects];
     
     // Read the atomic activities from the DB:
-    NSNumber *now = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
-    NSNumber *historyStart = [NSNumber numberWithDouble:([now doubleValue] - SECONDS_IN_24HRS)];
+    NSNumber *historyPageStart = [self getTimestampOfStartOfDay:self.timeInDayOfFocus];
+    NSNumber *historyPageEnd = [NSNumber numberWithDouble:([historyPageStart doubleValue] + SECONDS_IN_24HRS)];
     
-    NSArray *activities = [ES_DataBaseAccessor getActivitiesFrom:historyStart to:now];
+    NSArray *activities = [ES_DataBaseAccessor getActivitiesFrom:historyPageStart to:historyPageEnd];
 
     // Group together consecutive timepoints with similar activities to unified activity-events:
     ES_Activity *startOfActivity = nil;
@@ -221,25 +235,24 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     return self.eventHistory.count;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    NSString *title = [self getDayStringForDate:[NSDate date]];
-//    return title;
-//}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    UITableViewCell *header = [[UITableViewCell alloc] init];
-    header.textLabel.text = [self getDayStringForDate:[NSDate date]];
-    [header setBackgroundColor:[UIColor colorWithRed:0.1 green:0. blue:1. alpha:0.5]];
-    [self.tableView bringSubviewToFront:header];
-    
-    return header;
+    NSString *title = [self getDayStringForDate:[self timeInDayOfFocus]];
+    return title;
 }
+
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UITableViewCell *header = [[UITableViewCell alloc] init];
+//    header.textLabel.text = [self getDayStringForDate:[NSDate date]];
+//    [header setBackgroundColor:[UIColor colorWithRed:0.1 green:0. blue:1. alpha:0.5]];
+//    [self.tableView bringSubviewToFront:header];
+//    
+//    return header;
+//}
 
 - (NSString *) getDayStringForDate:(NSDate *)date
 {
@@ -248,6 +261,13 @@
     formatter.dateFormat = @"EEEE MMM-dd";
     NSString *dayStr = [formatter stringFromDate:date];
     
+    // Is this day today?
+    NSNumber *givenDateDayTimestamp = [self getTimestampOfStartOfDay:date];
+    NSNumber *todaysTimestamp = [self getTimestampOfStartOfDay:[NSDate date]];
+    if ([givenDateDayTimestamp isEqualToNumber:todaysTimestamp])
+    {
+        dayStr = [dayStr stringByAppendingString:@" (today)"];
+    }
     
     return dayStr;
 }
