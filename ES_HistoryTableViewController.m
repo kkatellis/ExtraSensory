@@ -21,6 +21,7 @@
 #import "ES_UserActivityLabels.h"
 
 #define SECONDS_IN_24HRS 86400
+#define TIMEGAP_TO_CONSIDER_SAME_EVENT 100
 
 @interface ES_HistoryTableViewController ()
 
@@ -151,6 +152,34 @@
     return !(activity2.mood);
 }
 
++ (BOOL)shouldActivity:(ES_Activity *)newActivity beMergedToEventStartingWithActivity:(ES_Activity *)startActivity RightAfterActivity:(ES_Activity *)endActivity
+{
+    if (!endActivity)
+    {
+        return NO;
+    }
+    
+    if (![self isActivity:newActivity similarToActivity:startActivity])
+    {
+        // Then they are not similar at all
+        return NO;
+    }
+    
+    if ([newActivity.timestamp doubleValue] < [endActivity.timestamp doubleValue])
+    {
+        // Then activity 2 is earlier than activity 1 and shouldn't be merged after it
+        return NO;
+    }
+    
+    if ([newActivity.timestamp doubleValue] > ([endActivity.timestamp doubleValue] + TIMEGAP_TO_CONSIDER_SAME_EVENT))
+    {
+        // Then activity 2 is too far apart after activity 1:
+        return NO;
+    }
+    
+    return YES;
+}
+
 + (BOOL)isActivity:(ES_Activity *)activity1 similarToActivity:(ES_Activity *)activity2
 {
     BOOL sameMainActivity = [self doesActivity:activity1 haveSameMainActivityAsActivity:activity2];
@@ -196,7 +225,8 @@
         ES_Activity *currentActivity = (ES_Activity *)activityObject;
 
         
-        if (![[self class] isActivity:currentActivity similarToActivity:startOfActivity])
+//        if (![[self class] isActivity:currentActivity similarToActivity:startOfActivity])
+        if (![[self class] shouldActivity:currentActivity beMergedToEventStartingWithActivity:startOfActivity RightAfterActivity:endOfActivity])
         {
             // Then we've reached a new activity.
             if (startOfActivity)
@@ -211,7 +241,7 @@
             minuteActivities = [[NSMutableArray alloc] initWithCapacity:1];
             startOfActivity = currentActivity;
         }
-        // Add teh minute activity object to the list of minutes of the current event:
+        // Add the minute activity object to the list of minutes of the current event:
         [minuteActivities addObject:currentActivity];
         endOfActivity = currentActivity;
     }

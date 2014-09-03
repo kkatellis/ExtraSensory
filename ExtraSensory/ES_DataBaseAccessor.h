@@ -27,6 +27,7 @@
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
 + (void) deleteActivity: (ES_Activity *) activity;
++ (BOOL) isActivityOrphanAndNowDeletedActivity:(ES_Activity *)activity;
 + (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity;
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time;
 + (ES_Activity *) getMostRecentActivity;

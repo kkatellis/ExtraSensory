@@ -89,6 +89,40 @@
     return act;
 }
 
++ (BOOL) isActivityOrphanAndNowDeletedActivity:(ES_Activity *)activity
+{
+    if (activity.serverPrediction)
+    {
+        // Then this activity's measurements were received by the server
+        return NO;
+    }
+    
+    if (!activity.timestamp)
+    {
+        // Then this might be just created now
+        return NO;
+    }
+    
+    if ([activity.timestamp doubleValue] > ([[NSDate date] timeIntervalSince1970] - 60) )
+    {
+        // This activity is very recent, and might still be in the process of acquiring data measurements
+        return NO;
+    }
+    
+    // Check if there is a zip file for this activity:
+    NSString *zipFile = [NSString stringWithFormat:@"%@%@",[self dataDirectory],[self zipFileName2:activity.timestamp]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:zipFile])
+    {
+        // Then this activity's data may still be sent to the server
+        return NO;
+    }
+    
+    // If reached here, this activity is an 'orphan' - it has no server prediction and no measurement data on the phone, so probably is not associated with any measurement data either on the phone or on the server. Hence, it is useless and should be deleted:
+    NSLog(@"[databaseAccessor] Orphan activity for time %@ (timestamp %@) should be deleted",[[NSDate dateWithTimeIntervalSince1970:[activity.timestamp doubleValue]] descriptionWithLocale:[NSLocale currentLocale]],activity.timestamp);
+//    [self deleteActivity:activity];
+    return YES;
+}
+
 + (void) deleteActivity: (ES_Activity *) activity
 {
     NSLog(@"[databaseAccessor] Deleting activity at %@", activity.timestamp);
@@ -598,8 +632,8 @@
      
      NSError *error = [NSError new];
      NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
-     
-     return results;
+        
+    return results;
 }
 
 //+ (NSArray *) arrayFromActivity: (ES_Activity *)activity
