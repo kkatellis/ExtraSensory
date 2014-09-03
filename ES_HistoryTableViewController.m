@@ -225,22 +225,25 @@
     return self.eventHistory.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString *title = [self getDayStringForDate:[NSDate date]];
-    return title;
-}
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 //{
-//    UITableViewCell *header = [[UITableViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:@"HistorySectionHeader"];
+//    NSString *title = [self getDayStringForDate:[NSDate date]];
+//    return title;
 //}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UITableViewCell *header = [[UITableViewCell alloc] init];
+    header.textLabel.text = [self getDayStringForDate:[NSDate date]];
+    [header setBackgroundColor:[UIColor colorWithRed:0.1 green:0. blue:1. alpha:0.5]];
+    [self.tableView bringSubviewToFront:header];
+    
+    return header;
+}
 
 - (NSString *) getDayStringForDate:(NSDate *)date
 {
-//    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday|NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear fromDate:date];
-//    NSString *dayStr = [NSString stringWithFormat:@"%ld %ld-%ld",(long)components.weekday,(long)components.day,(long)components.month];
-    
+   
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"EEEE MMM-dd";
     NSString *dayStr = [formatter stringFromDate:date];
