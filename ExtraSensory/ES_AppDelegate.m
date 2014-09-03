@@ -278,6 +278,16 @@
     return YES;
 }
 
+- (void) applicationWillTerminate:(UIApplication *)application
+{
+    NSLog(@"[appDelegate] Application is being terminated.");
+    [ES_DataBaseAccessor save];
+}
+
+
+
+
+
 - (void) userTurnedOffDataCollection
 {
     self.userSelectedDataCollectionOn = NO;

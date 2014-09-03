@@ -83,7 +83,7 @@
     // Configure the cell...
     NSString *activity = [[self.activityCounts allKeys] objectAtIndex:indexPath.row];
     cell.textLabel.text = activity;
-    int mins = [self.activityCounts[activity] integerValue];
+    int mins = (int)[self.activityCounts[activity] integerValue];
     NSString *activityDuration;
     if (mins >= 60)
     {
