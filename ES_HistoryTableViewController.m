@@ -363,13 +363,9 @@
     
     NSString *mainText = [NSString stringWithFormat:@"%@   %@",dateString,mainActivityString];
     cell.textLabel.text = mainText;
-    NSLog(@"==== for activity: %@ got color: %@",mainActivityString,color);
     if (color)
     {
-        NSLog(@"=== setting the color as background color");
-        //[cell setBackgroundColor:color];
-        //[cell.textLabel setBackgroundColor:color];
-        NSLog(@"=== after setting the color");
+        [cell setBackgroundColor:color];
     }
     
     NSString *eventDetails;

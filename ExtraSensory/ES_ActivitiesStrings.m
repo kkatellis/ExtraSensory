@@ -51,7 +51,8 @@ static NSArray *mainActivitiesColorList = nil;
     {
         if ([activity isEqualToString:[[self mainActivities] objectAtIndex:ii]])
         {
-            return [[self mainActivitiesColors] objectAtIndex:ii];
+            UIColor *uicolor = [UIColor colorWithCGColor:(__bridge CGColorRef)([[self mainActivitiesColors] objectAtIndex:ii])];
+            return uicolor;
         }
     }
     
