@@ -25,6 +25,7 @@
 @interface ES_HistoryTableViewController ()
 
 @property (nonatomic, retain) NSMutableArray * eventHistory;
+@property (nonatomic) BOOL editingActivityEvent;
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
@@ -47,6 +48,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        self.editingActivityEvent = NO;
     }
     return self;
 }
@@ -62,6 +64,14 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void) scrollToBottom
+{
+    NSLog(@"[HistoryTableViewController] Scrolling to bottom");
+    int lastRowIndex = [self tableView:self.tableView numberOfRowsInSection:0] - 1;
+    NSIndexPath *idp = [NSIndexPath indexPathForRow:lastRowIndex inSection:0];
+    [self.tableView scrollToRowAtIndexPath:idp atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+}
+
 - (void) refreshTable
 {
     [self recalculateEventsFromPredictionList];
@@ -71,6 +81,17 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [self refreshTable];
+    
+    if (self.editingActivityEvent)
+    {
+        // Then we're just back from the activityEventFeedback view.
+        self.editingActivityEvent = NO;
+    }
+    else
+    {
+        // Then we moved to this 'history' view from outside
+        [self scrollToBottom];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTable) name:@"Activities" object:nil];
 }
@@ -316,6 +337,9 @@
     activityFeedback.activityEvent = activityEvent;
     activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
     activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
+    
+    // Mark that we are moving to the feedback view:
+    self.editingActivityEvent = YES;
     
     [self.navigationController pushViewController:activityFeedback animated:YES];
 }

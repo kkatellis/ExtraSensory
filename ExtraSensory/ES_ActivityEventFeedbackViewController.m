@@ -318,7 +318,6 @@
     int timeWithoutSeconds = 60 * (referenceTimeInterval / 60);
     NSDate *rounded = [NSDate dateWithTimeIntervalSinceReferenceDate:(NSTimeInterval)timeWithoutSeconds];
     
-    NSLog(@"=== rouding time %@ to %@",date,rounded);
     return rounded;
 }
 
@@ -367,12 +366,12 @@
         // If relevant, send this minute's data to the server:
         if (minuteActivity.serverPrediction)
         {
-            NSLog(@"=== send feedback for time %@.",time);
+            NSLog(@"[activityEventFeedback] Send feedback for time %@.",time);
             [appDelegate.networkAccessor sendFeedback:minuteActivity];
         }
         else
         {
-            NSLog(@"=== activity of time %@ has no server prediction yet, so no point in sending label-feedback right now.",time);
+            NSLog(@"[activityEventFeedback] Activity of time %@ has no server prediction yet, so no point in sending label-feedback right now.",time);
         }
     }
     
