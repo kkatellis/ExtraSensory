@@ -225,6 +225,30 @@
     return self.eventHistory.count;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *title = [self getDayStringForDate:[NSDate date]];
+    return title;
+}
+
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UITableViewCell *header = [[UITableViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:@"HistorySectionHeader"];
+//}
+
+- (NSString *) getDayStringForDate:(NSDate *)date
+{
+//    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday|NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear fromDate:date];
+//    NSString *dayStr = [NSString stringWithFormat:@"%ld %ld-%ld",(long)components.weekday,(long)components.day,(long)components.month];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"EEEE MMM-dd";
+    NSString *dayStr = [formatter stringFromDate:date];
+    
+    
+    return dayStr;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"ActivityEventCell";
