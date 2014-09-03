@@ -71,6 +71,12 @@
     self.storageSlider.value = [numStoredSamples doubleValue];
     
     // Network stack label:
+    [self updateCurrentStorageLabel];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentStorageLabel) name:@"NetworkStackSize" object:self.appDelegate];
+}
+
+- (void) updateCurrentStorageLabel
+{
     NSString *networkString = [NSString stringWithFormat:@"Currently storing %lu samples.",(unsigned long)self.appDelegate.networkStack.count];
     self.currentNetworkStackLabel.text = networkString;
 }

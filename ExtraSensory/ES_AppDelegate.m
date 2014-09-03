@@ -124,9 +124,15 @@
     return _networkStack;
 }
 
+- (void) postNetworkStackNotification
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NetworkStackSize" object:self];
+}
+
 - (void) pushOnNetworkStack: (NSString *)file
 {
     [self.networkStack addObject: file];
+    [self postNetworkStackNotification];
     
     // Did we reach the limit of stack capacity:
     if (self.networkStack.count > [self.user.settings.maxZipFilesStored intValue])
@@ -151,6 +157,7 @@
         if ([filename isEqualToString:[self.networkStack objectAtIndex:ii]])
         {
             [self.networkStack removeObjectAtIndex:ii];
+            [self postNetworkStackNotification];
             NSLog(@"[appDelegate] Removed file %@ (item %d) from the network stack",filename,ii);
             
             // Did we just go bellow the storage limit?
