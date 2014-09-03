@@ -196,8 +196,6 @@
 {
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:date];
     NSDate *startOfDay = [[NSCalendar currentCalendar] dateFromComponents:components];
-
-    NSLog(@"[historyTableViewController] === rounding date %@ to date %@",[date descriptionWithLocale:[NSLocale currentLocale]],[startOfDay descriptionWithLocale:[NSLocale currentLocale]]);
     
     NSNumber *timestamp = [NSNumber numberWithDouble:[startOfDay timeIntervalSince1970]];
     
@@ -213,8 +211,8 @@
     NSNumber *historyPageStart = [self getTimestampOfStartOfDay:self.timeInDayOfFocus];
     NSNumber *historyPageEnd = [NSNumber numberWithDouble:([historyPageStart doubleValue] + SECONDS_IN_24HRS)];
     
-    NSArray *activities = [ES_DataBaseAccessor getActivitiesFrom:historyPageStart to:historyPageEnd];
-
+    NSArray *activities = [ES_DataBaseAccessor getWhileDeletingOrphansActivitiesFrom:historyPageStart to:historyPageEnd];
+    
     // Group together consecutive timepoints with similar activities to unified activity-events:
     ES_Activity *startOfActivity = nil;
     ES_Activity *endOfActivity = nil;

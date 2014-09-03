@@ -36,6 +36,6 @@
 + (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities;
 + (void) writeActivity: (ES_Activity *)activity;
 + (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
-
++ (NSArray *) getWhileDeletingOrphansActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
 
 @end
