@@ -20,6 +20,8 @@ static NSArray *mainActivitiesList = nil;
 static NSArray *secondaryActivitiesList = nil;
 static NSArray *moodsList = nil;
 
+static NSArray *mainActivitiesColorList = nil;
+
 +(NSArray *)mainActivities {
     
     if (!mainActivitiesList)
@@ -32,12 +34,28 @@ static NSArray *moodsList = nil;
 
 +(NSArray *)mainActivitiesColors
 {
-    NSArray *colors = [NSArray arrayWithObjects:(id)[UIColor purpleColor].CGColor,
+    if (!mainActivitiesColorList)
+    {
+        mainActivitiesColorList = [NSArray arrayWithObjects:(id)[UIColor purpleColor].CGColor,
                        (id)[UIColor blueColor].CGColor,
                        (id)[UIColor greenColor].CGColor,
                        (id)[UIColor yellowColor].CGColor,(id)[UIColor orangeColor].CGColor,(id)[UIColor redColor].CGColor,(id)[UIColor whiteColor].CGColor, nil];
+    }
     
-    return colors;
+    return mainActivitiesColorList;
+}
+
++(UIColor *)getColorForMainActivity:(NSString *)activity
+{
+    for (int ii = 0; ii < [self mainActivities].count; ii ++)
+    {
+        if ([activity isEqualToString:[[self mainActivities] objectAtIndex:ii]])
+        {
+            return [[self mainActivitiesColors] objectAtIndex:ii];
+        }
+    }
+    
+    return nil;
 }
 
 +(NSArray *)secondaryActivities {

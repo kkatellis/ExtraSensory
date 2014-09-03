@@ -25,7 +25,9 @@
 @property (nonatomic, retain) NSMutableArray * eventHistory;
 @property (nonatomic) BOOL editingActivityEvent;
 @property (nonatomic, retain) NSDate *timeInDayOfFocus;
-@property (nonatomic, retain) NSDictionary *colorForMainActivity;
+
+@property (weak, nonatomic) IBOutlet UIButton *prevButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
@@ -51,9 +53,10 @@
         self.editingActivityEvent = NO;
         
         // colors:
-        NSArray *mainActivityLabels = [ES_ActivitiesStrings mainActivities];
-        NSArray *colors = [ES_ActivitiesStrings mainActivitiesColors];
+//        NSArray *mainActivityLabels = [ES_ActivitiesStrings mainActivities];
+//        NSArray *colors = [ES_ActivitiesStrings mainActivitiesColors];
 //        self.colorForMainActivity = [NSDictionary dictionaryWithObjects:colors forKeys:mainActivityLabels];
+//        NSLog(@"[historyTable] Initializing color dictionary: %@",self.colorForMainActivity);
     }
     return self;
 }
@@ -112,6 +115,20 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+- (IBAction)prevButtonTouchedDown:(id)sender {
+    // Then go to previous day:
+    self.timeInDayOfFocus = [self.timeInDayOfFocus dateByAddingTimeInterval:-SECONDS_IN_24HRS];
+    [self refreshTable];
+}
+
+- (IBAction)nextButtonTouchedDown:(id)sender {
+    // Then go to next day:
+    self.timeInDayOfFocus = [self.timeInDayOfFocus dateByAddingTimeInterval:SECONDS_IN_24HRS];
+    [self refreshTable];
+}
+
 
 + (BOOL)doesActivity:(ES_Activity *)activity1 haveSameMainActivityAsActivity:(ES_Activity *)activity2
 {
@@ -332,17 +349,28 @@
     cell.activityEvent = relevantEvent;
     
     NSString *mainActivityString;
+    UIColor *color;
     if (relevantEvent.userCorrection)
     {
         mainActivityString = relevantEvent.userCorrection;
+        color = [ES_ActivitiesStrings getColorForMainActivity:relevantEvent.userCorrection];
     }
     else
     {
         mainActivityString = [NSString stringWithFormat:@"%@?",relevantEvent.serverPrediction];
+        color = [ES_ActivitiesStrings getColorForMainActivity:relevantEvent.serverPrediction];
     }
     
     NSString *mainText = [NSString stringWithFormat:@"%@   %@",dateString,mainActivityString];
     cell.textLabel.text = mainText;
+    NSLog(@"==== for activity: %@ got color: %@",mainActivityString,color);
+    if (color)
+    {
+        NSLog(@"=== setting the color as background color");
+        //[cell setBackgroundColor:color];
+        //[cell.textLabel setBackgroundColor:color];
+        NSLog(@"=== after setting the color");
+    }
     
     NSString *eventDetails;
     if (relevantEvent.mood)

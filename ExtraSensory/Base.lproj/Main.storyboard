@@ -92,7 +92,38 @@
                             <outlet property="delegate" destination="eHZ-Y9-Dqv" id="6AL-uM-n3s"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="History" id="e62-Jn-VpS"/>
+                    <navigationItem key="navigationItem" title="History" id="e62-Jn-VpS">
+                        <barButtonItem key="leftBarButtonItem" id="zov-PN-QHb">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="g5m-PV-0Yr">
+                                <rect key="frame" x="16" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="previous day">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="prevButtonTouchedDown:" destination="eHZ-Y9-Dqv" eventType="touchDown" id="1w7-EI-YfV"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" id="DWb-dr-bpj">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="avP-Pb-heH">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="next day">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="nextButtonTouchedDown:" destination="eHZ-Y9-Dqv" eventType="touchDown" id="dsh-10-zDo"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="nextButton" destination="avP-Pb-heH" id="Yxt-yk-eA3"/>
+                        <outlet property="prevButton" destination="g5m-PV-0Yr" id="Rdv-WJ-YBY"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rzZ-2o-uDt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

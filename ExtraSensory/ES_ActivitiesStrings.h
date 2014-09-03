@@ -14,6 +14,8 @@
 
 +(NSArray *)mainActivitiesColors;
 
++(UIColor *)getColorForMainActivity:(NSString *)activity;
+
 +(NSArray *) secondaryActivities;
 
 +(NSArray *)moods;
