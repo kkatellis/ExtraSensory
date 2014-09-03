@@ -12,6 +12,8 @@
 
 +(NSArray *) mainActivities;
 
++(NSArray *)mainActivitiesColors;
+
 +(NSArray *) secondaryActivities;
 
 +(NSArray *)moods;

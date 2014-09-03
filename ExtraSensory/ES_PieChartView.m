@@ -11,6 +11,7 @@
 #import "ES_ActivityStatistic.h"
 #import "ES_User.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_ActivitiesStrings.h"
 
 @implementation ES_PieChartView
 
@@ -81,11 +82,8 @@
     
     self.sliceArray = slices;
     // Set up the colors for the slices
-    NSArray *colors = [NSArray arrayWithObjects:(id)[UIColor purpleColor].CGColor,
-                       (id)[UIColor blueColor].CGColor,
-                       (id)[UIColor greenColor].CGColor,
-                       (id)[UIColor yellowColor].CGColor,(id)[UIColor orangeColor].CGColor,(id)[UIColor redColor].CGColor,(id)[UIColor whiteColor].CGColor, nil];
-        
+    NSArray *colors = [ES_ActivitiesStrings mainActivitiesColors];
+    
     self.colorsArray = colors;
     
     self.sliceArray = [self countsToPercentages:slices];

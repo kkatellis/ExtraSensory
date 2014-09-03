@@ -7,18 +7,15 @@
 //
 
 #import "ES_HistoryTableViewController.h"
-//#import "ES_CalendarViewTableViewController.h"
 #import "ES_AppDelegate.h"
-//#import "ES_FeedbackViewController.h"
 #import "ES_User.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_DataBaseAccessor.h"
-//#import "ES_CalendarViewCell.h"
 #import "ES_ActivityEvent.h"
 #import "ES_ActivityEventTableCell.h"
-//#import "ES_EventEditAndFeedbackViewController.h"
 #import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_UserActivityLabels.h"
+#import "ES_ActivitiesStrings.h"
 
 #define SECONDS_IN_24HRS 86400
 #define TIMEGAP_TO_CONSIDER_SAME_EVENT 100
@@ -28,6 +25,7 @@
 @property (nonatomic, retain) NSMutableArray * eventHistory;
 @property (nonatomic) BOOL editingActivityEvent;
 @property (nonatomic, retain) NSDate *timeInDayOfFocus;
+@property (nonatomic, retain) NSDictionary *colorForMainActivity;
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
@@ -51,6 +49,11 @@
     if (self) {
         // Custom initialization
         self.editingActivityEvent = NO;
+        
+        // colors:
+        NSArray *mainActivityLabels = [ES_ActivitiesStrings mainActivities];
+        NSArray *colors = [ES_ActivitiesStrings mainActivitiesColors];
+//        self.colorForMainActivity = [NSDictionary dictionaryWithObjects:colors forKeys:mainActivityLabels];
     }
     return self;
 }

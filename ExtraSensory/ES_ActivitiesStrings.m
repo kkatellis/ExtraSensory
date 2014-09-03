@@ -30,6 +30,16 @@ static NSArray *moodsList = nil;
     return mainActivitiesList;
 }
 
++(NSArray *)mainActivitiesColors
+{
+    NSArray *colors = [NSArray arrayWithObjects:(id)[UIColor purpleColor].CGColor,
+                       (id)[UIColor blueColor].CGColor,
+                       (id)[UIColor greenColor].CGColor,
+                       (id)[UIColor yellowColor].CGColor,(id)[UIColor orangeColor].CGColor,(id)[UIColor redColor].CGColor,(id)[UIColor whiteColor].CGColor, nil];
+    
+    return colors;
+}
+
 +(NSArray *)secondaryActivities {
     
     if (!secondaryActivitiesList)
