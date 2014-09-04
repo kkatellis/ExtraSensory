@@ -36,10 +36,10 @@ static NSArray *mainActivitiesColorList = nil;
 {
     if (!mainActivitiesColorList)
     {
-        mainActivitiesColorList = [NSArray arrayWithObjects:(id)[UIColor purpleColor].CGColor,
-                       (id)[UIColor blueColor].CGColor,
-                       (id)[UIColor greenColor].CGColor,
-                       (id)[UIColor yellowColor].CGColor,(id)[UIColor orangeColor].CGColor,(id)[UIColor redColor].CGColor,(id)[UIColor whiteColor].CGColor, nil];
+        mainActivitiesColorList = [NSArray arrayWithObjects:(id)[UIColor redColor].CGColor,
+                    (id)[UIColor grayColor].CGColor,
+                       (id)[UIColor purpleColor].CGColor,
+                       (id)[UIColor orangeColor].CGColor,(id)[UIColor blueColor].CGColor,(id)[UIColor greenColor].CGColor,(id)[UIColor yellowColor].CGColor, nil];
     }
     
     return mainActivitiesColorList;

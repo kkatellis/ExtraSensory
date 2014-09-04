@@ -68,15 +68,12 @@
                        nil];*/
     
     NSMutableDictionary *activityCounts = [ES_DataBaseAccessor getTodaysCounts];
-    NSArray *slices = [NSArray arrayWithObjects:
-                       activityCounts[@"Lying down"],
-                       activityCounts[@"Sitting"],
-                       activityCounts[@"Standing"],
-                       activityCounts[@"Walking"],
-                       activityCounts[@"Running"],
-                       activityCounts[@"Bicycling"],
-                       activityCounts[@"Driving"],
-                       nil];
+    NSArray *activityNames = [ES_ActivitiesStrings mainActivities];
+    NSMutableArray *slices = [NSMutableArray arrayWithCapacity:7];
+    for (NSString *act in activityNames)
+    {
+        [slices addObject:activityCounts[act]];
+    }
     
     //NSArray *slices = [NSArray arrayWithObjects:appDelegate.user.activityStatistics.countLying,appDelegate.user.activityStatistics.countSitting, appDelegate.user.activityStatistics.countStanding, appDelegate.user.activityStatistics.countWalking,appDelegate.user.activityStatistics.countRunning,appDelegate.user.activityStatistics.countBicycling,appDelegate.user.activityStatistics.countDriving, nil];
     

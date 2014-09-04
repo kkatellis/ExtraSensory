@@ -7,23 +7,60 @@
 //
 
 #import "ES_PieViewController.h"
+#import "ES_ActivitiesStrings.h"
 
 @interface ES_PieViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *border;
-@property (weak, nonatomic) IBOutlet UILabel *purple;
-@property (weak, nonatomic) IBOutlet UILabel *blue;
-@property (weak, nonatomic) IBOutlet UILabel *green;
-@property (weak, nonatomic) IBOutlet UILabel *yellow;
-@property (weak, nonatomic) IBOutlet UILabel *orange;
-@property (weak, nonatomic) IBOutlet UILabel *red;
-@property (weak, nonatomic) IBOutlet UILabel *white;
+//@property (weak, nonatomic) IBOutlet UILabel *border;
+@property (weak, nonatomic) IBOutlet UILabel *legendColor0;
+@property (weak, nonatomic) IBOutlet UILabel *legendColor1;
+@property (weak, nonatomic) IBOutlet UILabel *legendColor2;
+@property (weak, nonatomic) IBOutlet UILabel *legendColor3;
+@property (weak, nonatomic) IBOutlet UILabel *legendColor4;
+@property (weak, nonatomic) IBOutlet UILabel *legendColor5;
+@property (weak, nonatomic) IBOutlet UILabel *legendColor6;
+
+@property (nonatomic,retain) NSArray *legendColors;
+
+@property (weak, nonatomic) IBOutlet UILabel *legendName0;
+@property (weak, nonatomic) IBOutlet UILabel *legendName1;
+@property (weak, nonatomic) IBOutlet UILabel *legendName2;
+@property (weak, nonatomic) IBOutlet UILabel *legendName3;
+@property (weak, nonatomic) IBOutlet UILabel *legendName4;
+@property (weak, nonatomic) IBOutlet UILabel *legendName5;
+@property (weak, nonatomic) IBOutlet UILabel *legendName6;
+
+@property (nonatomic,retain) NSArray *legendNames;
 
 @end
 
 
 
 @implementation ES_PieViewController
+
+@synthesize legendColors = _legendColors;
+@synthesize legendNames = _legendNames;
+
+
+- (NSArray *)legendColors
+{
+    if (!_legendColors)
+    {
+        _legendColors = [NSArray arrayWithObjects:self.legendColor0,self.legendColor1,self.legendColor2,self.legendColor3,self.legendColor4,self.legendColor5,self.legendColor6, nil];
+    }
+    
+    return _legendColors;
+}
+
+- (NSArray *)legendNames
+{
+    if (!_legendNames)
+    {
+        _legendNames = [NSArray arrayWithObjects:self.legendName0,self.legendName1,self.legendName2,self.legendName3,self.legendName4,self.legendName5,self.legendName6, nil];
+    }
+    
+    return _legendNames;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,16 +75,23 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.border.layer.borderColor = [UIColor blackColor].CGColor;
-    self.border.layer.borderWidth = 3.0;
-    self.border.layer.cornerRadius = 5;
-    self.purple.layer.cornerRadius = 10;
-    self.blue.layer.cornerRadius = 10;
-    self.green.layer.cornerRadius = 10;
-    self.yellow.layer.cornerRadius = 10;
-    self.orange.layer.cornerRadius = 10;
-    self.red.layer.cornerRadius = 10;
-    self.white.layer.cornerRadius = 10;
+//    self.border.layer.borderColor = [UIColor blackColor].CGColor;
+//    self.border.layer.borderWidth = 3.0;
+//    self.border.layer.cornerRadius = 5;
+  
+    NSArray *activityNames = [ES_ActivitiesStrings mainActivities];
+    for (int ii=0; ii<7;ii ++)
+    {
+        UILabel *nameLabel = (UILabel *)[self.legendNames objectAtIndex:ii];
+        UILabel *colorLabel = (UILabel *)[self.legendColors objectAtIndex:ii];
+        
+        NSString *activityName = (NSString *)[activityNames objectAtIndex:ii];
+        UIColor *activityColor = [ES_ActivitiesStrings getColorForMainActivity:activityName];
+        
+        nameLabel.text = activityName;
+        colorLabel.backgroundColor = activityColor;
+        colorLabel.layer.cornerRadius = 10;
+    }
     
 }
 

@@ -654,19 +654,19 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lying down" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ejf-UL-lUd">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="legend0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ejf-UL-lUd">
                                 <rect key="frame" x="57" y="19" width="97" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sitting" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QSy-YD-EgT">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="legend1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QSy-YD-EgT">
                                 <rect key="frame" x="199" y="20" width="94" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Standing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LhF-v3-Amg">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="legend2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LhF-v3-Amg">
                                 <rect key="frame" x="57" y="49" width="72" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -675,25 +675,25 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Walking" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Md7-gM-oNk">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="legend3" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Md7-gM-oNk">
                                 <rect key="frame" x="199" y="49" width="94" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Running" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lup-G6-ZWG">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="legend4" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lup-G6-ZWG">
                                 <rect key="frame" x="57" y="78" width="73" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bicyling" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1fE-lQ-ftV">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="legend5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1fE-lQ-ftV">
                                 <rect key="frame" x="199" y="78" width="94" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Driving" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6gA-OV-Q16">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="legend6" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6gA-OV-Q16">
                                 <rect key="frame" x="57" y="107" width="72" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -755,13 +755,20 @@
                     <tabBarItem key="tabBarItem" title="Pie Chart" image="stats_pie_chart.png" id="WTj-iq-Wj4"/>
                     <navigationItem key="navigationItem" title="Pie Chart" id="yWt-3c-9FK"/>
                     <connections>
-                        <outlet property="blue" destination="9pS-VI-loq" id="7Vy-r2-PWf"/>
-                        <outlet property="green" destination="5ma-TW-UpP" id="d8d-eu-tfY"/>
-                        <outlet property="orange" destination="trC-Jq-ShE" id="CNE-PW-DPt"/>
-                        <outlet property="purple" destination="UJd-j1-lUc" id="2ZH-ue-vbP"/>
-                        <outlet property="red" destination="Si6-Ar-kjM" id="5XN-ZA-2Xb"/>
-                        <outlet property="white" destination="Thw-jD-vDS" id="phC-DF-Egd"/>
-                        <outlet property="yellow" destination="n6p-FF-dzN" id="sB9-aJ-KcC"/>
+                        <outlet property="legendColor0" destination="UJd-j1-lUc" id="v1v-nZ-hGa"/>
+                        <outlet property="legendColor1" destination="9pS-VI-loq" id="x6i-mg-gyM"/>
+                        <outlet property="legendColor2" destination="5ma-TW-UpP" id="5gH-Tk-Z3u"/>
+                        <outlet property="legendColor3" destination="n6p-FF-dzN" id="iZu-hO-QxK"/>
+                        <outlet property="legendColor4" destination="trC-Jq-ShE" id="I3K-wl-Kfb"/>
+                        <outlet property="legendColor5" destination="Si6-Ar-kjM" id="dWI-j5-C56"/>
+                        <outlet property="legendColor6" destination="Thw-jD-vDS" id="zTW-Mo-POB"/>
+                        <outlet property="legendName0" destination="ejf-UL-lUd" id="ZwP-aA-Slo"/>
+                        <outlet property="legendName1" destination="QSy-YD-EgT" id="6rq-hG-mZp"/>
+                        <outlet property="legendName2" destination="LhF-v3-Amg" id="N6N-tr-fTV"/>
+                        <outlet property="legendName3" destination="Md7-gM-oNk" id="9mN-SK-Tfc"/>
+                        <outlet property="legendName4" destination="lup-G6-ZWG" id="Qd0-C3-lfi"/>
+                        <outlet property="legendName5" destination="1fE-lQ-ftV" id="4qo-ds-lxX"/>
+                        <outlet property="legendName6" destination="6gA-OV-Q16" id="Rnt-C4-WAk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GxM-Bq-z2j" userLabel="First Responder" sceneMemberID="firstResponder"/>
