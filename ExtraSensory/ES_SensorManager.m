@@ -186,6 +186,7 @@
     }
     [ES_DataBaseAccessor clearHFDataFile];
     [ES_DataBaseAccessor clearLabelFile];
+    [ES_DataBaseAccessor clearSoundFile];
     
     // Mark begining recording:
     [self.appDelegate markRecordingRightNow];

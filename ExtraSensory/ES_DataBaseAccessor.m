@@ -22,6 +22,7 @@
 #define ROOT_DATA_OBJECT @"ES_User"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
 #define HF_DATA_FILE_DUR    @"HF_DUR_DATA.txt"
+#define LABEL_FILE          @"label.txt"
 
 + (ES_User *)user
 {
@@ -393,8 +394,8 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,HF_SOUND_FILE_DUR, nil];
-    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR, nil];
+//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR, nil];
+    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE, nil];
     
     return arr;
 }
@@ -546,6 +547,16 @@
     return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],HF_DATA_FILE_DUR];
 }
 
++ (NSString *) labelFileFullPath
+{
+    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],LABEL_FILE];
+}
+
++ (NSString *) soundFileFullPath
+{
+    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],HF_SOUND_FILE_DUR];
+}
+
 + (void) writeData:(NSArray *)array
 {
     NSError *error = [NSError new];
@@ -563,10 +574,9 @@
     }
 }
 
-+ (void) clearHFDataFile
++ (void) clearDataFile:(NSString *)filePath
 {
     NSError *error = [NSError new];
-    NSString *filePath = [self HFDataFileFullPath];
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
     {
         BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
@@ -574,15 +584,19 @@
     }
 }
 
++ (void) clearHFDataFile
+{
+    [self clearDataFile:[self HFDataFileFullPath]];
+}
+
 + (void) clearLabelFile
 {
-    NSError *error = [NSError new];
-    NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/label.txt"];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-    {
-        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
-    }
+    [self clearDataFile:[self labelFileFullPath]];
+}
+
++ (void) clearSoundFile
+{
+    [self clearDataFile:[self soundFileFullPath]];
 }
 
 + (void) writeLabels:(ES_Activity*)activity
@@ -612,7 +626,7 @@
                                                            forKeys: keys];
     
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
-    NSString *filePath = [[self dataDirectory] stringByAppendingString: @"/label.txt"];
+    NSString *filePath = [self labelFileFullPath];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     BOOL fileExists = [fileManager fileExistsAtPath:filePath];

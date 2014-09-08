@@ -24,6 +24,7 @@
 + (void) writeData: (NSArray *)data;
 + (void) clearHFDataFile;
 + (void) clearLabelFile;
++ (void) clearSoundFile;
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
 + (void) deleteActivity: (ES_Activity *) activity;
