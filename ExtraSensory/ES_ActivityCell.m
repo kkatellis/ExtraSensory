@@ -10,6 +10,7 @@
 #import "ES_Activity.h"
 #import "ES_Activity+Day.h"
 #import "ES_Format.h"
+#import "ES_UserActivityLabels.h"
 
 @interface ES_ActivityCell ()
 
@@ -109,22 +110,42 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mm"];
-    if (_isDailyView) {
-        self.time.attributedText =  [[NSAttributedString alloc] initWithString:@"" attributes:[self titleAttributesHighlighted:self.selected]];
-        self.title.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:[self titleAttributesHighlighted:self.selected]];
-    } else {
-        self.time.attributedText =  [[NSAttributedString alloc] initWithString:[dateFormatter stringFromDate:_activity.startTime] attributes:[self titleAttributesHighlighted:self.selected]];
-        self.time.font=[UIFont systemFontOfSize:8.0]; self.time.textColor=[UIColor blackColor];
+    NSString *title=@"";
+    NSString *time=@"";
+    if (!_isDailyView) {
+        time = [dateFormatter stringFromDate:_activity.startTime];
+
         
         if (_activity.userCorrection) {
-            self.title.attributedText = [[NSAttributedString alloc] initWithString:_activity.userCorrection attributes:[self titleAttributesHighlighted:self.selected]];
+            title=_activity.userCorrection;
         } else if (_activity.serverPrediction){
-            self.title.attributedText = [[NSAttributedString alloc] initWithString:_activity.serverPrediction attributes:[self titleAttributesHighlighted:self.selected]];
-        }else{
-            self.title.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:[self titleAttributesHighlighted:self.selected]];
+            title=[NSString stringWithFormat:@"%@?", _activity.serverPrediction];
+        }
+        if (_activity.userActivityLabels) {
+
+            int i=0;
+            for (id label in _activity.userActivityLabels){
+                if (!i){
+                    title=[NSString stringWithFormat:@"%@, [%@", title, ((ES_UserActivityLabels *)label).name];
+                }else
+                    title=[NSString stringWithFormat:@"%@, %@", title, ((ES_UserActivityLabels *)label).name];
+                i++;
+            }
+            if (i) {
+                title=[NSString stringWithFormat:@"%@]", title];
+            }
+            
+
+        }
+        
+        if (_activity.mood) {
+            title=[NSString stringWithFormat:@"%@, (%@)", title, _activity.mood];
         }
         
     }
+    self.time.attributedText =  [[NSAttributedString alloc] initWithString:time attributes:[self titleAttributesHighlighted:self.selected]];
+    self.title.attributedText = [[NSAttributedString alloc] initWithString:title attributes:[self titleAttributesHighlighted:self.selected]];
+    self.time.font=[UIFont systemFontOfSize:8.0]; self.time.textColor=[UIColor blackColor];
     
 }
 
