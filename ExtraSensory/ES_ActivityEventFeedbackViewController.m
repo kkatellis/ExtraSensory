@@ -21,8 +21,8 @@
 #define TIMES_SEC (int)3
 #define SEND_SEC (int)4
 
-#define MAIN_ACTIVITY @"Main activity"
-#define SECONDARY_ACTIVITIES @"Secondary activities"
+#define MAIN_ACTIVITY @"Main Activity"
+#define SECONDARY_ACTIVITIES @"Secondary Activities"
 #define MOOD @"Mood"
 #define SUBMIT_FEEDBACK @"Submit feedback"
 #define START_TIME @"Start time"

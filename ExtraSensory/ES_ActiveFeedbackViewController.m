@@ -7,7 +7,8 @@
 //
 
 #import "ES_ActiveFeedbackViewController.h"
-#import "ES_MainActivityViewController.h"
+//#import "ES_MainActivityViewController.h"
+#import "ES_SelectionFromListViewController.h"
 #import "ES_DataBaseAccessor.h"
 #import "ES_ActivitiesStrings.h"
 #import "ES_Scheduler.h"
@@ -201,21 +202,27 @@
     
     if ([segue.identifier isEqualToString:MAIN_ACTIVITY])
     {
-        ES_MainActivityViewController *viewController = [segue destinationViewController];
+        ES_SelectionFromListViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mainActivity]];
         [viewController setChoices: [ES_ActivitiesStrings mainActivities]];
+        [viewController setMultiSelection:NO];
+        [viewController setCategory:MAIN_ACTIVITY];
     }
     else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
     {
-        ES_MainActivityViewController *viewController = [segue destinationViewController];
+        ES_SelectionFromListViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.secondaryActivities]];
         [viewController setChoices: [ES_ActivitiesStrings secondaryActivities]];
+        [viewController setMultiSelection:YES];
+        [viewController setCategory:SECONDARY_ACTIVITIES];
     }
     else if ([segue.identifier isEqualToString:MOOD])
     {
-        ES_MainActivityViewController *viewController = [segue destinationViewController];
+        ES_SelectionFromListViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mood]];
         [viewController setChoices: [ES_ActivitiesStrings moods]];
+        [viewController setMultiSelection:NO];
+        [viewController setCategory:MOOD];
     }
 }
 
@@ -225,11 +232,11 @@
 
 -(IBAction)editedLabels:(UIStoryboardSegue *)segue
 {
-    //NSLog(@"editedLabels: %@", segue.identifier);
-    if ([segue.sourceViewController isKindOfClass:[ES_MainActivityViewController class]])
+    NSLog(@"editedLabels: %@", segue.identifier);
+    if ([segue.sourceViewController isKindOfClass:[ES_SelectionFromListViewController class]])
     {
-        ES_MainActivityViewController *mavc = (ES_MainActivityViewController*)segue.sourceViewController;
-        if ([segue.identifier isEqualToString:MAIN_ACTIVITY])
+        ES_SelectionFromListViewController *mavc = (ES_SelectionFromListViewController*)segue.sourceViewController;
+        if ([mavc.category isEqualToString:MAIN_ACTIVITY])
         {
             self.mainActivity = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
             if ([self.mainActivity count] > 0)
@@ -241,12 +248,12 @@
                 self.activity.userCorrection = nil;
             }
         }
-        else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
+        else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
         {
             self.secondaryActivities = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
             [ES_DataBaseAccessor setSecondaryActivities:self.secondaryActivities forActivity:self.activity];
         }
-        else if ([segue.identifier isEqualToString:MOOD])
+        else if ([mavc.category isEqualToString:MOOD])
         {
             self.mood = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
             if ([self.mood count] > 0)
