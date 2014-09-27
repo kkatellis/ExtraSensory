@@ -238,6 +238,11 @@
         ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController*)segue.sourceViewController;
         if ([selectionController.category isEqualToString:MAIN_ACTIVITY])
         {
+            if ([selectionController.appliedLabels count] < 1)
+            {
+                // Then no main activity was selected and we should do nothing
+                return;
+            }
             self.mainActivity = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]];
             if ([self.mainActivity count] > 0)
             {

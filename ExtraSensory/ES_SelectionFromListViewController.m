@@ -84,29 +84,37 @@
 }
 */
 
+- (void)removeFromAppliedLabelsCellToRemove:(UITableViewCell *)cell
+{
+    [self.appliedLabels removeObject:cell.textLabel.text];
+    cell.accessoryType = UITableViewCellAccessoryNone;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([self.appliedLabels containsObject:cell.textLabel.text])
     {
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        [self.appliedLabels removeObject:cell.textLabel.text];
+        [self removeFromAppliedLabelsCellToRemove:cell];
     }
     else
     {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        if(!self.appliedLabels) //this is for labling samples which is not labled by server (probably because the app is stoped)
+        if(!self.appliedLabels)
+        {//this is for labling samples which is not labled by server (probably because the app is stoped)
             self.appliedLabels=[NSMutableSet setWithObject:(cell.textLabel.text)];
+        }
         else
+        {
             [self.appliedLabels addObject:cell.textLabel.text];
+        }
     }
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    [self.appliedLabels removeObject:cell.textLabel.text];
+    [self removeFromAppliedLabelsCellToRemove:cell];
 }
 
 

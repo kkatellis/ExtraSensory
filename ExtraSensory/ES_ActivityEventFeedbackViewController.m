@@ -230,15 +230,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
     UIStoryboard *listSelectionStoryboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-//    UIViewController *newView = nil;
-//    ES_MainActivityViewController *activitySelection = nil;
-  
     ES_SelectionFromListViewController *activitySelection = (ES_SelectionFromListViewController *)[listSelectionStoryboard instantiateViewControllerWithIdentifier:@"SelectionFromList"];
     
     switch (indexPath.section) {
         case MAIN_ACTIVITY_SEC:
-//            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
-//            activitySelection = (ES_MainActivityViewController *)newView;
             if(self.activityEvent.userCorrection) // for samples which are not labeled by server
             {
                 [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection)]];
@@ -249,9 +244,6 @@
             [self.navigationController pushViewController:activitySelection animated:YES];
             break;
         case USER_ACTIVITIES_SEC:
-//            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"SecondaryActivitiesSelection"];
-//            activitySelection = (ES_MainActivityViewController *)newView;
-            
             if (self.activityEvent.userActivityLabels)
             {
                 [activitySelection setAppliedLabels: [NSMutableSet setWithSet:self.activityEvent.userActivityLabels]];
@@ -262,9 +254,6 @@
             [self.navigationController pushViewController:activitySelection animated:YES];
             break;
         case MOOD_SEC:
-//            newView = [listSelectionStoryboard instantiateViewControllerWithIdentifier:@"MainActivitySelection"];
-//            activitySelection = (ES_MainActivityViewController *)newView;
-            
             if (self.activityEvent.mood)
             {
                 [activitySelection setAppliedLabels:[NSMutableSet setWithObject:self.activityEvent.mood]];
@@ -393,6 +382,11 @@
         ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController*)segue.sourceViewController;
         if ([selectionController.category isEqualToString:MAIN_ACTIVITY])
         {
+            if ([selectionController.appliedLabels count] < 1)
+            {
+                // Then no main activity was selected. We should do nothing then:
+                return;
+            }
             self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]][[selectionController.appliedLabels count] -1];  // it must be the last element in the list (the count is always 1 for main activities)
         }
         else if ([selectionController.category isEqualToString:SECONDARY_ACTIVITIES])

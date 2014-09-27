@@ -11,7 +11,6 @@
 @interface ES_SelectionFromListViewController : UITableViewController
 
 @property (nonatomic) BOOL multiSelection; // allow multiple selections
-
 @property NSMutableSet *appliedLabels; // the labels that the user has chosen
 @property NSArray *choices; // the possible label choices
 
