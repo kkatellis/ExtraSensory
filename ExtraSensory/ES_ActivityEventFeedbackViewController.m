@@ -390,27 +390,27 @@
 {
     if ([segue.sourceViewController isKindOfClass:[ES_SelectionFromListViewController class]])
     {
-        ES_SelectionFromListViewController *mavc = (ES_SelectionFromListViewController*)segue.sourceViewController;
-        if ([mavc.category isEqualToString:MAIN_ACTIVITY])
+        ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController*)segue.sourceViewController;
+        if ([selectionController.category isEqualToString:MAIN_ACTIVITY])
         {
-            self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][[mavc.appliedLabels count] -1];  // it must be the last element in the list (the count is always 1 for main activities)
+            self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]][[selectionController.appliedLabels count] -1];  // it must be the last element in the list (the count is always 1 for main activities)
         }
-        else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
+        else if ([selectionController.category isEqualToString:SECONDARY_ACTIVITIES])
         {
-            if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
+            if (selectionController.appliedLabels && (selectionController.appliedLabels.count > 0))
             {
-                self.activityEvent.userActivityLabels = [NSSet setWithArray: [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]]];
+                self.activityEvent.userActivityLabels = [NSSet setWithArray: [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]]];
             }
             else
             {
                 self.activityEvent.userActivityLabels = nil;
             }
         }
-        else if ([mavc.category isEqualToString:MOOD])
+        else if ([selectionController.category isEqualToString:MOOD])
         {
-            if (mavc.appliedLabels && (mavc.appliedLabels.count > 0))
+            if (selectionController.appliedLabels && (selectionController.appliedLabels.count > 0))
             {
-                self.activityEvent.mood = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]][0];
+                self.activityEvent.mood = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]][0];
             }
             else
             {
@@ -419,7 +419,7 @@
         }
         else
         {
-            NSLog(@"!!! in edited labels. No match for category: %@",mavc.category);
+            NSLog(@"!!! in edited labels. No match for category: %@",selectionController.category);
         }
     }
 }

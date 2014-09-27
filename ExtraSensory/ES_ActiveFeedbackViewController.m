@@ -235,10 +235,10 @@
     NSLog(@"editedLabels: %@", segue.identifier);
     if ([segue.sourceViewController isKindOfClass:[ES_SelectionFromListViewController class]])
     {
-        ES_SelectionFromListViewController *mavc = (ES_SelectionFromListViewController*)segue.sourceViewController;
-        if ([mavc.category isEqualToString:MAIN_ACTIVITY])
+        ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController*)segue.sourceViewController;
+        if ([selectionController.category isEqualToString:MAIN_ACTIVITY])
         {
-            self.mainActivity = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            self.mainActivity = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]];
             if ([self.mainActivity count] > 0)
             {
                 self.activity.userCorrection = [self.mainActivity firstObject];
@@ -248,14 +248,14 @@
                 self.activity.userCorrection = nil;
             }
         }
-        else if ([mavc.category isEqualToString:SECONDARY_ACTIVITIES])
+        else if ([selectionController.category isEqualToString:SECONDARY_ACTIVITIES])
         {
-            self.secondaryActivities = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            self.secondaryActivities = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]];
             [ES_DataBaseAccessor setSecondaryActivities:self.secondaryActivities forActivity:self.activity];
         }
-        else if ([mavc.category isEqualToString:MOOD])
+        else if ([selectionController.category isEqualToString:MOOD])
         {
-            self.mood = [NSMutableArray arrayWithArray:[mavc.appliedLabels allObjects]];
+            self.mood = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]];
             if ([self.mood count] > 0)
             {
                 self.activity.mood = [self.mood firstObject];
