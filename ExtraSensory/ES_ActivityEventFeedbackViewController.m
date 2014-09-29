@@ -112,7 +112,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
-    
     if (indexPath.section == MAIN_ACTIVITY_SEC)
     {
         cell = self.mainActivityCell;
@@ -130,7 +129,7 @@
     {
         cell = self.otherActivitiesCell;
         cell.textLabel.text = SECONDARY_ACTIVITIES;
-        if (self.activityEvent.userActivityLabels)
+        if (self.activityEvent.userActivityLabels && [self.activityEvent.userActivityLabels count] > 0)
         {
             NSMutableArray *stringArray = [NSMutableArray arrayWithArray:[self.activityEvent.userActivityLabels allObjects]];
             
@@ -139,7 +138,7 @@
         }
         else
         {
-            cell.detailTextLabel.text = @"";
+            cell.detailTextLabel.text = @" ";
         }
     }
     else if (indexPath.section == MOOD_SEC)
@@ -152,7 +151,7 @@
         }
         else
         {
-            cell.detailTextLabel.text = @"";
+            cell.detailTextLabel.text = @" ";
         }
     }
     else if (indexPath.section == TIMES_SEC)
@@ -382,12 +381,10 @@
         ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController*)segue.sourceViewController;
         if ([selectionController.category isEqualToString:MAIN_ACTIVITY])
         {
-            if ([selectionController.appliedLabels count] < 1)
+            if ([selectionController.appliedLabels count] >= 1)
             {
-                // Then no main activity was selected. We should do nothing then:
-                return;
+                self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]][[selectionController.appliedLabels count] -1];  // it must be the last element in the list (the count is always 1 for main activities)
             }
-            self.activityEvent.userCorrection = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]][[selectionController.appliedLabels count] -1];  // it must be the last element in the list (the count is always 1 for main activities)
         }
         else if ([selectionController.category isEqualToString:SECONDARY_ACTIVITIES])
         {
@@ -416,6 +413,7 @@
             NSLog(@"!!! in edited labels. No match for category: %@",selectionController.category);
         }
     }
+    
 }
 
 

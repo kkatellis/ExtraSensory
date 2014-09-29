@@ -103,19 +103,40 @@
     {
         cell = [tableView dequeueReusableCellWithIdentifier:MAIN_ACTIVITY];
         cell.textLabel.text = MAIN_ACTIVITY;
-        cell.detailTextLabel.text = [self.mainActivity componentsJoinedByString:@", "];
+        if (self.mainActivity)
+        {
+            cell.detailTextLabel.text = [self.mainActivity componentsJoinedByString:@", "];
+        }
+        else
+        {
+            cell.detailTextLabel.text = @" ";
+        }
     }
     else if (indexPath.section == 1)
     {
         cell = [tableView dequeueReusableCellWithIdentifier:SECONDARY_ACTIVITIES];
         cell.textLabel.text = SECONDARY_ACTIVITIES;
-        cell.detailTextLabel.text = [self.secondaryActivities componentsJoinedByString:@", "];
+        if (self.secondaryActivities && [self.secondaryActivities count] > 0)
+        {
+            cell.detailTextLabel.text = [self.secondaryActivities componentsJoinedByString:@", "];
+        }
+        else
+        {
+            cell.detailTextLabel.text = @" ";
+        }
     }
     else if (indexPath.section == 2)
     {
         cell = [tableView dequeueReusableCellWithIdentifier:MOOD];
         cell.textLabel.text = MOOD;
-        cell.detailTextLabel.text = [self.mood componentsJoinedByString:@", "];
+        if (self.mood && [self.mood count] > 0)
+        {
+            cell.detailTextLabel.text = [self.mood componentsJoinedByString:@", "];
+        }
+        else
+        {
+            cell.detailTextLabel.text = @" ";
+        }
     }
     else if (indexPath.section == 3)
     {
@@ -232,25 +253,22 @@
 
 -(IBAction)editedLabels:(UIStoryboardSegue *)segue
 {
-    NSLog(@"editedLabels: %@", segue.identifier);
     if ([segue.sourceViewController isKindOfClass:[ES_SelectionFromListViewController class]])
     {
         ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController*)segue.sourceViewController;
         if ([selectionController.category isEqualToString:MAIN_ACTIVITY])
         {
-            if ([selectionController.appliedLabels count] < 1)
+            if ([selectionController.appliedLabels count] >= 1)
             {
-                // Then no main activity was selected and we should do nothing
-                return;
-            }
-            self.mainActivity = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]];
-            if ([self.mainActivity count] > 0)
-            {
-                self.activity.userCorrection = [self.mainActivity firstObject];
-            }
-            else
-            {
-                self.activity.userCorrection = nil;
+                self.mainActivity = [NSMutableArray arrayWithArray:[selectionController.appliedLabels allObjects]];
+                if ([self.mainActivity count] > 0)
+                {
+                    self.activity.userCorrection = [self.mainActivity firstObject];
+                }
+                else
+                {
+                    self.activity.userCorrection = nil;
+                }
             }
         }
         else if ([selectionController.category isEqualToString:SECONDARY_ACTIVITIES])
@@ -271,6 +289,8 @@
             }
         }
     }
+    
+    [self.tableView reloadData];
 }
 
 

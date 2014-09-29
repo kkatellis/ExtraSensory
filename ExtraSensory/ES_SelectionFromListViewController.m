@@ -10,6 +10,8 @@
 
 @interface ES_SelectionFromListViewController ()
 
+@property NSMutableArray *sections;
+
 @end
 
 @implementation ES_SelectionFromListViewController
@@ -33,6 +35,19 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void) recalculateTable
+{
+    // Sort the choice lables alphabetically:
+    self.choices = [self.choices sortedArrayUsingSelector:@selector(compare:)];
+    [self.tableView reloadData];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self recalculateTable];
 }
 
 - (void)didReceiveMemoryWarning
