@@ -384,6 +384,10 @@
         eventDetails = [NSString stringWithFormat:@"%@ %@",eventDetails,secondaryStr];
     }
     
+    if ([eventDetails length] <= 0)
+    {
+        eventDetails = @" ";
+    }
     cell.detailTextLabel.text = eventDetails;
     
     return cell;

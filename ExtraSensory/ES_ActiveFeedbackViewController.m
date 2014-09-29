@@ -227,6 +227,7 @@
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mainActivity]];
         [viewController setChoices: [ES_ActivitiesStrings mainActivities]];
         [viewController setMultiSelection:NO];
+        [viewController setUseIndex:NO];
         [viewController setCategory:MAIN_ACTIVITY];
     }
     else if ([segue.identifier isEqualToString:SECONDARY_ACTIVITIES])
@@ -235,6 +236,7 @@
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.secondaryActivities]];
         [viewController setChoices: [ES_ActivitiesStrings secondaryActivities]];
         [viewController setMultiSelection:YES];
+        [viewController setUseIndex:YES];
         [viewController setCategory:SECONDARY_ACTIVITIES];
     }
     else if ([segue.identifier isEqualToString:MOOD])
@@ -243,6 +245,7 @@
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mood]];
         [viewController setChoices: [ES_ActivitiesStrings moods]];
         [viewController setMultiSelection:NO];
+        [viewController setUseIndex:YES];
         [viewController setCategory:MOOD];
     }
 }

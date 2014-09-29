@@ -11,6 +11,7 @@
 @interface ES_SelectionFromListViewController ()
 
 @property NSMutableArray *sections;
+@property NSMutableArray *sectionNames;
 
 @end
 
@@ -41,6 +42,44 @@
 {
     // Sort the choice lables alphabetically:
     self.choices = [self.choices sortedArrayUsingSelector:@selector(compare:)];
+    
+    // Start dividing to sections:
+    if (self.useIndex)
+    {
+        self.sections = [NSMutableArray arrayWithCapacity:10];
+        self.sectionNames = [NSMutableArray arrayWithCapacity:10];
+        NSString *latestLetter = @"";
+        NSMutableArray *latestSection = nil;
+        for (NSString *label in self.choices)
+        {
+            NSString *firstLetter = [label substringToIndex:1];
+            if (![firstLetter isEqualToString:latestLetter])
+            {
+                // Then we have a new letter.
+                // Should we close the previous section:
+                if (latestSection)
+                {
+                    [self.sections addObject:latestSection];
+                    [self.sectionNames addObject:latestLetter];
+                }
+                // Start the new letter section:
+                latestLetter = firstLetter;
+                latestSection = [NSMutableArray array];
+            }
+            // Add this new label to the latest section:
+            [latestSection addObject:label];
+        }
+        
+        // Add the last section:
+        [self.sections addObject:latestSection];
+        [self.sectionNames addObject:latestLetter];
+    }
+    else
+    {
+        self.sectionNames = nil;
+        self.sections = [NSMutableArray arrayWithObject:self.choices];
+    }
+    
     [self.tableView reloadData];
 }
 
@@ -67,20 +106,20 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return self.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.choices count];
+    return [self.sections[section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.textLabel.text = [self.choices objectAtIndex:indexPath.row];
+    cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     if ([self.appliedLabels containsObject:cell.textLabel.text])
     {
@@ -88,6 +127,16 @@
         [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
     }
     return cell;
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    return self.sectionNames;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+    return index;
 }
 
 /*

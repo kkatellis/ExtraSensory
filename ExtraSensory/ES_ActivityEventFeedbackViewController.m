@@ -238,6 +238,7 @@
                 [activitySelection setAppliedLabels:[NSMutableSet setWithObject:(self.activityEvent.userCorrection)]];
             }
             [activitySelection setMultiSelection:NO];
+            [activitySelection setUseIndex:NO];
             [activitySelection setChoices:[ES_ActivitiesStrings mainActivities]];
             [activitySelection setCategory:MAIN_ACTIVITY];
             [self.navigationController pushViewController:activitySelection animated:YES];
@@ -248,6 +249,7 @@
                 [activitySelection setAppliedLabels: [NSMutableSet setWithSet:self.activityEvent.userActivityLabels]];
             }
             [activitySelection setMultiSelection:YES];
+            [activitySelection setUseIndex:YES];
             [activitySelection setChoices:[ES_ActivitiesStrings secondaryActivities]];
             [activitySelection setCategory:SECONDARY_ACTIVITIES];
             [self.navigationController pushViewController:activitySelection animated:YES];
@@ -262,6 +264,7 @@
                 [activitySelection setAppliedLabels:[NSMutableSet set]];
             }
             [activitySelection setMultiSelection:NO];
+            [activitySelection setUseIndex:YES];
             [activitySelection setChoices:[ES_ActivitiesStrings moods]];
             [activitySelection setCategory:MOOD];
             [self.navigationController pushViewController:activitySelection animated:YES];
