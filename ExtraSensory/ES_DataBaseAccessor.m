@@ -328,6 +328,82 @@
     return counts;
 }
 
++ (NSMutableDictionary *) getTodaysCountsForMoods:(NSArray *)moods
+{
+    NSMutableDictionary *counts = [NSMutableDictionary new];
+    for (NSString *mood in moods)
+    {
+        [counts setObject:[NSNumber numberWithInt:0] forKey:mood];
+    }
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
+    [fetchRequest setFetchLimit:0];
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *date = [NSDate date];
+    NSDateComponents *comps = [cal components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
+                                     fromDate:date];
+    NSDate *today = [cal dateFromComponents:comps];
+    NSNumber *todayNum = [NSNumber numberWithInt:(int)today];
+    
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@", @"timestamp",todayNum]];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    
+    NSError *error = [NSError new];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+    
+    for (ES_Activity *activity in results)
+    {
+        if (activity.mood)
+        {
+            int newCount = (int)[counts[activity.mood] integerValue] + 1;
+            counts[activity.mood] = [NSNumber numberWithInt:newCount];
+        }
+        else
+        {
+            NSLog(@"[databaseAccessor] fetch gave result with nil mood");
+        }
+    }
+    //NSLog(@"Today's counts: %@", counts);
+    return counts;
+}
+
++ (NSArray *) getFrequentLabelsOutOfLabelsWithCounts:(NSDictionary *)counts
+{
+    NSMutableDictionary *nonzeroCounts = [NSMutableDictionary dictionary];
+    for (NSString *label in [counts allKeys])
+    {
+        if ([counts[label] intValue] > 0)
+        {
+            [nonzeroCounts setObject:counts[label] forKey:label];
+        }
+    }
+    
+    NSArray *labelsByFrequency = [nonzeroCounts keysSortedByValueUsingComparator:^(NSNumber *num1,NSNumber *num2)
+    {
+        if ([num1 intValue] > [num2 intValue])
+            return NSOrderedAscending;
+        if ([num1 intValue] < [num2 intValue])
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    
+    return labelsByFrequency;
+}
+
++ (NSArray *) getTodaysFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities
+{
+    NSDictionary *counts = [self getTodaysCountsForSecondaryActivities:secondaryActivities];
+    NSArray *secondaryActivitiesByFrequency = [self getFrequentLabelsOutOfLabelsWithCounts:counts];
+    return secondaryActivitiesByFrequency;
+}
+
++ (NSArray *) getTodaysFrequentMoodsOutOf:(NSArray *)moods
+{
+    NSDictionary *counts = [self getTodaysCountsForMoods:moods];
+    NSArray *moodsByFrequency = [self getFrequentLabelsOutOfLabelsWithCounts:counts];
+    return moodsByFrequency;
+}
 
 + (void) save
 {

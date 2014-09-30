@@ -252,6 +252,7 @@
             [activitySelection setUseIndex:YES];
             [activitySelection setChoices:[ES_ActivitiesStrings secondaryActivities]];
             [activitySelection setCategory:SECONDARY_ACTIVITIES];
+            [activitySelection setFrequentChoices:[ES_DataBaseAccessor getTodaysFrequentSecondaryActivitiesOutOf:[ES_ActivitiesStrings secondaryActivities]]];
             [self.navigationController pushViewController:activitySelection animated:YES];
             break;
         case MOOD_SEC:
@@ -267,6 +268,7 @@
             [activitySelection setUseIndex:YES];
             [activitySelection setChoices:[ES_ActivitiesStrings moods]];
             [activitySelection setCategory:MOOD];
+            [activitySelection setFrequentChoices:[ES_DataBaseAccessor getTodaysFrequentMoodsOutOf:[ES_ActivitiesStrings moods]]];
             [self.navigationController pushViewController:activitySelection animated:YES];
             break;
         case TIMES_SEC:

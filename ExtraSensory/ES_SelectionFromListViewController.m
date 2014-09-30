@@ -12,6 +12,7 @@
 
 @property NSMutableArray *sections;
 @property NSMutableArray *sectionNames;
+@property NSMutableArray *sectionHeaders;
 
 @end
 
@@ -48,6 +49,16 @@
     {
         self.sections = [NSMutableArray arrayWithCapacity:10];
         self.sectionNames = [NSMutableArray arrayWithCapacity:10];
+        self.sectionHeaders = [NSMutableArray arrayWithCapacity:10];
+        
+        if (self.frequentChoices)
+        {
+            // Make the first section be dedicated to the frequently used labels:
+            [self.sections addObject:self.frequentChoices];
+            [self.sectionNames addObject:@"frequent"];
+            [self.sectionHeaders addObject:@"Frequently used"];
+        }
+        
         NSString *latestLetter = @"";
         NSMutableArray *latestSection = nil;
         for (NSString *label in self.choices)
@@ -61,6 +72,16 @@
                 {
                     [self.sections addObject:latestSection];
                     [self.sectionNames addObject:latestLetter];
+                    if ((!self.frequentChoices) || ([self.sections count] > 2))
+                    {
+                        // Then we don't want this added section to have a header:
+                        [self.sectionHeaders addObject:@""];
+                    }
+                    else
+                    {
+                        // Then there was a frequent section and now we added the first alphabetic section. Lets give it a headline:
+                        [self.sectionHeaders addObject:@"All labels"];
+                    }
                 }
                 // Start the new letter section:
                 latestLetter = firstLetter;
@@ -73,6 +94,7 @@
         // Add the last section:
         [self.sections addObject:latestSection];
         [self.sectionNames addObject:latestLetter];
+        [self.sectionHeaders addObject:@""];
     }
     else
     {
@@ -129,6 +151,16 @@
     return cell;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *title = self.sectionHeaders[section];
+    if ([title length] <= 0)
+    {
+        return nil;
+    }
+    return title;
+}
+
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
     return self.sectionNames;
@@ -150,7 +182,10 @@
 
 - (void)removeFromAppliedLabelsCellToRemove:(UITableViewCell *)cell
 {
-    [self.appliedLabels removeObject:cell.textLabel.text];
+    if (cell.textLabel.text)
+    {
+        [self.appliedLabels removeObject:cell.textLabel.text];
+    }
     cell.accessoryType = UITableViewCellAccessoryNone;
 }
 

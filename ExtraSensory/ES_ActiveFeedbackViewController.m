@@ -234,19 +234,23 @@
     {
         ES_SelectionFromListViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.secondaryActivities]];
-        [viewController setChoices: [ES_ActivitiesStrings secondaryActivities]];
+        NSArray *secondaryActivities = [ES_ActivitiesStrings secondaryActivities];
+        [viewController setChoices: secondaryActivities];
         [viewController setMultiSelection:YES];
         [viewController setUseIndex:YES];
         [viewController setCategory:SECONDARY_ACTIVITIES];
+        [viewController setFrequentChoices:[ES_DataBaseAccessor getTodaysFrequentSecondaryActivitiesOutOf:secondaryActivities]];
     }
     else if ([segue.identifier isEqualToString:MOOD])
     {
         ES_SelectionFromListViewController *viewController = [segue destinationViewController];
         [viewController setAppliedLabels: [NSMutableSet setWithArray:self.mood]];
-        [viewController setChoices: [ES_ActivitiesStrings moods]];
+        NSArray *moods = [ES_ActivitiesStrings moods];
+        [viewController setChoices: moods];
         [viewController setMultiSelection:NO];
         [viewController setUseIndex:YES];
         [viewController setCategory:MOOD];
+        [viewController setFrequentChoices:[ES_DataBaseAccessor getTodaysFrequentMoodsOutOf:moods]];
     }
 }
 
