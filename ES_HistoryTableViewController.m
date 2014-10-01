@@ -129,6 +129,13 @@
     [self refreshTable];
 }
 
+- (BOOL)allowEditingLabels
+{
+    NSNumber *startOfFocusDayTimestamp = [self getTimestampOfStartOfDay:self.timeInDayOfFocus];
+    float diffSeconds = (float)[[NSDate date] timeIntervalSince1970] - [startOfFocusDayTimestamp floatValue];
+    
+    return (diffSeconds < 2*SECONDS_IN_24HRS);
+}
 
 + (BOOL)doesActivity:(ES_Activity *)activity1 haveSameMainActivityAsActivity:(ES_Activity *)activity2
 {
@@ -315,6 +322,10 @@
     {
         dayStr = [dayStr stringByAppendingString:@" (today)"];
     }
+    else if (![self allowEditingLabels])
+    {
+        dayStr = [dayStr stringByAppendingString:@" (view only)"];
+    }
     
     return dayStr;
 }
@@ -442,7 +453,10 @@
     
     ES_ActivityEvent *activityEvent = cell.activityEvent;
     
-    [self segueToEditEvent:activityEvent];
+    if ([self allowEditingLabels])
+    {
+        [self segueToEditEvent:activityEvent];
+    }
 }
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent
