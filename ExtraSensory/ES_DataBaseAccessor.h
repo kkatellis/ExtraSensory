@@ -40,7 +40,6 @@
 + (NSArray *) getTodaysFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities;
 + (NSArray *) getTodaysFrequentMoodsOutOf:(NSArray *)moods;
 
-+ (NSDictionary *) getTodaysFrequentlyUsedLabelsForSecondaryActivitiesAndMoods;
 + (void) writeActivity: (ES_Activity *)activity;
 + (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
 + (NSArray *) getWhileDeletingOrphansActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;

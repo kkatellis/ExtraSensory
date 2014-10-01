@@ -123,7 +123,14 @@
             self.activityEvent.userCorrection = self.activityEvent.serverPrediction;
         }
         
-        self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
+        if (self.activityEvent.userCorrection)
+        {
+            self.mainActivityCell.detailTextLabel.text = self.activityEvent.userCorrection;
+        }
+        else
+        {
+            self.mainActivityCell.detailTextLabel.text = @" ";
+        }
     }
     else if (indexPath.section == USER_ACTIVITIES_SEC)
     {

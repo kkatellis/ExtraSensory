@@ -214,7 +214,7 @@
 
 - (NSNumber *) getTimestampOfStartOfDay:(NSDate *)date
 {
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:date];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
     NSDate *startOfDay = [[NSCalendar currentCalendar] dateFromComponents:components];
     
     NSNumber *timestamp = [NSNumber numberWithDouble:[startOfDay timeIntervalSince1970]];

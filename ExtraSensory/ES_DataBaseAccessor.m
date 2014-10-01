@@ -211,6 +211,18 @@
     return nil;
 }
 
++ (NSNumber *) getTimestampOfTodaysStart
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *date = [NSDate date];
+    NSDateComponents *comps = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)
+                                     fromDate:date];
+    NSDate *today = [cal dateFromComponents:comps];
+    NSNumber *todayNum = [NSNumber numberWithFloat:[today timeIntervalSince1970]];
+    
+    return todayNum;
+}
+
 + (NSMutableDictionary *) getTodaysCounts
 {
     NSArray *mainActivities = [ES_ActivitiesStrings mainActivities];
@@ -223,13 +235,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDate *date = [NSDate date];
-    NSDateComponents *comps = [cal components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
-                                     fromDate:date];
-    NSDate *today = [cal dateFromComponents:comps];
-    NSNumber *todayNum = [NSNumber numberWithInt:(int)today];
-    
+    NSNumber *todayNum = [self getTimestampOfTodaysStart];
     //NSNumber *yesterday = [NSNumber numberWithInt:(int)[NSDate dateWithTimeIntervalSinceNow:-24*60*60]];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp > %@", todayNum]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -295,12 +301,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDate *date = [NSDate date];
-    NSDateComponents *comps = [cal components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
-                                     fromDate:date];
-    NSDate *today = [cal dateFromComponents:comps];
-    NSNumber *todayNum = [NSNumber numberWithInt:(int)today];
+    NSNumber *todayNum = [self getTimestampOfTodaysStart];
     
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@ AND %K.@count > 0", @"timestamp",todayNum,@"userActivityLabels"]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -339,12 +340,7 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDate *date = [NSDate date];
-    NSDateComponents *comps = [cal components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
-                                     fromDate:date];
-    NSDate *today = [cal dateFromComponents:comps];
-    NSNumber *todayNum = [NSNumber numberWithInt:(int)today];
+    NSNumber *todayNum = [self getTimestampOfTodaysStart];
     
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@", @"timestamp",todayNum]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -364,7 +360,6 @@
             NSLog(@"[databaseAccessor] fetch gave result with nil mood");
         }
     }
-    //NSLog(@"Today's counts: %@", counts);
     return counts;
 }
 
