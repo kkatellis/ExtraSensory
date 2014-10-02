@@ -208,12 +208,15 @@
             [self.appliedLabels addObject:cell.textLabel.text];
         }
     }
+    
+    [self.tableView reloadData];
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [self removeFromAppliedLabelsCellToRemove:cell];
+    [self.tableView reloadData];
 }
 
 
