@@ -147,7 +147,6 @@
 		93F679C517F978AF000638CB /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BD17F978AF000638CB /* unzip.c */; };
 		93F679C617F978AF000638CB /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BF17F978AF000638CB /* zip.c */; };
 		93F679C717F978AF000638CB /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 93F679C217F978AF000638CB /* ZipArchive.mm */; };
-		9F05D07318BBC7E20005C843 /* ES_SelectTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F05D07218BBC7E20005C843 /* ES_SelectTimeViewController.m */; };
 		9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
 		9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
 		9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */; };
@@ -355,8 +354,6 @@
 		93F679C017F978AF000638CB /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		93F679C117F978AF000638CB /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		93F679C217F978AF000638CB /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
-		9F05D07118BBC7E20005C843 /* ES_SelectTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SelectTimeViewController.h; sourceTree = "<group>"; };
-		9F05D07218BBC7E20005C843 /* ES_SelectTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SelectTimeViewController.m; sourceTree = "<group>"; };
 		9F59F66518A9A9C5002C94B9 /* ES_HistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_HistoryTableViewController.h; sourceTree = SOURCE_ROOT; };
 		9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_HistoryTableViewController.m; sourceTree = SOURCE_ROOT; };
 		9F90A5C818AD7A6700E6E29B /* ES_ActivityEventTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEventTableCell.h; sourceTree = "<group>"; };
@@ -618,8 +615,6 @@
 				9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */,
 				9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */,
 				9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */,
-				9F05D07118BBC7E20005C843 /* ES_SelectTimeViewController.h */,
-				9F05D07218BBC7E20005C843 /* ES_SelectTimeViewController.m */,
 			);
 			name = Calendar;
 			sourceTree = "<group>";
@@ -1089,7 +1084,6 @@
 				4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */,
 				93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
-				9F05D07318BBC7E20005C843 /* ES_SelectTimeViewController.m in Sources */,
 				9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */,
 				70C156D118D75E34007CCB39 /* RaisedTabBarController.m in Sources */,
 				4294840F197E1BD000FF20B6 /* MSDayColumnHeader.m in Sources */,
