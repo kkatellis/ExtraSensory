@@ -12,6 +12,5 @@
 @interface ES_HistoryTableViewController : UITableViewController
 + (BOOL)isActivity:(ES_Activity *)activity1 similarToActivity:(ES_Activity *)activity2; // to be used in other classes
 
-@property (nonatomic, strong) NSMutableArray *predictions;
 
 @end

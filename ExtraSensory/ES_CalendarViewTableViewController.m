@@ -159,8 +159,10 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    [(ES_FeedbackViewController *)segue.destinationViewController setFromCell:sender ];
-    [(ES_FeedbackViewController *)segue.destinationViewController setPredictions: self.predictions];
+    // Commented out by Yonatan. This class is deprecated anyway.
+    
+    //[(ES_FeedbackViewController *)segue.destinationViewController setFromCell:sender ];
+    //[(ES_FeedbackViewController *)segue.destinationViewController setPredictions: self.predictions];
 }
 
 

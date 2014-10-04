@@ -18,7 +18,16 @@
 
 @implementation ES_SelectionFromListViewController
 
-@synthesize multiSelection = _multiSelection;
+
+- (void) setParametersCategory:(NSString *)category multiSelection:(BOOL)multiSelection useIndex:(BOOL)useIndex choices:(NSArray *)choices appliedLabels:(NSMutableSet *)appliedLabels frequentChoices:(NSArray *)frequentChoices
+{
+    [self setCategory:category];
+    [self setMultiSelection:multiSelection];
+    [self setUseIndex:useIndex];
+    [self setChoices:choices];
+    [self setAppliedLabels:appliedLabels];
+    [self setFrequentChoices:frequentChoices];
+}
 
 - (id) initWithStyle:(UITableViewStyle)style
 {
@@ -143,7 +152,7 @@
     UITableViewCell *cell = [[UITableViewCell alloc] init];
     cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    if ([self.appliedLabels containsObject:cell.textLabel.text])
+    if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
     {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
@@ -171,33 +180,56 @@
     return index;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL) doesAppliedLabelsContainLabel:(NSString *)label
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    for (NSString *applied in [self.appliedLabels allObjects])
+    {
+        if ([applied isEqualToString:label])
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
-*/
+
+- (void) removeFromAppliedLabelsLabel:(NSString *)label
+{
+    NSMutableArray *applied = [NSMutableArray arrayWithArray:[self.appliedLabels allObjects]];
+    for (int ii = 0; ii < [self.appliedLabels count]; ii ++)
+    {
+        if ([label isEqualToString:applied[ii]])
+        {
+            [applied removeObjectAtIndex:ii];
+            self.appliedLabels = [NSMutableSet setWithArray:applied];
+            return;
+        }
+    }
+}
 
 - (void)removeFromAppliedLabelsCellToRemove:(UITableViewCell *)cell
 {
+    NSLog(@"=== asked to remove label of cell: %@",cell);
     if (cell.textLabel.text)
     {
-        [self.appliedLabels removeObject:cell.textLabel.text];
+        NSLog(@"=== going to remove label: %@ from applied: %@",cell.textLabel.text,self.appliedLabels);
+        [self removeFromAppliedLabelsLabel:cell.textLabel.text];
+        NSLog(@"=== now applied: %@",self.appliedLabels);
     }
     cell.accessoryType = UITableViewCellAccessoryNone;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
+    NSLog(@"=== did select");
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if ([self.appliedLabels containsObject:cell.textLabel.text])
+    if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
     {
+        NSLog(@"=== is applied. need to remove label: %@",cell.textLabel.text);
         [self removeFromAppliedLabelsCellToRemove:cell];
     }
     else
     {
+        NSLog(@"=== is not applied. Need to apply label: %@",cell.textLabel.text);
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         if(!self.appliedLabels)
         {//this is for labling samples which is not labled by server (probably because the app is stoped)
@@ -205,17 +237,28 @@
         }
         else
         {
-            [self.appliedLabels addObject:cell.textLabel.text];
+            if (self.multiSelection)
+            {
+                [self.appliedLabels addObject:cell.textLabel.text];
+            }
+            else
+            {
+                // Make sure there is only a single label applied:
+                self.appliedLabels = [NSMutableSet setWithObject:cell.textLabel.text];
+            }
         }
     }
     
+    NSLog(@"=== after adding/removing. applied: %@",self.appliedLabels);
     [self.tableView reloadData];
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"=== did deselect");
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [self removeFromAppliedLabelsCellToRemove:cell];
+    NSLog(@"=== diselect - after remove cell. applied: %@",self.appliedLabels);
     [self.tableView reloadData];
 }
 

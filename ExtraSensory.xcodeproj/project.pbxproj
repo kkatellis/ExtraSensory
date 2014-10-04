@@ -29,6 +29,7 @@
 		4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */; };
 		4E987BB319AEA7E8008C569D /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E987BB219AEA7E8008C569D /* ES_Settings.m */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
+		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
 		70228E3018B19FFE00189063 /* ES_MainActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */; };
 		70228E3118B19FFE00189063 /* ES_ActiveFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */; };
@@ -131,7 +132,6 @@
 		93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B8A18024A9D00F2AAC7 /* ES_ActivityStatistic.m */; };
 		93146B9F1802CD9F00F2AAC7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 93146B9E1802CD9F00F2AAC7 /* libz.dylib */; };
 		933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */; };
-		934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934377B417FF94E200521B0D /* ES_FeedbackViewController.m */; };
 		939562FD1806481800BF448E /* ES_PieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 939562FC1806481800BF448E /* ES_PieChartView.m */; };
 		939600A5181B0194006221C6 /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A4181B0194006221C6 /* ES_User.m */; };
 		939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A7181B0195006221C6 /* ES_UserPopulation.m */; };
@@ -207,6 +207,8 @@
 		4E987BB219AEA7E8008C569D /* ES_Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Settings.m; sourceTree = SOURCE_ROOT; };
 		4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_AlertViewWithUserInfo.h; sourceTree = "<group>"; };
 		4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_AlertViewWithUserInfo.m; sourceTree = "<group>"; };
+		4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
+		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
 		70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_MainActivityViewController.m; sourceTree = "<group>"; };
 		70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_MainActivityViewController.h; sourceTree = "<group>"; };
@@ -325,8 +327,6 @@
 		93146B9E1802CD9F00F2AAC7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SensorManager.h; sourceTree = "<group>"; };
 		933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SensorManager.m; sourceTree = "<group>"; };
-		934377B317FF94E200521B0D /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
-		934377B417FF94E200521B0D /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		939562FB1806481800BF448E /* ES_PieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_PieChartView.h; sourceTree = "<group>"; };
 		939562FC1806481800BF448E /* ES_PieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieChartView.m; sourceTree = "<group>"; };
 		939600A3181B0194006221C6 /* ES_User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_User.h; sourceTree = "<group>"; };
@@ -584,10 +584,10 @@
 		70C156CB18D665D7007CCB39 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
+				4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */,
+				4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */,
 				4E71BD4819BDA53800BA648B /* ES_SelectionFromListViewController.h */,
 				4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */,
-				934377B317FF94E200521B0D /* ES_FeedbackViewController.h */,
-				934377B417FF94E200521B0D /* ES_FeedbackViewController.m */,
 				70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */,
 				70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */,
 				70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */,
@@ -1067,7 +1067,6 @@
 				42948410197E1BD000FF20B6 /* MSDayColumnHeaderBackground.m in Sources */,
 				4291F1DB199A8908008EDCA4 /* ES_Activity.m in Sources */,
 				7070A64818D7B991007D660D /* ES_UserActivityLabels.m in Sources */,
-				934377B517FF94E200521B0D /* ES_FeedbackViewController.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
@@ -1075,6 +1074,7 @@
 				42948424197E21B800FF20B6 /* ES_Activity+Day.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
+				4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */,
 				42948413197E1BD000FF20B6 /* MSTimeRowHeader.m in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */,

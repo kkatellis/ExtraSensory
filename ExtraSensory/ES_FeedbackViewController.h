@@ -2,18 +2,26 @@
 //  ES_FeedbackViewController.h
 //  ExtraSensory
 //
-//  Created by Bryan Grounds on 10/4/13.
-//  Copyright (c) 2013 Bryan Grounds. All rights reserved.
+//  Created by yonatan vaizman on 10/2/14.
+//  Copyright (c) 2014 Bryan Grounds. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "ES_Activity.h"
+#import "ES_ActivityEvent.h"
 
-@class ES_CalendarViewCell;
+typedef enum ES_FeedbackType : NSInteger
+{
+    ES_FeedbackTypeActive,
+    ES_FeedbackTypeActivityEvent,
+    ES_FeedbackTypeAtomicActivity
+} ES_FeedbackType;
 
-@interface ES_FeedbackViewController : UIViewController
+@interface ES_FeedbackViewController : UITableViewController
 
-@property ES_CalendarViewCell *fromCell;
+@property (nonatomic) ES_FeedbackType feedbackType;
 
-@property NSMutableArray *predictions;
+@property (nonatomic, strong) ES_Activity *activity;
+@property (nonatomic, strong) ES_ActivityEvent *activityEvent;
 
 @end

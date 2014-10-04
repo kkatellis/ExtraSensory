@@ -13,7 +13,7 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_ActivityEvent.h"
 #import "ES_ActivityEventTableCell.h"
-#import "ES_ActivityEventFeedbackViewController.h"
+#import "ES_FeedbackViewController.h"
 #import "ES_UserActivityLabels.h"
 #import "ES_ActivitiesStrings.h"
 
@@ -51,12 +51,6 @@
     if (self) {
         // Custom initialization
         self.editingActivityEvent = NO;
-        
-        // colors:
-//        NSArray *mainActivityLabels = [ES_ActivitiesStrings mainActivities];
-//        NSArray *colors = [ES_ActivitiesStrings mainActivitiesColors];
-//        self.colorForMainActivity = [NSDictionary dictionaryWithObjects:colors forKeys:mainActivityLabels];
-//        NSLog(@"[historyTable] Initializing color dictionary: %@",self.colorForMainActivity);
     }
     return self;
 }
@@ -157,7 +151,7 @@
     NSMutableSet *userActivitiesStrings1 = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity1.userActivityLabels allObjects]]];
     
     NSMutableSet *userActivitiesStrings2 = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity2.userActivityLabels allObjects]]];
-    
+  
     if ([userActivitiesStrings1 count] != [userActivitiesStrings2 count])
     {
         return NO;
@@ -461,18 +455,23 @@
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent
 {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
-    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
-    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
+//    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
+//    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
+  
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
+    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
+    ES_FeedbackViewController *feedback = (ES_FeedbackViewController *)newView;
     
-    activityFeedback.activityEvent = activityEvent;
-    activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
-    activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
+    feedback.activityEvent = activityEvent;
+    feedback.feedbackType = ES_FeedbackTypeActivityEvent;
+//    activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
+//    activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
     
     // Mark that we are moving to the feedback view:
     self.editingActivityEvent = YES;
     
-    [self.navigationController pushViewController:activityFeedback animated:YES];
+    [self.navigationController pushViewController:feedback animated:YES];
 }
 
 
