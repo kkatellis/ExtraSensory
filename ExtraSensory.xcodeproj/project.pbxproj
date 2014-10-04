@@ -31,7 +31,6 @@
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
-		70228E3018B19FFE00189063 /* ES_MainActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */; };
 		70228E3118B19FFE00189063 /* ES_ActiveFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */; };
 		703B3650196E3FA800D5D80B /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B364F196E3FA800D5D80B /* gear.png */; };
 		703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B3651196E3FD100D5D80B /* stats_pie_chart.png */; };
@@ -210,8 +209,6 @@
 		4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
-		70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_MainActivityViewController.m; sourceTree = "<group>"; };
-		70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_MainActivityViewController.h; sourceTree = "<group>"; };
 		70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActiveFeedbackViewController.m; sourceTree = "<group>"; };
 		70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActiveFeedbackViewController.h; sourceTree = "<group>"; };
 		703B364F196E3FA800D5D80B /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = ../gear.png; sourceTree = "<group>"; };
@@ -588,8 +585,6 @@
 				4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */,
 				4E71BD4819BDA53800BA648B /* ES_SelectionFromListViewController.h */,
 				4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */,
-				70228E2C18B19FFE00189063 /* ES_MainActivityViewController.m */,
-				70228E2D18B19FFE00189063 /* ES_MainActivityViewController.h */,
 				70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */,
 				70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */,
 			);
@@ -1058,7 +1053,6 @@
 				1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */,
 				70C156C718D52BD1007CCB39 /* ES_SwapViewController.m in Sources */,
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
-				70228E3018B19FFE00189063 /* ES_MainActivityViewController.m in Sources */,
 				4294841E197E1DA000FF20B6 /* ES_ActivityCell.m in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				42948417197E1C7600FF20B6 /* ES_CalendarViewController.m in Sources */,
