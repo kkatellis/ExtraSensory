@@ -208,28 +208,22 @@
 
 - (void)removeFromAppliedLabelsCellToRemove:(UITableViewCell *)cell
 {
-    NSLog(@"=== asked to remove label of cell: %@",cell);
     if (cell.textLabel.text)
     {
-        NSLog(@"=== going to remove label: %@ from applied: %@",cell.textLabel.text,self.appliedLabels);
         [self removeFromAppliedLabelsLabel:cell.textLabel.text];
-        NSLog(@"=== now applied: %@",self.appliedLabels);
     }
     cell.accessoryType = UITableViewCellAccessoryNone;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
-    NSLog(@"=== did select");
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
     {
-        NSLog(@"=== is applied. need to remove label: %@",cell.textLabel.text);
         [self removeFromAppliedLabelsCellToRemove:cell];
     }
     else
     {
-        NSLog(@"=== is not applied. Need to apply label: %@",cell.textLabel.text);
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         if(!self.appliedLabels)
         {//this is for labling samples which is not labled by server (probably because the app is stoped)
@@ -249,16 +243,13 @@
         }
     }
     
-    NSLog(@"=== after adding/removing. applied: %@",self.appliedLabels);
     [self.tableView reloadData];
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"=== did deselect");
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [self removeFromAppliedLabelsCellToRemove:cell];
-    NSLog(@"=== diselect - after remove cell. applied: %@",self.appliedLabels);
     [self.tableView reloadData];
 }
 

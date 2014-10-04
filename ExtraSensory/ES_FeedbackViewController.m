@@ -13,6 +13,8 @@
 #import "ES_AppDelegate.h"
 #import "ES_NetworkAccessor.h"
 #import "ES_ActivitiesStrings.h"
+#import "ES_HistoryTableViewController.h"
+#import "ES_UserActivityLabels.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -37,6 +39,8 @@
 @property (nonatomic, strong) NSString *mainActivity;
 @property (nonatomic, strong) NSSet *secondaryActivities;
 @property (nonatomic, strong) NSString *mood;
+
+@property (nonatomic) BOOL presentingMinuteByMinuteHistory;
 @end
 
 @implementation ES_FeedbackViewController
@@ -56,7 +60,7 @@
     {
         self.mainActivity = activity.serverPrediction;
     }
-    self.secondaryActivities = activity.userActivityLabels;
+    self.secondaryActivities = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]]];
     self.mood = activity.mood;
 }
 
@@ -87,11 +91,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.presentingMinuteByMinuteHistory = NO;
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    if (self.presentingMinuteByMinuteHistory)
+    {
+        // Then we're back from the minute-by-minute history, and possibly edited some of the atomic activities, so the information we currently have here is no longer up to date. Need to pop back to History:
+        [self.navigationController popViewControllerAnimated:NO];
+    }
     [self.tableView reloadData];
 }
 
@@ -170,7 +179,9 @@
                     // TODO: Perhaps add "I will do this activity for the next...."
                     break;
                 case ES_FeedbackTypeActivityEvent:
-                    // TODO: Add timespan and "go to minute breakdown"
+                    cell.textLabel.text = @"Minute by minute labels";
+                    cell.detailTextLabel.text = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.activityEvent.startTimestamp endTimestamp:self.activityEvent.endTimestamp];
+                    break;
                 case ES_FeedbackTypeAtomicActivity:
                     // Nothing
                 default:
@@ -200,13 +211,40 @@
             // Let the storyboard seque handle it
             break;
         case ACCESSORY_SEC:
-            // TODO: handle for type activityEvent and active
+            switch (self.feedbackType) {
+                case ES_FeedbackTypeActive:
+                    // TODO: add select time to continue same activity
+                    break;
+                    
+                case ES_FeedbackTypeActivityEvent:
+                    [self openActivityEventMinuteHistory];
+                    break;
+                    
+                case ES_FeedbackTypeAtomicActivity:
+                    // Do nothing
+                    break;
+                    
+                default:
+                    break;
+            }
             break;
         case SUBMIT_SEC:
             [self submitFeedback];
         default:
             break;
     }
+}
+
+- (void) openActivityEventMinuteHistory
+{
+    // First, mark that we're going to the minute-by-minute breakdown:
+    self.presentingMinuteByMinuteHistory = YES;
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    ES_HistoryTableViewController *historyController = (ES_HistoryTableViewController *)[storyboard instantiateViewControllerWithIdentifier:@"History"];
+    historyController.eventToShowMinuteByMinute = self.activityEvent;
+    
+    [self.navigationController pushViewController:historyController animated:YES];
 }
 
 - (void) submitFeedback

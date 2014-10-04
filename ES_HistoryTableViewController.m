@@ -11,7 +11,6 @@
 #import "ES_User.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_DataBaseAccessor.h"
-#import "ES_ActivityEvent.h"
 #import "ES_ActivityEventTableCell.h"
 #import "ES_FeedbackViewController.h"
 #import "ES_UserActivityLabels.h"
@@ -76,8 +75,31 @@
 
 - (void) refreshTable
 {
-    [self recalculateEventsFromPredictionList];
+    if (self.eventToShowMinuteByMinute)
+    {
+        [self recalculateEventsFromGivenActivityEvent];
+    }
+    else
+    {
+        [self recalculateEventsFromDatabase];
+    }
     [self.tableView reloadData];
+    
+    // The prev/next buttons:
+    if (self.eventToShowMinuteByMinute)
+    {
+        // Then we're showing minutes of a single activityEvent. No need to allow moving to prev/next day. Instead need to add a "done" button:
+        self.nextButton.enabled = NO;
+        [self.nextButton setHidden:YES];
+        [self.prevButton setTitle:@"done" forState:UIControlStateNormal];
+    }
+    else
+    {
+        BOOL presentedDayIsToday = [self isTodaySameDayAsDate:self.timeInDayOfFocus];
+        self.nextButton.enabled = !presentedDayIsToday;
+        [self.nextButton setHidden:NO];
+        [self.prevButton setTitle:@"previous day" forState:UIControlStateNormal];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -115,6 +137,13 @@
     // Then go to previous day:
     self.timeInDayOfFocus = [self.timeInDayOfFocus dateByAddingTimeInterval:-SECONDS_IN_24HRS];
     [self refreshTable];
+    
+    if (self.eventToShowMinuteByMinute)
+    {
+        // Then we are presenting a minute-by-minute breakdown, and the "prev" button is actually "done":
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (IBAction)nextButtonTouchedDown:(id)sender {
@@ -223,7 +252,23 @@
     return timestamp;
 }
 
-- (void)recalculateEventsFromPredictionList
+- (void)recalculateEventsFromGivenActivityEvent
+{
+    // Empty the event history:
+    [self.eventHistory removeAllObjects];
+    
+    // Add an activityEvent for each atomic activity:
+    for (ES_Activity *atomicActivity in self.eventToShowMinuteByMinute.minuteActivities)
+    {
+        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[atomicActivity.userActivityLabels allObjects]]];
+        
+        ES_ActivityEvent *shortEvent = [[ES_ActivityEvent alloc] initWithIsVerified:atomicActivity.isPredictionVerified serverPrediction:atomicActivity.serverPrediction userCorrection:atomicActivity.userCorrection userActivityLabels:userActivitiesStrings mood:atomicActivity.mood startTimestamp:atomicActivity.timestamp endTimestamp:atomicActivity.timestamp minuteActivities:[NSMutableArray arrayWithObject:atomicActivity]];
+        
+        [self.eventHistory addObject:shortEvent];
+    }
+}
+
+- (void)recalculateEventsFromDatabase
 {
     // Empty the event history:
     [self.eventHistory removeAllObjects];
@@ -288,19 +333,44 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString *title = [self getDayStringForDate:[self timeInDayOfFocus]];
+    NSString *title;
+    if (self.eventToShowMinuteByMinute)
+    {
+        title = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.eventToShowMinuteByMinute.startTimestamp endTimestamp:self.eventToShowMinuteByMinute.endTimestamp];
+    }
+    else
+    {
+        title = [self getDayStringForDate:[self timeInDayOfFocus]];
+    }
     return title;
 }
 
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    UITableViewCell *header = [[UITableViewCell alloc] init];
-//    header.textLabel.text = [self getDayStringForDate:[NSDate date]];
-//    [header setBackgroundColor:[UIColor colorWithRed:0.1 green:0. blue:1. alpha:0.5]];
-//    [self.tableView bringSubviewToFront:header];
-//    
-//    return header;
-//}
++ (NSString *) getEventTitleUsingStartTimestamp:(NSNumber *)startTime endTimestamp:(NSNumber *)endTime
+{
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[startTime floatValue]];
+    NSDate *endDate = [NSDate dateWithTimeIntervalSince1970:[endTime floatValue]];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    formatter.dateFormat = @"EEEE MMM-dd";
+    NSString *dayStr = [formatter stringFromDate:startDate];
+    
+    formatter.dateFormat = @"HH:mm";
+    NSString *startStr = [formatter stringFromDate:startDate];
+    NSString *endStr = [formatter stringFromDate:endDate];
+    
+    NSString *title = [NSString stringWithFormat:@"%@ %@-%@",dayStr,startStr,endStr];
+    
+    return title;
+}
+
+- (BOOL) isTodaySameDayAsDate:(NSDate *)date
+{
+    NSNumber *givenDateDayTimestamp = [self getTimestampOfStartOfDay:date];
+    NSNumber *todaysTimestamp = [self getTimestampOfStartOfDay:[NSDate date]];
+    
+    return ([givenDateDayTimestamp isEqualToNumber:todaysTimestamp]);
+}
 
 - (NSString *) getDayStringForDate:(NSDate *)date
 {
@@ -310,9 +380,7 @@
     NSString *dayStr = [formatter stringFromDate:date];
     
     // Is this day today?
-    NSNumber *givenDateDayTimestamp = [self getTimestampOfStartOfDay:date];
-    NSNumber *todaysTimestamp = [self getTimestampOfStartOfDay:[NSDate date]];
-    if ([givenDateDayTimestamp isEqualToNumber:todaysTimestamp])
+    if ([self isTodaySameDayAsDate:date])
     {
         dayStr = [dayStr stringByAppendingString:@" (today)"];
     }
@@ -336,7 +404,7 @@
     NSDate * endDate = [NSDate dateWithTimeIntervalSince1970:[relevantEvent.endTimestamp doubleValue]];
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    [dateFormatter setDateFormat:@"hh:mm"];
+    [dateFormatter setDateFormat:@"HH:mm"];
     
     NSString *startDateStr = [dateFormatter stringFromDate:startDate];
     NSString *endDateStr = [dateFormatter stringFromDate:endDate];
@@ -399,48 +467,6 @@
 }
 
 
-
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
     ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)[tableView cellForRowAtIndexPath:indexPath];
@@ -455,18 +481,24 @@
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent
 {
-//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
-//    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
-//    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
-  
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     ES_FeedbackViewController *feedback = (ES_FeedbackViewController *)newView;
     
-    feedback.activityEvent = activityEvent;
-    feedback.feedbackType = ES_FeedbackTypeActivityEvent;
-//    activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
-//    activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
+    if (self.eventToShowMinuteByMinute)
+    {
+        // Then the feedback is for an atomic (single minute) activity:
+        ES_Activity *atomicActivity = [activityEvent.minuteActivities firstObject]; // There should be only one object there
+        
+        feedback.preexistingActivity = atomicActivity;
+        feedback.feedbackType = ES_FeedbackTypeAtomicActivity;
+    }
+    else
+    {
+        // Then the feedback is for a "long" activity event:
+        feedback.activityEvent = activityEvent;
+        feedback.feedbackType = ES_FeedbackTypeActivityEvent;
+    }
     
     // Mark that we are moving to the feedback view:
     self.editingActivityEvent = YES;
@@ -476,15 +508,6 @@
 
 
 #pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-//    ES_EventEditAndFeedbackViewController * editController = (ES_EventEditAndFeedbackViewController *)segue.destinationViewController;
-//    editController.activityEvent = ((ES_ActivityEventTableCell *)sender).activityEvent;
-}
 
  
 
