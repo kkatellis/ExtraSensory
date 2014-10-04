@@ -152,8 +152,6 @@
 		9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
 		9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */; };
 		9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */; };
-		9FD9D2F918AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FD9D2F818AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard */; };
-		9FD9D2FC18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD9D2FB18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -365,9 +363,6 @@
 		9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEventTableCell.m; sourceTree = "<group>"; };
 		9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEvent.h; sourceTree = "<group>"; };
 		9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEvent.m; sourceTree = "<group>"; };
-		9FD9D2F818AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = ActivityEventFeedback.storyboard; path = ../ActivityEventFeedback.storyboard; sourceTree = "<group>"; };
-		9FD9D2FA18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEventFeedbackViewController.h; sourceTree = "<group>"; };
-		9FD9D2FB18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEventFeedbackViewController.m; sourceTree = "<group>"; };
 		D353BB394CCF47E79205820E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -619,8 +614,6 @@
 				429483F9197E1B7D00FF20B6 /* Reusable */,
 				9F59F66518A9A9C5002C94B9 /* ES_HistoryTableViewController.h */,
 				9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */,
-				9FD9D2FA18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.h */,
-				9FD9D2FB18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m */,
 				9F90A5C818AD7A6700E6E29B /* ES_ActivityEventTableCell.h */,
 				9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */,
 				9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */,
@@ -679,7 +672,6 @@
 				70228E2918B19FF200189063 /* ActiveFeedback.storyboard */,
 				9307CBC617F1A78A00D95E05 /* Main.storyboard */,
 				70B8A8E618F87D230076A4F5 /* Resources */,
-				9FD9D2F818AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard */,
 				9307CC6A17F220FE00D95E05 /* ViewControllers */,
 				939562FE1806482200BF448E /* Views */,
 				93F659DF17F6B299000638CB /* Network */,
@@ -977,7 +969,6 @@
 				4E5C5E6919A66D4A00B801BC /* back.png in Resources */,
 				70B8A96018F87D230076A4F5 /* favorite.png in Resources */,
 				70B8A95B18F87D230076A4F5 /* default_playlist.json in Resources */,
-				9FD9D2F918AEC6AC00A2DF67 /* ActivityEventFeedback.storyboard in Resources */,
 				70B8A95C18F87D230076A4F5 /* icon-ipad.png in Resources */,
 				70B8A93418F87D230076A4F5 /* exercising.png in Resources */,
 				703B3668196E477500D5D80B /* text-plus-icon.png in Resources */,
@@ -1083,7 +1074,6 @@
 				707762E318D125BD00ED0134 /* ES_SummaryViewController.m in Sources */,
 				4E987BB319AEA7E8008C569D /* ES_Settings.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
-				9FD9D2FC18AECA1900A2DF67 /* ES_ActivityEventFeedbackViewController.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
 				4294840C197E1BD000FF20B6 /* MSCollectionViewCalendarLayout.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,

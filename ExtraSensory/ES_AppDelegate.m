@@ -14,10 +14,9 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
-#import "ES_ActivityEventFeedbackViewController.h"
 #import "ES_ActivityEvent.h"
 #import "ES_AlertViewWithUserInfo.h"
-#import "ES_ActiveFeedbackViewController.h"
+#import "ES_FeedbackViewController.h"
 #import "RaisedTabBarController.h"
 
 // Some constants:
@@ -445,12 +444,12 @@
 - (void) pushActiveFeedbackView
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    ES_ActiveFeedbackViewController* activeFeedbackInitial = [storyboard instantiateInitialViewController];
-    activeFeedbackInitial.modalPresentationStyle = UIModalPresentationFormSheet;
+    ES_FeedbackViewController *activeFeedback = [storyboard instantiateInitialViewController];
+    activeFeedback.feedbackType = ES_FeedbackTypeActive;
     
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
-    [nav presentViewController:activeFeedbackInitial animated:YES completion:nil];
+    [nav presentViewController:activeFeedback animated:YES completion:nil];
 }
 
 
@@ -466,14 +465,12 @@
     
     ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:secondaryActivitiesStringsSet mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActivityEventFeedback" bundle:nil];
-    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"ActivityEventFeedbackView"];
-    ES_ActivityEventFeedbackViewController *activityFeedback = (ES_ActivityEventFeedbackViewController *)newView;
-    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
+    UIViewController *newView = [storyboard instantiateInitialViewController];
+    ES_FeedbackViewController *activityFeedback = (ES_FeedbackViewController *)newView;
+    activityFeedback.feedbackType = ES_FeedbackTypeActivityEvent;
     activityFeedback.activityEvent = activityEvent;
-    activityFeedback.startTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.startTimestamp doubleValue]];
-    activityFeedback.endTime = [NSDate dateWithTimeIntervalSince1970:[activityEvent.endTimestamp doubleValue]];
-
+    
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
     [nav pushViewController:activityFeedback animated:YES];
