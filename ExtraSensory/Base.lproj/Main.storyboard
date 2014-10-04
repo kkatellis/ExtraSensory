@@ -27,20 +27,8 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Home" id="G9S-O5-AV7">
-                        <barButtonItem key="rightBarButtonItem" width="10" id="c76-3d-Fcj">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MpH-Qo-gh7">
-                                <rect key="frame" x="242" y="7" width="62" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="calendar"/>
-                                <connections>
-                                    <action selector="calendarButtonAction:" destination="Id0-k4-3dv" eventType="touchUpInside" id="rGy-uh-Osv"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Home" id="G9S-O5-AV7"/>
                     <connections>
-                        <outlet property="calendarButton" destination="MpH-Qo-gh7" id="FQa-gi-X42"/>
                         <outlet property="mostRecentActivityImage" destination="RdZ-Fs-goq" id="3Ee-tQ-rBv"/>
                         <outlet property="mostRecentActivityLabel" destination="bga-qn-aaa" id="ev1-og-1JF"/>
                     </connections>
