@@ -179,11 +179,18 @@
                     // TODO: Perhaps add "I will do this activity for the next...."
                     break;
                 case ES_FeedbackTypeActivityEvent:
-                    cell.textLabel.text = @"Minute by minute labels";
+                    if ([self.activityEvent.minuteActivities count] <= 1) {
+                        cell.textLabel.text = @" ";
+                        cell.accessoryType = UITableViewCellAccessoryNone;
+                    }
+                    else
+                    {
+                        cell.textLabel.text = @"Minute by minute labels";
+                    }
                     cell.detailTextLabel.text = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.activityEvent.startTimestamp endTimestamp:self.activityEvent.endTimestamp];
                     break;
                 case ES_FeedbackTypeAtomicActivity:
-                    // Nothing
+                    [self setAsEmptyCell:cell];
                 default:
                     break;
             }
@@ -196,6 +203,47 @@
     }
     
     return cell;
+}
+
+- (void) setAsEmptyCell:(UITableViewCell *)cell
+{
+    cell.textLabel.text = @" ";
+    cell.detailTextLabel.text = @" ";
+    cell.accessoryType = UITableViewCellAccessoryNone;
+}
+
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == ACCESSORY_SEC)
+    {
+        switch (self.feedbackType) {
+            case ES_FeedbackTypeActive:
+                return indexPath;
+                break;
+            
+            case ES_FeedbackTypeActivityEvent:
+                if ([self.activityEvent.minuteActivities count] <= 1)
+                {
+                    // Then this activity event has only 1 minute. No need for minute-minute breakdown:
+                    return nil;
+                }
+                return indexPath;
+                break;
+            
+            case ES_FeedbackTypeAtomicActivity:
+                return nil;
+                break;
+            
+            default:
+                return nil;
+                break;
+        }
+    }
+    else
+    {
+        return indexPath;
+    }
+    
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

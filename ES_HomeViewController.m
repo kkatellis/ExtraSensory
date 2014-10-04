@@ -182,11 +182,8 @@
     feedback.feedbackType = ES_FeedbackTypeActive;
     feedback.modalPresentationStyle = UIModalPresentationFormSheet;
     [self presentViewController:feedback animated:YES completion:nil];
-//    [self.navigationController pushViewController:feedback animated:YES];
-//    ES_ActiveFeedbackViewController* initialView = [storyboard instantiateInitialViewController];
-//    initialView.modalPresentationStyle = UIModalPresentationFormSheet;
-//    [self presentViewController:initialView animated:YES completion:nil];
 }
+
 - (IBAction)calendarButtonAction:(id)sender {
 //    ES_CalendarViewController *calendarViewController = [[ES_CalendarViewController alloc] init];
 ////    [self presentViewController:calendarViewController animated:YES completion:nil];
