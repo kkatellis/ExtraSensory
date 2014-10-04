@@ -41,12 +41,12 @@
 
 @implementation ES_FeedbackViewController
 
-@synthesize activity = _activity;
+@synthesize preexistingActivity = _preexistingActivity;
 @synthesize activityEvent = _activityEvent;
 
-- (void) setActivity:(ES_Activity *)activity
+- (void) setPreexistingActivity:(ES_Activity *)activity
 {
-    _activity = activity;
+    _preexistingActivity = activity;
     // Update the labels for this feedback:
     if (activity.userCorrection)
     {
@@ -101,7 +101,14 @@
 }
 - (IBAction)cancel:(id)sender {
     NSLog(@"Cancel button was pressed");
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.feedbackType == ES_FeedbackTypeActive)
+    {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark - Table view data source
@@ -205,6 +212,8 @@
 - (void) submitFeedback
 {
 
+    ES_Activity *newActivity; // To be used only for active feedback
+    
     switch (self.feedbackType) {
         case ES_FeedbackTypeActive:
             if (!self.mainActivity)
@@ -215,15 +224,15 @@
                 return;
             }
             // Create a new activity record:
-            self.activity = [ES_DataBaseAccessor newActivity];
+            newActivity = [ES_DataBaseAccessor newActivity];
             // Fill the labels:
-            self.activity.userCorrection = self.mainActivity;
-            [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:self.activity];
-            self.activity.userActivityLabels = self.secondaryActivities;
-            self.activity.mood = self.mood;
+            newActivity.userCorrection = self.mainActivity;
+            [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:newActivity];
+            newActivity.mood = self.mood;
             // Active feedback:
             NSLog(@"[Feedback] Starting active feedback.");
-            [[self appDelegate].scheduler activeFeedback:self.activity];
+            [[self appDelegate].scheduler activeFeedback:newActivity];
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             break;
             
         case ES_FeedbackTypeActivityEvent:
@@ -234,23 +243,24 @@
             // Send the feedback:
             NSLog(@"[Feedback] Feedback from activity event.");
             [self submitFeedbackForActivityEvent:self.activityEvent];
+            [self.navigationController popViewControllerAnimated:YES];
             break;
             
         case ES_FeedbackTypeAtomicActivity:
             // Fill the labels:
-            self.activity.userCorrection = self.mainActivity;
-            [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:self.activity];
-            self.activity.mood = self.mood;
+            self.preexistingActivity.userCorrection = self.mainActivity;
+            [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:self.preexistingActivity];
+            self.preexistingActivity.mood = self.mood;
             // Send the feedback:
             NSLog(@"[Feedback] Feedback from atomic activity.");
-            [self sendAtomicActivityLabelsIfRelevant:self.activity];
+            [self sendAtomicActivityLabelsIfRelevant:self.preexistingActivity];
+            [self.navigationController popViewControllerAnimated:YES];
             break;
             
         default:
             break;
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) submitFeedbackForActivityEvent:(ES_ActivityEvent *)actEvent
@@ -372,7 +382,7 @@
             self.mood = [[selectionController.appliedLabels allObjects] lastObject];
         }
     }
-    
+        
 }
 
 @end
