@@ -250,6 +250,10 @@
     // Initialize the network stack:
     NSMutableArray *ns = self.networkStack;
     NSLog(@"[appDelegate] Network stack has items: %@",ns);
+    
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
+    }
 }
 
 - (void) applicationDidBecomeActive:(UIApplication *)application
@@ -444,12 +448,14 @@
 - (void) pushActiveFeedbackView
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    ES_FeedbackViewController *activeFeedback = [storyboard instantiateInitialViewController];
+    ES_FeedbackViewController *activeFeedback = (ES_FeedbackViewController *)[storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     activeFeedback.feedbackType = ES_FeedbackTypeActive;
+    activeFeedback.calledFromNotification = YES;
     
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
-    [nav presentViewController:activeFeedback animated:YES completion:nil];
+    [nav pushViewController:activeFeedback animated:NO];
+//    [nav presentViewController:activeFeedback.navigationController animated:YES completion:nil];
 }
 
 
@@ -466,10 +472,11 @@
     ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:secondaryActivitiesStringsSet mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    UIViewController *newView = [storyboard instantiateInitialViewController];
+    UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     ES_FeedbackViewController *activityFeedback = (ES_FeedbackViewController *)newView;
     activityFeedback.feedbackType = ES_FeedbackTypeActivityEvent;
     activityFeedback.activityEvent = activityEvent;
+    activityFeedback.calledFromNotification = YES;
     
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;

@@ -87,8 +87,6 @@
 }
 
 
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.presentingMinuteByMinuteHistory = NO;
@@ -110,14 +108,7 @@
 }
 - (IBAction)cancel:(id)sender {
     NSLog(@"Cancel button was pressed");
-    if (self.feedbackType == ES_FeedbackTypeActive)
-    {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
-    else
-    {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    [self leaveFeedbackView];
 }
 
 #pragma mark - Table view data source
@@ -295,6 +286,36 @@
     [self.navigationController pushViewController:historyController animated:YES];
 }
 
+- (void) leaveFeedbackView
+{
+    if (self.calledFromNotification)
+    {
+        NSLog(@"=== leaving feedback: called from notification");
+        [self.navigationController popViewControllerAnimated:YES];
+        NSLog(@"=== after pop, before return");
+        return;
+    }
+    
+    switch (self.feedbackType)
+    {
+        case ES_FeedbackTypeActive:
+            NSLog(@"=== leaving feedback, not notification. active.");
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            break;
+            
+        case ES_FeedbackTypeActivityEvent:
+            NSLog(@"=== leaving feedback, not notification. activityEvent");
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+            
+        case ES_FeedbackTypeAtomicActivity:
+            NSLog(@"=== leaving feedback, not notification. atomic");
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+    }
+    return;
+}
+
 - (void) submitFeedback
 {
 
@@ -318,7 +339,7 @@
             // Active feedback:
             NSLog(@"[Feedback] Starting active feedback.");
             [[self appDelegate].scheduler activeFeedback:newActivity];
-            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            [self leaveFeedbackView];
             break;
             
         case ES_FeedbackTypeActivityEvent:
@@ -329,7 +350,7 @@
             // Send the feedback:
             NSLog(@"[Feedback] Feedback from activity event.");
             [self submitFeedbackForActivityEvent:self.activityEvent];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self leaveFeedbackView];
             break;
             
         case ES_FeedbackTypeAtomicActivity:
@@ -340,7 +361,7 @@
             // Send the feedback:
             NSLog(@"[Feedback] Feedback from atomic activity.");
             [self sendAtomicActivityLabelsIfRelevant:self.preexistingActivity];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self leaveFeedbackView];
             break;
             
         default:

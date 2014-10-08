@@ -20,6 +20,7 @@ typedef enum ES_FeedbackType : NSInteger
 @interface ES_FeedbackViewController : UITableViewController
 
 @property (nonatomic) ES_FeedbackType feedbackType;
+@property (nonatomic) BOOL calledFromNotification;
 
 @property (nonatomic, strong) ES_Activity *preexistingActivity;
 @property (nonatomic, strong) ES_ActivityEvent *activityEvent;

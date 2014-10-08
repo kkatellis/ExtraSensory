@@ -194,6 +194,7 @@
 - (void) setTimerForNaggingCheckup
 {
     NSNumber *timeBeforeNagCheckup = self.user.settings.timeBetweenUserNags;
+    timeBeforeNagCheckup = [NSNumber numberWithInt:20];
     NSLog(@"[scheduler] Setting user-nagging timer for %@ seconds.",timeBeforeNagCheckup);
     if (self.naggingTimer)
     {

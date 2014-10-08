@@ -181,6 +181,7 @@
     ES_FeedbackViewController *feedback = [storyboard instantiateInitialViewController];
     feedback.feedbackType = ES_FeedbackTypeActive;
     feedback.modalPresentationStyle = UIModalPresentationFormSheet;
+//    [self.navigationController pushViewController:feedback animated:YES];
     [self presentViewController:feedback animated:YES completion:nil];
 }
 
