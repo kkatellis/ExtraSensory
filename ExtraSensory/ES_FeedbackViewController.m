@@ -98,6 +98,7 @@
     {
         // Then we're back from the minute-by-minute history, and possibly edited some of the atomic activities, so the information we currently have here is no longer up to date. Need to pop back to History:
         [self.navigationController popViewControllerAnimated:NO];
+        return;
     }
     [self.tableView reloadData];
 }
@@ -106,8 +107,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 - (IBAction)cancel:(id)sender {
-    NSLog(@"Cancel button was pressed");
+    NSLog(@"[Feedback] Cancel button was pressed");
     [self leaveFeedbackView];
 }
 
@@ -281,6 +283,12 @@
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     ES_HistoryTableViewController *historyController = (ES_HistoryTableViewController *)[storyboard instantiateViewControllerWithIdentifier:@"History"];
+    
+    self.activityEvent.userCorrection = self.mainActivity;
+    self.activityEvent.userActivityLabels = self.secondaryActivities;
+    self.activityEvent.mood = self.mood;
+    [self submitFeedbackForActivityEvent:self.activityEvent];
+    
     historyController.eventToShowMinuteByMinute = self.activityEvent;
     
     [self.navigationController pushViewController:historyController animated:YES];
@@ -290,26 +298,21 @@
 {
     if (self.calledFromNotification)
     {
-        NSLog(@"=== leaving feedback: called from notification");
         [self.navigationController popViewControllerAnimated:YES];
-        NSLog(@"=== after pop, before return");
         return;
     }
     
     switch (self.feedbackType)
     {
         case ES_FeedbackTypeActive:
-            NSLog(@"=== leaving feedback, not notification. active.");
             [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             break;
             
         case ES_FeedbackTypeActivityEvent:
-            NSLog(@"=== leaving feedback, not notification. activityEvent");
             [self.navigationController popViewControllerAnimated:YES];
             break;
             
         case ES_FeedbackTypeAtomicActivity:
-            NSLog(@"=== leaving feedback, not notification. atomic");
             [self.navigationController popViewControllerAnimated:YES];
             break;
     }

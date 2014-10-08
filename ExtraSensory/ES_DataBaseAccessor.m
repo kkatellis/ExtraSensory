@@ -267,8 +267,11 @@
  */
 + (ES_Activity *) getLatestCorrectedActivityWithinTheLatest:(NSNumber *)seconds
 {
-    NSDate *sinceTime = [NSDate dateWithTimeIntervalSinceNow:(-[seconds integerValue])];
-    NSNumber *since = [NSNumber numberWithInt:(int)sinceTime];
+    float secondsFloat = [seconds floatValue];
+    NSTimeInterval secondsInterval = -secondsFloat;
+    NSDate *sinceTime = [NSDate dateWithTimeIntervalSinceNow:secondsInterval];
+    NSNumber *since = [NSNumber numberWithFloat:[sinceTime timeIntervalSince1970]];
+    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@",@"timestamp",since]];
@@ -286,7 +289,7 @@
             return activity;
         }
     }
-    
+        
     return nil;
 }
 

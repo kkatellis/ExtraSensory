@@ -263,7 +263,6 @@
         NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[atomicActivity.userActivityLabels allObjects]]];
         
         ES_ActivityEvent *shortEvent = [[ES_ActivityEvent alloc] initWithIsVerified:atomicActivity.isPredictionVerified serverPrediction:atomicActivity.serverPrediction userCorrection:atomicActivity.userCorrection userActivityLabels:userActivitiesStrings mood:atomicActivity.mood startTimestamp:atomicActivity.timestamp endTimestamp:atomicActivity.timestamp minuteActivities:[NSMutableArray arrayWithObject:atomicActivity]];
-        
         [self.eventHistory addObject:shortEvent];
     }
 }

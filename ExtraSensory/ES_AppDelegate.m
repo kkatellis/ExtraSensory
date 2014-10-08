@@ -455,7 +455,6 @@
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
     [nav pushViewController:activeFeedback animated:NO];
-//    [nav presentViewController:activeFeedback.navigationController animated:YES completion:nil];
 }
 
 
