@@ -20,8 +20,12 @@
 #import "RaisedTabBarController.h"
 
 // Some constants:
+#define APP_NAME_TITLE_STR @"ExtraSensory"
 #define FOUND_VERIFIED @"foundVerified"
-#define NOT_NOW_BUTTON_STR @"Not now!"
+#define NOT_NOW_BUTTON_STR @"Cancel"
+#define YES_STR @"Yes"
+#define CORRECT_STR @"Correct"
+#define NOT_EXACTLY_STR @"Not exactly"
 #define ALERT_DISMISS_TIME 45
 
 @interface ES_AppDelegate()
@@ -365,20 +369,21 @@
     if ([alertView isKindOfClass:[ES_AlertViewWithUserInfo class]])
     {
         ES_AlertViewWithUserInfo *alert = (ES_AlertViewWithUserInfo *)alertView;
-        [self pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:alert.userInfo];
+        BOOL userApprovedLabels = ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:CORRECT_STR]);
+        [self pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:alert.userInfo userAlreadyApproved:userApprovedLabels];
     }
     
     
 }
 
-- (void) pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:(NSDictionary *)userInfo
+- (void) pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved
 {
     if (userInfo)
     {
         // Check if there was found a verified activity in the recent period of time:
         if ([userInfo valueForKey:FOUND_VERIFIED])
         {
-            [self pushActivityEventFeedbackViewWithUserInfo:userInfo];
+            [self pushActivityEventFeedbackViewWithUserInfo:userInfo userAlreadyApproved:userApproved];
         }
         else
         {
@@ -398,7 +403,7 @@
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
         {
             // Then the app is in background, and the user already got a notification (with the relevant question), and selected to click on it, so there is no need to alert the user again with the same question, and we can directly move to the updating view:
-            [self pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:notification.userInfo];
+            [self pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:notification.userInfo userAlreadyApproved:NO];
         }
         else
         {
@@ -406,8 +411,20 @@
             
             // Use the single alert we maintain. First see if there is an open one that we need to dismiss:
             [self dismissLatestAlert];
-            self.latestAlert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:@"ExtraSensory" message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:NOT_NOW_BUTTON_STR otherButtonTitles:@"Update!",nil];
-        
+            if ([notification.userInfo valueForKey:FOUND_VERIFIED])
+            {
+                NSLog(@"[appDelegate] notification user info has verified labels. So preparing alert for activityEvent feedback");
+                // Then prepare alert for activityEvent feedback:
+                self.latestAlert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:APP_NAME_TITLE_STR message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:NOT_NOW_BUTTON_STR otherButtonTitles:CORRECT_STR,nil];
+                [self.latestAlert addButtonWithTitle:NOT_EXACTLY_STR];
+            }
+            else
+            {
+                NSLog(@"[appDelegate] notification user info doesn't have verified labels. So preparing alert for active feedback");
+                // Then prepare alert for clean-slate active feedback:
+                self.latestAlert = [[ES_AlertViewWithUserInfo alloc] initWithTitle:APP_NAME_TITLE_STR message:notification.alertBody delegate:self userInfo:notification.userInfo cancelButtonTitle:NOT_NOW_BUTTON_STR otherButtonTitles:YES_STR,nil];
+            }
+                      
             [NSTimer scheduledTimerWithTimeInterval:ALERT_DISMISS_TIME target:self selector:@selector(dismissLatestAlert) userInfo:nil repeats:NO];
             [self.latestAlert show];
         }
@@ -458,7 +475,7 @@
 }
 
 
-- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo
+- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved
 {
     // Create an ES_ActivityEvent object to initially describe what was presumably done in the recent period of time:
     NSNumber *startTimestamp = [userInfo valueForKey:@"latestVerifiedTimestamp"];
@@ -469,6 +486,14 @@
     NSSet *secondaryActivitiesStringsSet = [NSSet setWithArray:[userInfo valueForKey:@"secondaryActivitiesStrings"]];
     
     ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:secondaryActivitiesStringsSet mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
+    
+    // If user already approved labels, we can send the feedback right-away, without opening the feedback view:
+    if (userApproved)
+    {
+        ES_FeedbackViewController *controller = [[ES_FeedbackViewController alloc] init];
+        [controller submitFeedbackForActivityEvent:activityEvent];
+        return;
+    }
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];

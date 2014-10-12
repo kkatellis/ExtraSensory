@@ -25,4 +25,6 @@ typedef enum ES_FeedbackType : NSInteger
 @property (nonatomic, strong) ES_Activity *preexistingActivity;
 @property (nonatomic, strong) ES_ActivityEvent *activityEvent;
 
+- (void) submitFeedbackForActivityEvent:(ES_ActivityEvent *)actEvent;
+
 @end
