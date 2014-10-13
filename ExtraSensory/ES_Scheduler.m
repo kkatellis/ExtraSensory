@@ -293,8 +293,12 @@
                                                     userInfo: nil
                                                      repeats: YES];
     
-    // The user just provided active feedback, so no need to nag them for a while. Set the nagging-timer starting now:
-    [self setTimerForNaggingCheckup];
+    if (![self.appDelegate getExampleActivityForPredeterminedLabels])
+    {
+        // There are no predetermined labels waiting, and:
+        // The user just provided active feedback, so no need to nag them for a while. Set the nagging-timer starting now:
+        [self setTimerForNaggingCheckup];
+    }
 }
 
 -(void) firstOp
@@ -325,11 +329,6 @@
 -(void) firstOpActive: (ES_Activity *) activity
 {
     NSLog(@"[scheduler] Active feedback newly created activity was given.");
-    // If the user used active feedback, there should be no more predetermined labels:
-    if ([self.appDelegate getExampleActivityForPredeterminedLabels])
-    {
-        [self.appDelegate clearPredeterminedLabelsAndTurnOnNaggingMechanism];
-    }
     
     NSLog(@"[scheduler] Record Sensors");
     [self.sensorManager setCurrentActivity: activity];

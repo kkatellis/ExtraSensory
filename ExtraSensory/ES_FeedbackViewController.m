@@ -339,6 +339,13 @@
             newActivity.userCorrection = self.mainActivity;
             [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:newActivity];
             newActivity.mood = self.mood;
+            
+            // If the user used active feedback, there should be no more predetermined labels:
+            if ([self.appDelegate getExampleActivityForPredeterminedLabels])
+            {
+                [self.appDelegate clearPredeterminedLabelsAndTurnOnNaggingMechanism];
+            }
+            
             // Active feedback:
             NSLog(@"[Feedback] Starting active feedback.");
             [[self appDelegate].scheduler activeFeedback:newActivity];
