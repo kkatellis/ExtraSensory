@@ -32,6 +32,9 @@
 
 @property ES_AlertViewWithUserInfo *latestAlert;
 @property BOOL userSelectedDataCollectionOn;
+@property (nonatomic) ES_Activity *exampleWithPredeterminedLabels;
+@property (nonatomic, strong) NSDate *predeterminedLabelsValidUntil;
+@property (nonatomic, strong) NSTimer *predeterminedLabelsExpirationTimer;
 
 @end
 
@@ -548,6 +551,54 @@
     {
         [rtbc hideRecordingImage];
     }
+}
+
+- (void) clearPredeterminedLabels
+{
+    self.predeterminedLabelsValidUntil = nil;
+    self.exampleWithPredeterminedLabels = nil;
+    [self.predeterminedLabelsExpirationTimer invalidate];
+    self.predeterminedLabelsExpirationTimer = nil;
+}
+
+- (void) clearPredeterminedLabelsAndTurnOnNaggingMechanism
+{
+    [self clearPredeterminedLabels];
+    [self.scheduler setTimerForNaggingCheckup];
+}
+
+- (void) setLabelsFromNowOnUntil:(NSDate *)validUntil toBeSameAsForActivity:(ES_Activity *)activity
+{
+    self.predeterminedLabelsValidUntil = validUntil;
+    self.exampleWithPredeterminedLabels = activity;
+    [self.scheduler turnOffNaggingMechanism];
+    
+    // Now need to set a timer to stop this predetermined labels:
+    if (self.predeterminedLabelsExpirationTimer && [self.predeterminedLabelsExpirationTimer isValid])
+    {
+        [self.predeterminedLabelsExpirationTimer invalidate];
+    }
+    NSTimeInterval interval = [validUntil timeIntervalSinceNow];
+    self.predeterminedLabelsExpirationTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(clearPredeterminedLabelsAndTurnOnNaggingMechanism) userInfo:nil repeats:NO];
+}
+
+- (ES_Activity *) getExampleActivityForPredeterminedLabels
+{
+    if ((self.exampleWithPredeterminedLabels == nil) || (self.predeterminedLabelsValidUntil == nil))
+    {
+        [self clearPredeterminedLabels];
+        return nil;
+    }
+    
+    // If there are predetermined labels, make sure they are not (accidentally) expired:
+    if ([self.predeterminedLabelsValidUntil compare:[NSDate date]] == NSOrderedAscending)
+    {
+        // Then the predetermined labels expired and should be cleared:
+        [self clearPredeterminedLabelsAndTurnOnNaggingMechanism];
+        return nil;
+    }
+    
+    return self.exampleWithPredeterminedLabels;
 }
 
 #pragma mark -

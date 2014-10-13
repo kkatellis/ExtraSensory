@@ -186,9 +186,13 @@
     [self.timer invalidate];
     self.timer = nil;
     
+    [self turnOffNaggingMechanism];
+}
+
+- (void) turnOffNaggingMechanism
+{
     [self.naggingTimer invalidate];
     self.naggingTimer = nil;
-    
 }
 
 - (void) setTimerForNaggingCheckup
@@ -295,13 +299,38 @@
 
 -(void) firstOp
 {
+    ES_Activity *predeterminedLabels = [self.appDelegate getExampleActivityForPredeterminedLabels];
+    if (predeterminedLabels)
+    {
+        // Create a new activity record with the predetermined labels:
+        ES_Activity *newActivity = [ES_DataBaseAccessor newActivity];
+        newActivity.userCorrection = predeterminedLabels.userCorrection;
+        NSArray *userActivitiesStrings = [ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[predeterminedLabels.userActivityLabels allObjects]];
+        [ES_DataBaseAccessor setSecondaryActivities:userActivitiesStrings forActivity:newActivity];
+        newActivity.mood = predeterminedLabels.mood;
+        
+        NSLog(@"[scheduler] There are predetermined labels to attach to this new activity");
+        [self.sensorManager setCurrentActivity:newActivity];
+    }
+    else
+    {
+        // Record with no given activity record:
+        NSLog(@"[scheduler] There are no predetermined labels for now.");
+        [self.sensorManager setCurrentActivity: nil];
+    }
     NSLog(@"[scheduler] Record Sensors");
-    [self.sensorManager setCurrentActivity: nil];
     [self.sensorManager record];
 }
 
 -(void) firstOpActive: (ES_Activity *) activity
 {
+    NSLog(@"[scheduler] Active feedback newly created activity was given.");
+    // If the user used active feedback, there should be no more predetermined labels:
+    if ([self.appDelegate getExampleActivityForPredeterminedLabels])
+    {
+        [self.appDelegate clearPredeterminedLabelsAndTurnOnNaggingMechanism];
+    }
+    
     NSLog(@"[scheduler] Record Sensors");
     [self.sensorManager setCurrentActivity: activity];
     [self.sensorManager record];

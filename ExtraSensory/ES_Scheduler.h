@@ -19,4 +19,7 @@
 - (void) turnOffRecording;
 - (void) activeFeedback: (ES_Activity *) activity;
 
+- (void) turnOffNaggingMechanism;
+- (void) setTimerForNaggingCheckup;
+
 @end
