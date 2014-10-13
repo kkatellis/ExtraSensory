@@ -360,8 +360,8 @@
             if (!self.mainActivity)
             {
                 // Then we shouldn't do the active feedback.
-                // TODO: Alert about the missing main activity:
-                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:@"Feedback must have a main activity." delegate:self cancelButtonTitle:@"o.k." otherButtonTitles: nil];
+                [alert show];
                 return;
             }
             // Create a new activity record:
@@ -371,10 +371,20 @@
             [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:newActivity];
             newActivity.mood = self.mood;
             
-            // If the user used active feedback, there should be no more predetermined labels:
-            if ([self.appDelegate getExampleActivityForPredeterminedLabels])
+            // Should we set the selected labels as predetermined for future measurements:
+            if (self.validForNumberOfMinutes && [self.validForNumberOfMinutes intValue] > 0)
             {
-                [self.appDelegate clearPredeterminedLabelsAndTurnOnNaggingMechanism];
+                NSTimeInterval validInterval = 60.0 * [self.validForNumberOfMinutes floatValue];
+                NSDate *validUntil = [NSDate dateWithTimeIntervalSinceNow:validInterval];
+                [self.appDelegate setLabelsFromNowOnUntil:validUntil toBeSameAsForActivity:newActivity];
+            }
+            else
+            {
+                // If the user used active feedback, there should be no more predetermined labels:
+                if ([self.appDelegate getExampleActivityForPredeterminedLabels])
+                {
+                    [self.appDelegate clearPredeterminedLabelsAndTurnOnNaggingMechanism];
+                }
             }
             
             // Active feedback:

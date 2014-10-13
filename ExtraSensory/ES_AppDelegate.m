@@ -555,6 +555,7 @@
 
 - (void) clearPredeterminedLabels
 {
+    NSLog(@"[appDelegate] Removing predetermined labels.");
     self.predeterminedLabelsValidUntil = nil;
     self.exampleWithPredeterminedLabels = nil;
     [self.predeterminedLabelsExpirationTimer invalidate];
@@ -569,6 +570,8 @@
 
 - (void) setLabelsFromNowOnUntil:(NSDate *)validUntil toBeSameAsForActivity:(ES_Activity *)activity
 {
+    NSLog(@"[appDelegate] Setting labels to be valid until %@.",validUntil);
+    
     self.predeterminedLabelsValidUntil = validUntil;
     self.exampleWithPredeterminedLabels = activity;
     [self.scheduler turnOffNaggingMechanism];
