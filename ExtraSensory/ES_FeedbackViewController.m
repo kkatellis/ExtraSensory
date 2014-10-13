@@ -20,6 +20,8 @@
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
 #define MOOD @"Mood"
 
+#define VALID_FOR @"Valid for"
+
 #define MAIN_ACTIVITY_CELL @"Main Activity cell"
 #define SECONDARY_ACTIVITIES_CELL @"Secondary Activities cell"
 #define MOOD_CELL @"Mood cell"
@@ -33,12 +35,15 @@
 #define SUBMIT_SEC (int)4
 
 #define WHITESPACE @" "
+#define LESS_THAN_A_MINUTE @"less than a minute"
 
 @interface ES_FeedbackViewController ()
 
 @property (nonatomic, strong) NSString *mainActivity;
 @property (nonatomic, strong) NSSet *secondaryActivities;
 @property (nonatomic, strong) NSString *mood;
+
+@property (nonatomic, strong) NSNumber *validForNumberOfMinutes;
 
 @property (nonatomic) BOOL presentingMinuteByMinuteHistory;
 @end
@@ -169,18 +174,19 @@
             cell = [tableView dequeueReusableCellWithIdentifier:ACCESSORY_CELL];
             switch (self.feedbackType) {
                 case ES_FeedbackTypeActive:
-                    // TODO: Perhaps add "I will do this activity for the next...."
+                    cell.textLabel.text = VALID_FOR;
+                    cell.detailTextLabel.text = [self stringForValidForMinutes:self.validForNumberOfMinutes];
                     break;
                 case ES_FeedbackTypeActivityEvent:
                     if ([self.activityEvent.minuteActivities count] <= 1) {
-                        cell.textLabel.text = @" ";
+                        cell.detailTextLabel.text = @" ";
                         cell.accessoryType = UITableViewCellAccessoryNone;
                     }
                     else
                     {
-                        cell.textLabel.text = @"Minute by minute labels";
+                        cell.detailTextLabel.text = @"Minute by minute labels";
                     }
-                    cell.detailTextLabel.text = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.activityEvent.startTimestamp endTimestamp:self.activityEvent.endTimestamp];
+                    cell.textLabel.text = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.activityEvent.startTimestamp endTimestamp:self.activityEvent.endTimestamp];
                     break;
                 case ES_FeedbackTypeAtomicActivity:
                     [self setAsEmptyCell:cell];
@@ -196,6 +202,16 @@
     }
     
     return cell;
+}
+
+- (NSString *) stringForValidForMinutes:(NSNumber *)numMinutes
+{
+    if (!numMinutes || [numMinutes intValue] <= 0)
+    {
+        return @" ";
+    }
+    
+    return [NSString stringWithFormat:@"%@ minutes",numMinutes];
 }
 
 - (void) setAsEmptyCell:(UITableViewCell *)cell
@@ -254,7 +270,7 @@
         case ACCESSORY_SEC:
             switch (self.feedbackType) {
                 case ES_FeedbackTypeActive:
-                    // TODO: add select time to continue same activity
+                    [self openSelectNumMinutesValidFor];
                     break;
                     
                 case ES_FeedbackTypeActivityEvent:
@@ -274,6 +290,21 @@
         default:
             break;
     }
+}
+
+- (NSArray *) choicesForMinutesValidFor
+{
+    NSArray *choices = @[LESS_THAN_A_MINUTE,@"2 minutes",@"5 minutes",@"10 minutes",@"15 minutes",@"20 minutes",@"25 minutes",@"30 minutes"];
+    return choices;
+}
+
+- (void) openSelectNumMinutesValidFor
+{
+    NSArray *minuteChoices = [self choicesForMinutesValidFor];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
+    ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController *)[storyboard instantiateViewControllerWithIdentifier:@"SelectionFromList"];
+    [selectionController setParametersCategory:VALID_FOR multiSelection:NO useIndex:NO choices:minuteChoices appliedLabels:nil frequentChoices:nil];
+    [self.navigationController pushViewController:selectionController animated:YES];
 }
 
 - (void) openActivityEventMinuteHistory
@@ -497,6 +528,27 @@
         else
         {
             self.mood = [[selectionController.appliedLabels allObjects] lastObject];
+        }
+    }
+    else if ([selectionController.category isEqualToString:VALID_FOR])
+    {
+        if (!selectionController.appliedLabels || [selectionController.appliedLabels count] <= 0)
+        {
+            self.validForNumberOfMinutes = nil;
+        }
+        else
+        {
+            // There should be only a single selected value:
+            NSString *selected = [[selectionController.appliedLabels allObjects] lastObject];
+            if ([selected isEqualToString:LESS_THAN_A_MINUTE])
+            {
+                self.validForNumberOfMinutes = nil;
+            }
+            else
+            {
+                int numMinutes = [selected intValue];
+                self.validForNumberOfMinutes = [NSNumber numberWithInt:numMinutes];
+            }
         }
     }
         

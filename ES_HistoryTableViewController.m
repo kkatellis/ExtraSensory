@@ -91,7 +91,7 @@
         // Then we're showing minutes of a single activityEvent. No need to allow moving to prev/next day. Instead need to add a "done" button:
         self.nextButton.enabled = NO;
         [self.nextButton setHidden:YES];
-        [self.prevButton setTitle:@"done" forState:UIControlStateNormal];
+        [self.prevButton setTitle:@"Done" forState:UIControlStateNormal];
     }
     else
     {
