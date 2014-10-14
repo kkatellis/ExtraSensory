@@ -31,7 +31,6 @@
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
-		70228E3118B19FFE00189063 /* ES_ActiveFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */; };
 		703B3650196E3FA800D5D80B /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B364F196E3FA800D5D80B /* gear.png */; };
 		703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B3651196E3FD100D5D80B /* stats_pie_chart.png */; };
 		703B3668196E477500D5D80B /* text-plus-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B3667196E477500D5D80B /* text-plus-icon.png */; };
@@ -206,8 +205,6 @@
 		4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
-		70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActiveFeedbackViewController.m; sourceTree = "<group>"; };
-		70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActiveFeedbackViewController.h; sourceTree = "<group>"; };
 		703B364F196E3FA800D5D80B /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = ../gear.png; sourceTree = "<group>"; };
 		703B3651196E3FD100D5D80B /* stats_pie_chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_pie_chart.png; path = ../stats_pie_chart.png; sourceTree = "<group>"; };
 		703B3667196E477500D5D80B /* text-plus-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text-plus-icon.png"; sourceTree = "<group>"; };
@@ -577,8 +574,6 @@
 				4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */,
 				4E71BD4819BDA53800BA648B /* ES_SelectionFromListViewController.h */,
 				4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */,
-				70228E2E18B19FFE00189063 /* ES_ActiveFeedbackViewController.m */,
-				70228E2F18B19FFE00189063 /* ES_ActiveFeedbackViewController.h */,
 			);
 			name = Feedback;
 			sourceTree = "<group>";
@@ -1043,7 +1038,6 @@
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				42948417197E1C7600FF20B6 /* ES_CalendarViewController.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
-				70228E3118B19FFE00189063 /* ES_ActiveFeedbackViewController.m in Sources */,
 				42948410197E1BD000FF20B6 /* MSDayColumnHeaderBackground.m in Sources */,
 				4291F1DB199A8908008EDCA4 /* ES_Activity.m in Sources */,
 				7070A64818D7B991007D660D /* ES_UserActivityLabels.m in Sources */,
