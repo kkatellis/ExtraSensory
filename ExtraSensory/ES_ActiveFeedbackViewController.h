@@ -1,17 +1,19 @@
+/// Deprecated (Yonatan. Oct 2014). Instead, use the generic ES_FeedbackViewController
+
+////
+////  ES_ActiveFeedbackViewController.h
+////  ExtraSensory
+////
+////  Created by Kat Ellis on 2/10/14.
+////  Copyright (c) 2014 Bryan Grounds. All rights reserved.
+////
 //
-//  ES_ActiveFeedbackViewController.h
-//  ExtraSensory
+//#import <UIKit/UIKit.h>
+//#import "ES_Activity.h"
+//#import "ES_Scheduler.h"
 //
-//  Created by Kat Ellis on 2/10/14.
-//  Copyright (c) 2014 Bryan Grounds. All rights reserved.
 //
-
-#import <UIKit/UIKit.h>
-#import "ES_Activity.h"
-#import "ES_Scheduler.h"
-
-
-@interface ES_ActiveFeedbackViewController : UITableViewController
-
-@property (nonatomic, strong) ES_Activity *activity;
-@end
+//@interface ES_ActiveFeedbackViewController : UITableViewController
+//
+//@property (nonatomic, strong) ES_Activity *activity;
+//@end

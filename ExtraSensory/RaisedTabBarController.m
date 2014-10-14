@@ -7,7 +7,8 @@
 //
 
 #import "RaisedTabBarController.h"
-#import "ES_ActiveFeedbackViewController.h"
+//#import "ES_ActiveFeedbackViewController.h"
+#import "ES_FeedbackViewController.h"
 #import "ES_AppDelegate.h"
 
 #define PLUS_TAG 111
@@ -184,9 +185,16 @@
 -(void) activeFeedback:(UIButton*)button
 {
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-    ES_ActiveFeedbackViewController* initialView = [storyboard instantiateInitialViewController];
-    initialView.modalPresentationStyle = UIModalPresentationFormSheet;
-    [self presentViewController:initialView animated:YES completion:nil];
+    ES_FeedbackViewController *feedbackController = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
+    feedbackController.feedbackType = ES_FeedbackTypeActive;
+    feedbackController.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    UINavigationController *nav = [UINavigationController new];
+    [nav pushViewController:feedbackController animated:NO];
+    [self presentViewController:nav animated:YES completion:nil];
+//    ES_ActiveFeedbackViewController* initialView = [storyboard instantiateInitialViewController];
+//    initialView.modalPresentationStyle = UIModalPresentationFormSheet;
+//    [self presentViewController:initialView animated:YES completion:nil];
 }
 
 @end

@@ -35,7 +35,9 @@
 #define SUBMIT_SEC (int)4
 
 #define WHITESPACE @" "
+
 #define LESS_THAN_A_MINUTE @"less than a minute"
+#define DONT_REMEMBER @"don't remember"
 
 @interface ES_FeedbackViewController ()
 
@@ -470,6 +472,13 @@
         multiSelection = NO;
         useIndex = NO;
         choices = [ES_ActivitiesStrings mainActivities];
+        if (self.feedbackType != ES_FeedbackTypeActive)
+        {
+            // Add another choice for not remembering the activity:
+            NSMutableArray *tmp = [NSMutableArray arrayWithArray:choices];
+            [tmp addObject:DONT_REMEMBER];
+            choices = [NSArray arrayWithArray:tmp];
+        }
         if (self.mainActivity)
         {
             appliedLabels = [NSMutableSet setWithObject:self.mainActivity];

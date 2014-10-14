@@ -439,6 +439,10 @@
     {
         [cell setBackgroundColor:color];
     }
+    else
+    {
+        [cell setBackgroundColor:[UIColor clearColor]];
+    }
     
     NSString *eventDetails;
     if (relevantEvent.mood)
