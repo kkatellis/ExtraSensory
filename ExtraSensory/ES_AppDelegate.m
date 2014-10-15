@@ -292,6 +292,7 @@
 {
     NSLog(@"[appDelegate] Application is being terminated.");
     [ES_DataBaseAccessor save];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
 
 
@@ -376,7 +377,8 @@
         [self pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:alert.userInfo userAlreadyApproved:userApprovedLabels];
     }
     
-    
+    // This is a good time to clear the app's notifications. We shouldn't keep old/irrelevant notifications in the center:
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
 
 - (void) pushEitherActiveFeedbackOrActivityEventFeedbackAccordingToUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved
