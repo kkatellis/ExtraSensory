@@ -75,8 +75,6 @@
         [slices addObject:activityCounts[act]];
     }
     
-    //NSArray *slices = [NSArray arrayWithObjects:appDelegate.user.activityStatistics.countLying,appDelegate.user.activityStatistics.countSitting, appDelegate.user.activityStatistics.countStanding, appDelegate.user.activityStatistics.countWalking,appDelegate.user.activityStatistics.countRunning,appDelegate.user.activityStatistics.countBicycling,appDelegate.user.activityStatistics.countDriving, nil];
-    
     self.sliceArray = slices;
     // Set up the colors for the slices
     NSArray *colors = [ES_ActivitiesStrings mainActivitiesColors];

@@ -13,9 +13,7 @@
 #import "ES_Scheduler.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
-#import "ES_PieChartView.h"
 #import "ES_ActivityStatistic.h"
-//#import "ES_ActiveFeedbackViewController.h"
 #import "ES_FeedbackViewController.h"
 #import "ES_CalendarViewController.h"
 
@@ -27,8 +25,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *calendarButton;
 
 @property NSMutableArray *activityCountArray;
-
-@property (weak, nonatomic) IBOutlet ES_PieChartView *pieChartView;
 
 @end
 
