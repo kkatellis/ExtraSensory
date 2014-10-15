@@ -715,6 +715,7 @@
                         <outlet property="legendName4" destination="lup-G6-ZWG" id="Qd0-C3-lfi"/>
                         <outlet property="legendName5" destination="1fE-lQ-ftV" id="4qo-ds-lxX"/>
                         <outlet property="legendName6" destination="6gA-OV-Q16" id="Rnt-C4-WAk"/>
+                        <outlet property="pieChartView" destination="Hcr-55-b9f" id="xze-Ex-lSM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GxM-Bq-z2j" userLabel="First Responder" sceneMemberID="firstResponder"/>

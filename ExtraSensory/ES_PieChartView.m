@@ -29,7 +29,6 @@
     return self;
 }
 
-
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 
@@ -67,6 +66,7 @@
                        [NSNumber numberWithFloat:0.3],
                        nil];*/
     
+    NSLog(@"[pieChartView] Drawing pie chart.");
     NSMutableDictionary *activityCounts = [ES_DataBaseAccessor getTodaysCounts];
     NSArray *activityNames = [ES_ActivitiesStrings mainActivities];
     NSMutableArray *slices = [NSMutableArray arrayWithCapacity:7];

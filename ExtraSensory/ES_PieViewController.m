@@ -8,6 +8,7 @@
 
 #import "ES_PieViewController.h"
 #import "ES_ActivitiesStrings.h"
+#import "ES_PieChartView.h"
 
 @interface ES_PieViewController ()
 
@@ -31,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *legendName6;
 
 @property (nonatomic,retain) NSArray *legendNames;
+@property (weak, nonatomic) IBOutlet ES_PieChartView *pieChartView;
 
 @end
 
@@ -93,6 +95,25 @@
         colorLabel.layer.cornerRadius = 10;
     }
     
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(redrawPie) name:@"Activities" object:nil];
+    [self redrawPie];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) redrawPie
+{
+    [self.pieChartView setNeedsDisplay];
+    [self.pieChartView drawRect:self.pieChartView.frame];
 }
 
 - (void)didReceiveMemoryWarning
