@@ -11,6 +11,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreTelephony/CTCallCenter.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ES_SoundWaveProcessor.h"
 
@@ -39,6 +40,7 @@
 
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) CTCallCenter *callCenter;
 
 @property (nonatomic) double sampleFrequency; // Hertz
 @property (nonatomic) double interval; // seconds

@@ -25,4 +25,6 @@ BOOL isReady;   //only upload one at a time
 - (void) upload;
 - (void) sendFeedback: (ES_Activity *)feedback;
 
+- (NetworkStatus) reachabilityStatus;
+
 @end

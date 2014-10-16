@@ -66,9 +66,14 @@
     return _predictions;
 }
 
+- (NetworkStatus) reachabilityStatus
+{
+    return [wifiReachable currentReachabilityStatus];
+}
+
 - (void)reachabilityDidChange:(NSNotification *)notification
 {
-    if ([wifiReachable currentReachabilityStatus] == ReachableViaWiFi)
+    if ([self reachabilityStatus] == ReachableViaWiFi)
     {
         NSLog(@"[networkAccessor] WiFi is now available. Set timer to call upload in 3 seconds.");
         [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(upload) userInfo:nil repeats:NO];
@@ -153,7 +158,7 @@
     
     
     NSLog( @"[networkAccessor] Attempting to upload %@", file );
-    if( [wifiReachable currentReachabilityStatus] == ReachableViaWiFi )
+    if( [self reachabilityStatus] == ReachableViaWiFi )
     {
     
         NSData *data = [NSData dataWithContentsOfFile: fullPath];

@@ -14,6 +14,8 @@
 #import "ES_Settings.h"
 #import "ES_Activity.h"
 #import "ES_SoundWaveProcessor.h"
+#import "Reachability.h"
+#import "ES_NetworkAccessor.h"
 
 // In Hertz
 #define HF_SAMPLING_RATE    40
@@ -29,6 +31,7 @@
 
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
+
 @end
 
 @implementation ES_SensorManager
@@ -37,6 +40,7 @@
 @synthesize currentLocation = _currentLocation;
 @synthesize motionManager = _motionManager;
 @synthesize locationManager = _locationManager;
+@synthesize callCenter = _callCenter;
 @synthesize timer = _timer;
 @synthesize soundTimer = _soundTimer;
 @synthesize counter = _counter;
@@ -64,6 +68,17 @@
 #define MAG_X           @"magnet_x"
 #define MAG_Y           @"magnet_y"
 #define MAG_Z           @"magnet_z"
+
+#define ALTITUDE        @"altitude"
+#define FLOOR           @"floor"
+#define HOR_ACCURACY    @"horizontal_accuracy"
+#define VER_ACCURACY    @"vertical_accuracy"
+
+#define WIFI_STATUS     @"wifi_status"
+#define APP_STATE       @"app_state"
+#define DEV_ORIENTATION @"device_orientation"
+#define PROXIMITY       @"proximity"
+#define ON_THE_PHONE    @"on_the_phone"
 
 -(ES_SoundWaveProcessor *) soundProcessor
 {
@@ -99,6 +114,20 @@
         _appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return _appDelegate;
+}
+
+- (ES_NetworkAccessor *) networkAccessor
+{
+    return [self appDelegate].networkAccessor;
+}
+
+- (CTCallCenter *) callCenter
+{
+    if (!_callCenter)
+    {
+        _callCenter = [CTCallCenter new];
+    }
+    return _callCenter;
 }
 
 
@@ -245,6 +274,25 @@
     [self.appDelegate markNotRecordingRightNow];
 }
 
+- (NSMutableDictionary *) addDeviceIndicatorsAndLowFreqMeasurements:(NSMutableDictionary *)HFDataList
+{
+    // Discrete indicators:
+    [HFDataList setValue:[NSNumber numberWithInt:[[self networkAccessor] reachabilityStatus]] forKey:WIFI_STATUS];
+    [HFDataList setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:APP_STATE];
+    [HFDataList setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:DEV_ORIENTATION];
+    [HFDataList setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:PROXIMITY];
+    BOOL onThePhone = ((self.callCenter.currentCalls) && ([self.callCenter.currentCalls count] > 0));
+    [HFDataList setValue:[NSNumber numberWithBool:onThePhone] forKey:ON_THE_PHONE];
+    
+    // Scalar measurements:
+    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.altitude] forKey:ALTITUDE];
+    [HFDataList setValue:[NSNumber numberWithInteger:self.currentLocation.floor.level] forKey:FLOOR];
+    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.horizontalAccuracy] forKey:HOR_ACCURACY];
+    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.verticalAccuracy] forKey:VER_ACCURACY];
+    
+    return HFDataList;
+}
+
 -(void) packHFData
 {
     //--// Pack most recent data and place it within Data Bundle
@@ -286,6 +334,10 @@
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ] forKey: GYR_Z];
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ] forKey: ACC_Z];
     [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.magnetometerData.magneticField.z] forKey:MAG_Z];
+    
+    if( [HFDataBundle count] % 100 == 0 ) {
+        HFDataList = [self addDeviceIndicatorsAndLowFreqMeasurements:HFDataList];
+    }
     
     [HFDataBundle addObject:HFDataList];
     

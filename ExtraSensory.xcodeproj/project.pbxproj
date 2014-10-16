@@ -30,6 +30,7 @@
 		4E987BB319AEA7E8008C569D /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E987BB219AEA7E8008C569D /* ES_Settings.m */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
+		4EFADB3119F08BD800262568 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFADB3019F08BD500262568 /* CoreTelephony.framework */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
 		703B3650196E3FA800D5D80B /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B364F196E3FA800D5D80B /* gear.png */; };
 		703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B3651196E3FD100D5D80B /* stats_pie_chart.png */; };
@@ -204,6 +205,7 @@
 		4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_AlertViewWithUserInfo.m; sourceTree = "<group>"; };
 		4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
+		4EFADB3019F08BD500262568 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
 		703B364F196E3FA800D5D80B /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = ../gear.png; sourceTree = "<group>"; };
 		703B3651196E3FD100D5D80B /* stats_pie_chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_pie_chart.png; path = ../stats_pie_chart.png; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EFADB3119F08BD800262568 /* CoreTelephony.framework in Frameworks */,
 				93146B9F1802CD9F00F2AAC7 /* libz.dylib in Frameworks */,
 				9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */,
 				9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */,
@@ -639,6 +642,7 @@
 		9307CBB317F1A78A00D95E05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4EFADB3019F08BD500262568 /* CoreTelephony.framework */,
 				93146B9E1802CD9F00F2AAC7 /* libz.dylib */,
 				9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */,
 				9307CBB417F1A78A00D95E05 /* Foundation.framework */,
