@@ -277,18 +277,18 @@
 - (NSMutableDictionary *) addDeviceIndicatorsAndLowFreqMeasurements:(NSMutableDictionary *)HFDataList
 {
     // Discrete indicators:
-    [HFDataList setValue:[NSNumber numberWithInt:[[self networkAccessor] reachabilityStatus]] forKey:WIFI_STATUS];
-    [HFDataList setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:APP_STATE];
-    [HFDataList setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:DEV_ORIENTATION];
-    [HFDataList setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:PROXIMITY];
+    [HFDataList setValue:[NSNumber numberWithInt:[[self networkAccessor] reachabilityStatus]] forKey:[NSString stringWithFormat:@"lf_%@",WIFI_STATUS]];
+    [HFDataList setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:[NSString stringWithFormat:@"lf_%@",APP_STATE]];
+    [HFDataList setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:[NSString stringWithFormat:@"lf_%@",DEV_ORIENTATION]];
+    [HFDataList setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:[NSString stringWithFormat:@"lf_%@",PROXIMITY]];
     BOOL onThePhone = ((self.callCenter.currentCalls) && ([self.callCenter.currentCalls count] > 0));
-    [HFDataList setValue:[NSNumber numberWithBool:onThePhone] forKey:ON_THE_PHONE];
+    [HFDataList setValue:[NSNumber numberWithBool:onThePhone] forKey:[NSString stringWithFormat:@"lf_%@",ON_THE_PHONE]];
     
     // Scalar measurements:
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.altitude] forKey:ALTITUDE];
-    [HFDataList setValue:[NSNumber numberWithInteger:self.currentLocation.floor.level] forKey:FLOOR];
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.horizontalAccuracy] forKey:HOR_ACCURACY];
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.verticalAccuracy] forKey:VER_ACCURACY];
+    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.altitude] forKey:[NSString stringWithFormat:@"lf_%@",ALTITUDE]];
+    [HFDataList setValue:[NSNumber numberWithInteger:self.currentLocation.floor.level] forKey:[NSString stringWithFormat:@"lf_%@",FLOOR]];
+    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.horizontalAccuracy] forKey:[NSString stringWithFormat:@"lf_%@",HOR_ACCURACY]];
+    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.verticalAccuracy] forKey:[NSString stringWithFormat:@"lf_%@",VER_ACCURACY]];
     
     return HFDataList;
 }
