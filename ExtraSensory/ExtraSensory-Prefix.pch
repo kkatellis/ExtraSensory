@@ -22,9 +22,9 @@
 // Pod Configuration
 #define MAS_SHORTHAND
 // Pods
-#import <RestKit/RestKit.h>
-#import <CupertinoYankee/NSDate+CupertinoYankee.h>
-#import <UIColor-HexString/UIColor+HexString.h>
-#import <Masonry/Masonry.h>
+//#import <RestKit/RestKit.h>
+//#import <CupertinoYankee/NSDate+CupertinoYankee.h>
+//#import <UIColor-HexString/UIColor+HexString.h>
+//#import <Masonry/Masonry.h>
 
 #endif
