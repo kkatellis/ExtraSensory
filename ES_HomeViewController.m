@@ -15,7 +15,6 @@
 #import "ES_Settings.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_FeedbackViewController.h"
-#import "ES_CalendarViewController.h"
 
 @interface ES_HomeViewController ()
 
