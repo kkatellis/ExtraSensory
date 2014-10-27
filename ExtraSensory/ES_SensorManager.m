@@ -232,9 +232,7 @@
     [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
     [self.locationManager setPausesLocationUpdatesAutomatically: NO];
     [self.locationManager startUpdatingLocation];
-    
-    //NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
-    
+        
     [self.motionManager startDeviceMotionUpdates];
     [self.motionManager startAccelerometerUpdates];
     [self.motionManager startGyroUpdates];
