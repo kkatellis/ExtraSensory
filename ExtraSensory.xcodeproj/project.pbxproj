@@ -1103,7 +1103,7 @@
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "195933e1-c71d-4d52-8d19-5270fbc2715d";
+				PROVISIONING_PROFILE = "e004c33d-7ac8-4975-b9bc-5bef5e202314";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1120,7 +1120,7 @@
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "195933e1-c71d-4d52-8d19-5270fbc2715d";
+				PROVISIONING_PROFILE = "e004c33d-7ac8-4975-b9bc-5bef5e202314";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
