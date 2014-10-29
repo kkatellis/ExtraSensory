@@ -296,6 +296,7 @@
     //--// Pack most recent data and place it within Data Bundle
     if( [HFDataBundle count] % 100 == 0 ) {
         NSLog( @"[sensorManager] Collected %lu HF samples", (unsigned long)[HFDataBundle count]);
+        NSLog(@"==== now: %f. interval: %f",[[NSDate date] timeIntervalSince1970], self.interval);
     }
     if ([HFDataBundle count] == self.samplesPerBatch )
     {

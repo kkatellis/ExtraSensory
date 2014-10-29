@@ -250,7 +250,7 @@
         NSLog(@"[appDelegate] Prompting user for location authorization.");
         [self.locationManager requestAlwaysAuthorization];
     }
-    else if ( [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways) {
+    else if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways) {
         NSLog(@"[appDelegate] Alerting user that location is disabled and asking to enable it.");
         UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:@"You currently have location services disabled. It would be helpful if you allow the app to collect location data (please change your phone's privacy settings, location section)." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [servicesDisabledAlert show];
