@@ -22,6 +22,7 @@
 + (NSString *) dataDirectory;
 + (NSString *) zipDirectory;
 + (void) writeData: (NSArray *)data;
++ (void) writeSensorData: (NSDictionary *)data;
 + (void) clearHFDataFile;
 + (void) clearLabelFile;
 + (void) clearSoundFile;
@@ -40,6 +41,7 @@
 + (NSArray *) getTodaysFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities;
 + (NSArray *) getTodaysFrequentMoodsOutOf:(NSArray *)moods;
 
++ (void) writeSensorData:(NSDictionary *)data andActivity:(ES_Activity *)activity;
 + (void) writeActivity: (ES_Activity *)activity;
 + (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
 + (NSArray *) getWhileDeletingOrphansActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;

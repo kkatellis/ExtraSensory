@@ -167,6 +167,10 @@
         {
             NSLog(@"[networkAccessor] !!! no data!");
         }
+        else
+        {
+            NSLog(@"[networkAccessor] Loaded zip file's data");
+        }
     
         NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"%@%@",API_PREFIX,API_UPLOAD]];
         NSURLRequest *urlRequest = [self postRequestWithURL: url
@@ -176,6 +180,10 @@
         if( !urlRequest ) {
             NSLog( @"[networkAccessor] url request failed");
         }
+        else
+        {
+            NSLog(@"[networkAccessor] url request created");
+        }
     
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest: urlRequest
                                                                    delegate: self.appDelegate.networkAccessor];
@@ -184,6 +192,10 @@
             NSLog( @"[networkAccessor] !!! Connection Failed");
             isReady = YES;
             self.appDelegate.currentlyUploading = NO;
+        }
+        else
+        {
+            NSLog(@"[networkAccessor] Got connection. Waiting for reply...");
         }
     }
     else
@@ -234,7 +246,7 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    //NSLog( @"connectiondidReceiveResponse %@",response);
+    NSLog( @"[networkAccessor] connectiondidReceiveResponse %@",response);
     
     [self.recievedData setLength: 0];
     
@@ -242,16 +254,16 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSLog( @"connection: didReceiveData: ...");
+    NSLog( @"[networkAccessor] connection: didReceiveData");
     [self.recievedData appendData:data];
 }
 
 - (void) connection: (NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog( @"Network Stack size = %lu", (unsigned long)[self.appDelegate.networkStack count]);
+    NSLog( @"[networkAccessor] Network Stack size = %lu", (unsigned long)[self.appDelegate.networkStack count]);
     connection = nil;
     self.recievedData = nil;
-    NSLog( @"Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLErrorKey]);
+    NSLog( @"[networkAccessor] !!! Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLErrorKey]);
     self.appDelegate.currentlyUploading = NO;
     isReady = YES;
 }
@@ -264,7 +276,7 @@
     NSString *reply = [[NSString alloc] initWithData: self.recievedData
                                             encoding: NSUTF8StringEncoding];
     
-    NSLog( @" reply = %@", [reply description]);
+    NSLog( @"[networkAccessor] Got reply = %@", [reply description]);
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
     
