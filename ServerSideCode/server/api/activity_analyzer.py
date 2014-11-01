@@ -42,7 +42,8 @@ def classify_zip(zip_in,upload_folder,classifier_path):
     nf = feats_acc.shape[0]
     #X = np.hstack((feats_acc[0:nf,:],feats_gyro[0:nf,:],feats_gps[0:nf,:],feats_mic[0:nf,:],feats_mfcc[0:nf,:]))
     X = np.hstack((feats_acc[0:nf,:],feats_gyro[0:nf,:],feats_gps[0:nf,:]))
-    #print X.shape
+    print "features shape:"
+    print X.shape
     #predicted_activity = 'something'
     #load the classifier
     svm = mlpy.LibSvm.load_model(os.path.join(classifier_path,'svm'))
@@ -51,6 +52,8 @@ def classify_zip(zip_in,upload_folder,classifier_path):
     fp.close()
     mm = np.array(params['m'])
     dd = np.array(params['d'])
+    print "std minimal value is:";
+    print np.min(dd);
     X1 = (X-mm)
     X2 = X1/dd
     X2[np.where(np.isnan(X2))]=0
@@ -59,40 +62,61 @@ def classify_zip(zip_in,upload_folder,classifier_path):
     print "predictions", predictions
     pr = np.bincount(predictions.astype(int)).argmax()
     predicted_activity = params['activities'][pr - 1] #python indexes from zero
+    print "predicted activity: ", predicted_activity;
     return predicted_activity, UTime
+
+def get_measurements_from_json_dict(jdict):
+    print "Reading measurements from json structure, assuming dictionary structure";
+    # load data into arrays
+    acc = np.array([jdict['processed_user_acc_x'],jdict['processed_user_acc_y'],jdict['processed_user_acc_z']]).T;
+    magnet = np.array([jdict['processed_magnet_x'],jdict['processed_magnet_y'],jdict['processed_magnet_z']]).T;
+    gyro = np.array([jdict['processed_gyro_x'],jdict['processed_gyro_y'],jdict['processed_gyro_z']]).T;
+    last_gps_record = np.array([jdict['location_latitude'][-1],jdict['location_longitude'][-1],jdict['location_speed'][-1]]).T;
+    gps = np.outer(np.ones(acc.shape[0]),last_gps_record);
+
+    return (acc,magnet,gyro,gps);
+
+
+def get_measurements_from_json_list(jlist):
+    print "Reading measurements from json structure, assuming list structure";
+    # load data into arrays
+    acc = np.zeros((len(jlist),3))
+    magnet = np.zeros((len(jlist),3))
+    gyro = np.zeros((len(jlist),3))
+    gps = np.zeros((len(jlist),3))
+    
+	#loop through json and write data
+    for j in range(len(jlist)):
+        acc[j,0] = jlist[j]['acc_x']
+        acc[j,1] = jlist[j]['acc_y']
+        acc[j,2] = jlist[j]['acc_z']
+        magnet[j,0] = jlist[j]['magnet_x']
+        magnet[j,1] = jlist[j]['magnet_y']
+        magnet[j,2] = jlist[j]['magnet_z']
+        gyro[j,0] = jlist[j]['gyro_x']
+        gyro[j,1] = jlist[j]['gyro_y']
+        gyro[j,2] = jlist[j]['gyro_z']
+        gps[j,0] = jlist[j]['lat']
+        gps[j,1] = jlist[j]['long']
+        gps[j,2] = jlist[j]['speed']
+        pass;
+
+    return (acc,magnet,gyro,gps);
 
 def do_datafile(tmp_dir):
 	# open the file for reading
 	fr = open(os.path.join(tmp_dir,"HF_DUR_DATA.txt"), "r")
-	jlist = json.load(fr)
-	#print "jlist:", len(jlist)
-
-	# load data into arrays
-	acc = np.zeros((len(jlist),3))
-	magnet = np.zeros((len(jlist),3))
-	gyro = np.zeros((len(jlist),3))
-	gps = np.zeros((len(jlist),3))
-#	mic = np.zeros((len(jlist),2))
-	
-	#loop through json and write data
-	for j in range(len(jlist)):
-		acc[j,0] = jlist[j]['acc_x']
-		acc[j,1] = jlist[j]['acc_y']
-		acc[j,2] = jlist[j]['acc_z']
-		magnet[j,0] = jlist[j]['magnet_x']
-		magnet[j,1] = jlist[j]['magnet_y']
-		magnet[j,2] = jlist[j]['magnet_z']
-		gyro[j,0] = jlist[j]['gyro_x']
-		gyro[j,1] = jlist[j]['gyro_y']
-		gyro[j,2] = jlist[j]['gyro_z']
-		gps[j,0] = jlist[j]['lat']
-		gps[j,1] = jlist[j]['long']
-		gps[j,2] = jlist[j]['speed']
-#		mic[j,0] = jlist[j]['mic_peak_db']
-#		mic[j,1] = jlist[j]['mic_avg_db']
-#	
+        jobj = json.load(fr);
 	# close file
 	fr.close()
+
+        if (type(jobj) == list):
+            (acc,magnet,gyro,gps) = get_measurements_from_json_list(jobj);
+            pass;
+        else:
+            (acc,magnet,gyro,gps) = get_measurements_from_json_dict(jobj);
+            pass;
+
 	if acc.shape[0] < feats.wins40:
 		raise Exception("Not enough data to make a feature (n = %i)" % acc.shape[0])
 	feats_acc = feats.feats_acc(acc,feats.wins40,feats.steps40) #accelerometer features

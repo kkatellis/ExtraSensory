@@ -171,6 +171,7 @@ def feedback_upload():
 	#now predict the activity
 
         predicted_activity, UTime = activity_analyzer.classify_zip(filename, current_app.config['UPLOAD_FOLDER'], current_app.config['CLASSIFIER_FOLDER'])
+        print "analyzer got predicted activity: %s and UTime: %s from classify_zip." % (predicted_activity,UTime);
         msg = ''
         success = True;
         pass;
@@ -185,7 +186,12 @@ def feedback_upload():
 	    UTime = 0
             pass;
         pass;
-    return json.dumps( {'api_type':'feedback_upload','filename':uploaded_file.filename,'success': success, 'predicted_activity': predicted_activity, 'timestamp': int(UTime), 'msg': msg } )
+
+    return_string = json.dumps( {'api_type':'feedback_upload','filename':uploaded_file.filename,'success': success, 'predicted_activity': predicted_activity, 'timestamp': int(UTime), 'msg': msg } );
+
+    print "Analyzer returning message:";
+    print return_string;
+    return return_string;
 
 @analyzer_api.route( '/feedback' )
 def handle_feedback():
