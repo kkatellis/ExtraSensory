@@ -42,8 +42,6 @@ def classify_zip(zip_in,upload_folder,classifier_path):
     nf = feats_acc.shape[0]
     #X = np.hstack((feats_acc[0:nf,:],feats_gyro[0:nf,:],feats_gps[0:nf,:],feats_mic[0:nf,:],feats_mfcc[0:nf,:]))
     X = np.hstack((feats_acc[0:nf,:],feats_gyro[0:nf,:],feats_gps[0:nf,:]))
-    print "features shape:"
-    print X.shape
     #predicted_activity = 'something'
     #load the classifier
     svm = mlpy.LibSvm.load_model(os.path.join(classifier_path,'svm'))
@@ -52,8 +50,6 @@ def classify_zip(zip_in,upload_folder,classifier_path):
     fp.close()
     mm = np.array(params['m'])
     dd = np.array(params['d'])
-    print "std minimal value is:";
-    print np.min(dd);
     X1 = (X-mm)
     X2 = X1/dd
     X2[np.where(np.isnan(X2))]=0
@@ -63,6 +59,7 @@ def classify_zip(zip_in,upload_folder,classifier_path):
     pr = np.bincount(predictions.astype(int)).argmax()
     predicted_activity = params['activities'][pr - 1] #python indexes from zero
     print "predicted activity: ", predicted_activity;
+
     return predicted_activity, UTime
 
 def get_measurements_from_json_dict(jdict):
