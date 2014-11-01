@@ -222,7 +222,7 @@
 {
     if (!_interval)
     {
-        _interval = 1 / [self.user.settings.sampleRate doubleValue];
+        _interval = 1. / [self.user.settings.sampleRate doubleValue];
     }
     return _interval;
 }
@@ -243,7 +243,7 @@
 
 - (BOOL) usingTimerForSampling
 {
-    _usingTimerForSampling = YES;
+    _usingTimerForSampling = NO;
     return _usingTimerForSampling;
 }
 
@@ -468,23 +468,37 @@
     // Start the sampling:
     NSLog(@"[sensorManager] Starting sampling sensors...(%@)",[NSDate date]);
     
-    NSOperationQueue *accQueue = [NSOperationQueue new];
-    [self.motionManager startAccelerometerUpdatesToQueue:accQueue withHandler:^(CMAccelerometerData *accelerometerData, NSError *error ) {
+    NSOperationQueue *queue = [NSOperationQueue mainQueue];
+    /// Notice: when used a new queue (or separate new queue for each sensor) there were bugs after finished sampling (red dot took time to disappear and network connection failed to get response)
+    [self.motionManager startAccelerometerUpdatesToQueue:queue withHandler:^(CMAccelerometerData *accelerometerData, NSError *error ) {
+        if (error)
+        {
+            NSLog(@"caught error: %@",error);
+        }
         [self addAccelerationSample:accelerometerData];
     }];
     
-    NSOperationQueue *gyroQueue = [NSOperationQueue new];
-    [self.motionManager startGyroUpdatesToQueue:gyroQueue withHandler:^(CMGyroData *gyroscopeData, NSError *error) {
+    [self.motionManager startGyroUpdatesToQueue:queue withHandler:^(CMGyroData *gyroscopeData, NSError *error) {
+        if (error)
+        {
+            NSLog(@"caught error: %@",error);
+        }
         [self addGyroscopeSample:gyroscopeData];
     }];
     
-    NSOperationQueue *magnetQueue = [NSOperationQueue new];
-    [self.motionManager startMagnetometerUpdatesToQueue:magnetQueue withHandler:^(CMMagnetometerData *magnetometerData, NSError *error) {
+    [self.motionManager startMagnetometerUpdatesToQueue:queue withHandler:^(CMMagnetometerData *magnetometerData, NSError *error) {
+        if (error)
+        {
+            NSLog(@"caught error: %@",error);
+        }
         [self addMagnetometerSample:magnetometerData];
     }];
     
-    NSOperationQueue *motionQueue = [NSOperationQueue new];
-    [self.motionManager startDeviceMotionUpdatesToQueue:motionQueue withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
+    [self.motionManager startDeviceMotionUpdatesToQueue:queue withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
+        if (error)
+        {
+            NSLog(@"caught error: %@",error);
+        }
         [self addDeviceMotionSample:deviceMotion];
     }];
     
@@ -493,10 +507,6 @@
     // Add low frequency (one time) measurements:
     [self addDeviceIndicatorsToDataBundle];
     
-    // Add a timer, just to make sure this sampling doesn't go on forever:
-    [self.timer invalidate];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:(self.sampleDuration + 10.) target:self selector:@selector(checkIfDataBundleReadyAndHandleIt) userInfo:nil repeats:YES];
-    //NSLog(@"==== set timer for: %@",self.timer.fireDate);
     
 }
 
@@ -555,7 +565,7 @@
 //    }
     if (curr_count >= [self samplesPerBatch])
     {
-        NSLog(@"[sensorManager] Have enough device motion samples. Stopping device motion (%@)",[NSDate date]);
+        //NSLog(@"[sensorManager] Have enough device motion samples. Stopping device motion (%@)",[NSDate date]);
         [self.motionManager stopDeviceMotionUpdates];
         [self checkIfDataBundleReadyAndHandleIt];
     }
@@ -586,7 +596,7 @@
 //    }
     if (curr_count >= [self samplesPerBatch])
     {
-        NSLog(@"[sensorManager] Have enough magnet samples. Stopping magnetometer (%@)",[NSDate date]);
+        //NSLog(@"[sensorManager] Have enough magnet samples. Stopping magnetometer (%@)",[NSDate date]);
         [self.motionManager stopMagnetometerUpdates];
         [self checkIfDataBundleReadyAndHandleIt];
     }
@@ -617,7 +627,7 @@
 //    }
     if (curr_count >= [self samplesPerBatch])
     {
-        NSLog(@"[sensorManager] Have enough gyroscope samples. Stopping gyroscope (%@)",[NSDate date]);
+        //NSLog(@"[sensorManager] Have enough gyroscope samples. Stopping gyroscope (%@)",[NSDate date]);
         [self.motionManager stopGyroUpdates];
         [self checkIfDataBundleReadyAndHandleIt];
     }
@@ -699,6 +709,7 @@
 
 - (void) checkIfDataBundleReadyAndHandleIt
 {
+    
     unsigned long accCount = [self countField:RAW_ACC_X];
     unsigned long gyrCount = [self countField:RAW_GYR_X];
     unsigned long magCount = [self countField:RAW_MAG_X];
@@ -714,17 +725,28 @@
     [self handleFinishedDataBundle];
 }
 
+- (void) stopAllSamplers
+{
+    NSLog(@"[sensorManager] Stopping all sensor sampling.");
+    [self.locationManager stopUpdatingLocation];
+    [self.motionManager stopAccelerometerUpdates];
+    [self.motionManager stopGyroUpdates];
+    [self.motionManager stopMagnetometerUpdates];
+    [self.motionManager stopDeviceMotionUpdates];
+}
+
 - (void) handleFinishedDataBundle
 {
     NSLog(@"[sensorManager] Time to wrap the data bundle and send it");
     // Make sure to stop the sensing:
-    [self.locationManager stopUpdatingLocation];
+    [self stopAllSamplers];
+    
+
+    //[self.timer invalidate];
+    [ES_DataBaseAccessor writeSensorData:self.hfData andActivity:self.currentActivity];
     
     // Mark finished recording:
     [self.appDelegate markNotRecordingRightNow];
-
-    [self.timer invalidate];
-    [ES_DataBaseAccessor writeSensorData:self.hfData andActivity:self.currentActivity];
     
 }
 

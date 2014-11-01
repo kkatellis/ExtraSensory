@@ -246,7 +246,7 @@
 
 - (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    NSLog( @"[networkAccessor] connectiondidReceiveResponse %@",response);
+    NSLog( @"[networkAccessor] connectiondidReceiveResponse.");
     
     [self.recievedData setLength: 0];
     
