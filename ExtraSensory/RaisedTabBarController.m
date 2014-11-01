@@ -80,7 +80,9 @@
 
 - (void)hideRecordingImage
 {
+    NSLog(@"[raisedTabBar] Hiding 'recording' red dot symbol: currently has hidden: %hhd",[self.view viewWithTag:RECORDING_TAG].hidden);
     [self hideViewWithTag:RECORDING_TAG];
+    NSLog(@"[raisedTabBar] After hiding 'recording' red dot symbol: currently has hidden: %hhd",[self.view viewWithTag:RECORDING_TAG].hidden);
 }
 
 - (void)showRecordingImage

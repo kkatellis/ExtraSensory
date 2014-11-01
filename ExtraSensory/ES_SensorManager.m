@@ -31,6 +31,9 @@
 
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
+@property (nonatomic, strong) NSMutableDictionary *hfData;
+@property (nonatomic) BOOL usingTimerForSampling;
+
 
 @end
 
@@ -50,12 +53,9 @@
 @synthesize isReady = _isReady;
 @synthesize user = _user;
 @synthesize currentActivity = _currentActivity;
+@synthesize usingTimerForSampling = _usingTimerForSampling;
 
 //--// API data keys
-#define LAT             @"lat"
-#define LNG             @"long"
-#define SPEED           @"speed"
-#define TIMESTAMP       @"timestamp"
 
 #define ACC_X           @"acc_x"
 #define ACC_Y           @"acc_y"
@@ -68,6 +68,69 @@
 #define MAG_X           @"magnet_x"
 #define MAG_Y           @"magnet_y"
 #define MAG_Z           @"magnet_z"
+
+#define LAT             @"lat"
+#define LNG             @"long"
+#define SPEED           @"speed"
+#define TIMESTAMP       @"timestamp"
+
+//#################
+// New sampling method fields:
+
+#define RAW_ACC_X           @"raw_acc_x"
+#define RAW_ACC_Y           @"raw_acc_y"
+#define RAW_ACC_Z           @"raw_acc_z"
+#define RAW_ACC_TIME        @"raw_acc_timeref"
+
+#define RAW_GYR_X           @"raw_gyro_x"
+#define RAW_GYR_Y           @"raw_gyro_y"
+#define RAW_GYR_Z           @"raw_gyro_z"
+#define RAW_GYR_TIME        @"raw_gyro_timeref"
+
+#define RAW_MAG_X           @"raw_magnet_x"
+#define RAW_MAG_Y           @"raw_magnet_y"
+#define RAW_MAG_Z           @"raw_magnet_z"
+#define RAW_MAG_TIME        @"raw_magnet_timeref"
+
+// measurements processed by CMDeviceMotionManager:
+#define PROC_USER_ACC_X     @"processed_user_acc_x"
+#define PROC_USER_ACC_Y     @"processed_user_acc_y"
+#define PROC_USER_ACC_Z     @"processed_user_acc_z"
+
+#define PROC_GRAV_X         @"processed_gravity_x"
+#define PROC_GRAV_Y         @"processed_gravity_y"
+#define PROC_GRAV_Z         @"processed_gravity_z"
+
+#define PROC_GYR_X          @"processed_gyro_x"
+#define PROC_GYR_Y          @"processed_gyro_y"
+#define PROC_GYR_Z          @"processed_gyro_z"
+
+#define PROC_ROLL           @"processed_roll"
+#define PROC_PITCH          @"processed_pitch"
+#define PROC_YAW            @"processed_yaw"
+
+#define PROC_MAG_X          @"processed_magnet_x"
+#define PROC_MAG_Y          @"processed_magnet_y"
+#define PROC_MAG_Z          @"processed_magnet_z"
+
+#define PROC_TIME           @"processed_timeref"
+
+// Location:
+#define LOC_LAT             @"location_latitude"
+#define LOC_LONG            @"location_longitude"
+#define LOC_ALT             @"location_altitude"
+#define LOC_FLOOR           @"location_floor"
+#define LOC_SPEED           @"location_speed"
+
+#define LOC_HOR_ACCURACY    @"location_horizontal_accuracy"
+#define LOC_VER_ACCURACY    @"location_vertical_accuracy"
+
+#define LOC_TIME            @"location_timestamp"
+
+#define LOW_FREQ            @"low_frequency"
+
+//############
+// low frequency measurements:
 
 #define ALTITUDE        @"altitude"
 #define FLOOR           @"floor"
@@ -178,6 +241,14 @@
     return _sampleDuration;
 }
 
+- (BOOL) usingTimerForSampling
+{
+    _usingTimerForSampling = YES;
+    return _usingTimerForSampling;
+}
+
+
+
 /* starts recording of microphone depending on filename*/
 - (void) _prepStage: (NSString *)fileName {
     
@@ -205,6 +276,20 @@
 
 - (BOOL) record
 {
+    if ([self usingTimerForSampling])
+    {
+        [self recordUsingTimer];
+    }
+    else
+    {
+        [self recordWithoutNSTimer];
+    }
+    
+    return YES;
+}
+
+- (BOOL) recordUsingTimer
+{
     // Setup HFData array
     if( HFDataBundle) {
         NSLog(@"[sensorManager] Clearing old HFDataBundle.");
@@ -226,15 +311,14 @@
     self.motionManager.accelerometerUpdateInterval = self.interval;
     self.motionManager.gyroUpdateInterval = self.interval;
     self.motionManager.magnetometerUpdateInterval = self.interval;
+    self.motionManager.deviceMotionUpdateInterval = self.interval;
     
     [self.locationManager setDelegate: self];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
     [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
     [self.locationManager setPausesLocationUpdatesAutomatically: NO];
     [self.locationManager startUpdatingLocation];
-    
-    //NSLog( @"gpsAuth: %u", [CLLocationManager authorizationStatus]);
-    
+        
     [self.motionManager startDeviceMotionUpdates];
     [self.motionManager startAccelerometerUpdates];
     [self.motionManager startGyroUpdates];
@@ -270,6 +354,7 @@
     [self.motionManager stopAccelerometerUpdates];
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
+    [self.motionManager stopDeviceMotionUpdates];
     [self.soundProcessor pauseDurRecording];
     [self.appDelegate markNotRecordingRightNow];
 }
@@ -298,6 +383,7 @@
     //--// Pack most recent data and place it within Data Bundle
     if( [HFDataBundle count] % 100 == 0 ) {
         NSLog( @"[sensorManager] Collected %lu HF samples", (unsigned long)[HFDataBundle count]);
+        NSLog(@"==== now: %f. interval: %f",[[NSDate date] timeIntervalSince1970], self.interval);
     }
     if ([HFDataBundle count] == self.samplesPerBatch )
     {
@@ -308,6 +394,7 @@
         [self.motionManager stopAccelerometerUpdates];
         [self.motionManager stopGyroUpdates];
         [self.motionManager stopMagnetometerUpdates];
+        [self.motionManager stopDeviceMotionUpdates];
         
         [ES_DataBaseAccessor writeData: HFDataBundle];
         [ES_DataBaseAccessor writeActivity: self.currentActivity];
@@ -343,6 +430,304 @@
     
 }
 
+// #############################################################
+// New version of recording measurements (not relying on NSTimer, which is no accurate, especially, when app goes to background):
+
+- (void) recordWithoutNSTimer
+{
+    // Prepare for collection of new measurements:
+    if (self.hfData)
+    {
+        NSLog(@"[sensorManager] Clearing old HF data.");
+        [self.hfData removeAllObjects];
+    }
+    else
+    {
+        self.hfData = [NSMutableDictionary dictionaryWithCapacity:20];
+    }
+    [ES_DataBaseAccessor clearHFDataFile];
+    [ES_DataBaseAccessor clearLabelFile];
+    [ES_DataBaseAccessor clearSoundFile];
+    
+    // Mark begining recording:
+    [self.appDelegate markRecordingRightNow];
+    
+    self.currentActivity.startTime = [NSDate date];
+    self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[self.currentActivity.startTime timeIntervalSince1970]];
+    
+    // Prepare sensing devices:
+    self.motionManager.accelerometerUpdateInterval = self.interval;
+    self.motionManager.gyroUpdateInterval = self.interval;
+    self.motionManager.magnetometerUpdateInterval = self.interval;
+    self.motionManager.deviceMotionUpdateInterval = self.interval;
+    [self.locationManager setDelegate: self];
+    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+    [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
+    [self.locationManager setPausesLocationUpdatesAutomatically: NO];
+    
+    // Start the sampling:
+    NSLog(@"[sensorManager] Starting sampling sensors...(%@)",[NSDate date]);
+    
+    NSOperationQueue *accQueue = [NSOperationQueue new];
+    [self.motionManager startAccelerometerUpdatesToQueue:accQueue withHandler:^(CMAccelerometerData *accelerometerData, NSError *error ) {
+        [self addAccelerationSample:accelerometerData];
+    }];
+    
+    NSOperationQueue *gyroQueue = [NSOperationQueue new];
+    [self.motionManager startGyroUpdatesToQueue:gyroQueue withHandler:^(CMGyroData *gyroscopeData, NSError *error) {
+        [self addGyroscopeSample:gyroscopeData];
+    }];
+    
+    NSOperationQueue *magnetQueue = [NSOperationQueue new];
+    [self.motionManager startMagnetometerUpdatesToQueue:magnetQueue withHandler:^(CMMagnetometerData *magnetometerData, NSError *error) {
+        [self addMagnetometerSample:magnetometerData];
+    }];
+    
+    NSOperationQueue *motionQueue = [NSOperationQueue new];
+    [self.motionManager startDeviceMotionUpdatesToQueue:motionQueue withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
+        [self addDeviceMotionSample:deviceMotion];
+    }];
+    
+    [self.locationManager startUpdatingLocation];
+    
+    // Add low frequency (one time) measurements:
+    [self addDeviceIndicatorsToDataBundle];
+    
+    // Add a timer, just to make sure this sampling doesn't go on forever:
+    [self.timer invalidate];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:(self.sampleDuration + 10.) target:self selector:@selector(checkIfDataBundleReadyAndHandleIt) userInfo:nil repeats:YES];
+    //NSLog(@"==== set timer for: %@",self.timer.fireDate);
+    
+}
+
+- (void) addToHighFrequencyDataNumericValue:(NSNumber *)value forField:(NSString *)field
+{
+    if (![self.hfData valueForKey:field])
+    {
+        // Create this field for the first time, as an array:
+        [self.hfData setValue:[NSMutableArray arrayWithCapacity:[self samplesPerBatch]] forKey:field];
+    }
+    // Add the numeric value to the array:
+    [[self.hfData valueForKey:field] addObject:value];
+}
+
+- (void) addDeviceMotionSample:(CMDeviceMotion *)deviceMotionData
+{
+    // Are we already done collecting:
+    NSUInteger curr_count = [self countField:PROC_GRAV_X];
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Got new deviceMotion sample, but don't need it, sice we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        return;
+    }
+    
+    // Add the newly received measurements:
+    // Acceleration:
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.gravity.x] forField:PROC_GRAV_X];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.gravity.y] forField:PROC_GRAV_Y];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.gravity.z] forField:PROC_GRAV_Z];
+    
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.userAcceleration.x] forField:PROC_USER_ACC_X];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.userAcceleration.y] forField:PROC_USER_ACC_Y];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.userAcceleration.z] forField:PROC_USER_ACC_Z];
+    
+    // Rotation rate (gyro):
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.rotationRate.x] forField:PROC_GYR_X];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.rotationRate.y] forField:PROC_GYR_Y];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.rotationRate.z] forField:PROC_GYR_Z];
+
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.attitude.roll] forField:PROC_ROLL];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.attitude.pitch] forField:PROC_PITCH];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.attitude.yaw] forField:PROC_YAW];
+    
+    // magnet:
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.magneticField.field.x] forField:PROC_MAG_X];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.magneticField.field.y] forField:PROC_MAG_Y];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.magneticField.field.z] forField:PROC_MAG_Z];
+
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:deviceMotionData.timestamp] forField:PROC_TIME];
+    
+    // Check how many samples have already been collected in this bundle:
+    curr_count = [self countField:PROC_GRAV_X];
+//    if (curr_count % 100 == 0)
+//    {
+//        NSLog(@"[sensorManager] Collected %lu HF device motion samples (%@).",(unsigned long)curr_count,[NSDate date]);
+//    }
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Have enough device motion samples. Stopping device motion (%@)",[NSDate date]);
+        [self.motionManager stopDeviceMotionUpdates];
+        [self checkIfDataBundleReadyAndHandleIt];
+    }
+}
+
+- (void) addMagnetometerSample:(CMMagnetometerData *)magnetData
+{
+    // Are we already done collecting:
+    NSUInteger curr_count = [self countField:RAW_MAG_X];
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Got new magnetometer sample, but don't need it, sice we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        return;
+    }
+    
+    // Add the newly received measurements:
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.magneticField.x] forField:RAW_MAG_X];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.magneticField.y] forField:RAW_MAG_Y];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.magneticField.z] forField:RAW_MAG_Z];
+    
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:magnetData.timestamp] forField:RAW_MAG_TIME];
+    
+    // Check how many samples have already been collected in this bundle:
+    curr_count = [self countField:RAW_MAG_X];
+//    if (curr_count % 100 == 0)
+//    {
+//        NSLog(@"[sensorManager] Collected %lu HF magnet samples (%@).",(unsigned long)curr_count,[NSDate date]);
+//    }
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Have enough magnet samples. Stopping magnetometer (%@)",[NSDate date]);
+        [self.motionManager stopMagnetometerUpdates];
+        [self checkIfDataBundleReadyAndHandleIt];
+    }
+}
+
+- (void) addGyroscopeSample:(CMGyroData *)gyroData
+{
+    // Are we already done collecting:
+    NSUInteger curr_count = [self countField:RAW_GYR_X];
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Got new gyroscope sample, but don't need it, sice we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        return;
+    }
+    
+    // Add the newly received measurements:
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.rotationRate.x] forField:RAW_GYR_X];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.rotationRate.y] forField:RAW_GYR_Y];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.rotationRate.z] forField:RAW_GYR_Z];
+    
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:gyroData.timestamp] forField:RAW_GYR_TIME];
+    
+    // Check how many samples have already been collected in this bundle:
+    curr_count = [self countField:RAW_GYR_X];
+//    if (curr_count % 100 == 0)
+//    {
+//        NSLog(@"[sensorManager] Collected %lu HF gyro samples (%@).",(unsigned long)curr_count,[NSDate date]);
+//    }
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Have enough gyroscope samples. Stopping gyroscope (%@)",[NSDate date]);
+        [self.motionManager stopGyroUpdates];
+        [self checkIfDataBundleReadyAndHandleIt];
+    }
+}
+
+- (void) addAccelerationSample:(CMAccelerometerData *)accelerometerData
+{
+    // Are we already done collecting:
+    unsigned long curr_count = [self countField:RAW_ACC_X];
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Got new acceleration sample, but don't need it, since we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        return;
+    }
+    
+    // Add the newly received measurements:
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.acceleration.x] forField:RAW_ACC_X];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forField:RAW_ACC_Y];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forField:RAW_ACC_Z];
+
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:accelerometerData.timestamp] forField:RAW_ACC_TIME];
+    
+    // Check how many samples have already been collected in this bundle:
+    curr_count = [self countField:RAW_ACC_X];
+    if (curr_count % 100 == 0)
+    {
+        NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],[self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+    }
+    if (curr_count >= [self samplesPerBatch])
+    {
+        NSLog(@"[sensorManager] Have enough acceleration samples. Stopping accelerometer. (%@)",[NSDate date]);
+        [self.motionManager stopAccelerometerUpdates];
+        [self checkIfDataBundleReadyAndHandleIt];
+    }
+}
+
+- (void) addLocationSample:(CLLocation *)location
+{
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.altitude] forField:LOC_ALT];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.speed] forField:LOC_SPEED];
+    
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.horizontalAccuracy] forField:LOC_HOR_ACCURACY];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.verticalAccuracy] forField:LOC_VER_ACCURACY];
+    //[self addToHighFrequencyDataNumericValue:[NSNumber numberWithInteger:location.floor.level] forField:LOC_FLOOR];
+    
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:[location.timestamp timeIntervalSince1970]] forField:LOC_TIME];
+}
+
+- (void) addDeviceIndicatorsToDataBundle
+{
+    NSMutableDictionary *lfData = [NSMutableDictionary dictionaryWithCapacity:6];
+    // Discrete indicators:
+    [lfData setValue:[NSNumber numberWithInt:[[self networkAccessor] reachabilityStatus]] forKey:WIFI_STATUS];
+    [lfData setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:APP_STATE];
+    [lfData setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:DEV_ORIENTATION];
+    [lfData setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:PROXIMITY];
+    
+    BOOL onThePhone = ((self.callCenter.currentCalls) && ([self.callCenter.currentCalls count] > 0));
+    [lfData setValue:[NSNumber numberWithBool:onThePhone] forKey:ON_THE_PHONE];
+    
+    // Add these measurements to the data bundle:
+    [self.hfData setValue:lfData forKey:LOW_FREQ];
+    
+}
+
+- (unsigned long) countField:(NSString *)field
+{
+    if (![self.hfData valueForKey:field])
+    {
+        return 0;
+    }
+    else
+    {
+        return [[self.hfData valueForKey:field] count];
+    }
+}
+
+- (void) checkIfDataBundleReadyAndHandleIt
+{
+    unsigned long accCount = [self countField:RAW_ACC_X];
+    unsigned long gyrCount = [self countField:RAW_GYR_X];
+    unsigned long magCount = [self countField:RAW_MAG_X];
+    unsigned long motionCount = [self countField:PROC_GRAV_X];
+    
+    if (accCount < [self samplesPerBatch] || gyrCount < [self samplesPerBatch] || magCount < [self samplesPerBatch] || motionCount < [self samplesPerBatch])
+    {
+        return;
+    }
+    
+    NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
+    
+    [self handleFinishedDataBundle];
+}
+
+- (void) handleFinishedDataBundle
+{
+    NSLog(@"[sensorManager] Time to wrap the data bundle and send it");
+    // Make sure to stop the sensing:
+    [self.locationManager stopUpdatingLocation];
+    
+    // Mark finished recording:
+    [self.appDelegate markNotRecordingRightNow];
+
+    [self.timer invalidate];
+    [ES_DataBaseAccessor writeSensorData:self.hfData andActivity:self.currentActivity];
+    
+}
+
 
 
 #pragma mark Location Manager Delegate Methods
@@ -354,7 +739,15 @@
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    self.currentLocation = locations.lastObject;
+    if ([self usingTimerForSampling])
+    {
+        self.currentLocation = locations.lastObject;
+    }
+    else
+    {
+//        NSLog(@"[sensorManager] adding updated location");
+        [self addLocationSample:locations.lastObject];
+    }
 }
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error

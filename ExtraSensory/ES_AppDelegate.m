@@ -244,11 +244,23 @@
     // Create a location manager instance to determine if location services are enabled. This manager instance will be
     // immediately released afterwards.
     self.locationManager = [CLLocationManager new];
-    /*if ( [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) {
-     UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:@"Location Services Disabled" message:@"You currently have all location services for this device disabled. If you proceed, you will be asked to confirm whether location services should be reenabled." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-     [servicesDisabledAlert show];
-     }*/
-    [self.locationManager startUpdatingLocation];
+    // If location authorization wasn't decided yet, ask for it:
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined)
+    {
+        NSLog(@"[appDelegate] Prompting user for location authorization.");
+        [self.locationManager requestAlwaysAuthorization];
+    }
+    else if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways) {
+        NSLog(@"[appDelegate] Alerting user that location is disabled and asking to enable it.");
+        UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:@"You currently have location services disabled. It would be helpful if you allow the app to collect location data (please change your phone's privacy settings, location section)." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [servicesDisabledAlert show];
+    }
+    else
+    {
+        NSLog(@"[appDelegate] App is authorized to use location services. Authorization status=%d",[CLLocationManager authorizationStatus]);
+    }
+//    [self.locationManager startUpdatingLocation];
+
     UIImage *navBackgroundImage = [UIImage imageNamed:@"iOS7-blue"];
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
 

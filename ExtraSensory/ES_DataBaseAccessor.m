@@ -473,18 +473,14 @@
     return arr;
 }
 
-+ (void) zipFilesWithTimer: (NSTimer *)timer
++ (void) zipFilesWithZipFilename:(NSString *)zipFilename
 {
     BOOL isDir=NO;
     NSString *dataPath = [self dataDirectory];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSArray *filenames = [self filesToPackInsizeZipFile];
-//    if ([fileManager fileExistsAtPath:dataPath isDirectory:&isDir] && isDir){
-//        filenames = [fileManager subpathsAtPath:dataPath];
-//    }
     
-    NSString *zipFilename = [timer userInfo];
     NSString *archivePath = [[self zipDirectory] stringByAppendingString: zipFilename ];
     
     ZipArchive *archiver = [[ZipArchive alloc] init];
@@ -510,6 +506,28 @@
     ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate pushOnNetworkStack: zipFilename];
     [appDelegate.networkAccessor upload]; //upload the new file
+
+}
+
++ (void) zipFilesWithTimer: (NSTimer *)timer
+{
+    NSLog(@"=== in zip files with timer");
+    NSString *zipFilename = [timer userInfo];
+    [self zipFilesWithZipFilename:zipFilename];
+}
+
++ (void) writeSensorData:(NSDictionary *)data andActivity:(ES_Activity *)activity
+{
+    [self writeSensorData:data];
+    NSLog(@"[databaseAccessor] activity has label: %@",activity.userCorrection);
+    if (activity.userCorrection)
+    {
+        [self writeLabels:activity];
+    }
+    
+    NSString *zipFilename = [self zipFileName:activity.timestamp];
+    NSLog(@"=== in write .... zip file: %@",zipFilename);
+    [self zipFilesWithZipFilename:zipFilename];
 }
 
 + (void) writeActivity: (ES_Activity *)activity
@@ -522,6 +540,7 @@
     }
     
     NSString *zipFileName = [self zipFileName: activity.timestamp];
+    NSLog(@"=== in write activity. should create zip file: %@",zipFileName);
 
     NSTimer *timer;
     timer = [NSTimer scheduledTimerWithTimeInterval: 2
@@ -529,7 +548,9 @@
                                            selector: @selector(zipFilesWithTimer: )
                                            userInfo: zipFileName
                                             repeats: NO];
-
+    
+//    NSLog(@"==== in wriet activity . scheduled timer: %@ for time %@",timer,timer.fireDate);
+    
 }
 
 //+ (void) writeData2:(NSArray *)array
@@ -628,6 +649,23 @@
 + (NSString *) soundFileFullPath
 {
     return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],HF_SOUND_FILE_DUR];
+}
+
++ (void) writeSensorData:(NSDictionary *)data
+{
+    NSError *error = [NSError new];
+    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:data options:0 error:&error];
+    NSString *filePath = [self HFDataFileFullPath];
+    
+    BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
+    if (writeFileSuccess)
+    {
+        NSLog(@"[databaseAccessor] Data successfully written to file");
+    }
+    else
+    {
+        NSLog(@"[databaseAccessor] !!! Error writing data to file!!");
+    }
 }
 
 + (void) writeData:(NSArray *)array

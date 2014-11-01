@@ -42,5 +42,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Do you allow ExtraSensory to record location information (including when app is in background)?</string>
 </dict>
 </plist>
