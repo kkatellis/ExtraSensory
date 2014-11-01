@@ -142,6 +142,8 @@
 #define DEV_ORIENTATION @"device_orientation"
 #define PROXIMITY       @"proximity"
 #define ON_THE_PHONE    @"on_the_phone"
+#define BATTERY_LEVEL   @"battery_level"
+#define BATTERY_STATE   @"battery_state"
 
 -(ES_SoundWaveProcessor *) soundProcessor
 {
@@ -686,6 +688,8 @@
     [lfData setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:APP_STATE];
     [lfData setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:DEV_ORIENTATION];
     [lfData setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:PROXIMITY];
+    [lfData setValue:[NSNumber numberWithFloat:[[UIDevice currentDevice] batteryLevel]] forKey:BATTERY_LEVEL];
+    [lfData setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] batteryState]] forKey:BATTERY_STATE];
     
     BOOL onThePhone = ((self.callCenter.currentCalls) && ([self.callCenter.currentCalls count] > 0));
     [lfData setValue:[NSNumber numberWithBool:onThePhone] forKey:ON_THE_PHONE];
