@@ -687,7 +687,11 @@
     [lfData setValue:[NSNumber numberWithInt:[[self networkAccessor] reachabilityStatus]] forKey:WIFI_STATUS];
     [lfData setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:APP_STATE];
     [lfData setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:DEV_ORIENTATION];
+    
+    [UIDevice currentDevice].proximityMonitoringEnabled = YES;
     [lfData setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:PROXIMITY];
+    
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
     [lfData setValue:[NSNumber numberWithFloat:[[UIDevice currentDevice] batteryLevel]] forKey:BATTERY_LEVEL];
     [lfData setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] batteryState]] forKey:BATTERY_STATE];
     
