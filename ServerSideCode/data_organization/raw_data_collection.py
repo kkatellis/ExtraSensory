@@ -85,17 +85,46 @@ def collect_single_instance(uuid,timestamp,skip_existing):
         print "++ Copied feedback file";
         pass;
     else:
-        print "-- No feedback file";
-        pass;
+        # Check if there are labels from active feedback:
+        active_label_file = os.path.join(instance_out_dir,'label.txt');
+        if os.path.exists(active_label_file):
+            analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp);
+            pass; # end if exists active_label_file
+        else:
+            print "-- No feedback file and no active label.txt file";
+            pass; # end else (if exists active_label_file)
+
+        pass; # end else (if exists feedback_file)
 
     # Read the measurements file and save the different modalities to files:
-    (acc,magnet,gyro,gps,lf_data) = read_datafile(hf_file);
+    new_version = True;
+    if new_version:
+        (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data) = read_datafile(hf_file);
+
+        np.savetxt(os.path.join(instance_out_dir,'raw_acc'),raw_acc);
+        np.savetxt(os.path.join(instance_out_dir,'raw_magnet'),raw_magnet);
+        np.savetxt(os.path.join(instance_out_dir,'raw_gyro'),raw_gyro);
+
+        np.savetxt(os.path.join(instance_out_dir,'proc_timeref'),proc_timeref);
+
+        np.savetxt(os.path.join(instance_out_dir,'proc_acc'),proc_acc);
+        np.savetxt(os.path.join(instance_out_dir,'proc_magnet'),proc_magnet);
+        np.savetxt(os.path.join(instance_out_dir,'proc_gyro'),proc_gyro);
+        np.savetxt(os.path.join(instance_out_dir,'proc_gravity'),proc_gravity);
+        np.savetxt(os.path.join(instance_out_dir,'proc_attitude'),proc_attitude);
+
+        np.savetxt(os.path.join(instance_out_dir,'location'),location);
+        pass;
+    else:
+        (acc,magnet,gyro,location,lf_data) = read_datafile_json_list(hf_file);
+        pass;
 
     # Save measurement data to modality-separate files:
-    np.savetxt(os.path.join(instance_out_dir,'acc'),acc);
-    np.savetxt(os.path.join(instance_out_dir,'magnet'),magnet);
-    np.savetxt(os.path.join(instance_out_dir,'gyro'),gyro);
-    np.savetxt(os.path.join(instance_out_dir,'gps'),gps);
+        np.savetxt(os.path.join(instance_out_dir,'acc'),acc);
+        np.savetxt(os.path.join(instance_out_dir,'magnet'),magnet);
+        np.savetxt(os.path.join(instance_out_dir,'gyro'),gyro);
+        np.savetxt(os.path.join(instance_out_dir,'location'),location);
+        pass;
 
     lf_out_file = os.path.join(instance_out_dir,'lf_measurements.dat');
     fid = open(lf_out_file,'wb');
@@ -107,7 +136,49 @@ def collect_single_instance(uuid,timestamp,skip_existing):
 
     return True;
 
+def analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp):
+    fid = file(active_label_file,'rb');
+    in_jlist = lson.load(fid);
+    fid.close();
+
+    out_jlist = {'active_feedback':'true','uuid':uuid,'timestamp':timestamp};
+
+    out_jlist['corrected_activity'] = in_jlist['mainActivity'];
+    out_jlist['secondary_activities'] = in_jlist['secondaryActivities'];
+    out_jlist['mood'] = in_jlist['mood'];
+
+    print "++ Active feedback labels copied to feedback file";
+
+    return;
+
 def read_datafile(hf_file):
+    # open the file for reading
+    fid = open(hf_file, "r");
+    jdict = json.load(fid);
+    fid.close();
+
+    raw_acc = np.array([jdict['raw_acc_timeref'],jdict['raw_acc_x'],jdict['raw_acc_y'],jdict['raw_acc_z']]).T;
+    raw_gyro = np.array([jdict['raw_gyro_timeref'],jdict['raw_gyro_x'],jdict['raw_gyro_y'],jdict['raw_gyro_z']]).T;
+    raw_magnet = np.array([jdict['raw_magnet_timeref'],jdict['raw_magnet_x'],jdict['raw_magnet_y'],jdict['raw_magnet_z']]).T;
+
+    proc_acc = np.array([jdict['processed_user_acc_x'],jdict['processed_user_acc_y'],jdict['processed_user_acc_z']]).T;
+    proc_magnet = np.array([jdict['processed_magnet_x'],jdict['processed_magnet_y'],jdict['processed_magnet_z']]).T;
+    proc_gyro = np.array([jdict['processed_gyro_x'],jdict['processed_gyro_y'],jdict['processed_gyro_z']]).T;
+
+    proc_gravity = np.array([jdict['processed_gravity_x'],jdict['processed_gravity_y'],jdict['processed_gravity_z']]).T;
+    proc_attitude = np.array([jdict['processed_roll'],jdict['processed_pitch'],jdict['processed_yaw']]).T;
+
+    proc_timeref = np.array(jdict['processed_timeref']).T;
+
+    location = np.array([jdict['location_timestamp'],jdict['location_latitude'],jdict['location_longitude'],\
+                             jdict['location_altitude'],jdict['location_speed'],\
+                             jdict['location_horizontal_accuracy'],jdict['location_vertical_accuracy']]).T;
+    
+    lf_data = jdict['low_frequency'];
+        
+    return (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data);
+
+def read_datafile_json_list(hf_file):
     # open the file for reading
     fid = open(hf_file, "r");
     jlist = json.load(fid);
@@ -164,7 +235,11 @@ def main():
     uuids = [];
     fid = file('real_uuids.list','rb');
     for line in fid:
-        uuids.append(line.strip());
+        line = line.strip();
+        if line.startswith('#'):
+            continue;
+
+        uuids.append(line);
         pass;
     fid.close();
 
