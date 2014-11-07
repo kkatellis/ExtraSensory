@@ -560,7 +560,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.magneticField.field.y] forField:PROC_MAG_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.magneticField.field.z] forField:PROC_MAG_Z];
 
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:deviceMotionData.timestamp] forField:PROC_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.timestamp] forField:PROC_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:PROC_GRAV_X];
@@ -591,7 +591,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.magneticField.y] forField:RAW_MAG_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.magneticField.z] forField:RAW_MAG_Z];
     
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:magnetData.timestamp] forField:RAW_MAG_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.timestamp] forField:RAW_MAG_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:RAW_MAG_X];
@@ -622,7 +622,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.rotationRate.y] forField:RAW_GYR_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.rotationRate.z] forField:RAW_GYR_Z];
     
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:gyroData.timestamp] forField:RAW_GYR_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.timestamp] forField:RAW_GYR_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:RAW_GYR_X];
@@ -653,7 +653,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forField:RAW_ACC_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forField:RAW_ACC_Z];
 
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:accelerometerData.timestamp] forField:RAW_ACC_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.timestamp] forField:RAW_ACC_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:RAW_ACC_X];
