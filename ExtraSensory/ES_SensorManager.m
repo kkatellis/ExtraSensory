@@ -462,6 +462,7 @@
     self.motionManager.gyroUpdateInterval = self.interval;
     self.motionManager.magnetometerUpdateInterval = self.interval;
     self.motionManager.deviceMotionUpdateInterval = self.interval;
+    
     [self.locationManager setDelegate: self];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
     [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
@@ -504,6 +505,8 @@
         [self addDeviceMotionSample:deviceMotion];
     }];
     
+    // Stop updating before start updating, to force getting an update:
+    [self.locationManager stopUpdatingLocation];
     [self.locationManager startUpdatingLocation];
     
     // Add low frequency (one time) measurements:
@@ -677,7 +680,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.verticalAccuracy] forField:LOC_VER_ACCURACY];
     //[self addToHighFrequencyDataNumericValue:[NSNumber numberWithInteger:location.floor.level] forField:LOC_FLOOR];
     
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:[location.timestamp timeIntervalSince1970]] forField:LOC_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:[location.timestamp timeIntervalSince1970]] forField:LOC_TIME];
 }
 
 - (void) addDeviceIndicatorsToDataBundle
@@ -769,14 +772,18 @@
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+    CLLocation *latestLocation = locations.lastObject;
+    
     if ([self usingTimerForSampling])
     {
-        self.currentLocation = locations.lastObject;
+        self.currentLocation = latestLocation;
     }
     else
     {
-//        NSLog(@"[sensorManager] adding updated location");
-        [self addLocationSample:locations.lastObject];
+        NSTimeInterval updateTimestamp = [latestLocation.timestamp timeIntervalSince1970];
+        NSTimeInterval updateAge = -[latestLocation.timestamp timeIntervalSinceNow];
+        NSLog(@"==== got update timestamp %f. age: %f.",updateTimestamp,updateAge);
+        [self addLocationSample:latestLocation];
     }
 }
 
