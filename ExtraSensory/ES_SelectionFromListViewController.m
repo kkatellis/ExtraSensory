@@ -13,6 +13,7 @@
 @property NSMutableArray *sections;
 @property NSMutableArray *sectionNames;
 @property NSMutableArray *sectionHeaders;
+@property NSArray *searchResults;
 
 @end
 
@@ -40,6 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.searchResults = [[NSArray alloc] init];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -143,7 +145,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.sections[section] count];
+       return [self.sections[section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="euD-ak-RDc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="euD-ak-RDc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--Home-->
@@ -108,9 +108,26 @@
                     <connections>
                         <outlet property="nextButton" destination="avP-Pb-heH" id="Yxt-yk-eA3"/>
                         <outlet property="prevButton" destination="g5m-PV-0Yr" id="Rdv-WJ-YBY"/>
+                        <outlet property="searchDisplayController" destination="A8H-uW-LsB" id="nBB-A5-CGs"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rzZ-2o-uDt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="mac-9d-9GQ">
+                    <connections>
+                        <outlet property="delegate" destination="eHZ-Y9-Dqv" id="e58-Iq-7fF"/>
+                        <outlet property="searchContentsController" destination="eHZ-Y9-Dqv" id="CE2-1e-CaV"/>
+                        <outlet property="searchResultsDataSource" destination="eHZ-Y9-Dqv" id="66C-sk-knC"/>
+                        <outlet property="searchResultsDelegate" destination="eHZ-Y9-Dqv" id="POj-XD-bC6"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="A8H-uW-LsB">
+                    <connections>
+                        <outlet property="delegate" destination="eHZ-Y9-Dqv" id="cIr-h5-4Ci"/>
+                        <outlet property="searchContentsController" destination="eHZ-Y9-Dqv" id="FZv-dE-31O"/>
+                        <outlet property="searchResultsDataSource" destination="eHZ-Y9-Dqv" id="Nse-PS-vzo"/>
+                        <outlet property="searchResultsDelegate" destination="eHZ-Y9-Dqv" id="ebP-Z4-ALz"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1209" y="316"/>
         </scene>
@@ -417,8 +434,27 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="History" id="pBf-eq-Q71"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="JbB-o6-hpL" id="5oY-9W-WuC"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZGO-IW-sOw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="Tfa-pU-Npf">
+                    <connections>
+                        <outlet property="delegate" destination="clN-UH-6YB" id="knh-Dt-XLO"/>
+                        <outlet property="searchContentsController" destination="clN-UH-6YB" id="dKi-Qi-zid"/>
+                        <outlet property="searchResultsDataSource" destination="clN-UH-6YB" id="u0U-gE-yXf"/>
+                        <outlet property="searchResultsDelegate" destination="clN-UH-6YB" id="Ugp-mR-5pd"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="JbB-o6-hpL">
+                    <connections>
+                        <outlet property="delegate" destination="clN-UH-6YB" id="GC6-qI-Uj4"/>
+                        <outlet property="searchContentsController" destination="clN-UH-6YB" id="uhb-BK-SVL"/>
+                        <outlet property="searchResultsDataSource" destination="clN-UH-6YB" id="NmR-xp-tES"/>
+                        <outlet property="searchResultsDelegate" destination="clN-UH-6YB" id="Qu4-ys-6Cg"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1635" y="-364"/>
         </scene>
@@ -540,9 +576,18 @@
                         <outlet property="Standing" destination="e8E-b9-Zvq" id="OSY-S2-Vd6"/>
                         <outlet property="Walking" destination="au8-dT-qb6" id="b08-3t-sDj"/>
                         <outlet property="correctActivityLabel" destination="wye-NQ-8Rc" id="P1n-UI-IM3"/>
+                        <outlet property="searchDisplayController" destination="fMp-wp-OIe" id="oVp-1L-1bG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wru-i0-xBP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="fMp-wp-OIe">
+                    <connections>
+                        <outlet property="delegate" destination="veM-TY-9u1" id="Iar-Px-8Ca"/>
+                        <outlet property="searchContentsController" destination="veM-TY-9u1" id="Xld-kP-Ppv"/>
+                        <outlet property="searchResultsDataSource" destination="veM-TY-9u1" id="MHj-aT-ElB"/>
+                        <outlet property="searchResultsDelegate" destination="veM-TY-9u1" id="BPg-Dg-p3S"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="2077" y="-363"/>
         </scene>
@@ -762,8 +807,19 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Summary" id="Tgm-Gy-Ecv"/>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="5YL-O4-mjv" id="azs-qt-8yn"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N5f-Zv-nAM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="5YL-O4-mjv">
+                    <connections>
+                        <outlet property="delegate" destination="Xlp-0H-uch" id="Y3z-yx-DUo"/>
+                        <outlet property="searchContentsController" destination="Xlp-0H-uch" id="cN8-Lf-WZz"/>
+                        <outlet property="searchResultsDataSource" destination="Xlp-0H-uch" id="Fru-WS-PYg"/>
+                        <outlet property="searchResultsDelegate" destination="Xlp-0H-uch" id="F8c-Js-Twz"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="3017" y="1534"/>
         </scene>

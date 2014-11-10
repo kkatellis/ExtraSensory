@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ES_SelectionFromListViewController : UITableViewController
+@interface ES_SelectionFromListViewController : UITableViewController <UISearchDisplayDelegate>
 
 @property NSString *category; // Name of the category for which the selection list is presented
 @property (nonatomic) BOOL multiSelection; // allow multiple selections
