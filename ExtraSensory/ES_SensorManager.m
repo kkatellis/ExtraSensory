@@ -462,6 +462,7 @@
     self.motionManager.gyroUpdateInterval = self.interval;
     self.motionManager.magnetometerUpdateInterval = self.interval;
     self.motionManager.deviceMotionUpdateInterval = self.interval;
+    
     [self.locationManager setDelegate: self];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
     [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
@@ -504,6 +505,8 @@
         [self addDeviceMotionSample:deviceMotion];
     }];
     
+    // Stop updating before start updating, to force getting an update:
+    [self.locationManager stopUpdatingLocation];
     [self.locationManager startUpdatingLocation];
     
     // Add low frequency (one time) measurements:
@@ -557,7 +560,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.magneticField.field.y] forField:PROC_MAG_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.magneticField.field.z] forField:PROC_MAG_Z];
 
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:deviceMotionData.timestamp] forField:PROC_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:deviceMotionData.timestamp] forField:PROC_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:PROC_GRAV_X];
@@ -588,7 +591,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.magneticField.y] forField:RAW_MAG_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.magneticField.z] forField:RAW_MAG_Z];
     
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:magnetData.timestamp] forField:RAW_MAG_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:magnetData.timestamp] forField:RAW_MAG_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:RAW_MAG_X];
@@ -619,7 +622,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.rotationRate.y] forField:RAW_GYR_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.rotationRate.z] forField:RAW_GYR_Z];
     
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:gyroData.timestamp] forField:RAW_GYR_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:gyroData.timestamp] forField:RAW_GYR_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:RAW_GYR_X];
@@ -650,7 +653,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forField:RAW_ACC_Y];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forField:RAW_ACC_Z];
 
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:accelerometerData.timestamp] forField:RAW_ACC_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:accelerometerData.timestamp] forField:RAW_ACC_TIME];
     
     // Check how many samples have already been collected in this bundle:
     curr_count = [self countField:RAW_ACC_X];
@@ -677,7 +680,7 @@
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.verticalAccuracy] forField:LOC_VER_ACCURACY];
     //[self addToHighFrequencyDataNumericValue:[NSNumber numberWithInteger:location.floor.level] forField:LOC_FLOOR];
     
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithFloat:[location.timestamp timeIntervalSince1970]] forField:LOC_TIME];
+    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:[location.timestamp timeIntervalSince1970]] forField:LOC_TIME];
 }
 
 - (void) addDeviceIndicatorsToDataBundle
@@ -769,14 +772,18 @@
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+    CLLocation *latestLocation = locations.lastObject;
+    
     if ([self usingTimerForSampling])
     {
-        self.currentLocation = locations.lastObject;
+        self.currentLocation = latestLocation;
     }
     else
     {
-//        NSLog(@"[sensorManager] adding updated location");
-        [self addLocationSample:locations.lastObject];
+        NSTimeInterval updateTimestamp = [latestLocation.timestamp timeIntervalSince1970];
+        NSTimeInterval updateAge = -[latestLocation.timestamp timeIntervalSinceNow];
+        NSLog(@"==== got update timestamp %f. age: %f.",updateTimestamp,updateAge);
+        [self addLocationSample:latestLocation];
     }
 }
 

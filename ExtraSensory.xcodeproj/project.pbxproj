@@ -1103,7 +1103,7 @@
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e004c33d-7ac8-4975-b9bc-5bef5e202314";
+				PROVISIONING_PROFILE = "de337dc2-92fe-487b-a162-1d5c942517e4";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1113,14 +1113,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e004c33d-7ac8-4975-b9bc-5bef5e202314";
+				PROVISIONING_PROFILE = "3d57104f-c222-4574-8233-7b270d30d9ee";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
