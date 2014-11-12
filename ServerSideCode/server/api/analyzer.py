@@ -143,6 +143,21 @@ def analyze():
 def allowed_file( filename ):
     return '.' in filename and filename.rsplit( '.', 1 )[1] in ALLOWED_EXTENSIONS
 
+def get_and_create_upload_instance_dir(UUID,UTime):
+    # Create a directory for this instance:
+    uuid_dir = os.path.join(current_app.config['UPLOAD_FOLDER'],UUID);
+    if not os.path.exists(uuid_dir):
+        os.mkdir(uuid_dir);
+        pass;
+    
+    instance_dir = os.path.join(uuid_dir,UTime);
+    if not os.path.exists(instance_dir):
+        os.mkdir(instance_dir);
+        pass;
+
+    return instance_dir;
+
+
 @analyzer_api.route( '/feedback_upload', methods=[ 'POST' ] )
 def feedback_upload():
     print 'feedback_upload()'
@@ -162,15 +177,20 @@ def feedback_upload():
     '''
     try:
     	uploaded_file = request.files[ 'file' ]
-    #if uploaded_file and allowed_file( uploaded_file.filename ):
         filename = secure_filename( uploaded_file.filename )
 
-        uploaded_file.save( os.path.join( current_app.config['UPLOAD_FOLDER'], filename ) )
-        print 'saved ', filename
+        d = filename.find('-')
+        UTime = filename[:d] #unique time identifier
+        UUID = filename[d+1:].replace(".zip","") #unique user identifier
+
+        instance_dir = get_and_create_upload_instance_dir(UUID,UTime);
+        fullfilename = os.path.join(instance_dir,filename);
+        uploaded_file.save( fullfilename )
+        print 'saved ', fullfilename
 	
 	#now predict the activity
 
-        predicted_activity, UTime = activity_analyzer.classify_zip(filename, current_app.config['UPLOAD_FOLDER'], current_app.config['CLASSIFIER_FOLDER'])
+        predicted_activity, UTime = activity_analyzer.classify_zip(filename, instance_dir, current_app.config['CLASSIFIER_FOLDER'])
         print "analyzer got predicted activity: %s and UTime: %s from classify_zip." % (predicted_activity,UTime);
         msg = ''
         success = True;
@@ -247,11 +267,14 @@ def handle_feedback():
 
         UUID 	= str(fback['uuid'])
         UTime 	= str(fback['timestamp'])
-        fpath 	= os.path.join(current_app.config['CLASSIFIER_FOLDER'],'feats',UUID,UTime)
-        if not os.path.exists(fpath):
+        instance_dir = get_and_create_upload_instance_dir(UUID,UTime);
+        feats_path 	= os.path.join(current_app.config['CLASSIFIER_FOLDER'],'feats',UUID,UTime)
+        if not os.path.exists(feats_path):
             raise Exception( 'Can''t find corresponding data on the server' )
         else:
-            fp = open(os.path.join(fpath,'feedback'),'w')
+            feedback_file = os.path.join(instance_dir,'feedback');
+#            fp = open(os.path.join(fpath,'feedback'),'w')
+            fp = open(feedback_file,'w')
             json.dump( fback, fp)
             fp.close()
     

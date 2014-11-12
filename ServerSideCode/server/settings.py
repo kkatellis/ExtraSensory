@@ -24,7 +24,8 @@ class Dev( Config ):
 class Production( Config ):
     #SQLALCHEMY_DATABASE_URI = 'sqlite:///../tmp/dev.db'
     ANALYZER_PATH = 'java -classpath "/Library/WebServer/Documents/rmw/scripts/ActivityAnalyzer/bin" ActivityAnalyzer %s'
-    UPLOAD_FOLDER = '/Library/WebServer/Documents/rmw/feedback'
+#    UPLOAD_FOLDER = '/Library/WebServer/Documents/rmw/feedback'
+    UPLOAD_FOLDER = '/Library/WebServer/Documents/rmw/user_input'
     CLASSIFIER_FOLDER = '/Library/WebServer/Documents/rmw/classifier'
 
 class Testing( Config ):
