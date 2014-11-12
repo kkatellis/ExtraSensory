@@ -21,7 +21,7 @@ import shutil;
 
 g__data_zip_dir = '/Library/WebServer/Documents/rmw/feedback';
 g__feedback_superdir = '/Library/WebServer/Documents/rmw/classifier/feats';
-g__output_superdir = '/Users/yonatan/Documents/collected_data';
+g__output_superdir = '/Users/yonatan/Documents/collected_data/uuids';
 
 g__lf_fields = [\
     'altitude','floor','horizontal_accuracy','vertical_accuracy',\
@@ -101,32 +101,31 @@ def collect_single_instance(uuid,timestamp,skip_existing):
     if new_version:
         (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data) = read_datafile(hf_file);
 
-        np.savetxt(os.path.join(instance_out_dir,'raw_acc'),raw_acc);
-        np.savetxt(os.path.join(instance_out_dir,'raw_magnet'),raw_magnet);
-        np.savetxt(os.path.join(instance_out_dir,'raw_gyro'),raw_gyro);
+        np.savetxt(os.path.join(instance_out_dir,'m_raw_acc'),raw_acc);
+        np.savetxt(os.path.join(instance_out_dir,'m_raw_magnet'),raw_magnet);
+        np.savetxt(os.path.join(instance_out_dir,'m_raw_gyro'),raw_gyro);
 
-        np.savetxt(os.path.join(instance_out_dir,'proc_timeref'),proc_timeref);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_timeref'),proc_timeref);
 
-        np.savetxt(os.path.join(instance_out_dir,'proc_acc'),proc_acc);
-        np.savetxt(os.path.join(instance_out_dir,'proc_magnet'),proc_magnet);
-        np.savetxt(os.path.join(instance_out_dir,'proc_gyro'),proc_gyro);
-        np.savetxt(os.path.join(instance_out_dir,'proc_gravity'),proc_gravity);
-        np.savetxt(os.path.join(instance_out_dir,'proc_attitude'),proc_attitude);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_acc'),proc_acc);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_magnet'),proc_magnet);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_gyro'),proc_gyro);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_gravity'),proc_gravity);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_attitude'),proc_attitude);
 
-        np.savetxt(os.path.join(instance_out_dir,'location'),location);
+        np.savetxt(os.path.join(instance_out_dir,'m_location'),location);
         pass;
     else:
         (acc,magnet,gyro,location,lf_data) = read_datafile_json_list(hf_file);
-        pass;
 
-    # Save measurement data to modality-separate files:
+        # Save measurement data to modality-separate files:
         np.savetxt(os.path.join(instance_out_dir,'acc'),acc);
         np.savetxt(os.path.join(instance_out_dir,'magnet'),magnet);
         np.savetxt(os.path.join(instance_out_dir,'gyro'),gyro);
         np.savetxt(os.path.join(instance_out_dir,'location'),location);
         pass;
 
-    lf_out_file = os.path.join(instance_out_dir,'lf_measurements.dat');
+    lf_out_file = os.path.join(instance_out_dir,'m_lf_measurements.dat');
     fid = open(lf_out_file,'wb');
     json.dump(lf_data,fid);
     fid.close();
