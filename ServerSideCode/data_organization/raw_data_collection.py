@@ -19,9 +19,8 @@ import mlpy;
 import shutil;
 
 
-g__data_zip_dir = '/Library/WebServer/Documents/rmw/feedback';
-g__feedback_superdir = '/Library/WebServer/Documents/rmw/classifier/feats';
 g__output_superdir = '/Users/yonatan/Documents/collected_data/uuids';
+g__input_superdir = '/Library/WebServer/Documents/rmw/user_input';
 
 g__lf_fields = [\
     'altitude','floor','horizontal_accuracy','vertical_accuracy',\
@@ -29,22 +28,30 @@ g__lf_fields = [\
     'on_the_phone'];
 
 def collect_all_instances_of_uuid(uuid,skip_existing):
-    for filename in os.listdir(g__data_zip_dir):
-        if fnmatch.fnmatch(filename,'*-%s.zip' % uuid):
-            print filename;
-            parts = filename.split('-');
-            timestamp = parts[0];
-            collect_single_instance(uuid,timestamp,skip_existing);
+    input_uuid_dir = os.path.join(g__input_superdir,uuid);
+    if not os.path.exists(input_uuid_dir):
+        return;
 
-            pass; # end if fnmatch...
+    for timestamp in os.listdir(input_uuid_dir):
+        print timestamp;
+        collect_single_instance(uuid,timestamp,skip_existing);
+
         pass; # end for filename...
 
     return;
 
 def collect_single_instance(uuid,timestamp,skip_existing):
+    input_uuid_dir = os.path.join(g__input_superdir,uuid);
+    if not os.path.exists(input_uuid_dir):
+        return False;
+
+    input_instance_dir = os.path.join(input_uuid_dir,timestamp);
+    if not os.path.exists(input_instance_dir):
+        return False;
+
     # First check if there is any source of data for this uuid and timestamp:
     input_zip_filename = '%s-%s.zip' % (timestamp,uuid);
-    input_zip_file = os.path.join(g__data_zip_dir,input_zip_filename);
+    input_zip_file = os.path.join(input_instance_dir,input_zip_filename);
     if not os.path.exists(input_zip_file):
         print "-- no zip file %s" % input_zip_file;
         return False;
@@ -79,7 +86,7 @@ def collect_single_instance(uuid,timestamp,skip_existing):
         return False;
 
     # If there is a label-feedback file, copy it:
-    feedback_file = os.path.join(os.path.join(os.path.join(g__feedback_superdir,uuid),timestamp),'feedback');
+    feedback_file = os.path.join(input_instance_dir,'feedback');
     if os.path.exists(feedback_file):
         shutil.copy(feedback_file,instance_out_dir);
         print "++ Copied feedback file";
