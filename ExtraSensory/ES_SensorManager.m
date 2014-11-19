@@ -780,9 +780,6 @@
     }
     else
     {
-        NSTimeInterval updateTimestamp = [latestLocation.timestamp timeIntervalSince1970];
-        NSTimeInterval updateAge = -[latestLocation.timestamp timeIntervalSinceNow];
-        //NSLog(@"==== got update timestamp %f. age: %f.",updateTimestamp,updateAge);
         [self addLocationSample:latestLocation];
     }
 }
