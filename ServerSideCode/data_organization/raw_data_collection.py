@@ -87,15 +87,20 @@ def collect_single_instance(uuid,timestamp,skip_existing):
 
     # If there is a label-feedback file, copy it:
     feedback_file = os.path.join(input_instance_dir,'feedback');
+    out_feedback_file = os.path.join(instance_out_dir,'feedback');
     if os.path.exists(feedback_file):
-        shutil.copy(feedback_file,instance_out_dir);
+        shutil.copyfile(feedback_file,out_feedback_file);
         print "++ Copied feedback file";
         pass;
     else:
         # Check if there are labels from active feedback:
         active_label_file = os.path.join(instance_out_dir,'label.txt');
         if os.path.exists(active_label_file):
-            analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp);
+            out_jlist = analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp);
+            fid = file(out_feedback_file,'wb');
+            json.dump(out_jlist,fid);
+            fid.close();
+            print "++ Saved labels from active feedback file into file 'feedback'";
             pass; # end if exists active_label_file
         else:
             print "-- No feedback file and no active label.txt file";
@@ -144,18 +149,35 @@ def collect_single_instance(uuid,timestamp,skip_existing):
 
 def analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp):
     fid = file(active_label_file,'rb');
-    in_jlist = lson.load(fid);
+    in_jlist = json.load(fid);
     fid.close();
 
     out_jlist = {'active_feedback':'true','uuid':uuid,'timestamp':timestamp};
 
     out_jlist['corrected_activity'] = in_jlist['mainActivity'];
     out_jlist['secondary_activities'] = in_jlist['secondaryActivities'];
-    out_jlist['mood'] = in_jlist['mood'];
+    if 'mood' in in_jlist:
+        out_jlist['mood'] = in_jlist['mood'];
+        pass;
 
-    print "++ Active feedback labels copied to feedback file";
+    print "++ Analyzed active feedback file.";
 
-    return;
+    return out_jlist;
+
+def join_data_fields_to_array(jdict,field_names):
+
+    try:
+        list_of_rows = [];
+        for name in field_names:
+            list_of_rows.append(jdict[name]);
+            pass;
+        arr = np.array(list_of_rows).T;
+        pass;
+    except:
+        arr = np.array([np.nan]);
+        pass;
+
+    return arr;
 
 def read_datafile(hf_file):
     # open the file for reading
@@ -163,22 +185,22 @@ def read_datafile(hf_file):
     jdict = json.load(fid);
     fid.close();
 
-    raw_acc = np.array([jdict['raw_acc_timeref'],jdict['raw_acc_x'],jdict['raw_acc_y'],jdict['raw_acc_z']]).T;
-    raw_gyro = np.array([jdict['raw_gyro_timeref'],jdict['raw_gyro_x'],jdict['raw_gyro_y'],jdict['raw_gyro_z']]).T;
-    raw_magnet = np.array([jdict['raw_magnet_timeref'],jdict['raw_magnet_x'],jdict['raw_magnet_y'],jdict['raw_magnet_z']]).T;
+    raw_acc = join_data_fields_to_array(jdict,['raw_acc_timeref','raw_acc_x','raw_acc_y','raw_acc_z']);
+    raw_gyro = join_data_fields_to_array(jdict,['raw_gyro_timeref','raw_gyro_x','raw_gyro_y','raw_gyro_z']);
+    raw_magnet = join_data_fields_to_array(jdict,['raw_magnet_timeref','raw_magnet_x','raw_magnet_y','raw_magnet_z']);
 
-    proc_acc = np.array([jdict['processed_user_acc_x'],jdict['processed_user_acc_y'],jdict['processed_user_acc_z']]).T;
-    proc_magnet = np.array([jdict['processed_magnet_x'],jdict['processed_magnet_y'],jdict['processed_magnet_z']]).T;
-    proc_gyro = np.array([jdict['processed_gyro_x'],jdict['processed_gyro_y'],jdict['processed_gyro_z']]).T;
+    proc_acc = join_data_fields_to_array(jdict,['processed_user_acc_x','processed_user_acc_y','processed_user_acc_z']);
+    proc_magnet = join_data_fields_to_array(jdict,['processed_magnet_x','processed_magnet_y','processed_magnet_z']);
+    proc_gyro = join_data_fields_to_array(jdict,['processed_gyro_x','processed_gyro_y','processed_gyro_z']);
 
-    proc_gravity = np.array([jdict['processed_gravity_x'],jdict['processed_gravity_y'],jdict['processed_gravity_z']]).T;
-    proc_attitude = np.array([jdict['processed_roll'],jdict['processed_pitch'],jdict['processed_yaw']]).T;
+    proc_gravity = join_data_fields_to_array(jdict,['processed_gravity_x','processed_gravity_y','processed_gravity_z']);
+    proc_attitude = join_data_fields_to_array(jdict,['processed_roll','processed_pitch','processed_yaw']);
 
-    proc_timeref = np.array(jdict['processed_timeref']).T;
+    proc_timeref = join_data_fields_to_array(jdict,['processed_timeref']);
 
-    location = np.array([jdict['location_timestamp'],jdict['location_latitude'],jdict['location_longitude'],\
-                             jdict['location_altitude'],jdict['location_speed'],\
-                             jdict['location_horizontal_accuracy'],jdict['location_vertical_accuracy']]).T;
+    location = join_data_fields_to_array(jdict,['location_timestamp','location_latitude','location_longitude',\
+                                              'location_altitude','location_speed',\
+                                              'location_horizontal_accuracy','location_vertical_accuracy']);
     
     lf_data = jdict['low_frequency'];
         
@@ -249,7 +271,7 @@ def main():
         pass;
     fid.close();
 
-    skip_existing = False;
+    skip_existing = True;
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;
