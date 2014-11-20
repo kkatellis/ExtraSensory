@@ -493,7 +493,7 @@
         {
             appliedLabels = [NSMutableSet setWithSet:self.secondaryActivities];
         }
-        frequentChoices = [ES_DataBaseAccessor getTodaysFrequentSecondaryActivitiesOutOf:choices];
+        frequentChoices = [ES_DataBaseAccessor getRecentFrequentSecondaryActivitiesOutOf:choices];
     }
     else if ([segue.identifier isEqualToString:MOOD])
     {
@@ -504,7 +504,7 @@
         {
             appliedLabels = [NSMutableSet setWithObject:self.mood];
         }
-        frequentChoices = [ES_DataBaseAccessor getTodaysFrequentMoodsOutOf:choices];
+        frequentChoices = [ES_DataBaseAccessor getRecentFrequentMoodsOutOf:choices];
     }
     else
     {

@@ -24,6 +24,8 @@
 #define HF_DATA_FILE_DUR    @"HF_DUR_DATA.txt"
 #define LABEL_FILE          @"label.txt"
 
+#define SECONDS_IN_WEEK     604800.0
+
 + (ES_User *)user
 {
     ES_User *user;
@@ -292,7 +294,7 @@
     return nil;
 }
 
-+ (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities
++ (NSMutableDictionary *) getRecentCountsForSecondaryActivities:(NSArray *)secondaryActivities
 {
     NSMutableDictionary *counts = [NSMutableDictionary new];
     for (NSString *act in secondaryActivities)
@@ -303,9 +305,9 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     
-    NSNumber *todayNum = [self getTimestampOfTodaysStart];
+    float startFrom = [[NSDate date] timeIntervalSince1970] - SECONDS_IN_WEEK;
     
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@ AND %K.@count > 0", @"timestamp",todayNum,@"userActivityLabels"]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %f AND %K.@count > 0", @"timestamp",startFrom,@"userActivityLabels"]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     NSError *error = [NSError new];
@@ -322,16 +324,12 @@
                 counts[activityName] = [NSNumber numberWithInt:newCount];
             }
         }
-        else
-        {
-            NSLog(@"[databaseAccessor] fetch gave result with nil userActivityLabels");
-        }
     }
     //NSLog(@"Today's counts: %@", counts);
     return counts;
 }
 
-+ (NSMutableDictionary *) getTodaysCountsForMoods:(NSArray *)moods
++ (NSMutableDictionary *) getRecentCountsForMoods:(NSArray *)moods
 {
     NSMutableDictionary *counts = [NSMutableDictionary new];
     for (NSString *mood in moods)
@@ -342,9 +340,9 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     
-    NSNumber *todayNum = [self getTimestampOfTodaysStart];
+    float startFrom = [[NSDate date] timeIntervalSince1970] - SECONDS_IN_WEEK;
     
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@", @"timestamp",todayNum]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %f", @"timestamp",startFrom]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     NSError *error = [NSError new];
@@ -356,10 +354,6 @@
         {
             int newCount = (int)[counts[activity.mood] integerValue] + 1;
             counts[activity.mood] = [NSNumber numberWithInt:newCount];
-        }
-        else
-        {
-            NSLog(@"[databaseAccessor] fetch gave result with nil mood");
         }
     }
     return counts;
@@ -388,16 +382,16 @@
     return labelsByFrequency;
 }
 
-+ (NSArray *) getTodaysFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities
++ (NSArray *) getRecentFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities
 {
-    NSDictionary *counts = [self getTodaysCountsForSecondaryActivities:secondaryActivities];
+    NSDictionary *counts = [self getRecentCountsForSecondaryActivities:secondaryActivities];
     NSArray *secondaryActivitiesByFrequency = [self getFrequentLabelsOutOfLabelsWithCounts:counts];
     return secondaryActivitiesByFrequency;
 }
 
-+ (NSArray *) getTodaysFrequentMoodsOutOf:(NSArray *)moods
++ (NSArray *) getRecentFrequentMoodsOutOf:(NSArray *)moods
 {
-    NSDictionary *counts = [self getTodaysCountsForMoods:moods];
+    NSDictionary *counts = [self getRecentCountsForMoods:moods];
     NSArray *moodsByFrequency = [self getFrequentLabelsOutOfLabelsWithCounts:counts];
     return moodsByFrequency;
 }

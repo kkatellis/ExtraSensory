@@ -35,11 +35,11 @@
 + (ES_Activity *) getMostRecentActivity;
 + (ES_Activity *) getLatestCorrectedActivityWithinTheLatest:(NSNumber *)seconds;
 + (NSMutableDictionary *) getTodaysCounts;
-+ (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities;
-+ (NSMutableDictionary *) getTodaysCountsForMoods:(NSArray *)moods;
+//+ (NSMutableDictionary *) getRecentCountsForSecondaryActivities:(NSArray *)secondaryActivities;
+//+ (NSMutableDictionary *) getRecentCountsForMoods:(NSArray *)moods;
 
-+ (NSArray *) getTodaysFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities;
-+ (NSArray *) getTodaysFrequentMoodsOutOf:(NSArray *)moods;
++ (NSArray *) getRecentFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities;
++ (NSArray *) getRecentFrequentMoodsOutOf:(NSArray *)moods;
 
 + (void) writeSensorData:(NSDictionary *)data andActivity:(ES_Activity *)activity;
 + (void) writeActivity: (ES_Activity *)activity;
