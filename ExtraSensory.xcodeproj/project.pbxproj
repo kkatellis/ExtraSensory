@@ -358,6 +358,13 @@
 			name = calendar;
 			sourceTree = "<group>";
 		};
+		4E4047BC1A1FAD8D00C1D0DF /* textFiles */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = textFiles;
+			sourceTree = "<group>";
+		};
 		707762DD18CF7C9800ED0134 /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -370,6 +377,7 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4E4047BC1A1FAD8D00C1D0DF /* textFiles */,
 				4E5C5D93199F6C7F00B801BC /* redCircle.png */,
 				4291F1C4199A7F29008EDCA4 /* calendar */,
 				708D5FAF197C3778003FE7D3 /* Lying down.png */,
