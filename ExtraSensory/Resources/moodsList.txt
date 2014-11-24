@@ -1,0 +1,27 @@
+Amused
+Angry
+Bored
+Calm
+Crazy
+Disgusted
+Dreamy
+Energetic
+Excited
+Frustrated
+Happy
+High
+Hungry
+In love
+Lonely
+Normal
+Nostalgic
+Optimistic
+Romantic
+Sad
+Serious
+Sexy
+Sleepy
+Stressed
+Tired
+Untroubled
+Worried

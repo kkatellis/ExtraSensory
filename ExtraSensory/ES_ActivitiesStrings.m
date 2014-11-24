@@ -75,7 +75,8 @@ static NSArray *mainActivitiesColorList = nil;
     NSArray *labelsStrings = [allStrings componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
     // Sort the labels alphabetically:
-    NSArray *sortedLabels = [labelsStrings sortedArrayUsingSelector:@selector(compare:)];
+    NSMutableArray *sortedLabels = [NSMutableArray arrayWithArray:[labelsStrings sortedArrayUsingSelector:@selector(compare:)]];
+    [sortedLabels removeObject:@""];
     
     NSLog(@"[activitiesStrings] Loaded %d labels from %@.",sortedLabels.count,resourceFilename);
     
@@ -97,47 +98,12 @@ static NSArray *mainActivitiesColorList = nil;
     
 }
 
-//+(NSArray *)sortedSecondaryActivities
-//{
-//    
-//    NSDictionary *secondaryActivityCounts = [ES_DataBaseAccessor getTodaysCountsForSecondaryActivities:secondaryActivitiesList];
-//    
-//    
-//    // Separate the activities to those that have been used and those that haven't:
-//    NSMutableArray *usedActivities = [[NSMutableArray alloc] initWithCapacity:[secondaryActivitiesList count]];
-//    NSMutableArray *usedActivitiesCountValues = [[NSMutableArray alloc] initWithCapacity:[secondaryActivitiesList count]];
-//    NSMutableArray *unusedActivities = [[NSMutableArray alloc] initWithCapacity:[secondaryActivitiesList count]];
-//
-//    for (NSString *act in secondaryActivitiesList)
-//    {
-//        if ([[secondaryActivityCounts valueForKey:act] integerValue] > 0)
-//        {
-//            [usedActivities addObject:act];
-//            [usedActivitiesCountValues addObject:[secondaryActivityCounts valueForKey:act]];
-//        }
-//        else
-//        {
-//            [unusedActivities addObject:act];
-//        }
-//    }
-//    
-//    NSDictionary *usedActivitiesCounts = [NSDictionary dictionaryWithObjects:usedActivitiesCountValues forKeys:usedActivities];
-//    
-//    NSArray *sortedUsedActivities = [usedActivitiesCounts keysSortedByValueUsingSelector:@selector(compare:)];
-//    // Since this sorts from least used to most used, reverse the order:
-//    sortedUsedActivities = [[sortedUsedActivities reverseObjectEnumerator] allObjects];
-//    
-//    NSMutableArray *sortedAllActivities = [NSMutableArray arrayWithArray:sortedUsedActivities];
-//    [sortedAllActivities addObjectsFromArray:unusedActivities];
-//
-//    return sortedAllActivities;
-//    
-//}
 
 +(NSArray *)moods {
     if (!moodsList)
     {
-        moodsList = [@[@"Amused",@"Angry",@"Bored",@"Calm",@"Crazy",@"Disgusted",@"Dreamy",@"Energetic",@"Excited",@"Frustrated",@"Happy",@"High",@"Hungry",@"In love", @"Lonely", @"Normal", @"Nostalgic", @"Optimistic", @"Romantic", @"Sad", @"Serious", @"Sexy", @"Sleepy", @"Stressed", @"Tired", @"Untroubled", @"Worried"] sortedArrayUsingSelector:@selector(compare:)];
+        moodsList = [self loadStringArrayFromTextFile:@"moodsList"];
+//        moodsList = [@[@"Amused",@"Angry",@"Bored",@"Calm",@"Crazy",@"Disgusted",@"Dreamy",@"Energetic",@"Excited",@"Frustrated",@"Happy",@"High",@"Hungry",@"In love", @"Lonely", @"Normal", @"Nostalgic", @"Optimistic", @"Romantic", @"Sad", @"Serious", @"Sexy", @"Sleepy", @"Stressed", @"Tired", @"Untroubled", @"Worried"] sortedArrayUsingSelector:@selector(compare:)];
     }
     
     return moodsList;
