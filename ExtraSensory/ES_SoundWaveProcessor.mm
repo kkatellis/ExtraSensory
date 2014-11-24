@@ -10,9 +10,15 @@
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
+//#import "ES_MFCC.h"
+#include "AudioFileReader.hpp"
+#include "MFCCUtils.h"
 
 #define HF_SOUND_FILE_PRE   @"HF_SOUNDWAVE_PRE"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
+#define MFCC_FILE_DUR   @"MFCC_SOUNDWAVE_DUR"
+
+typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 
 @implementation ES_SoundWaveProcessor
 
@@ -128,6 +134,42 @@
 
 - (void) pauseDurRecording {
     [hfRecorderDur stop];
+}
+
+- (void) processMFCC {
+    NSLog(@"%@",[[NSBundle mainBundle] bundlePath]);
+    NSLog(@"[ES_SoundWaveProcessor] processMFCC");
+    soundFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_DUR]];
+    NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:MFCC_FILE_DUR]];
+    NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
+    [self callAudio:(CFURLRef)soundFileURLDur toMFCC:MFCCFileURLDur];
+}
+- (void) callAudio: (const CFURLRef&)audioURL toMFCC:(NSURL*)MFCCURL {
+    
+    std::cout << "compute_mfcc_features\n";
+    
+    AudioFileReaderRef someReader = AudioFileReaderRef(new WM::AudioFileReader(audioURL));
+    
+    FeatureTypeDTW::Features feats;
+    feats = get_mfcc_features(someReader);
+    
+    std::cout << "write_mfcc_features\n";
+    
+    NSMutableString* arrayString = [[NSMutableString alloc] init];
+    NSMutableString* temp = [[NSMutableString alloc] init];
+    for (int i = 0; i<7; ++i) {
+        for (int j = 0; j<feats.size(); ++j) {
+            [temp appendString:[NSString stringWithFormat:@"%f ", feats[j].at(i)]];
+        }
+        [temp appendString:@"\n"];
+        [arrayString appendString:temp];
+    }
+    //NSLog(@"array: %@",arrayString);
+    NSError* err;
+    BOOL success = [arrayString writeToURL:MFCCURL atomically:YES encoding:NSUTF8StringEncoding error:&err];
+    if (success){
+        NSLog(@"MFCC successfully written\n");
+    }
 }
 
 @end
