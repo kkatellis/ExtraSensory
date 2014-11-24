@@ -21,6 +21,7 @@
 
 #define ROOT_DATA_OBJECT @"ES_User"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
+#define MFCC_FILE_DUR   @"MFCC_SOUNDWAVE_DUR"
 #define HF_DATA_FILE_DUR    @"HF_DUR_DATA.txt"
 #define LABEL_FILE          @"label.txt"
 
@@ -461,8 +462,8 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR, nil];
-    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE, nil];
+    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR,MFCC_FILE_DUR, nil];
+//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE, nil];
     
     return arr;
 }

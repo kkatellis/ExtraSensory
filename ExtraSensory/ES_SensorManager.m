@@ -398,6 +398,9 @@
         [self.motionManager stopMagnetometerUpdates];
         [self.motionManager stopDeviceMotionUpdates];
         
+        //added MFCC extraction here
+        [self.soundProcessor processMFCC];
+        
         [ES_DataBaseAccessor writeData: HFDataBundle];
         [ES_DataBaseAccessor writeActivity: self.currentActivity];
         
