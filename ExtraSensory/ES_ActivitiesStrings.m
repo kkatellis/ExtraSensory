@@ -59,19 +59,42 @@ static NSArray *mainActivitiesColorList = nil;
     return nil;
 }
 
++ (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename
+{
+    NSString *resourceFilePath = [[NSBundle mainBundle] pathForResource:resourceFilename ofType:@"txt"];
+    NSError *err = nil;
+    NSString *allStrings = [NSString stringWithContentsOfFile:resourceFilePath encoding:NSUTF8StringEncoding error:&err];
+    
+    if (err)
+    {
+        NSLog(@"[activitiesStrings] !!! failed to load label strings from file %@. Got error: %@",resourceFilePath,err);
+        return nil;
+    }
+    
+    // Separate the labels from the total string:
+    NSArray *labelsStrings = [allStrings componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    
+    // Sort the labels alphabetically:
+    NSArray *sortedLabels = [labelsStrings sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSLog(@"[activitiesStrings] Loaded %d labels from %@.",sortedLabels.count,resourceFilename);
+    
+    return sortedLabels;
+}
+
 +(NSArray *)secondaryActivities {
     
     if (!secondaryActivitiesList)
     {
-        secondaryActivitiesList = [@[@"Lifting weights", @"Playing baseball", @"Playing basketball", @"Playing lacrosse", @"Skateboarding", @"Playing soccer", @"Playing frisbee", @"Stretching", @"Yoga", @"Elliptical machine", @"Treadmill", @"Stationary Bike", @"Cooking", @"Cleaning", @"Gardening", @"Doing laundry", @"Mowing the lawn", @"Raking the leaves", @"Vacuuming", @"Doing dishes", @"Washing car", @"Manual labor", @"Dancing", @"Driving", @"Eating", @"Drinking",@"Jumping", @"Listening to music", @"Relaxing", @"Shopping", @"Sleeping", @"Talking with friends", @"Using the bathroom", @"Playing videogames", @"Watching TV", @"Lab work", @"Written work", @"Drawing", @"Surfing the internet", @"Computer work", @"Reading a book", @"Studying", @"In class", @"In a meeting", @"Texting", @"At a bar", @"At a concert", @"At the beach", @"At a restaurant", @"On a bus", @"On a plane", @"On a train", @"In a car"] sortedArrayUsingSelector:@selector(compare:)];
+        
+        secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList"];
+        
+        
+//        secondaryActivitiesList = [@[@"Lifting weights", @"Playing baseball", @"Playing basketball", @"Playing lacrosse", @"Skateboarding", @"Playing soccer", @"Playing frisbee", @"Stretching", @"Yoga", @"Elliptical machine", @"Treadmill", @"Stationary Bike", @"Cooking", @"Cleaning", @"Gardening", @"Doing laundry", @"Mowing the lawn", @"Raking the leaves", @"Vacuuming", @"Doing dishes", @"Washing car", @"Manual labor", @"Dancing", @"Driving", @"Eating", @"Drinking",@"Jumping", @"Listening to music", @"Relaxing", @"Shopping", @"Sleeping", @"Talking with friends", @"Using the bathroom", @"Playing videogames", @"Watching TV", @"Lab work", @"Written work", @"Drawing", @"Surfing the internet", @"Computer work", @"Reading a book", @"Studying", @"In class", @"In a meeting", @"Texting", @"At a bar", @"At a concert", @"At the beach", @"At a restaurant", @"On a bus", @"On a plane", @"On a train", @"In a car"] sortedArrayUsingSelector:@selector(compare:)];
     }
     
     return secondaryActivitiesList;
     
-//    // Dynamically find out what are the most common activities of the user:
-//    NSArray *sortedSecondaryActivities = [self sortedSecondaryActivities];
-// 
-//    return sortedSecondaryActivities;
 }
 
 //+(NSArray *)sortedSecondaryActivities
