@@ -16,7 +16,8 @@
 #import "ES_Activity.h"
 #import "ES_Settings.h"
 #import "ES_SoundWaveProcessor.h"
-#import "ES_UserActivityLabels.h"
+#import "ES_ActivitiesStrings.h"
+//#import "ES_UserActivityLabels.h"
 
 #define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
 #define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
@@ -235,13 +236,13 @@
     {
         // Then ask user if they are still doing the same thing in the last x time:
         NSString *mainActivity = latestVerifiedActivity.userCorrection;
-        NSSet *secondaryActivities = latestVerifiedActivity.userActivityLabels;
+        NSSet *secondaryActivities = latestVerifiedActivity.secondaryActivities;
         NSString *mood = latestVerifiedActivity.mood;
         NSDate *latestVerifiedDate = [NSDate dateWithTimeIntervalSince1970:[latestVerifiedActivity.timestamp doubleValue]];
         NSTimeInterval timePassed = [now timeIntervalSinceDate:latestVerifiedDate];
         
         question = [NSString stringWithFormat:@"In the past %d minutes were you still %@",(int)timePassed/60,mainActivity];
-        NSArray *secondaryActivitiesStrings = [ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[secondaryActivities allObjects]];
+        NSArray *secondaryActivitiesStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[secondaryActivities allObjects]];
         if (secondaryActivities && [secondaryActivities count]>0)
         {
             NSString *secondaryString = [secondaryActivitiesStrings componentsJoinedByString:@","];
@@ -309,7 +310,7 @@
         // Create a new activity record with the predetermined labels:
         ES_Activity *newActivity = [ES_DataBaseAccessor newActivity];
         newActivity.userCorrection = predeterminedLabels.userCorrection;
-        NSArray *userActivitiesStrings = [ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[predeterminedLabels.userActivityLabels allObjects]];
+        NSArray *userActivitiesStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[predeterminedLabels.secondaryActivities allObjects]];
         [ES_DataBaseAccessor setSecondaryActivities:userActivitiesStrings forActivity:newActivity];
         newActivity.mood = predeterminedLabels.mood;
         

@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel;
+@class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel, ES_Label, ES_SecondaryActivity, ES_Mood;
 
 @interface ES_DataBaseAccessor : NSObject {
     

@@ -13,7 +13,9 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_ActivityEventTableCell.h"
 #import "ES_FeedbackViewController.h"
-#import "ES_UserActivityLabels.h"
+//#import "ES_UserActivityLabels.h"
+#import "ES_SecondaryActivity.h"
+#import "ES_Mood.h"
 #import "ES_ActivitiesStrings.h"
 
 #define SECONDS_IN_24HRS 86400
@@ -177,9 +179,9 @@
 
 + (BOOL)doesActivity:(ES_Activity *)activity1 haveSameSecondaryActivitiesAsActivity:(ES_Activity *)activity2
 {
-    NSMutableSet *userActivitiesStrings1 = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity1.userActivityLabels allObjects]]];
+    NSMutableSet *userActivitiesStrings1 = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity1.secondaryActivities allObjects]]];
     
-    NSMutableSet *userActivitiesStrings2 = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity2.userActivityLabels allObjects]]];
+    NSMutableSet *userActivitiesStrings2 = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity2.secondaryActivities allObjects]]];
   
     if ([userActivitiesStrings1 count] != [userActivitiesStrings2 count])
     {
@@ -260,7 +262,7 @@
     // Add an activityEvent for each atomic activity:
     for (ES_Activity *atomicActivity in self.eventToShowMinuteByMinute.minuteActivities)
     {
-        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[atomicActivity.userActivityLabels allObjects]]];
+        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[atomicActivity.secondaryActivities allObjects]]];
         
         ES_ActivityEvent *shortEvent = [[ES_ActivityEvent alloc] initWithIsVerified:atomicActivity.isPredictionVerified serverPrediction:atomicActivity.serverPrediction userCorrection:atomicActivity.userCorrection userActivityLabels:userActivitiesStrings mood:atomicActivity.mood startTimestamp:atomicActivity.timestamp endTimestamp:atomicActivity.timestamp minuteActivities:[NSMutableArray arrayWithObject:atomicActivity]];
         [self.eventHistory addObject:shortEvent];
@@ -293,7 +295,7 @@
             // Then we've reached a new activity.
             if (startOfActivity)
             {
-                NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
+                NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.secondaryActivities allObjects]]];
                 // Create an event from the start and end of the previous activity:
                 currentEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
                 [self.eventHistory addObject:currentEvent];
@@ -310,7 +312,7 @@
     if (endOfActivity)
     {
         // Create the last event from the start and end of activity:
-        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[startOfActivity.userActivityLabels allObjects]]];
+        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.secondaryActivities allObjects]]];
         ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
         [self.eventHistory addObject:event];
     }

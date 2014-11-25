@@ -12,7 +12,8 @@
 #import "ES_User.h"
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
-#import "ES_UserActivityLabels.h"
+#import "ES_ActivitiesStrings.h"
+//#import "ES_UserActivityLabels.h"
 
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
 
@@ -105,7 +106,7 @@
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"predicted_activity",activity.serverPrediction]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"corrected_activity",activity.userCorrection]];
     
-    NSString *secondaryActivitiesSingleString = [NSString stringWithFormat:@"%@",[[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]] componentsJoinedByString:@","]];
+    NSString *secondaryActivitiesSingleString = [NSString stringWithFormat:@"%@",[[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity.secondaryActivities allObjects]] componentsJoinedByString:@","]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"secondary_activities",secondaryActivitiesSingleString]];
     
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"mood",activity.mood]];
@@ -353,7 +354,7 @@
     {
         return YES;
     }
-    if (activity.userActivityLabels && activity.userActivityLabels.count > 0)
+    if (activity.secondaryActivities && activity.secondaryActivities.count > 0)
     {
         return YES;
     }

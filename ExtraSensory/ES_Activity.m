@@ -10,7 +10,6 @@
 #import "ES_Mood.h"
 #import "ES_SecondaryActivity.h"
 #import "ES_User.h"
-#import "ES_UserActivityLabels.h"
 
 
 @implementation ES_Activity
@@ -23,9 +22,8 @@
 @dynamic timestamp;
 @dynamic userCorrection;
 @dynamic uuid;
-@dynamic user;
-@dynamic userActivityLabels;
-@dynamic secondaryActivities;
 @dynamic moods;
+@dynamic secondaryActivities;
+@dynamic user;
 
 @end

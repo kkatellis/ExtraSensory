@@ -14,7 +14,9 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_ActivitiesStrings.h"
 #import "ES_HistoryTableViewController.h"
-#import "ES_UserActivityLabels.h"
+//#import "ES_UserActivityLabels.h"
+#import "ES_SecondaryActivity.h"
+#import "ES_Mood.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -67,7 +69,8 @@
     {
         self.mainActivity = activity.serverPrediction;
     }
-    self.secondaryActivities = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]]];
+//    self.secondaryActivities = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]]];
+    self.secondaryActivities = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity.secondaryActivities allObjects]]];
     self.mood = activity.mood;
 }
 
