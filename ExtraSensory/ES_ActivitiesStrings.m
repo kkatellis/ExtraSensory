@@ -8,6 +8,7 @@
 
 #import "ES_ActivitiesStrings.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_Label.h"
 
 @interface ES_ActivitiesStrings()
 
@@ -107,6 +108,27 @@ static NSArray *mainActivitiesColorList = nil;
     }
     
     return moodsList;
+}
+
+
+/*
+ * This is a helping utility function to convert an array of ES_Label objects into an array of Strings.
+ */
++ (NSMutableArray *) createStringArrayFromLabelObjectsAraay:(NSArray *)labelObjectsArray
+{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (id obj in labelObjectsArray)
+    {
+        if (![obj isKindOfClass:[ES_Label class]])
+        {
+            NSLog(@"!!! Array contains an item that is not ES_Label");
+            return nil;
+        }
+        ES_Label *label = (ES_Label *)obj;
+        [result addObject:label.label];
+    }
+    
+    return result;
 }
 
 @end
