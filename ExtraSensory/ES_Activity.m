@@ -16,7 +16,7 @@
 
 @dynamic isPredictionCorrect;
 @dynamic isPredictionVerified;
-@dynamic mood;
+//@dynamic mood;
 @dynamic serverPrediction;
 @dynamic startTime;
 @dynamic timestamp;

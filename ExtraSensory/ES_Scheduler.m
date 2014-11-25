@@ -237,31 +237,33 @@
         // Then ask user if they are still doing the same thing in the last x time:
         NSString *mainActivity = latestVerifiedActivity.userCorrection;
         NSSet *secondaryActivities = latestVerifiedActivity.secondaryActivities;
-        NSString *mood = latestVerifiedActivity.mood;
+        NSSet *moods = latestVerifiedActivity.moods;
         NSDate *latestVerifiedDate = [NSDate dateWithTimeIntervalSince1970:[latestVerifiedActivity.timestamp doubleValue]];
         NSTimeInterval timePassed = [now timeIntervalSinceDate:latestVerifiedDate];
         
         question = [NSString stringWithFormat:@"In the past %d minutes were you still %@",(int)timePassed/60,mainActivity];
         NSArray *secondaryActivitiesStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[secondaryActivities allObjects]];
+        NSArray *moodsStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[moods allObjects]];
         if (secondaryActivities && [secondaryActivities count]>0)
         {
             NSString *secondaryString = [secondaryActivitiesStrings componentsJoinedByString:@","];
             question = [NSString stringWithFormat:@"%@ (%@)",question,secondaryString];
         }
         
-        if (mood)
+        if (moods && [moods count] > 0)
         {
-            question = [NSString stringWithFormat:@"%@ and feeling %@",question,mood];
+            NSString *moodsString = [moodsStrings componentsJoinedByString:@","];
+            question = [NSString stringWithFormat:@"%@ and feeling %@",question,moodsString];
         }
         question = [NSString stringWithFormat:@"%@?",question];
     
-        userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:YES main:mainActivity secondary:secondaryActivitiesStrings mood:mood latestVerifiedTime:latestVerifiedActivity.timestamp];
+        userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:YES main:mainActivity secondary:secondaryActivitiesStrings moods:moodsStrings latestVerifiedTime:latestVerifiedActivity.timestamp];
     }
     else
     {
         // Then ask the user to provide feedback:
         question = @"Can you update what you're doing now?";
-        userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:NO main:nil secondary:nil mood:nil latestVerifiedTime:nil];
+        userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:NO main:nil secondary:nil moods:nil latestVerifiedTime:nil];
     }
     
     NSLog(@"[scheduler] Should ask question: [%@]",question);
@@ -311,8 +313,9 @@
         ES_Activity *newActivity = [ES_DataBaseAccessor newActivity];
         newActivity.userCorrection = predeterminedLabels.userCorrection;
         NSArray *userActivitiesStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[predeterminedLabels.secondaryActivities allObjects]];
+        NSArray *moodsStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[predeterminedLabels.moods allObjects]];
         [ES_DataBaseAccessor setSecondaryActivities:userActivitiesStrings forActivity:newActivity];
-        newActivity.mood = predeterminedLabels.mood;
+        [ES_DataBaseAccessor setMoods:moodsStrings forActivity:newActivity];
         
         NSLog(@"[scheduler] There are predetermined labels to attach to this new activity");
         [self.sensorManager setCurrentActivity:newActivity];

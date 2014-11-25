@@ -10,19 +10,19 @@
 
 @implementation ES_ActivityEvent
 
-- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels mood:(NSString *)mood startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities
+- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection secondaryActivitiesStrings:(NSSet *)secondaryActivitiesStrings moodsStrings:(NSSet *)moodsStrings startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities
 {
     self = [super init];
     if (self) {
         self.isPredictionVerified = isPredictionVerified;
         self.serverPrediction = serverPrediction;
         self.userCorrection = userCorrection;
-        self.userActivityLabels = userActivityLabels;
+        self.secondaryActivitiesStrings = secondaryActivitiesStrings;
+        self.moodsStrings = moodsStrings;
         self.startTimestamp = startTimestamp;
         self.endTimestamp = endTimestamp;
-//        self.startActivity = startActivity;
         self.minuteActivities = minuteActivities;
-        self.mood = mood;
+//        self.mood = mood;
     }
     return self;
 }

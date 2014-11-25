@@ -157,23 +157,42 @@
 //    
 //}
 //
-+ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity
+
++ (void) setMoods:(NSArray *)labels forActivity:(ES_Activity *)activity
 {
-    NSSet *oldlabels = activity.secondaryActivities;
+    NSSet *oldLabels = activity.moods;
     
-    if ([oldlabels count] > 0)
+    if ([oldLabels count] > 0)
     {
-        [activity removeSecondaryActivities:oldlabels];
+        [activity removeMoods:oldLabels];
     }
     
-    NSMutableSet *newlabels = [NSMutableSet new];
+    NSMutableSet *newLabels = [NSMutableSet new];
+    for (NSString *label in labels)
+    {
+        ES_Mood *newLabel = [self getMoodEntityWithName:label];
+        [newLabels addObject:newLabel];
+    }
+    [activity addMoods:newLabels];
+}
+
++ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity
+{
+    NSSet *oldLabels = activity.secondaryActivities;
+    
+    if ([oldLabels count] > 0)
+    {
+        [activity removeSecondaryActivities:oldLabels];
+    }
+    
+    NSMutableSet *newLabels = [NSMutableSet new];
     
     for (NSString* label in labels)
     {
         ES_SecondaryActivity* newlabel = [self getSecondaryActivityEntityWithName:label];
-        [newlabels addObject:newlabel];
+        [newLabels addObject:newlabel];
     }
-    [activity addSecondaryActivities:newlabels];
+    [activity addSecondaryActivities:newLabels];
     
 }
 
@@ -398,40 +417,6 @@
     //NSLog(@"Today's counts: %@", counts);
     return counts;
 }
-//+ (NSMutableDictionary *) getRecentCountsForSecondaryActivities:(NSArray *)secondaryActivities
-//{
-//    NSMutableDictionary *counts = [NSMutableDictionary new];
-//    for (NSString *act in secondaryActivities)
-//    {
-//        [counts setObject:[NSNumber numberWithInt:0] forKey:act];
-//    }
-//    
-//    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
-//    [fetchRequest setFetchLimit:0];
-//    
-//    float startFrom = [[NSDate date] timeIntervalSince1970] - SECONDS_IN_WEEK;
-//    
-//    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %f AND %K.@count > 0", @"timestamp",startFrom,@"userActivityLabels"]];
-//    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-//    
-//    NSError *error = [NSError new];
-//    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
-//    
-//    for (ES_Activity *activity in results)
-//    {
-//        if (activity.userActivityLabels)
-//        {
-//            for (id actObj in activity.userActivityLabels)
-//            {
-//                NSString *activityName = [(ES_UserActivityLabels *)actObj name];
-//                int newCount = (int)[counts[activityName] integerValue] + 1;
-//                counts[activityName] = [NSNumber numberWithInt:newCount];
-//            }
-//        }
-//    }
-//    //NSLog(@"Today's counts: %@", counts);
-//    return counts;
-//}
 
 + (NSMutableDictionary *) getRecentCountsForMoods:(NSArray *)moods
 {
@@ -446,7 +431,7 @@
     
     float startFrom = [[NSDate date] timeIntervalSince1970] - SECONDS_IN_WEEK;
     
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %f", @"timestamp",startFrom]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %f AND %K.@count > 0", @"timestamp",startFrom,@"moods"]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     NSError *error = [NSError new];
@@ -454,12 +439,17 @@
     
     for (ES_Activity *activity in results)
     {
-        if (activity.mood)
+        if (activity.moods)
         {
-            int newCount = (int)[counts[activity.mood] integerValue] + 1;
-            counts[activity.mood] = [NSNumber numberWithInt:newCount];
+            for (id moodObj in activity.moods)
+            {
+                NSString *moodName = [(ES_Mood *)moodObj label];
+                int newCount = (int)[counts[moodName] integerValue] + 1;
+                counts[moodName] = [NSNumber numberWithInt:newCount];
+            }
         }
     }
+    //NSLog(@"Today's counts: %@", counts);
     return counts;
 }
 
@@ -835,10 +825,10 @@
 //        [keys addObject:@"secondaryActivities"];
 //        [values addObject:secondaryLabels];
 //    }
-    if (activity.mood)
+    if (activity.moods)
     {
-        [keys addObject:@"mood"];
-        [values addObject:activity.mood];
+        [keys addObject:@"moods"];
+        [values addObject:activity.moods];
     }
     
     NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values

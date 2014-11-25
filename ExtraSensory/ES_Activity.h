@@ -15,7 +15,7 @@
 
 @property (nonatomic, retain) NSNumber * isPredictionCorrect;
 @property (nonatomic, retain) NSNumber * isPredictionVerified;
-@property (nonatomic, retain) NSString * mood;
+//@property (nonatomic, retain) NSString * mood;
 @property (nonatomic, retain) NSString * serverPrediction;
 @property (nonatomic, retain) NSDate * startTime;
 @property (nonatomic, retain) NSNumber * timestamp;

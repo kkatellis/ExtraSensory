@@ -177,31 +177,39 @@
     return [activity1.serverPrediction isEqualToString:activity2.serverPrediction];
 }
 
-+ (BOOL)doesActivity:(ES_Activity *)activity1 haveSameSecondaryActivitiesAsActivity:(ES_Activity *)activity2
+/*
+ * Compare 2 sets of ES_Label entities. Do they represent the same sets of labels (strings)
+ */
++ (BOOL) isLabelSet:(NSSet *)labelObjects1 equalToLabelSet:(NSSet *)labelObjects2
 {
-    NSMutableSet *userActivitiesStrings1 = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity1.secondaryActivities allObjects]]];
+    NSMutableSet *labelStrings1 = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[labelObjects1 allObjects]]];
+    NSMutableSet *labelStrings2 = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[labelObjects2 allObjects]]];
     
-    NSMutableSet *userActivitiesStrings2 = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity2.secondaryActivities allObjects]]];
-  
-    if ([userActivitiesStrings1 count] != [userActivitiesStrings2 count])
+    if ([labelStrings1 count] != [labelStrings2 count])
     {
         return NO;
     }
     
-    NSMutableSet *diff = [NSMutableSet setWithSet:userActivitiesStrings1];
-    [diff minusSet:userActivitiesStrings2];
+    NSMutableSet *diff = [NSMutableSet setWithSet:labelStrings1];
+    [diff minusSet:labelStrings2];
     
     return ![diff count];
 }
 
++ (BOOL)doesActivity:(ES_Activity *)activity1 haveSameSecondaryActivitiesAsActivity:(ES_Activity *)activity2
+{
+    return [self isLabelSet:activity1.secondaryActivities equalToLabelSet:activity2.secondaryActivities];
+}
+
 + (BOOL)doesActivity:(ES_Activity *)activity1 haveSameMoodAsActivity:(ES_Activity *)activity2
 {
-    if (activity1.mood)
-    {
-        return [activity1.mood isEqualToString:activity2.mood];
-    }
-    
-    return !(activity2.mood);
+    return [self isLabelSet:activity1.moods equalToLabelSet:activity2.moods];
+//    if (activity1.mood)
+//    {
+//        return [activity1.mood isEqualToString:activity2.mood];
+//    }
+//    
+//    return !(activity2.mood);
 }
 
 + (BOOL)shouldActivity:(ES_Activity *)newActivity beMergedToEventStartingWithActivity:(ES_Activity *)startActivity RightAfterActivity:(ES_Activity *)endActivity
@@ -262,9 +270,10 @@
     // Add an activityEvent for each atomic activity:
     for (ES_Activity *atomicActivity in self.eventToShowMinuteByMinute.minuteActivities)
     {
-        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[atomicActivity.secondaryActivities allObjects]]];
+        NSMutableSet *secondaryActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[atomicActivity.secondaryActivities allObjects]]];
+        NSMutableSet *moodsStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[atomicActivity.moods allObjects]]];
         
-        ES_ActivityEvent *shortEvent = [[ES_ActivityEvent alloc] initWithIsVerified:atomicActivity.isPredictionVerified serverPrediction:atomicActivity.serverPrediction userCorrection:atomicActivity.userCorrection userActivityLabels:userActivitiesStrings mood:atomicActivity.mood startTimestamp:atomicActivity.timestamp endTimestamp:atomicActivity.timestamp minuteActivities:[NSMutableArray arrayWithObject:atomicActivity]];
+        ES_ActivityEvent *shortEvent = [[ES_ActivityEvent alloc] initWithIsVerified:atomicActivity.isPredictionVerified serverPrediction:atomicActivity.serverPrediction userCorrection:atomicActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:atomicActivity.timestamp endTimestamp:atomicActivity.timestamp minuteActivities:[NSMutableArray arrayWithObject:atomicActivity]];
         [self.eventHistory addObject:shortEvent];
     }
 }
@@ -295,9 +304,11 @@
             // Then we've reached a new activity.
             if (startOfActivity)
             {
-                NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.secondaryActivities allObjects]]];
+                NSMutableSet *secondaryActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.secondaryActivities allObjects]]];
+                NSMutableSet *moodsStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.moods allObjects]]];
+                
                 // Create an event from the start and end of the previous activity:
-                currentEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
+                currentEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
                 [self.eventHistory addObject:currentEvent];
             }
             
@@ -312,8 +323,9 @@
     if (endOfActivity)
     {
         // Create the last event from the start and end of activity:
-        NSMutableSet *userActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.secondaryActivities allObjects]]];
-        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection userActivityLabels:userActivitiesStrings mood:startOfActivity.mood startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
+        NSMutableSet *secondaryActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.secondaryActivities allObjects]]];
+        NSMutableSet *moodsStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.moods allObjects]]];
+        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
         [self.eventHistory addObject:event];
     }
     
@@ -447,18 +459,18 @@
     }
     
     NSString *eventDetails;
-    if (relevantEvent.mood)
+    if (relevantEvent.moodsStrings && [relevantEvent.moodsStrings count] > 0)
     {
-        eventDetails = relevantEvent.mood;
+        eventDetails = [[relevantEvent.moodsStrings allObjects] componentsJoinedByString:@", "];
     }
     else
     {
         eventDetails = @"";
     }
     
-    if (relevantEvent.userActivityLabels && [relevantEvent.userActivityLabels count]>0)
+    if (relevantEvent.secondaryActivitiesStrings && [relevantEvent.secondaryActivitiesStrings count]>0)
     {
-        NSString *secondaryStr = [NSString stringWithFormat:@"(%@)",[[relevantEvent.userActivityLabels allObjects] componentsJoinedByString:@", "]];
+        NSString *secondaryStr = [NSString stringWithFormat:@"(%@)",[[relevantEvent.secondaryActivitiesStrings allObjects] componentsJoinedByString:@", "]];
         eventDetails = [NSString stringWithFormat:@"%@ %@",eventDetails,secondaryStr];
     }
     

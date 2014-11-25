@@ -107,9 +107,11 @@
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"corrected_activity",activity.userCorrection]];
     
     NSString *secondaryActivitiesSingleString = [NSString stringWithFormat:@"%@",[[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity.secondaryActivities allObjects]] componentsJoinedByString:@","]];
+    NSString *moodsSingleString = [NSString stringWithFormat:@"%@",[[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity.moods allObjects]] componentsJoinedByString:@","]];
+    
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"secondary_activities",secondaryActivitiesSingleString]];
     
-    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"mood",activity.mood]];
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"moods",moodsSingleString]];
     
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"uuid",activity.user.uuid]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"timestamp",activity.timestamp]];
@@ -350,7 +352,7 @@
     {
         return YES;
     }
-    if (activity.mood)
+    if (activity.moods && activity.moods.count > 0)
     {
         return YES;
     }
