@@ -446,10 +446,15 @@
         mainActivityString = relevantEvent.userCorrection;
         color = [ES_ActivitiesStrings getColorForMainActivity:relevantEvent.userCorrection];
     }
-    else
+    else if (relevantEvent.serverPrediction)
     {
         mainActivityString = [NSString stringWithFormat:@"%@?",relevantEvent.serverPrediction];
         color = [ES_ActivitiesStrings getColorForMainActivity:relevantEvent.serverPrediction];
+    }
+    else
+    {
+        mainActivityString = @"??";
+        color = nil;
     }
     
     NSString *mainText = [NSString stringWithFormat:@"%@   %@",dateString,mainActivityString];
