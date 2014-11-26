@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel;
+@class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel, ES_Label, ES_SecondaryActivity, ES_Mood;
 
 @interface ES_DataBaseAccessor : NSObject {
     
@@ -31,6 +31,7 @@
 + (void) deleteActivity: (ES_Activity *) activity;
 + (BOOL) isActivityOrphanAndNowDeletedActivity:(ES_Activity *)activity;
 + (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity;
++ (void) setMoods:(NSArray*)labels forActivity: (ES_Activity *)activity;
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time;
 + (ES_Activity *) getMostRecentActivity;
 + (ES_Activity *) getLatestCorrectedActivityWithinTheLatest:(NSNumber *)seconds;

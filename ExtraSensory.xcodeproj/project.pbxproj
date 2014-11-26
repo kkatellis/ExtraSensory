@@ -9,20 +9,24 @@
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */; };
-		4291F1DB199A8908008EDCA4 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4291F1DA199A8908008EDCA4 /* ES_Activity.m */; };
+		4E4047C01A1FDDF700C1D0DF /* secondaryActivitiesList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */; };
+		4E4047C21A23B5BE00C1D0DF /* moodsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047C11A23B5BE00C1D0DF /* moodsList.txt */; };
+		4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C41A23F19600C1D0DF /* ES_Label.m */; };
+		4E4047C81A24F54100C1D0DF /* ES_SecondaryActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C71A24F54100C1D0DF /* ES_SecondaryActivity.m */; };
+		4E4047CB1A24F54300C1D0DF /* ES_Mood.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047CA1A24F54300C1D0DF /* ES_Mood.m */; };
 		4E5C5D94199F6C7F00B801BC /* redCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5D93199F6C7F00B801BC /* redCircle.png */; };
 		4E5C5E6919A66D4A00B801BC /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6719A66D4A00B801BC /* back.png */; };
 		4E5C5E6A19A66D4A00B801BC /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6819A66D4A00B801BC /* edit.png */; };
 		4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */; };
 		4E987BB319AEA7E8008C569D /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E987BB219AEA7E8008C569D /* ES_Settings.m */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
+		4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
 		4EFADB3119F08BD800262568 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFADB3019F08BD500262568 /* CoreTelephony.framework */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
 		703B3650196E3FA800D5D80B /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B364F196E3FA800D5D80B /* gear.png */; };
 		703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B3651196E3FD100D5D80B /* stats_pie_chart.png */; };
 		703B3668196E477500D5D80B /* text-plus-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B3667196E477500D5D80B /* text-plus-icon.png */; };
-		7070A64818D7B991007D660D /* ES_UserActivityLabels.m in Sources */ = {isa = PBXBuildFile; fileRef = 7070A64718D7B991007D660D /* ES_UserActivityLabels.m */; };
 		707762E018CF7C9800ED0134 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 707762DF18CF7C9800ED0134 /* Reachability.m */; };
 		707762E318D125BD00ED0134 /* ES_SummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 707762E218D125BD00ED0134 /* ES_SummaryViewController.m */; };
 		708D5FB2197C3778003FE7D3 /* Lying down.png in Resources */ = {isa = PBXBuildFile; fileRef = 708D5FAF197C3778003FE7D3 /* Lying down.png */; };
@@ -154,8 +158,14 @@
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SoundWaveProcessor.m; sourceTree = "<group>"; };
-		4291F1D9199A8908008EDCA4 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
-		4291F1DA199A8908008EDCA4 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
+		4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secondaryActivitiesList.txt; sourceTree = "<group>"; };
+		4E4047C11A23B5BE00C1D0DF /* moodsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = moodsList.txt; sourceTree = "<group>"; };
+		4E4047C31A23F19600C1D0DF /* ES_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Label.h; sourceTree = "<group>"; };
+		4E4047C41A23F19600C1D0DF /* ES_Label.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Label.m; sourceTree = "<group>"; };
+		4E4047C61A24F54100C1D0DF /* ES_SecondaryActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SecondaryActivity.h; sourceTree = "<group>"; };
+		4E4047C71A24F54100C1D0DF /* ES_SecondaryActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SecondaryActivity.m; sourceTree = "<group>"; };
+		4E4047C91A24F54300C1D0DF /* ES_Mood.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Mood.h; sourceTree = "<group>"; };
+		4E4047CA1A24F54300C1D0DF /* ES_Mood.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Mood.m; sourceTree = "<group>"; };
 		4E5C5D93199F6C7F00B801BC /* redCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redCircle.png; sourceTree = "<group>"; };
 		4E5C5E6719A66D4A00B801BC /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		4E5C5E6819A66D4A00B801BC /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
@@ -165,6 +175,8 @@
 		4E987BB219AEA7E8008C569D /* ES_Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Settings.m; sourceTree = SOURCE_ROOT; };
 		4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_AlertViewWithUserInfo.h; sourceTree = "<group>"; };
 		4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_AlertViewWithUserInfo.m; sourceTree = "<group>"; };
+		4EE9AC7C1A25760F004CB8C2 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
+		4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
 		4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		4EFADB3019F08BD500262568 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -172,8 +184,6 @@
 		703B364F196E3FA800D5D80B /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = ../gear.png; sourceTree = "<group>"; };
 		703B3651196E3FD100D5D80B /* stats_pie_chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_pie_chart.png; path = ../stats_pie_chart.png; sourceTree = "<group>"; };
 		703B3667196E477500D5D80B /* text-plus-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text-plus-icon.png"; sourceTree = "<group>"; };
-		7070A64618D7B991007D660D /* ES_UserActivityLabels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_UserActivityLabels.h; sourceTree = "<group>"; };
-		7070A64718D7B991007D660D /* ES_UserActivityLabels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_UserActivityLabels.m; sourceTree = "<group>"; };
 		707762DE18CF7C9800ED0134 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		707762DF18CF7C9800ED0134 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		707762E118D125BD00ED0134 /* ES_SummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SummaryViewController.h; sourceTree = "<group>"; };
@@ -358,6 +368,15 @@
 			name = calendar;
 			sourceTree = "<group>";
 		};
+		4E4047BC1A1FAD8D00C1D0DF /* textFiles */ = {
+			isa = PBXGroup;
+			children = (
+				4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */,
+				4E4047C11A23B5BE00C1D0DF /* moodsList.txt */,
+			);
+			name = textFiles;
+			sourceTree = "<group>";
+		};
 		707762DD18CF7C9800ED0134 /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -370,6 +389,7 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4E4047BC1A1FAD8D00C1D0DF /* textFiles */,
 				4E5C5D93199F6C7F00B801BC /* redCircle.png */,
 				4291F1C4199A7F29008EDCA4 /* calendar */,
 				708D5FAF197C3778003FE7D3 /* Lying down.png */,
@@ -666,13 +686,17 @@
 		934377A017FEE27E00521B0D /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
+				4EE9AC7C1A25760F004CB8C2 /* ES_Activity.h */,
+				4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */,
 				4E987BB119AEA7E8008C569D /* ES_Settings.h */,
 				4E987BB219AEA7E8008C569D /* ES_Settings.m */,
-				4291F1D9199A8908008EDCA4 /* ES_Activity.h */,
-				4291F1DA199A8908008EDCA4 /* ES_Activity.m */,
 				9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */,
-				7070A64618D7B991007D660D /* ES_UserActivityLabels.h */,
-				7070A64718D7B991007D660D /* ES_UserActivityLabels.m */,
+				4E4047C91A24F54300C1D0DF /* ES_Mood.h */,
+				4E4047CA1A24F54300C1D0DF /* ES_Mood.m */,
+				4E4047C61A24F54100C1D0DF /* ES_SecondaryActivity.h */,
+				4E4047C71A24F54100C1D0DF /* ES_SecondaryActivity.m */,
+				4E4047C31A23F19600C1D0DF /* ES_Label.h */,
+				4E4047C41A23F19600C1D0DF /* ES_Label.m */,
 				939600A6181B0195006221C6 /* ES_UserPopulation.h */,
 				939600A7181B0195006221C6 /* ES_UserPopulation.m */,
 				939600A3181B0194006221C6 /* ES_User.h */,
@@ -860,6 +884,8 @@
 				70B8A95E18F87D230076A4F5 /* icon@2x.png in Resources */,
 				4E5C5E6A19A66D4A00B801BC /* edit.png in Resources */,
 				703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */,
+				4E4047C21A23B5BE00C1D0DF /* moodsList.txt in Resources */,
+				4E4047C01A1FDDF700C1D0DF /* secondaryActivitiesList.txt in Resources */,
 				70B8A94B18F87D230076A4F5 /* Sitting.png in Resources */,
 				70B8A93918F87D230076A4F5 /* indicator-driving@2x.png in Resources */,
 				70B8A95518F87D230076A4F5 /* network.png in Resources */,
@@ -927,14 +953,14 @@
 				70C156C718D52BD1007CCB39 /* ES_SwapViewController.m in Sources */,
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
+				4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
-				4291F1DB199A8908008EDCA4 /* ES_Activity.m in Sources */,
-				7070A64818D7B991007D660D /* ES_UserActivityLabels.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
 				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
+				4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
 				4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */,
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
@@ -950,7 +976,9 @@
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
+				4E4047CB1A24F54300C1D0DF /* ES_Mood.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
+				4E4047C81A24F54100C1D0DF /* ES_SecondaryActivity.m in Sources */,
 				70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */,
 				70C156BE18D526EB007CCB39 /* ES_ContainerViewController.m in Sources */,
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,

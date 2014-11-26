@@ -14,7 +14,9 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_ActivitiesStrings.h"
 #import "ES_HistoryTableViewController.h"
-#import "ES_UserActivityLabels.h"
+//#import "ES_UserActivityLabels.h"
+#import "ES_SecondaryActivity.h"
+#import "ES_Mood.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -43,7 +45,8 @@
 
 @property (nonatomic, strong) NSString *mainActivity;
 @property (nonatomic, strong) NSSet *secondaryActivities;
-@property (nonatomic, strong) NSString *mood;
+@property (nonatomic, strong) NSSet *moods;
+//@property (nonatomic, strong) NSString *mood;
 
 @property (nonatomic, strong) NSNumber *validForNumberOfMinutes;
 
@@ -67,8 +70,8 @@
     {
         self.mainActivity = activity.serverPrediction;
     }
-    self.secondaryActivities = [NSMutableSet setWithArray:[ES_UserActivityLabels createStringArrayFromUserActivityLabelsAraay:[activity.userActivityLabels allObjects]]];
-    self.mood = activity.mood;
+    self.secondaryActivities = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity.secondaryActivities allObjects]]];
+    self.moods = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[activity.moods allObjects]]];
 }
 
 - (void) setActivityEvent:(ES_ActivityEvent *)activityEvent
@@ -83,8 +86,8 @@
     {
         self.mainActivity = activityEvent.serverPrediction;
     }
-    self.secondaryActivities = activityEvent.userActivityLabels;
-    self.mood = activityEvent.mood;
+    self.secondaryActivities = activityEvent.secondaryActivitiesStrings;
+    self.moods = activityEvent.moodsStrings;
 }
 
 - (ES_AppDelegate *)appDelegate
@@ -163,9 +166,10 @@
             break;
         case MOOD_SEC:
             cell = [tableView dequeueReusableCellWithIdentifier:MOOD_CELL];
-            if (self.mood)
+            if (self.moods && ([self.moods count] > 0))
             {
-                cell.detailTextLabel.text = self.mood;
+                NSString *presentableMoodsString = [[self.moods allObjects] componentsJoinedByString:@", "];
+                cell.detailTextLabel.text = presentableMoodsString;
             }
             else
             {
@@ -318,8 +322,8 @@
     ES_HistoryTableViewController *historyController = (ES_HistoryTableViewController *)[storyboard instantiateViewControllerWithIdentifier:@"History"];
     
     self.activityEvent.userCorrection = self.mainActivity;
-    self.activityEvent.userActivityLabels = self.secondaryActivities;
-    self.activityEvent.mood = self.mood;
+    self.activityEvent.secondaryActivitiesStrings = self.secondaryActivities;
+    self.activityEvent.moodsStrings = self.moods;
     [self submitFeedbackForActivityEvent:self.activityEvent];
     
     historyController.eventToShowMinuteByMinute = self.activityEvent;
@@ -371,7 +375,7 @@
             // Fill the labels:
             newActivity.userCorrection = self.mainActivity;
             [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:newActivity];
-            newActivity.mood = self.mood;
+            [ES_DataBaseAccessor setMoods:[self.moods allObjects] forActivity:newActivity];
             
             // Should we set the selected labels as predetermined for future measurements:
             if (self.validForNumberOfMinutes && [self.validForNumberOfMinutes intValue] > 0)
@@ -398,8 +402,8 @@
         case ES_FeedbackTypeActivityEvent:
             // Fill the labels:
             self.activityEvent.userCorrection = self.mainActivity;
-            self.activityEvent.userActivityLabels = self.secondaryActivities;
-            self.activityEvent.mood = self.mood;
+            self.activityEvent.secondaryActivitiesStrings = self.secondaryActivities;
+            self.activityEvent.moodsStrings = self.moods;
             // Send the feedback:
             NSLog(@"[Feedback] Feedback from activity event.");
             [self submitFeedbackForActivityEvent:self.activityEvent];
@@ -410,7 +414,7 @@
             // Fill the labels:
             self.preexistingActivity.userCorrection = self.mainActivity;
             [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:self.preexistingActivity];
-            self.preexistingActivity.mood = self.mood;
+            [ES_DataBaseAccessor setMoods:[self.moods allObjects] forActivity:self.preexistingActivity];
             // Send the feedback:
             NSLog(@"[Feedback] Feedback from atomic activity.");
             [self sendAtomicActivityLabelsIfRelevant:self.preexistingActivity];
@@ -429,8 +433,8 @@
     {
         // Set the labels according to the activiey event:
         act.userCorrection = actEvent.userCorrection;
-        [ES_DataBaseAccessor setSecondaryActivities:[actEvent.userActivityLabels allObjects] forActivity:act];
-        act.mood = actEvent.mood;
+        [ES_DataBaseAccessor setSecondaryActivities:[actEvent.secondaryActivitiesStrings allObjects] forActivity:act];
+        [ES_DataBaseAccessor setMoods:[actEvent.moodsStrings allObjects] forActivity:act];
         [self sendAtomicActivityLabelsIfRelevant:act];
     }
 }
@@ -497,12 +501,12 @@
     }
     else if ([segue.identifier isEqualToString:MOOD])
     {
-        multiSelection = NO;
+        multiSelection = YES;
         useIndex = YES;
         choices = [ES_ActivitiesStrings moods];
-        if (self.mood)
+        if (self.moods)
         {
-            appliedLabels = [NSMutableSet setWithObject:self.mood];
+            appliedLabels = [NSMutableSet setWithSet:self.moods];
         }
         frequentChoices = [ES_DataBaseAccessor getRecentFrequentMoodsOutOf:choices];
     }
@@ -540,14 +544,7 @@
     }
     else if ([selectionController.category isEqualToString:MOOD])
     {
-        if (!selectionController.appliedLabels || [selectionController.appliedLabels count] <= 0)
-        {
-            self.mood = nil;
-        }
-        else
-        {
-            self.mood = [[selectionController.appliedLabels allObjects] lastObject];
-        }
+        self.moods = [NSSet setWithSet:selectionController.appliedLabels];
     }
     else if ([selectionController.category isEqualToString:VALID_FOR])
     {

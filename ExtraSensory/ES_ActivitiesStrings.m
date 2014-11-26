@@ -8,6 +8,7 @@
 
 #import "ES_ActivitiesStrings.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_Label.h"
 
 @interface ES_ActivitiesStrings()
 
@@ -59,65 +60,75 @@ static NSArray *mainActivitiesColorList = nil;
     return nil;
 }
 
++ (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename
+{
+    NSString *resourceFilePath = [[NSBundle mainBundle] pathForResource:resourceFilename ofType:@"txt"];
+    NSError *err = nil;
+    NSString *allStrings = [NSString stringWithContentsOfFile:resourceFilePath encoding:NSUTF8StringEncoding error:&err];
+    
+    if (err)
+    {
+        NSLog(@"[activitiesStrings] !!! failed to load label strings from file %@. Got error: %@",resourceFilePath,err);
+        return nil;
+    }
+    
+    // Separate the labels from the total string:
+    NSArray *labelsStrings = [allStrings componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    
+    // Sort the labels alphabetically:
+    NSMutableArray *sortedLabels = [NSMutableArray arrayWithArray:[labelsStrings sortedArrayUsingSelector:@selector(compare:)]];
+    [sortedLabels removeObject:@""];
+    
+    NSLog(@"[activitiesStrings] Loaded %d labels from %@.",sortedLabels.count,resourceFilename);
+    
+    return sortedLabels;
+}
+
 +(NSArray *)secondaryActivities {
     
     if (!secondaryActivitiesList)
     {
-        secondaryActivitiesList = [@[@"Lifting weights", @"Playing baseball", @"Playing basketball", @"Playing lacrosse", @"Skateboarding", @"Playing soccer", @"Playing frisbee", @"Stretching", @"Yoga", @"Elliptical machine", @"Treadmill", @"Stationary Bike", @"Cooking", @"Cleaning", @"Gardening", @"Doing laundry", @"Mowing the lawn", @"Raking the leaves", @"Vacuuming", @"Doing dishes", @"Washing car", @"Manual labor", @"Dancing", @"Driving", @"Eating", @"Drinking",@"Jumping", @"Listening to music", @"Relaxing", @"Shopping", @"Sleeping", @"Talking with friends", @"Using the bathroom", @"Playing videogames", @"Watching TV", @"Lab work", @"Written work", @"Drawing", @"Surfing the internet", @"Computer work", @"Reading a book", @"Studying", @"In class", @"In a meeting", @"Texting", @"At a bar", @"At a concert", @"At the beach", @"At a restaurant", @"On a bus", @"On a plane", @"On a train", @"In a car"] sortedArrayUsingSelector:@selector(compare:)];
+        
+        secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList"];
+        
+        
+//        secondaryActivitiesList = [@[@"Lifting weights", @"Playing baseball", @"Playing basketball", @"Playing lacrosse", @"Skateboarding", @"Playing soccer", @"Playing frisbee", @"Stretching", @"Yoga", @"Elliptical machine", @"Treadmill", @"Stationary Bike", @"Cooking", @"Cleaning", @"Gardening", @"Doing laundry", @"Mowing the lawn", @"Raking the leaves", @"Vacuuming", @"Doing dishes", @"Washing car", @"Manual labor", @"Dancing", @"Driving", @"Eating", @"Drinking",@"Jumping", @"Listening to music", @"Relaxing", @"Shopping", @"Sleeping", @"Talking with friends", @"Using the bathroom", @"Playing videogames", @"Watching TV", @"Lab work", @"Written work", @"Drawing", @"Surfing the internet", @"Computer work", @"Reading a book", @"Studying", @"In class", @"In a meeting", @"Texting", @"At a bar", @"At a concert", @"At the beach", @"At a restaurant", @"On a bus", @"On a plane", @"On a train", @"In a car"] sortedArrayUsingSelector:@selector(compare:)];
     }
     
     return secondaryActivitiesList;
     
-//    // Dynamically find out what are the most common activities of the user:
-//    NSArray *sortedSecondaryActivities = [self sortedSecondaryActivities];
-// 
-//    return sortedSecondaryActivities;
 }
 
-//+(NSArray *)sortedSecondaryActivities
-//{
-//    
-//    NSDictionary *secondaryActivityCounts = [ES_DataBaseAccessor getTodaysCountsForSecondaryActivities:secondaryActivitiesList];
-//    
-//    
-//    // Separate the activities to those that have been used and those that haven't:
-//    NSMutableArray *usedActivities = [[NSMutableArray alloc] initWithCapacity:[secondaryActivitiesList count]];
-//    NSMutableArray *usedActivitiesCountValues = [[NSMutableArray alloc] initWithCapacity:[secondaryActivitiesList count]];
-//    NSMutableArray *unusedActivities = [[NSMutableArray alloc] initWithCapacity:[secondaryActivitiesList count]];
-//
-//    for (NSString *act in secondaryActivitiesList)
-//    {
-//        if ([[secondaryActivityCounts valueForKey:act] integerValue] > 0)
-//        {
-//            [usedActivities addObject:act];
-//            [usedActivitiesCountValues addObject:[secondaryActivityCounts valueForKey:act]];
-//        }
-//        else
-//        {
-//            [unusedActivities addObject:act];
-//        }
-//    }
-//    
-//    NSDictionary *usedActivitiesCounts = [NSDictionary dictionaryWithObjects:usedActivitiesCountValues forKeys:usedActivities];
-//    
-//    NSArray *sortedUsedActivities = [usedActivitiesCounts keysSortedByValueUsingSelector:@selector(compare:)];
-//    // Since this sorts from least used to most used, reverse the order:
-//    sortedUsedActivities = [[sortedUsedActivities reverseObjectEnumerator] allObjects];
-//    
-//    NSMutableArray *sortedAllActivities = [NSMutableArray arrayWithArray:sortedUsedActivities];
-//    [sortedAllActivities addObjectsFromArray:unusedActivities];
-//
-//    return sortedAllActivities;
-//    
-//}
 
 +(NSArray *)moods {
     if (!moodsList)
     {
-        moodsList = [@[@"Amused",@"Angry",@"Bored",@"Calm",@"Crazy",@"Disgusted",@"Dreamy",@"Energetic",@"Excited",@"Frustrated",@"Happy",@"High",@"Hungry",@"In love", @"Lonely", @"Normal", @"Nostalgic", @"Optimistic", @"Romantic", @"Sad", @"Serious", @"Sexy", @"Sleepy", @"Stressed", @"Tired", @"Untroubled", @"Worried"] sortedArrayUsingSelector:@selector(compare:)];
+        moodsList = [self loadStringArrayFromTextFile:@"moodsList"];
+//        moodsList = [@[@"Amused",@"Angry",@"Bored",@"Calm",@"Crazy",@"Disgusted",@"Dreamy",@"Energetic",@"Excited",@"Frustrated",@"Happy",@"High",@"Hungry",@"In love", @"Lonely", @"Normal", @"Nostalgic", @"Optimistic", @"Romantic", @"Sad", @"Serious", @"Sexy", @"Sleepy", @"Stressed", @"Tired", @"Untroubled", @"Worried"] sortedArrayUsingSelector:@selector(compare:)];
     }
     
     return moodsList;
+}
+
+
+/*
+ * This is a helping utility function to convert an array of ES_Label objects into an array of Strings.
+ */
++ (NSMutableArray *) createStringArrayFromLabelObjectsAraay:(NSArray *)labelObjectsArray
+{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (id obj in labelObjectsArray)
+    {
+        if (![obj isKindOfClass:[ES_Label class]])
+        {
+            NSLog(@"!!! Array contains an item that is not ES_Label");
+            return nil;
+        }
+        ES_Label *label = (ES_Label *)obj;
+        [result addObject:label.label];
+    }
+    
+    return result;
 }
 
 @end
