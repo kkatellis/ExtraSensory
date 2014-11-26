@@ -255,15 +255,15 @@ def handle_feedback():
             raise Exception( 'Missing corrected_activity' )
         if 'secondary_activities' not in request.args:
             raise Exception( 'Missing secondary_activities' )
-        if 'mood' not in request.args:
-            raise Exception( 'Missing mood' )
+        if 'moods' not in request.args:
+            raise Exception( 'Missing moods' )
 
         fback[ 'uuid' ]                 	= request.args.get( 'uuid' )
         fback[ 'timestamp' ]		    	= request.args.get( 'timestamp' ) 
         fback[ 'predicted_activity' ]   	= request.args.get( 'predicted_activity' ).upper()
         fback[ 'corrected_activity' ]     	= request.args.get( 'corrected_activity' ).upper()
         fback[ 'secondary_activities' ]         = request.args.get( 'secondary_activities' ).upper().split( ',' )
-        fback[ 'mood' ]                         = request.args.get( 'mood' ).upper()
+        fback[ 'moods' ]                        = request.args.get( 'moods' ).upper().split( ',' )
 
         UUID 	= str(fback['uuid'])
         UTime 	= str(fback['timestamp'])
