@@ -62,8 +62,15 @@ At a party
 At the beach
 At a restaurant
 Outside
+Indoors
 On a bus
 On a plane
 On a train
+Elevator
 Motorbike
 In a car
+Phone in pocket
+Phone in hand
+Phone in bag
+Phone on table
+Phone away from me
