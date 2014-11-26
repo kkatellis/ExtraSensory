@@ -582,7 +582,7 @@
     NSUInteger curr_count = [self countField:RAW_MAG_X];
     if (curr_count >= [self samplesPerBatch])
     {
-        NSLog(@"[sensorManager] Got new magnetometer sample, but don't need it, sice we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        NSLog(@"[sensorManager] Got new magnetometer sample, but don't need it, since we already have enough samples collected: %lu.",(unsigned long)curr_count);
         return;
     }
     
@@ -613,7 +613,7 @@
     NSUInteger curr_count = [self countField:RAW_GYR_X];
     if (curr_count >= [self samplesPerBatch])
     {
-        NSLog(@"[sensorManager] Got new gyroscope sample, but don't need it, sice we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        NSLog(@"[sensorManager] Got new gyroscope sample, but don't need it, since we already have enough samples collected: %lu.",(unsigned long)curr_count);
         return;
     }
     

@@ -174,6 +174,11 @@
         return NO;
     }
     
+    if (!activity1.serverPrediction && !activity2.serverPrediction)
+    {
+        return YES;
+    }
+    
     return [activity1.serverPrediction isEqualToString:activity2.serverPrediction];
 }
 
