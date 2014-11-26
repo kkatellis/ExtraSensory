@@ -502,7 +502,7 @@
     
     NSSet *secondaryActivitiesStringsSet = [NSSet setWithArray:[userInfo valueForKey:@"secondaryActivitiesStrings"]];
     
-    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] secondaryActivitiesStrings:secondaryActivitiesStringsSet moodsStrings:[userInfo valueForKey:@"moods"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
+    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithServerPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] secondaryActivitiesStrings:secondaryActivitiesStringsSet moodsStrings:[userInfo valueForKey:@"moods"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
     
     // If user already approved labels, we can send the feedback right-away, without opening the feedback view:
     if (userApproved)

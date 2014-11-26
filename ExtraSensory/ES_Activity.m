@@ -14,9 +14,6 @@
 
 @implementation ES_Activity
 
-@dynamic isPredictionCorrect;
-@dynamic isPredictionVerified;
-//@dynamic mood;
 @dynamic serverPrediction;
 @dynamic startTime;
 @dynamic timestamp;

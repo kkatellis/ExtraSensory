@@ -815,20 +815,15 @@
         [keys addObject:@"secondaryActivities"];
         [values addObject:secondaryLabels];
     }
-//    if (activity.userActivityLabels)
-//    {
-//        NSMutableArray *secondaryLabels = [NSMutableArray new];
-//        for (ES_UserActivityLabels* label in activity.userActivityLabels)
-//        {
-//            [secondaryLabels addObject:label.name];
-//        }
-//        [keys addObject:@"secondaryActivities"];
-//        [values addObject:secondaryLabels];
-//    }
     if (activity.moods)
     {
+        NSMutableArray *moodLabels = [NSMutableArray new];
+        for (ES_Mood *label in activity.moods)
+        {
+            [moodLabels addObject:label.label];
+        }
         [keys addObject:@"moods"];
-        [values addObject:activity.moods];
+        [values addObject:moodLabels];
     }
     
     NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values

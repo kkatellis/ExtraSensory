@@ -273,7 +273,7 @@
         NSMutableSet *secondaryActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[atomicActivity.secondaryActivities allObjects]]];
         NSMutableSet *moodsStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[atomicActivity.moods allObjects]]];
         
-        ES_ActivityEvent *shortEvent = [[ES_ActivityEvent alloc] initWithIsVerified:atomicActivity.isPredictionVerified serverPrediction:atomicActivity.serverPrediction userCorrection:atomicActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:atomicActivity.timestamp endTimestamp:atomicActivity.timestamp minuteActivities:[NSMutableArray arrayWithObject:atomicActivity]];
+        ES_ActivityEvent *shortEvent = [[ES_ActivityEvent alloc] initWithServerPrediction:atomicActivity.serverPrediction userCorrection:atomicActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:atomicActivity.timestamp endTimestamp:atomicActivity.timestamp minuteActivities:[NSMutableArray arrayWithObject:atomicActivity]];
         [self.eventHistory addObject:shortEvent];
     }
 }
@@ -308,7 +308,7 @@
                 NSMutableSet *moodsStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.moods allObjects]]];
                 
                 // Create an event from the start and end of the previous activity:
-                currentEvent = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
+                currentEvent = [[ES_ActivityEvent alloc] initWithServerPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
                 [self.eventHistory addObject:currentEvent];
             }
             
@@ -325,7 +325,7 @@
         // Create the last event from the start and end of activity:
         NSMutableSet *secondaryActivitiesStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.secondaryActivities allObjects]]];
         NSMutableSet *moodsStrings = [NSMutableSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[startOfActivity.moods allObjects]]];
-        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithIsVerified:startOfActivity.isPredictionVerified serverPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
+        ES_ActivityEvent *event = [[ES_ActivityEvent alloc] initWithServerPrediction:startOfActivity.serverPrediction userCorrection:startOfActivity.userCorrection secondaryActivitiesStrings:secondaryActivitiesStrings moodsStrings:moodsStrings startTimestamp:startOfActivity.timestamp endTimestamp:endOfActivity.timestamp minuteActivities:minuteActivities];
         [self.eventHistory addObject:event];
     }
     
