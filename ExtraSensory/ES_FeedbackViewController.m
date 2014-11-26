@@ -501,7 +501,7 @@
     }
     else if ([segue.identifier isEqualToString:MOOD])
     {
-        multiSelection = NO;
+        multiSelection = YES;
         useIndex = YES;
         choices = [ES_ActivitiesStrings moods];
         if (self.moods)
@@ -545,14 +545,6 @@
     else if ([selectionController.category isEqualToString:MOOD])
     {
         self.moods = [NSSet setWithSet:selectionController.appliedLabels];
-//        if (!selectionController.appliedLabels || [selectionController.appliedLabels count] <= 0)
-//        {
-//            self.mood = nil;
-//        }
-//        else
-//        {
-//            self.mood = [[selectionController.appliedLabels allObjects] lastObject];
-//        }
     }
     else if ([selectionController.category isEqualToString:VALID_FOR])
     {
