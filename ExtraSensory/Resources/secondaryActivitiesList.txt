@@ -44,6 +44,8 @@ Stairs - going up
 Stairs - going down
 Limping
 Jumping
+Laughing
+Crying
 Lab work
 Written work
 Drawing
