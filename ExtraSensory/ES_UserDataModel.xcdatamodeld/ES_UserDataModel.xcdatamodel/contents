@@ -33,6 +33,7 @@
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_Activity" inverseName="secondaryActivities" inverseEntity="ES_Activity" syncable="YES"/>
     </entity>
     <entity name="ES_Settings" representedClassName="ES_Settings" syncable="YES">
+        <attribute name="homeSensingParticipant" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="maxZipFilesStored" optional="YES" attributeType="Double" defaultValueString="120" syncable="YES"/>
         <attribute name="recentTimePeriod" optional="YES" attributeType="Double" defaultValueString="1200" syncable="YES"/>
         <attribute name="sampleDuration" attributeType="Double" minValueString="5" defaultValueString="20" syncable="YES"/>
@@ -61,7 +62,7 @@
         <element name="ES_Label" positionX="9" positionY="90" width="128" height="58"/>
         <element name="ES_Mood" positionX="27" positionY="108" width="128" height="58"/>
         <element name="ES_SecondaryActivity" positionX="18" positionY="99" width="128" height="58"/>
-        <element name="ES_Settings" positionX="0" positionY="0" width="128" height="150"/>
+        <element name="ES_Settings" positionX="0" positionY="0" width="128" height="165"/>
         <element name="ES_User" positionX="0" positionY="0" width="128" height="135"/>
         <element name="ES_UserActivityLabels" positionX="0" positionY="0" width="128" height="60"/>
         <element name="ES_UserPopulation" positionX="0" positionY="0" width="128" height="60"/>

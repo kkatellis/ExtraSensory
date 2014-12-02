@@ -2,7 +2,7 @@
 //  ES_Settings.m
 //  ExtraSensory
 //
-//  Created by yonatan vaizman on 8/27/14.
+//  Created by yonatan vaizman on 12/1/14.
 //  Copyright (c) 2014 Bryan Grounds. All rights reserved.
 //
 
@@ -12,12 +12,13 @@
 
 @implementation ES_Settings
 
+@dynamic maxZipFilesStored;
 @dynamic recentTimePeriod;
 @dynamic sampleDuration;
 @dynamic sampleRate;
 @dynamic timeBetweenSampling;
 @dynamic timeBetweenUserNags;
-@dynamic maxZipFilesStored;
+@dynamic homeSensingParticipant;
 @dynamic user;
 
 @end

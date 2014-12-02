@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="euD-ak-RDc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="euD-ak-RDc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--Home-->
@@ -298,6 +298,24 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="home-sensing:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvs-Qb-XtK">
+                                <rect key="frame" x="21" y="273" width="129" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OFF" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gw0-x7-pWU">
+                                <rect key="frame" x="180" y="271" width="63" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pB8-1T-ruC">
+                                <rect key="frame" x="251" y="268" width="51" height="31"/>
+                                <connections>
+                                    <action selector="homeSensingSwitchChanged:" destination="FhT-sF-lQK" eventType="valueChanged" id="fvu-gt-eFG"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
@@ -343,6 +361,8 @@
                     <navigationItem key="navigationItem" title="Settings" id="vya-3r-gup"/>
                     <connections>
                         <outlet property="currentNetworkStackLabel" destination="0jZ-5a-1bc" id="8nu-RO-zAR"/>
+                        <outlet property="homeSensingSwitch" destination="pB8-1T-ruC" id="RQ6-b4-CHP"/>
+                        <outlet property="homeSensingSwitchLabel" destination="gw0-x7-pWU" id="jeg-tt-x78"/>
                         <outlet property="indicatorLabel" destination="nwn-Gr-zvt" id="UGz-7q-F5u"/>
                         <outlet property="numStoredSamplesLabel" destination="aPH-BM-87r" id="iPb-fw-d5g"/>
                         <outlet property="reminderIntervalSelectedValue" destination="iOv-hT-b5y" id="pyU-2W-E1F"/>

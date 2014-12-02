@@ -20,6 +20,7 @@
 static NSArray *mainActivitiesList = nil;
 static NSArray *secondaryActivitiesList = nil;
 static NSArray *moodsList = nil;
+static NSArray *homeSensingList = nil;
 
 static NSArray *mainActivitiesColorList = nil;
 
@@ -79,7 +80,7 @@ static NSArray *mainActivitiesColorList = nil;
     NSMutableArray *sortedLabels = [NSMutableArray arrayWithArray:[labelsStrings sortedArrayUsingSelector:@selector(compare:)]];
     [sortedLabels removeObject:@""];
     
-    NSLog(@"[activitiesStrings] Loaded %d labels from %@.",sortedLabels.count,resourceFilename);
+    NSLog(@"[activitiesStrings] Loaded %lu labels from %@.",(unsigned long)sortedLabels.count,resourceFilename);
     
     return sortedLabels;
 }
@@ -90,9 +91,6 @@ static NSArray *mainActivitiesColorList = nil;
     {
         
         secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList"];
-        
-        
-//        secondaryActivitiesList = [@[@"Lifting weights", @"Playing baseball", @"Playing basketball", @"Playing lacrosse", @"Skateboarding", @"Playing soccer", @"Playing frisbee", @"Stretching", @"Yoga", @"Elliptical machine", @"Treadmill", @"Stationary Bike", @"Cooking", @"Cleaning", @"Gardening", @"Doing laundry", @"Mowing the lawn", @"Raking the leaves", @"Vacuuming", @"Doing dishes", @"Washing car", @"Manual labor", @"Dancing", @"Driving", @"Eating", @"Drinking",@"Jumping", @"Listening to music", @"Relaxing", @"Shopping", @"Sleeping", @"Talking with friends", @"Using the bathroom", @"Playing videogames", @"Watching TV", @"Lab work", @"Written work", @"Drawing", @"Surfing the internet", @"Computer work", @"Reading a book", @"Studying", @"In class", @"In a meeting", @"Texting", @"At a bar", @"At a concert", @"At the beach", @"At a restaurant", @"On a bus", @"On a plane", @"On a train", @"In a car"] sortedArrayUsingSelector:@selector(compare:)];
     }
     
     return secondaryActivitiesList;
@@ -104,10 +102,18 @@ static NSArray *mainActivitiesColorList = nil;
     if (!moodsList)
     {
         moodsList = [self loadStringArrayFromTextFile:@"moodsList"];
-//        moodsList = [@[@"Amused",@"Angry",@"Bored",@"Calm",@"Crazy",@"Disgusted",@"Dreamy",@"Energetic",@"Excited",@"Frustrated",@"Happy",@"High",@"Hungry",@"In love", @"Lonely", @"Normal", @"Nostalgic", @"Optimistic", @"Romantic", @"Sad", @"Serious", @"Sexy", @"Sleepy", @"Stressed", @"Tired", @"Untroubled", @"Worried"] sortedArrayUsingSelector:@selector(compare:)];
     }
     
     return moodsList;
+}
+
++(NSArray *)homeSensingLabels{
+    if (!homeSensingList)
+    {
+        homeSensingList = [self loadStringArrayFromTextFile:@"homeSensingLabelsList"];
+    }
+    
+    return homeSensingList;
 }
 
 

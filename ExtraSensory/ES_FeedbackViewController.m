@@ -14,9 +14,10 @@
 #import "ES_NetworkAccessor.h"
 #import "ES_ActivitiesStrings.h"
 #import "ES_HistoryTableViewController.h"
-//#import "ES_UserActivityLabels.h"
 #import "ES_SecondaryActivity.h"
 #import "ES_Mood.h"
+#import "ES_User.h"
+#import "ES_Settings.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -493,6 +494,14 @@
         multiSelection = YES;
         useIndex = YES;
         choices = [ES_ActivitiesStrings secondaryActivities];
+        ES_AppDelegate *appDelegate = (ES_AppDelegate *)[UIApplication sharedApplication].delegate;
+        if ([appDelegate.user.settings.homeSensingParticipant boolValue])
+        {
+            NSMutableArray *arr = [NSMutableArray arrayWithArray:[ES_ActivitiesStrings homeSensingLabels]];
+            [arr addObjectsFromArray:choices];
+            choices = [NSArray arrayWithArray:arr];
+        }
+        
         if (self.secondaryActivities)
         {
             appliedLabels = [NSMutableSet setWithSet:self.secondaryActivities];
