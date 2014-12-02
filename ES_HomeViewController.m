@@ -20,8 +20,7 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *mostRecentActivityLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *mostRecentActivityImage;
-- (IBAction)calendarButtonAction:(id)sender;
-@property (weak, nonatomic) IBOutlet UIButton *calendarButton;
+@property (weak, nonatomic) IBOutlet UILabel *networkStackSizeLabel;
 
 @property NSMutableArray *activityCountArray;
 
@@ -53,6 +52,17 @@
     
     // Register to listen to activity-change notifications:
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"Activities" object:nil];
+    
+    // Current storage state:
+    [self updateCurrentStorageLabel];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentStorageLabel) name:@"NetworkStackSize" object:[self appDelegate]];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [ES_DataBaseAccessor save];
+    
 }
 
 - (void) updateMostRecentActivity:(ES_Activity*) activity;
@@ -129,13 +139,6 @@
     return result;
 }
 
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [ES_DataBaseAccessor save];
-
-}
-
 - (ES_SensorManager *)sensorManager
 {
     ES_AppDelegate *appDelegate = [self appDelegate];
@@ -170,6 +173,18 @@
 }
 
 
+- (void) updateCurrentStorageLabel
+{
+    NSString *storageString = @"";
+    unsigned long storage = [self appDelegate].networkStack.count;
+    if (storage > 0)
+    {
+        NSString *lastWord = (storage == 1) ? @"sample" : @"samples";
+        storageString = [NSString stringWithFormat:@"Storing %lu %@.",storage,lastWord];
+    }
+    self.networkStackSizeLabel.text = storageString;
+}
+
 - (IBAction)ActiveFeedback:(UIButton *)sender {
     
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
@@ -180,15 +195,4 @@
     [self presentViewController:feedback animated:YES completion:nil];
 }
 
-- (IBAction)calendarButtonAction:(id)sender {
-//    ES_CalendarViewController *calendarViewController = [[ES_CalendarViewController alloc] init];
-////    [self presentViewController:calendarViewController animated:YES completion:nil];
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
-//                                                  forBarMetrics:UIBarMetricsDefault];
-//    self.navigationController.navigationBar.shadowImage = [UIImage new];
-//    self.navigationController.navigationBar.translucent = YES;
-//    self.navigationController.view.backgroundColor = [UIColor clearColor];
-//        [self.navigationController pushViewController:calendarViewController animated:YES];
-//
-}
 @end

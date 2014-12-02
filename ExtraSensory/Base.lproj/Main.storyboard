@@ -24,6 +24,12 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="house.png" translatesAutoresizingMaskIntoConstraints="NO" id="RdZ-Fs-goq">
                                 <rect key="frame" x="96" y="220" width="128" height="128"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngK-Na-CGF">
+                                <rect key="frame" x="16" y="72" width="208" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
@@ -31,6 +37,7 @@
                     <connections>
                         <outlet property="mostRecentActivityImage" destination="RdZ-Fs-goq" id="3Ee-tQ-rBv"/>
                         <outlet property="mostRecentActivityLabel" destination="bga-qn-aaa" id="ev1-og-1JF"/>
+                        <outlet property="networkStackSizeLabel" destination="ngK-Na-CGF" id="c99-2f-JKh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="alz-gN-hpr" userLabel="First Responder" sceneMemberID="firstResponder"/>
