@@ -10,6 +10,13 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_Label.h"
 
+#define LYING_DOWN  @"Lying down"
+#define SITTING     @"Sitting"
+#define STANDING    @"Standing"
+#define WALKING     @"Walking"
+#define RUNNING     @"Running"
+#define BICYCLING   @"Bicycling"
+
 @interface ES_ActivitiesStrings()
 
 @end
@@ -28,7 +35,7 @@ static NSArray *mainActivitiesColorList = nil;
     
     if (!mainActivitiesList)
     {
-        mainActivitiesList = [@[@"Lying down", @"Sitting", @"Standing", @"Walking", @"Running", @"Bicycling", @"Driving"] sortedArrayUsingSelector:@selector(compare:)];
+        mainActivitiesList = @[LYING_DOWN, SITTING, STANDING, WALKING, RUNNING, BICYCLING];
     }
     
     return mainActivitiesList;
@@ -38,10 +45,13 @@ static NSArray *mainActivitiesColorList = nil;
 {
     if (!mainActivitiesColorList)
     {
-        mainActivitiesColorList = [NSArray arrayWithObjects:(id)[UIColor redColor].CGColor,
-                    (id)[UIColor grayColor].CGColor,
-                       (id)[UIColor purpleColor].CGColor,
-                       (id)[UIColor orangeColor].CGColor,(id)[UIColor blueColor].CGColor,(id)[UIColor greenColor].CGColor,(id)[UIColor yellowColor].CGColor, nil];
+        NSMutableArray *arr = [NSMutableArray arrayWithCapacity:[self mainActivities].count];
+        for (NSString *label in [self mainActivities])
+        {
+            UIColor *color = [self getColorForMainActivity:label];
+            [arr addObject:(id)color.CGColor];
+        }
+        mainActivitiesColorList = [NSArray arrayWithArray:arr];
     }
     
     return mainActivitiesColorList;
@@ -49,14 +59,32 @@ static NSArray *mainActivitiesColorList = nil;
 
 +(UIColor *)getColorForMainActivity:(NSString *)activity
 {
-    for (int ii = 0; ii < [self mainActivities].count; ii ++)
+    if ([activity isEqualToString:LYING_DOWN])
     {
-        if ([activity isEqualToString:[[self mainActivities] objectAtIndex:ii]])
-        {
-            UIColor *uicolor = [UIColor colorWithCGColor:(__bridge CGColorRef)([[self mainActivitiesColors] objectAtIndex:ii])];
-            return uicolor;
-        }
+        return [UIColor purpleColor];
     }
+    if ([activity isEqualToString:SITTING])
+    {
+        return [UIColor blueColor];
+    }
+    if ([activity isEqualToString:STANDING])
+    {
+        return [UIColor greenColor];
+    }
+    if ([activity isEqualToString:WALKING])
+    {
+        return [UIColor yellowColor];
+    }
+    if ([activity isEqualToString:RUNNING])
+    {
+        return [UIColor orangeColor];
+    }
+    if ([activity isEqualToString:BICYCLING])
+    {
+        return [UIColor redColor];
+    }
+    
+    return [UIColor grayColor];
     
     return nil;
 }
