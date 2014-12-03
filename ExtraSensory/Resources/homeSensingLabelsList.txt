@@ -9,3 +9,5 @@ Household - everyone home
 Household - sleep
 Household - cleaning
 Household - alcohol
+Household - having guests
+Household - party
