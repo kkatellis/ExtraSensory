@@ -19,7 +19,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *legendColor3;
 @property (weak, nonatomic) IBOutlet UILabel *legendColor4;
 @property (weak, nonatomic) IBOutlet UILabel *legendColor5;
-@property (weak, nonatomic) IBOutlet UILabel *legendColor6;
 
 @property (nonatomic,retain) NSArray *legendColors;
 
@@ -29,7 +28,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *legendName3;
 @property (weak, nonatomic) IBOutlet UILabel *legendName4;
 @property (weak, nonatomic) IBOutlet UILabel *legendName5;
-@property (weak, nonatomic) IBOutlet UILabel *legendName6;
 
 @property (nonatomic,retain) NSArray *legendNames;
 @property (weak, nonatomic) IBOutlet ES_PieChartView *pieChartView;
@@ -48,7 +46,7 @@
 {
     if (!_legendColors)
     {
-        _legendColors = [NSArray arrayWithObjects:self.legendColor0,self.legendColor1,self.legendColor2,self.legendColor3,self.legendColor4,self.legendColor5,self.legendColor6, nil];
+        _legendColors = [NSArray arrayWithObjects:self.legendColor0,self.legendColor1,self.legendColor2,self.legendColor3,self.legendColor4,self.legendColor5,nil];
     }
     
     return _legendColors;
@@ -58,7 +56,7 @@
 {
     if (!_legendNames)
     {
-        _legendNames = [NSArray arrayWithObjects:self.legendName0,self.legendName1,self.legendName2,self.legendName3,self.legendName4,self.legendName5,self.legendName6, nil];
+        _legendNames = [NSArray arrayWithObjects:self.legendName0,self.legendName1,self.legendName2,self.legendName3,self.legendName4,self.legendName5, nil];
     }
     
     return _legendNames;
@@ -82,7 +80,7 @@
 //    self.border.layer.cornerRadius = 5;
   
     NSArray *activityNames = [ES_ActivitiesStrings mainActivities];
-    for (int ii=0; ii<7;ii ++)
+    for (int ii=0; ii<6;ii ++)
     {
         UILabel *nameLabel = (UILabel *)[self.legendNames objectAtIndex:ii];
         UILabel *colorLabel = (UILabel *)[self.legendColors objectAtIndex:ii];

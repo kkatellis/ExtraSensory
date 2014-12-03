@@ -459,7 +459,7 @@
     }
 }
 
-- (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings mood:(NSString *)mood latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp
+- (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings moods:(NSArray *)moods latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp
 {
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:nagCheckTimestamp forKey:@"nagCheckTimestamp"];
     
@@ -468,7 +468,7 @@
         [userInfo setValue:@1 forKey:FOUND_VERIFIED];
         [userInfo setValue:mainActivity forKey:@"mainActivity"];
         [userInfo setValue:secondaryActivitiesStrings forKey:@"secondaryActivitiesStrings"];
-        [userInfo setValue:mood forKey:@"mood"];
+        [userInfo setValue:moods forKey:@"moods"];
         [userInfo setValue:latestVerifiedTimestamp forKey:@"latestVerifiedTimestamp"];
     }
     else
@@ -502,7 +502,7 @@
     
     NSSet *secondaryActivitiesStringsSet = [NSSet setWithArray:[userInfo valueForKey:@"secondaryActivitiesStrings"]];
     
-    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithIsVerified:nil serverPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] userActivityLabels:secondaryActivitiesStringsSet mood:[userInfo valueForKey:@"mood"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
+    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithServerPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] secondaryActivitiesStrings:secondaryActivitiesStringsSet moodsStrings:[userInfo valueForKey:@"moods"] startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
     
     // If user already approved labels, we can send the feedback right-away, without opening the feedback view:
     if (userApproved)

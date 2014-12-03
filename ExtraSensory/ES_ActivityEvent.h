@@ -11,18 +11,17 @@
 
 @interface ES_ActivityEvent : NSObject
 
-@property (nonatomic, retain) NSNumber * isPredictionVerified;
 
 @property (nonatomic, retain) NSString * serverPrediction;
 @property (nonatomic, retain) NSString * userCorrection;
-@property (nonatomic, retain) NSSet * userActivityLabels;
-@property (nonatomic, retain) NSString * mood;
+@property (nonatomic, retain) NSSet * secondaryActivitiesStrings;
+@property (nonatomic, retain) NSSet * moodsStrings;
 @property (nonatomic, retain) NSNumber * startTimestamp;
 @property (nonatomic, retain) NSNumber * endTimestamp;
 
 @property (nonatomic, retain) NSMutableArray *minuteActivities;
 
-- (id)initWithIsVerified:(NSNumber *)isPredictionVerified serverPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection userActivityLabels:(NSSet *)userActivityLabels mood:(NSString *)mood startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities;
+- (id)initWithServerPrediction:(NSString *)serverPrediction userCorrection:(NSString *)userCorrection secondaryActivitiesStrings:(NSSet *)secondaryActivitiesStrings moodsStrings:(NSSet *)moodsStrings startTimestamp:(NSNumber *)startTimestamp endTimestamp:(NSNumber *)endTimestamp minuteActivities:(NSMutableArray *)minuteActivities;
 
 
 @end
