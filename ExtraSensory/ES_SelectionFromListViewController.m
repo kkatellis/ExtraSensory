@@ -14,6 +14,7 @@
 @property NSMutableArray *sectionNames;
 @property NSMutableArray *sectionHeaders;
 @property NSArray *searchResults;
+@property NSMutableArray *checkedArray;
 @property (strong, nonatomic)NSArray *array;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @end
@@ -179,21 +180,25 @@
     //cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
-    if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
-    {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
-    }
-    
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
         cell.textLabel.text = [self.searchResults objectAtIndex:indexPath.row];
+        //checkedArray =
+        NSLog(@"search result match: %@", cell.textLabel.text);
     }
     else
     {
         cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
-        //cell.textLabel.text = [self.array objectAtIndex:indexPath.row];
     }
+    
+    if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
+    {
+        NSLog(@"applied label contains label");
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [_checkedArray addObject:indexPath];
+        [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
+    }
+    NSLog(@"cell returned is %@", cell.textLabel.text);
     return cell;
 }
 
@@ -254,17 +259,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
+    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+
     if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
     {
+        NSLog(@"Removing");
+        //[tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self removeFromAppliedLabelsCellToRemove:cell];
+        //remove from checked array
+        [_checkedArray removeObject:indexPath];
     }
     else
     {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        NSLog(@"Selection made");
         if(!self.appliedLabels)
         {//this is for labling samples which is not labled by server (probably because the app is stoped)
             self.appliedLabels=[NSMutableSet setWithObject:(cell.textLabel.text)];
+            [_checkedArray addObject:indexPath];
         }
         else
         {
@@ -280,6 +292,7 @@
         }
     }
     
+    NSLog(@"reload data");
     [self.tableView reloadData];
 }
 
