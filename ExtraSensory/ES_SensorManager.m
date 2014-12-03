@@ -747,19 +747,18 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
-    
 }
 
 - (void) handleFinishedDataBundle
 {
     NSLog(@"[sensorManager] Time to wrap the data bundle and send it");
     
-    //added MFCC extraction here
-    [self.soundProcessor processMFCC];
     
     // Make sure to stop the sensing:
     [self stopAllSamplers];
     
+    //added MFCC extraction here
+    [self.soundProcessor processMFCC];
 
     //[self.timer invalidate];
     [ES_DataBaseAccessor writeSensorData:self.hfData andActivity:self.currentActivity];

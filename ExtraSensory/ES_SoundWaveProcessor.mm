@@ -140,7 +140,18 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 - (void) processMFCC {
     NSLog(@"%@",[[NSBundle mainBundle] bundlePath]);
     NSLog(@"[ES_SoundWaveProcessor] processMFCC");
-    soundFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_DUR]];
+    NSString* soundFilePath = [[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_DUR];
+    int i = 0;
+    while (![[NSFileManager defaultManager] fileExistsAtPath:soundFilePath]){
+        NSLog(@"waiting 100 ms");
+        [NSThread sleepForTimeInterval:.1];
+        i++;
+        if (i > 20){
+            //don't wait more than 2 seconds
+            return;
+        }
+    }
+    soundFileURLDur = [NSURL fileURLWithPath:soundFilePath];
     NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:MFCC_FILE_DUR]];
     NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
     [self callAudio:(CFURLRef)soundFileURLDur toMFCC:MFCCFileURLDur];

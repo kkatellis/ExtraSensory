@@ -9,7 +9,11 @@
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */; };
-		4291F1DB199A8908008EDCA4 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4291F1DA199A8908008EDCA4 /* ES_Activity.m */; };
+		4E4047C01A1FDDF700C1D0DF /* secondaryActivitiesList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */; };
+		4E4047C21A23B5BE00C1D0DF /* moodsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047C11A23B5BE00C1D0DF /* moodsList.txt */; };
+		4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C41A23F19600C1D0DF /* ES_Label.m */; };
+		4E4047C81A24F54100C1D0DF /* ES_SecondaryActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C71A24F54100C1D0DF /* ES_SecondaryActivity.m */; };
+		4E4047CB1A24F54300C1D0DF /* ES_Mood.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047CA1A24F54300C1D0DF /* ES_Mood.m */; };
 		4E5C5D94199F6C7F00B801BC /* redCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5D93199F6C7F00B801BC /* redCircle.png */; };
 		4E5C5E6919A66D4A00B801BC /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6719A66D4A00B801BC /* back.png */; };
 		4E5C5E6A19A66D4A00B801BC /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6819A66D4A00B801BC /* edit.png */; };
@@ -167,8 +171,14 @@
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ES_SoundWaveProcessor.mm; sourceTree = "<group>"; };
-		4291F1D9199A8908008EDCA4 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
-		4291F1DA199A8908008EDCA4 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
+		4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secondaryActivitiesList.txt; sourceTree = "<group>"; };
+		4E4047C11A23B5BE00C1D0DF /* moodsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = moodsList.txt; sourceTree = "<group>"; };
+		4E4047C31A23F19600C1D0DF /* ES_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Label.h; sourceTree = "<group>"; };
+		4E4047C41A23F19600C1D0DF /* ES_Label.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Label.m; sourceTree = "<group>"; };
+		4E4047C61A24F54100C1D0DF /* ES_SecondaryActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SecondaryActivity.h; sourceTree = "<group>"; };
+		4E4047C71A24F54100C1D0DF /* ES_SecondaryActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SecondaryActivity.m; sourceTree = "<group>"; };
+		4E4047C91A24F54300C1D0DF /* ES_Mood.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Mood.h; sourceTree = "<group>"; };
+		4E4047CA1A24F54300C1D0DF /* ES_Mood.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Mood.m; sourceTree = "<group>"; };
 		4E5C5D93199F6C7F00B801BC /* redCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redCircle.png; sourceTree = "<group>"; };
 		4E5C5E6719A66D4A00B801BC /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		4E5C5E6819A66D4A00B801BC /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
@@ -1031,8 +1041,6 @@
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
-				4291F1DB199A8908008EDCA4 /* ES_Activity.m in Sources */,
-				7070A64818D7B991007D660D /* ES_UserActivityLabels.m in Sources */,
 				7015789719FF1196003CCA95 /* TriangleFilter.cpp in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
@@ -1046,6 +1054,7 @@
 				93F679C517F978AF000638CB /* unzip.c in Sources */,
 				93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */,
 				939600A5181B0194006221C6 /* ES_User.m in Sources */,
+				4EE9AC831A2D4A0E004CB8C2 /* ES_Settings.m in Sources */,
 				7015789619FF1196003CCA95 /* MelFilterBank.cpp in Sources */,
 				4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */,
 				709F5AEC19FEBFED00F3386C /* CAStreamBasicDescription.cpp in Sources */,
@@ -1218,7 +1227,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
-				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/../boost_ext/include\"";
+				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/boost_ext/include\"";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -1242,7 +1251,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
-				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/../boost_ext/include\"";
+				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/boost_ext/include\"";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
