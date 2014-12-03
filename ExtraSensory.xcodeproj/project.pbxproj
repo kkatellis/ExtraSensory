@@ -199,6 +199,7 @@
 		701DEDD11A2FC578006F411E /* MelFilterBank.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MelFilterBank.hpp; sourceTree = "<group>"; };
 		701DEDD21A2FC578006F411E /* TriangleFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleFilter.cpp; sourceTree = "<group>"; };
 		701DEDD31A2FC578006F411E /* TriangleFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TriangleFilter.hpp; sourceTree = "<group>"; };
+		701DEDD61A2FC71D006F411E /* dtw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dtw.hpp; sourceTree = "<group>"; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
 		703B364F196E3FA800D5D80B /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = ../gear.png; sourceTree = "<group>"; };
 		703B3651196E3FD100D5D80B /* stats_pie_chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_pie_chart.png; path = ../stats_pie_chart.png; sourceTree = "<group>"; };
@@ -436,6 +437,7 @@
 				709F513F19FEA72500F3386C /* MFCCProcessor.cpp */,
 				709F514019FEA72500F3386C /* MFCCProcessor.hpp */,
 				701DEDD01A2FC578006F411E /* MelFilterBank.cpp */,
+				701DEDD61A2FC71D006F411E /* dtw.hpp */,
 				701DEDD11A2FC578006F411E /* MelFilterBank.hpp */,
 				701DEDD21A2FC578006F411E /* TriangleFilter.cpp */,
 				701DEDD31A2FC578006F411E /* TriangleFilter.hpp */,
