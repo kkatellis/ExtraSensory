@@ -438,6 +438,7 @@
 				709F514019FEA72500F3386C /* MFCCProcessor.hpp */,
 				701DEDD01A2FC578006F411E /* MelFilterBank.cpp */,
 				701DEDD61A2FC71D006F411E /* dtw.hpp */,
+				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				701DEDD11A2FC578006F411E /* MelFilterBank.hpp */,
 				701DEDD21A2FC578006F411E /* TriangleFilter.cpp */,
 				701DEDD31A2FC578006F411E /* TriangleFilter.hpp */,
@@ -761,7 +762,6 @@
 			children = (
 				709F513B19FEA6B200F3386C /* MFCC */,
 				93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */,
-				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */,
 				933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */,
 				10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */,
@@ -1233,7 +1233,7 @@
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "de337dc2-92fe-487b-a162-1d5c942517e4";
+				PROVISIONING_PROFILE = "bf788b6f-3026-483c-8f59-cb45140069a6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1256,7 +1256,7 @@
 				);
 				New_Setting = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3d57104f-c222-4574-8233-7b270d30d9ee";
+				PROVISIONING_PROFILE = "80f708ec-f3ef-419a-978c-3ff427e851e4";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

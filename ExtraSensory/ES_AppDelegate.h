@@ -60,6 +60,7 @@
 - (BOOL) removeFromeNetworkStackAndDeleteFile:(NSString *)filename;
 - (void) pushOnNetworkStack: (NSString *) file;
 - (void) logNetworkStackAndZipFiles;
+- (void) updateApplicationBadge;
 
 - (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings moods:(NSArray *)moodsStrings latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp;
 

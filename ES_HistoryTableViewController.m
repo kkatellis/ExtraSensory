@@ -30,6 +30,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *prevButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
+@property (retain, nonatomic) NSNumber *markZoneStartTimestamp;
+@property (retain, nonatomic) NSNumber *markZoneEndTimestamp;
+//@property (retain, nonatomic) NSMutableSet *markZoneActivityEvents;
+
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
 @end
@@ -75,7 +79,13 @@
     [self.tableView scrollToRowAtIndexPath:idp atScrollPosition:UITableViewScrollPositionBottom animated:NO];
 }
 
-- (void) refreshTable
+- (void) clearMarkZone
+{
+    self.markZoneStartTimestamp = nil;
+    self.markZoneEndTimestamp = nil;
+}
+
+- (void) refreshTableClearMarkZone:(BOOL)clearMarkZone
 {
     if (self.eventToShowMinuteByMinute)
     {
@@ -84,6 +94,11 @@
     else
     {
         [self recalculateEventsFromDatabase];
+    }
+    
+    if (clearMarkZone)
+    {
+        [self clearMarkZone];
     }
     [self.tableView reloadData];
     
@@ -110,17 +125,22 @@
     {
         // Then we're just back from the activityEventFeedback view.
         self.editingActivityEvent = NO;
-        [self refreshTable];
+        [self refreshTableClearMarkZone:YES];
     }
     else
     {
         // Then we moved to this 'history' view from outside
         self.timeInDayOfFocus = [NSDate date];
-        [self refreshTable];
+        [self refreshTableClearMarkZone:YES];
         [self scrollToBottom];
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTable) name:@"Activities" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTableWithoutChangingMarkZone) name:@"Activities" object:nil];
+}
+
+- (void) refreshTableWithoutChangingMarkZone
+{
+    [self refreshTableClearMarkZone:NO];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -138,7 +158,7 @@
 - (IBAction)prevButtonTouchedDown:(id)sender {
     // Then go to previous day:
     self.timeInDayOfFocus = [self.timeInDayOfFocus dateByAddingTimeInterval:-SECONDS_IN_24HRS];
-    [self refreshTable];
+    [self refreshTableClearMarkZone:YES];
     
     if (self.eventToShowMinuteByMinute)
     {
@@ -151,7 +171,7 @@
 - (IBAction)nextButtonTouchedDown:(id)sender {
     // Then go to next day:
     self.timeInDayOfFocus = [self.timeInDayOfFocus dateByAddingTimeInterval:SECONDS_IN_24HRS];
-    [self refreshTable];
+    [self refreshTableClearMarkZone:YES];
 }
 
 - (BOOL)allowEditingLabels
@@ -490,20 +510,190 @@
     }
     cell.detailTextLabel.text = eventDetails;
     
+    if ([self allowEditingLabels])
+    {
+        // Visually mark/unmark the cell according to the mark zone:
+        [self changeVisualMarkingForCell:cell mark:[self checkIfCellShouldBeMarked:cell]];
+
+        // Add a swipe gesture recognizer:
+        UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGestureFromRecognizer:)];
+        [recognizer setDirection:UISwipeGestureRecognizerDirectionRight];
+        [cell addGestureRecognizer:recognizer];
+    }
+    
     return cell;
 }
 
+- (BOOL) checkIfCellShouldBeMarked:(ES_ActivityEventTableCell *)cell
+{
+    return [self checkIfActivityEventInMarkZone:cell.activityEvent];
+}
+
+- (BOOL) checkIfActivityEventInMarkZone:(ES_ActivityEvent *)activityEvent
+{
+    if (!self.markZoneStartTimestamp)
+    {
+        // Then no cell should be marked:
+        return NO;
+    }
+    
+    if (activityEvent.startTimestamp.doubleValue < self.markZoneStartTimestamp.doubleValue)
+    {
+        // Then this cell is earlier than the mark zone:
+        return NO;
+    }
+    
+    // Then check if current cell is not later than end of mark zone:
+    return (activityEvent.startTimestamp.doubleValue <= self.markZoneEndTimestamp.doubleValue);
+}
+
+- (void) handleSwipeGestureFromRecognizer:(UISwipeGestureRecognizer *)recognizer
+{
+    ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)recognizer.view;
+    NSNumber *cellTime = cell.activityEvent.startTimestamp;
+    
+    // If there is currently no mark zone:
+    if (!self.markZoneStartTimestamp)
+    {
+        // Then mark this single cell as the mark zone:
+        self.markZoneStartTimestamp = cellTime;
+        self.markZoneEndTimestamp = cellTime;
+    }
+    else if (cellTime.doubleValue < self.markZoneStartTimestamp.doubleValue)
+    {
+        // If this cell is earlier than the current mark zone:
+        self.markZoneStartTimestamp = cellTime;
+    }
+    else if (cellTime.doubleValue > self.markZoneEndTimestamp.doubleValue)
+    {
+        // If this cell is later than the current mark zone:
+        self.markZoneEndTimestamp = cellTime;
+    }
+    else
+    {
+        // Then this cell is within the already marked zone.
+        // Use this extra swipe as a signal to cancel the mark zone:
+        self.markZoneStartTimestamp = nil;
+        self.markZoneEndTimestamp = nil;
+    }
+    
+    [self refreshTableWithoutChangingMarkZone];
+    return;
+}
+
+- (void) changeVisualMarkingForCell:(ES_ActivityEventTableCell *)cell mark:(BOOL)mark
+{
+    if (mark)
+    {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
+    else
+    {
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+    }
+}
+
+- (UIColor *) getChangedColor:(UIColor *)color clearer:(BOOL)clearer
+{
+    CGFloat hue;
+    CGFloat saturation;
+    CGFloat brightness;
+    CGFloat alpha;
+    [color getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+    
+    alpha = (clearer) ? 0.2 : 1.0;
+    
+    UIColor *newColor = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:alpha];
+    return newColor;
+}
+
+- (ES_ActivityEvent *) constructJointActivityEventFromMarkZone
+{
+    if (!self.markZoneStartTimestamp)
+    {
+        return nil;
+    }
+    
+    ES_Activity *referenceForVerifiedLabels = nil;
+    NSMutableArray *jointActivities = [NSMutableArray arrayWithCapacity:10];
+    // Go over the events to collect the marked ones:
+    for (ES_ActivityEvent *actEv in self.eventHistory)
+    {
+        // Is this event part of the mark zone:
+        if (![self checkIfActivityEventInMarkZone:actEv])
+        {
+            continue;
+        }
+        
+        // Does this even have user-verified labels:
+        if (actEv.userCorrection)
+        {
+            // Check if we already have a verified reference:
+            if (referenceForVerifiedLabels)
+            {
+                // Then we don't allow this mark zone to be merged:
+                NSLog(@"[history] The mark zone has more than one labeled events. Can't merge it to a single event.");
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:@"The marked events contain more than one labeled event. Can't merge them to a single event." delegate:self cancelButtonTitle:@"O.K." otherButtonTitles: nil];
+                [alert show];
+                [self refreshTableClearMarkZone:YES];
+                
+                return nil;
+            }
+            
+            referenceForVerifiedLabels = [actEv.minuteActivities firstObject];
+        }
+        
+        // Add the atomic activities:
+        [jointActivities addObjectsFromArray:actEv.minuteActivities];
+    }
+    
+    if (jointActivities.count <= 0)
+    {
+        return nil;
+    }
+    
+    // Construct the merged activity event:
+    if (!referenceForVerifiedLabels)
+    {
+        referenceForVerifiedLabels = [jointActivities firstObject];
+    }
+    NSNumber *startTimestamp = self.markZoneStartTimestamp;
+    NSNumber *endTimestamp = ((ES_Activity *)[jointActivities lastObject]).timestamp;
+    NSSet *secondaryStrings = [NSSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[referenceForVerifiedLabels.secondaryActivities allObjects]]];
+    NSSet *moodStrings = [NSSet setWithArray:[ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[referenceForVerifiedLabels.moods allObjects]]];
+    ES_ActivityEvent *mergedActivityEvent = [[ES_ActivityEvent alloc] initWithServerPrediction:referenceForVerifiedLabels.serverPrediction userCorrection:referenceForVerifiedLabels.userCorrection secondaryActivitiesStrings:secondaryStrings moodsStrings:moodStrings startTimestamp:startTimestamp endTimestamp:endTimestamp minuteActivities:jointActivities];
+    
+    return mergedActivityEvent;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath   *)indexPath
 {
+    if (![self allowEditingLabels])
+    {
+        return;
+    }
+    
     ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    ES_ActivityEvent *activityEvent = cell.activityEvent;
-    
-    if ([self allowEditingLabels])
+    ES_ActivityEvent *activityEvent;
+    if ([self checkIfCellShouldBeMarked:cell])
     {
-        [self segueToEditEvent:activityEvent];
+        // If selected any cell in the mark zone, create a joint activity-event (if legal):
+        activityEvent = [self constructJointActivityEventFromMarkZone];
+        if (!activityEvent)
+        {
+            // The mark zone is illegal, so clear it:
+            [self clearMarkZone];
+            return;
+        }
     }
+    else
+    {
+        // If selected outside a mark zone, use the activity-event of the cell:
+        activityEvent = cell.activityEvent;
+    }
+    
+    [self segueToEditEvent:activityEvent];
 }
 
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent

@@ -43,8 +43,10 @@
         wifiReachable = [Reachability reachabilityForLocalWiFi];
         [wifiReachable startNotifier];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityDidChange:) name:kReachabilityChangedNotification object:wifiReachable];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadIfNecessaryAfterNetworkStackChanged) name:@"NetworkStackSize" object:[self appDelegate]];
         
         isReady = YES;
+        
     }
     return self;
 }
@@ -131,6 +133,18 @@
 }
 
 
+- (void) uploadIfNecessaryAfterNetworkStackChanged
+{
+    if (self.appDelegate.networkStack.count > 0)
+    {
+        NSLog(@"[networkAccessor] Network stack size changed.");
+        if (isReady)
+        {
+            NSLog(@"[networkAccessor] Ready. Calling 'upload'");
+            [self upload];
+        }
+    }
+}
 
 /**
  
@@ -269,6 +283,7 @@
     NSLog( @"[networkAccessor] !!! Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLErrorKey]);
     self.appDelegate.currentlyUploading = NO;
     isReady = YES;
+    [self upload];
 }
 
 - (void) connectionDidFinishLoading: (NSURLConnection *)connection

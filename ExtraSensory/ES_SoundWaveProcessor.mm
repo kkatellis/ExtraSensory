@@ -164,17 +164,14 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     
     FeatureTypeDTW::Features feats;
     feats = get_mfcc_features(someReader);
-    
-    std::cout << "write_mfcc_features\n";
+    std::cout << "mfcc_features: " << feats.size() << "x" << feats[0].size() << std::endl;
     
     NSMutableString* arrayString = [[NSMutableString alloc] init];
-    NSMutableString* temp = [[NSMutableString alloc] init];
-    for (int i = 0; i<7; ++i) {
-        for (int j = 0; j<feats.size(); ++j) {
-            [temp appendString:[NSString stringWithFormat:@"%f ", feats[j].at(i)]];
+    for (int i = 0; i<feats.size(); ++i) {
+        for (int j = 0; j<feats[i].size(); ++j) {
+            [arrayString appendString:[NSString stringWithFormat:@"%f ", feats[i].at(j)]];
         }
-        [temp appendString:@"\n"];
-        [arrayString appendString:temp];
+        [arrayString appendString:@"\n"];
     }
     //NSLog(@"array: %@",arrayString);
     NSError* err;

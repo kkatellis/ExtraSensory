@@ -45,6 +45,7 @@
 + (void) writeSensorData:(NSDictionary *)data andActivity:(ES_Activity *)activity;
 + (void) writeActivity: (ES_Activity *)activity;
 + (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
++ (int) howManyUnlabeledActivitiesToday;
 + (NSArray *) getWhileDeletingOrphansActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
 
 @end

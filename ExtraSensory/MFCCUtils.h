@@ -31,7 +31,7 @@
 typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 typedef boost::scoped_array<float> FloatScopedArray;
 typedef boost::scoped_array<WMFeatureType> FeatureTypeArray;
-typedef simod1::DTW<WMFeatureType, 7> FeatureTypeDTW;
+typedef simod1::DTW<WMFeatureType, 13> FeatureTypeDTW;
 
 FeatureTypeDTW::Features get_mfcc_features(const AudioFileReaderRef& reader,
                                            WMAudioFilePreProcessInfo* reader_info = NULL);
