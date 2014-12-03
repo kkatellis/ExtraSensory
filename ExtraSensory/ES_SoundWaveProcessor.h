@@ -17,8 +17,6 @@
     NSURL   *soundFileURLPre, *soundFileURLDur;
 }
 
-
-
 @property (nonatomic, retain) AVAudioRecorder *hfRecorderPre;
 @property (nonatomic, retain) AVAudioRecorder   *hfRecorderDur;
 @property (nonatomic, retain) NSURL             *soundFileURLPre;

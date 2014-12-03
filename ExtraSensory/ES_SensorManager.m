@@ -398,9 +398,6 @@
         [self.motionManager stopMagnetometerUpdates];
         [self.motionManager stopDeviceMotionUpdates];
         
-        //added MFCC extraction here
-        [self.soundProcessor processMFCC];
-        
         [ES_DataBaseAccessor writeData: HFDataBundle];
         [ES_DataBaseAccessor writeActivity: self.currentActivity];
         
@@ -476,6 +473,9 @@
     
     NSOperationQueue *queue = [NSOperationQueue mainQueue];
     /// Notice: when used a new queue (or separate new queue for each sensor) there were bugs after finished sampling (red dot took time to disappear and network connection failed to get response)
+    
+    [self.soundProcessor startDurRecording];
+    
     [self.motionManager startAccelerometerUpdatesToQueue:queue withHandler:^(CMAccelerometerData *accelerometerData, NSError *error ) {
         if (error)
         {
@@ -747,11 +747,16 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
+    
 }
 
 - (void) handleFinishedDataBundle
 {
     NSLog(@"[sensorManager] Time to wrap the data bundle and send it");
+    
+    //added MFCC extraction here
+    [self.soundProcessor processMFCC];
+    
     // Make sure to stop the sensing:
     [self stopAllSamplers];
     

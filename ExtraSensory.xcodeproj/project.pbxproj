@@ -1221,7 +1221,12 @@
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/../boost_ext/include\"";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ExtraSensory/boost_ext/lib",
+				);
+				New_Setting = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3d57104f-c222-4574-8233-7b270d30d9ee";
 				WRAPPER_EXTENSION = app;
