@@ -25,8 +25,8 @@
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
 		4EFADB3119F08BD800262568 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFADB3019F08BD500262568 /* CoreTelephony.framework */; };
 		7015789019FF0585003CCA95 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7015788F19FF0585003CCA95 /* libz.1.2.5.dylib */; };
-		7015789619FF1196003CCA95 /* MelFilterBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7015789219FF1196003CCA95 /* MelFilterBank.cpp */; };
-		7015789719FF1196003CCA95 /* TriangleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7015789419FF1196003CCA95 /* TriangleFilter.cpp */; };
+		701DEDD41A2FC578006F411E /* MelFilterBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701DEDD01A2FC578006F411E /* MelFilterBank.cpp */; };
+		701DEDD51A2FC578006F411E /* TriangleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701DEDD21A2FC578006F411E /* TriangleFilter.cpp */; };
 		70228E2B18B19FF200189063 /* ActiveFeedback.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70228E2918B19FF200189063 /* ActiveFeedback.storyboard */; };
 		703B3650196E3FA800D5D80B /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B364F196E3FA800D5D80B /* gear.png */; };
 		703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */ = {isa = PBXBuildFile; fileRef = 703B3651196E3FD100D5D80B /* stats_pie_chart.png */; };
@@ -195,10 +195,10 @@
 		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		4EFADB3019F08BD500262568 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		7015788F19FF0585003CCA95 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
-		7015789219FF1196003CCA95 /* MelFilterBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MelFilterBank.cpp; path = ../../../matchbox/Xcode/WordMatch/MelFilterBank.cpp; sourceTree = "<group>"; };
-		7015789319FF1196003CCA95 /* MelFilterBank.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MelFilterBank.hpp; path = ../../../matchbox/Xcode/WordMatch/MelFilterBank.hpp; sourceTree = "<group>"; };
-		7015789419FF1196003CCA95 /* TriangleFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TriangleFilter.cpp; path = ../../../matchbox/Xcode/WordMatch/TriangleFilter.cpp; sourceTree = "<group>"; };
-		7015789519FF1196003CCA95 /* TriangleFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TriangleFilter.hpp; path = ../../../matchbox/Xcode/WordMatch/TriangleFilter.hpp; sourceTree = "<group>"; };
+		701DEDD01A2FC578006F411E /* MelFilterBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MelFilterBank.cpp; sourceTree = "<group>"; };
+		701DEDD11A2FC578006F411E /* MelFilterBank.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MelFilterBank.hpp; sourceTree = "<group>"; };
+		701DEDD21A2FC578006F411E /* TriangleFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleFilter.cpp; sourceTree = "<group>"; };
+		701DEDD31A2FC578006F411E /* TriangleFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TriangleFilter.hpp; sourceTree = "<group>"; };
 		70228E2A18B19FF200189063 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ExtraSensory/Base.lproj/ActiveFeedback.storyboard; sourceTree = "<group>"; };
 		703B364F196E3FA800D5D80B /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = ../gear.png; sourceTree = "<group>"; };
 		703B3651196E3FD100D5D80B /* stats_pie_chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_pie_chart.png; path = ../stats_pie_chart.png; sourceTree = "<group>"; };
@@ -432,13 +432,13 @@
 		709F513B19FEA6B200F3386C /* MFCC */ = {
 			isa = PBXGroup;
 			children = (
-				7015789219FF1196003CCA95 /* MelFilterBank.cpp */,
-				7015789319FF1196003CCA95 /* MelFilterBank.hpp */,
-				7015789419FF1196003CCA95 /* TriangleFilter.cpp */,
-				7015789519FF1196003CCA95 /* TriangleFilter.hpp */,
 				709F5ADA19FEB4BC00F3386C /* Types.h */,
 				709F513F19FEA72500F3386C /* MFCCProcessor.cpp */,
 				709F514019FEA72500F3386C /* MFCCProcessor.hpp */,
+				701DEDD01A2FC578006F411E /* MelFilterBank.cpp */,
+				701DEDD11A2FC578006F411E /* MelFilterBank.hpp */,
+				701DEDD21A2FC578006F411E /* TriangleFilter.cpp */,
+				701DEDD31A2FC578006F411E /* TriangleFilter.hpp */,
 				709F513C19FEA6E700F3386C /* AudioFileReader.cpp */,
 				709F513D19FEA6E700F3386C /* AudioFileReader.hpp */,
 				709F513819FEA6A100F3386C /* MFCCUtils.cpp */,
@@ -1041,7 +1041,6 @@
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
-				7015789719FF1196003CCA95 /* TriangleFilter.cpp in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				709F5AEB19FEBFED00F3386C /* CAHostTimeBase.cpp in Sources */,
@@ -1055,7 +1054,6 @@
 				93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */,
 				939600A5181B0194006221C6 /* ES_User.m in Sources */,
 				4EE9AC831A2D4A0E004CB8C2 /* ES_Settings.m in Sources */,
-				7015789619FF1196003CCA95 /* MelFilterBank.cpp in Sources */,
 				4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */,
 				709F5AEC19FEBFED00F3386C /* CAStreamBasicDescription.cpp in Sources */,
 				93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */,
@@ -1070,7 +1068,9 @@
 				4E4047CB1A24F54300C1D0DF /* ES_Mood.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
 				4E4047C81A24F54100C1D0DF /* ES_SecondaryActivity.m in Sources */,
+				701DEDD51A2FC578006F411E /* TriangleFilter.cpp in Sources */,
 				70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */,
+				701DEDD41A2FC578006F411E /* MelFilterBank.cpp in Sources */,
 				70C156BE18D526EB007CCB39 /* ES_ContainerViewController.m in Sources */,
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
 				70C156C418D52864007CCB39 /* Empty.m in Sources */,
