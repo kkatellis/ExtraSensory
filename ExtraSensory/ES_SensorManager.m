@@ -473,6 +473,9 @@
     
     NSOperationQueue *queue = [NSOperationQueue mainQueue];
     /// Notice: when used a new queue (or separate new queue for each sensor) there were bugs after finished sampling (red dot took time to disappear and network connection failed to get response)
+    
+    [self.soundProcessor startDurRecording];
+    
     [self.motionManager startAccelerometerUpdatesToQueue:queue withHandler:^(CMAccelerometerData *accelerometerData, NSError *error ) {
         if (error)
         {
@@ -582,7 +585,7 @@
     NSUInteger curr_count = [self countField:RAW_MAG_X];
     if (curr_count >= [self samplesPerBatch])
     {
-        NSLog(@"[sensorManager] Got new magnetometer sample, but don't need it, sice we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        NSLog(@"[sensorManager] Got new magnetometer sample, but don't need it, since we already have enough samples collected: %lu.",(unsigned long)curr_count);
         return;
     }
     
@@ -613,7 +616,7 @@
     NSUInteger curr_count = [self countField:RAW_GYR_X];
     if (curr_count >= [self samplesPerBatch])
     {
-        NSLog(@"[sensorManager] Got new gyroscope sample, but don't need it, sice we already have enough samples collected: %lu.",(unsigned long)curr_count);
+        NSLog(@"[sensorManager] Got new gyroscope sample, but don't need it, since we already have enough samples collected: %lu.",(unsigned long)curr_count);
         return;
     }
     
@@ -749,9 +752,13 @@
 - (void) handleFinishedDataBundle
 {
     NSLog(@"[sensorManager] Time to wrap the data bundle and send it");
+    
+    
     // Make sure to stop the sensing:
     [self stopAllSamplers];
     
+    //added MFCC extraction here
+    [self.soundProcessor processMFCC];
 
     //[self.timer invalidate];
     [ES_DataBaseAccessor writeSensorData:self.hfData andActivity:self.currentActivity];
@@ -780,9 +787,6 @@
     }
     else
     {
-        NSTimeInterval updateTimestamp = [latestLocation.timestamp timeIntervalSince1970];
-        NSTimeInterval updateAge = -[latestLocation.timestamp timeIntervalSinceNow];
-        NSLog(@"==== got update timestamp %f. age: %f.",updateTimestamp,updateAge);
         [self addLocationSample:latestLocation];
     }
 }

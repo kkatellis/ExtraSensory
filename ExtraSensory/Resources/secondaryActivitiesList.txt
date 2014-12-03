@@ -1,0 +1,81 @@
+Lifting weights
+Playing baseball
+Playing basketball
+Playing lacrosse
+Skateboarding
+Playing soccer
+Playing frisbee
+Stretching
+Yoga
+Elliptical machine
+Treadmill
+Stationary bike
+Cooking
+Cleaning
+Gardening
+Doing laundry
+Mowing the lawn
+Raking leaves
+Vacuuming
+Washing dishes
+Washing car
+Manual labor
+Dancing
+Listening to music
+Playing musical instrument
+Singing
+Playing videogames
+Playing phone-games
+Relaxing
+Strolling
+Hiking
+Shopping
+Watching TV
+Talking with friends
+Reading a book
+Drinking (alcohol)
+Eating
+Drinking (non-alcohol)
+Sleeping
+Toilet
+Bath
+Shower
+Stairs - going up
+Stairs - going down
+Limping
+Jumping
+Laughing
+Crying
+Lab work
+Written work
+Drawing
+Texting
+Surfing the internet
+Computer work
+Studying
+In class
+In a meeting
+At home
+At work
+At school
+At a bar
+At a concert
+At a party
+At the beach
+At a restaurant
+Outside
+Indoors
+On a bus
+On a plane
+On a train
+Elevator
+Motorbike
+Riding an animal
+Drive - I'm the driver
+Drive - I'm a passenger
+In a car
+Phone in pocket
+Phone in hand
+Phone in bag
+Phone on table
+Phone away from me

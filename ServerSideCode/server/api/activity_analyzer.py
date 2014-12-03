@@ -64,12 +64,40 @@ def classify_zip(zip_in,upload_folder,classifier_path):
 
 def get_measurements_from_json_dict(jdict):
     print "Reading measurements from json structure, assuming dictionary structure";
+
     # load data into arrays
-    acc = np.array([jdict['processed_user_acc_x'],jdict['processed_user_acc_y'],jdict['processed_user_acc_z']]).T;
-    magnet = np.array([jdict['processed_magnet_x'],jdict['processed_magnet_y'],jdict['processed_magnet_z']]).T;
-    gyro = np.array([jdict['processed_gyro_x'],jdict['processed_gyro_y'],jdict['processed_gyro_z']]).T;
-    last_gps_record = np.array([jdict['location_latitude'][-1],jdict['location_longitude'][-1],jdict['location_speed'][-1]]).T;
-    gps = np.outer(np.ones(acc.shape[0]),last_gps_record);
+    try:
+        acc = np.array([jdict['processed_user_acc_x'],jdict['processed_user_acc_y'],jdict['processed_user_acc_z']]).T;
+        pass;
+    except:
+        print "-- Missing accelerometer data";
+        acc = np.zeros((800,3));
+        pass;
+
+    try:
+        magnet = np.array([jdict['processed_magnet_x'],jdict['processed_magnet_y'],jdict['processed_magnet_z']]).T;
+        pass;
+    except:
+        print "-- Missing magnetometer data";
+        magnet = np.zeros((800,3));
+        pass;
+
+    try:
+        gyro = np.array([jdict['processed_gyro_x'],jdict['processed_gyro_y'],jdict['processed_gyro_z']]).T;
+        pass;
+    except:
+        print "-- Missing gyroscope data";
+        gyro = np.zeros((800,3));
+        pass;
+
+    try:
+        last_gps_record = np.array([jdict['location_latitude'][-1],jdict['location_longitude'][-1],jdict['location_speed'][-1]]).T;
+        gps = np.outer(np.ones(acc.shape[0]),last_gps_record);
+        pass;
+    except:
+        print "-- Missing location data";
+        gps = np.zeros((800,3));
+        pass;
 
     return (acc,magnet,gyro,gps);
 

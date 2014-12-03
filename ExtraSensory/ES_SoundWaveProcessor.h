@@ -15,7 +15,6 @@
     AVAudioSession *ourSession;
     AVAudioRecorder *hfRecorderPre, *hfRecorderDur;
     NSURL   *soundFileURLPre, *soundFileURLDur;
-    
 }
 
 @property (nonatomic, retain) AVAudioRecorder *hfRecorderPre;
@@ -32,5 +31,6 @@
 
 - (void) startDurRecording;
 - (void) pauseDurRecording;
+- (void) processMFCC;
 
 @end

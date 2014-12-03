@@ -15,14 +15,20 @@
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_ActivitiesStrings.h"
-#import "ES_UserActivityLabels.h"
+//#import "ES_UserActivityLabels.h"
+#import "ES_Label.h"
+#import "ES_SecondaryActivity.h"
+#import "ES_Mood.h"
 
 @implementation ES_DataBaseAccessor
 
 #define ROOT_DATA_OBJECT @"ES_User"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
+#define MFCC_FILE_DUR   @"MFCC_SOUNDWAVE_DUR"
 #define HF_DATA_FILE_DUR    @"HF_DUR_DATA.txt"
 #define LABEL_FILE          @"label.txt"
+
+#define SECONDS_IN_WEEK     604800.0
 
 + (ES_User *)user
 {
@@ -132,32 +138,71 @@
     [[self context] deleteObject:activity];
 }
 
-+ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity
+//+ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity
+//{
+//    NSSet *oldlabels = activity.userActivityLabels;
+//    
+//    if ([oldlabels count] > 0)
+//    {
+//        [activity removeUserActivityLabels:oldlabels];
+//    }
+//    
+//    NSMutableSet *newlabels = [NSMutableSet new];
+//    
+//    for (NSString* label in labels)
+//    {
+//        ES_UserActivityLabels* newlabel = [self getUserActivityLabelWithName:label];
+//        [newlabels addObject:newlabel];
+//    }
+//    [activity addUserActivityLabels:newlabels];
+//    
+//}
+//
+
++ (void) setMoods:(NSArray *)labels forActivity:(ES_Activity *)activity
 {
-    NSSet *oldlabels = activity.userActivityLabels;
+    NSSet *oldLabels = activity.moods;
     
-    if ([oldlabels count] > 0)
+    if ([oldLabels count] > 0)
     {
-        [activity removeUserActivityLabels:oldlabels];
+        [activity removeMoods:oldLabels];
     }
     
-    NSMutableSet *newlabels = [NSMutableSet new];
+    NSMutableSet *newLabels = [NSMutableSet new];
+    for (NSString *label in labels)
+    {
+        ES_Mood *newLabel = [self getMoodEntityWithName:label];
+        [newLabels addObject:newLabel];
+    }
+    [activity addMoods:newLabels];
+}
+
++ (void) setSecondaryActivities:(NSArray*)labels forActivity: (ES_Activity *)activity
+{
+    NSSet *oldLabels = activity.secondaryActivities;
+    
+    if ([oldLabels count] > 0)
+    {
+        [activity removeSecondaryActivities:oldLabels];
+    }
+    
+    NSMutableSet *newLabels = [NSMutableSet new];
     
     for (NSString* label in labels)
     {
-        ES_UserActivityLabels* newlabel = [self getUserActivityLabelWithName:label];
-        [newlabels addObject:newlabel];
+        ES_SecondaryActivity* newlabel = [self getSecondaryActivityEntityWithName:label];
+        [newLabels addObject:newlabel];
     }
-    [activity addUserActivityLabels:newlabels];
+    [activity addSecondaryActivities:newLabels];
     
 }
 
-+ (ES_UserActivityLabels*) getUserActivityLabelWithName:(NSString*)label
++ (ES_SecondaryActivity *) getSecondaryActivityEntityWithName:(NSString *)label
 {
     NSError *error = [NSError new];
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabels"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_SecondaryActivity"];
     [fetchRequest setFetchLimit:1];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name = %@", label]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"label = %@", label]];
     NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
     
     if ([results count] > 0)
@@ -167,12 +212,59 @@
     // if not exists, just insert a new entity
     else
     {
-        ES_UserActivityLabels *userActivity = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabels"
-                                                                                inManagedObjectContext:[self context]];
-        userActivity.name = label;
-        return userActivity;
+        ES_SecondaryActivity *secondaryActivity = [NSEntityDescription insertNewObjectForEntityForName:@"ES_SecondaryActivity"
+                                                                            inManagedObjectContext:[self context]];
+        secondaryActivity.label = label;
+        return secondaryActivity;
     }
+
 }
+
++ (ES_Mood *) getMoodEntityWithName:(NSString *)label
+{
+    NSError *error = [NSError new];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Mood"];
+    [fetchRequest setFetchLimit:1];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"label = %@", label]];
+    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+    
+    if ([results count] > 0)
+    {
+        return [results firstObject];
+    }
+    // if not exists, just insert a new entity
+    else
+    {
+        ES_Mood *mood = [NSEntityDescription insertNewObjectForEntityForName:@"ES_Mood"
+                                                                                inManagedObjectContext:[self context]];
+        mood.label = label;
+        return mood;
+    }
+    
+}
+
+//+ (ES_UserActivityLabels*) getUserActivityLabelWithName:(NSString*)label
+//{
+//    NSError *error = [NSError new];
+//    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_UserActivityLabels"];
+//    [fetchRequest setFetchLimit:1];
+//    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name = %@", label]];
+//    NSArray *results = [[self context] executeFetchRequest:fetchRequest error:&error];
+//    
+//    if ([results count] > 0)
+//    {
+//        return [results firstObject];
+//    }
+//    // if not exists, just insert a new entity
+//    else
+//    {
+//        ES_UserActivityLabels *userActivity = [NSEntityDescription insertNewObjectForEntityForName:@"ES_UserActivityLabels"
+//                                                                                inManagedObjectContext:[self context]];
+//        
+//        userActivity.name = label;
+//        return userActivity;
+//    }
+//}
 
 + (ES_Activity *) getActivityWithTime: (NSNumber *)time
 {
@@ -292,7 +384,7 @@
     return nil;
 }
 
-+ (NSMutableDictionary *) getTodaysCountsForSecondaryActivities:(NSArray *)secondaryActivities
++ (NSMutableDictionary *) getRecentCountsForSecondaryActivities:(NSArray *)secondaryActivities
 {
     NSMutableDictionary *counts = [NSMutableDictionary new];
     for (NSString *act in secondaryActivities)
@@ -303,9 +395,9 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     
-    NSNumber *todayNum = [self getTimestampOfTodaysStart];
+    float startFrom = [[NSDate date] timeIntervalSince1970] - SECONDS_IN_WEEK;
     
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@ AND %K.@count > 0", @"timestamp",todayNum,@"userActivityLabels"]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %f AND %K.@count > 0", @"timestamp",startFrom,@"secondaryActivities"]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     NSError *error = [NSError new];
@@ -313,25 +405,21 @@
     
     for (ES_Activity *activity in results)
     {
-        if (activity.userActivityLabels)
+        if (activity.secondaryActivities)
         {
-            for (id actObj in activity.userActivityLabels)
+            for (id actObj in activity.secondaryActivities)
             {
-                NSString *activityName = [(ES_UserActivityLabels *)actObj name];
+                NSString *activityName = [(ES_SecondaryActivity *)actObj label];
                 int newCount = (int)[counts[activityName] integerValue] + 1;
                 counts[activityName] = [NSNumber numberWithInt:newCount];
             }
-        }
-        else
-        {
-            NSLog(@"[databaseAccessor] fetch gave result with nil userActivityLabels");
         }
     }
     //NSLog(@"Today's counts: %@", counts);
     return counts;
 }
 
-+ (NSMutableDictionary *) getTodaysCountsForMoods:(NSArray *)moods
++ (NSMutableDictionary *) getRecentCountsForMoods:(NSArray *)moods
 {
     NSMutableDictionary *counts = [NSMutableDictionary new];
     for (NSString *mood in moods)
@@ -342,9 +430,9 @@
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ES_Activity"];
     [fetchRequest setFetchLimit:0];
     
-    NSNumber *todayNum = [self getTimestampOfTodaysStart];
+    float startFrom = [[NSDate date] timeIntervalSince1970] - SECONDS_IN_WEEK;
     
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %@", @"timestamp",todayNum]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K > %f AND %K.@count > 0", @"timestamp",startFrom,@"moods"]];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     NSError *error = [NSError new];
@@ -352,16 +440,17 @@
     
     for (ES_Activity *activity in results)
     {
-        if (activity.mood)
+        if (activity.moods)
         {
-            int newCount = (int)[counts[activity.mood] integerValue] + 1;
-            counts[activity.mood] = [NSNumber numberWithInt:newCount];
-        }
-        else
-        {
-            NSLog(@"[databaseAccessor] fetch gave result with nil mood");
+            for (id moodObj in activity.moods)
+            {
+                NSString *moodName = [(ES_Mood *)moodObj label];
+                int newCount = (int)[counts[moodName] integerValue] + 1;
+                counts[moodName] = [NSNumber numberWithInt:newCount];
+            }
         }
     }
+    //NSLog(@"Today's counts: %@", counts);
     return counts;
 }
 
@@ -388,16 +477,16 @@
     return labelsByFrequency;
 }
 
-+ (NSArray *) getTodaysFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities
++ (NSArray *) getRecentFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities
 {
-    NSDictionary *counts = [self getTodaysCountsForSecondaryActivities:secondaryActivities];
+    NSDictionary *counts = [self getRecentCountsForSecondaryActivities:secondaryActivities];
     NSArray *secondaryActivitiesByFrequency = [self getFrequentLabelsOutOfLabelsWithCounts:counts];
     return secondaryActivitiesByFrequency;
 }
 
-+ (NSArray *) getTodaysFrequentMoodsOutOf:(NSArray *)moods
++ (NSArray *) getRecentFrequentMoodsOutOf:(NSArray *)moods
 {
-    NSDictionary *counts = [self getTodaysCountsForMoods:moods];
+    NSDictionary *counts = [self getRecentCountsForMoods:moods];
     NSArray *moodsByFrequency = [self getFrequentLabelsOutOfLabelsWithCounts:counts];
     return moodsByFrequency;
 }
@@ -467,8 +556,8 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR, nil];
-    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE, nil];
+    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR,MFCC_FILE_DUR, nil];
+//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE, nil];
     
     return arr;
 }
@@ -717,20 +806,25 @@
     NSMutableArray* keys = [NSMutableArray arrayWithArray:@[@"mainActivity"]];
     NSMutableArray* values = [NSMutableArray arrayWithArray:@[activity.userCorrection]];
     
-    if (activity.userActivityLabels)
+    if (activity.secondaryActivities)
     {
         NSMutableArray *secondaryLabels = [NSMutableArray new];
-        for (ES_UserActivityLabels* label in activity.userActivityLabels)
+        for (ES_SecondaryActivity* label in activity.secondaryActivities)
         {
-            [secondaryLabels addObject:label.name];
+            [secondaryLabels addObject:label.label];
         }
         [keys addObject:@"secondaryActivities"];
         [values addObject:secondaryLabels];
     }
-    if (activity.mood)
+    if (activity.moods)
     {
-        [keys addObject:@"mood"];
-        [values addObject:activity.mood];
+        NSMutableArray *moodLabels = [NSMutableArray new];
+        for (ES_Mood *label in activity.moods)
+        {
+            [moodLabels addObject:label.label];
+        }
+        [keys addObject:@"moods"];
+        [values addObject:moodLabels];
     }
     
     NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values

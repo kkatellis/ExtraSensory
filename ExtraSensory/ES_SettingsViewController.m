@@ -10,6 +10,7 @@
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
+#import "ES_DataBaseAccessor.h"
 
 @interface ES_SettingsViewController ()
 
@@ -26,6 +27,11 @@
 @property (weak, nonatomic) IBOutlet UISlider *storageSlider;
 
 @property (weak, nonatomic) IBOutlet UILabel *currentNetworkStackLabel;
+
+@property (weak, nonatomic) IBOutlet UISwitch *homeSensingSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *homeSensingSwitchLabel;
+
+
 
 @property (strong, nonatomic) ES_AppDelegate* appDelegate;
 @end
@@ -73,6 +79,32 @@
     // Network stack label:
     [self updateCurrentStorageLabel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentStorageLabel) name:@"NetworkStackSize" object:self.appDelegate];
+    
+    // Home-sensing:
+    self.homeSensingSwitch.on = [self.appDelegate.user.settings.homeSensingParticipant boolValue];
+    [self updateHomeSensingSwitchLabel];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [ES_DataBaseAccessor save];
+}
+
+- (void) updateHomeSensingSwitchLabel
+{
+    if (self.homeSensingSwitch.on)
+    {
+        self.homeSensingSwitchLabel.text = @"ON";
+    }
+    else
+    {
+        self.homeSensingSwitchLabel.text = @"OFF";
+    }
+}
+
+- (IBAction)homeSensingSwitchChanged:(id)sender {
+    self.appDelegate.user.settings.homeSensingParticipant = [NSNumber numberWithBool:self.homeSensingSwitch.on];
+    [self updateHomeSensingSwitchLabel];
 }
 
 - (void) updateCurrentStorageLabel

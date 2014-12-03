@@ -19,9 +19,8 @@ import mlpy;
 import shutil;
 
 
-g__data_zip_dir = '/Library/WebServer/Documents/rmw/feedback';
-g__feedback_superdir = '/Library/WebServer/Documents/rmw/classifier/feats';
-g__output_superdir = '/Users/yonatan/Documents/collected_data';
+g__output_superdir = '/Users/yonatan/Documents/collected_data/uuids';
+g__input_superdir = '/Library/WebServer/Documents/rmw/user_input';
 
 g__lf_fields = [\
     'altitude','floor','horizontal_accuracy','vertical_accuracy',\
@@ -29,22 +28,30 @@ g__lf_fields = [\
     'on_the_phone'];
 
 def collect_all_instances_of_uuid(uuid,skip_existing):
-    for filename in os.listdir(g__data_zip_dir):
-        if fnmatch.fnmatch(filename,'*-%s.zip' % uuid):
-            print filename;
-            parts = filename.split('-');
-            timestamp = parts[0];
-            collect_single_instance(uuid,timestamp,skip_existing);
+    input_uuid_dir = os.path.join(g__input_superdir,uuid);
+    if not os.path.exists(input_uuid_dir):
+        return;
 
-            pass; # end if fnmatch...
+    for timestamp in os.listdir(input_uuid_dir):
+        print timestamp;
+        collect_single_instance(uuid,timestamp,skip_existing);
+
         pass; # end for filename...
 
     return;
 
 def collect_single_instance(uuid,timestamp,skip_existing):
+    input_uuid_dir = os.path.join(g__input_superdir,uuid);
+    if not os.path.exists(input_uuid_dir):
+        return False;
+
+    input_instance_dir = os.path.join(input_uuid_dir,timestamp);
+    if not os.path.exists(input_instance_dir):
+        return False;
+
     # First check if there is any source of data for this uuid and timestamp:
     input_zip_filename = '%s-%s.zip' % (timestamp,uuid);
-    input_zip_file = os.path.join(g__data_zip_dir,input_zip_filename);
+    input_zip_file = os.path.join(input_instance_dir,input_zip_filename);
     if not os.path.exists(input_zip_file):
         print "-- no zip file %s" % input_zip_file;
         return False;
@@ -79,16 +86,21 @@ def collect_single_instance(uuid,timestamp,skip_existing):
         return False;
 
     # If there is a label-feedback file, copy it:
-    feedback_file = os.path.join(os.path.join(os.path.join(g__feedback_superdir,uuid),timestamp),'feedback');
+    feedback_file = os.path.join(input_instance_dir,'feedback');
+    out_feedback_file = os.path.join(instance_out_dir,'feedback');
     if os.path.exists(feedback_file):
-        shutil.copy(feedback_file,instance_out_dir);
+        shutil.copyfile(feedback_file,out_feedback_file);
         print "++ Copied feedback file";
         pass;
     else:
         # Check if there are labels from active feedback:
         active_label_file = os.path.join(instance_out_dir,'label.txt');
         if os.path.exists(active_label_file):
-            analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp);
+            out_jlist = analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp);
+            fid = file(out_feedback_file,'wb');
+            json.dump(out_jlist,fid);
+            fid.close();
+            print "++ Saved labels from active feedback file into file 'feedback'";
             pass; # end if exists active_label_file
         else:
             print "-- No feedback file and no active label.txt file";
@@ -101,32 +113,31 @@ def collect_single_instance(uuid,timestamp,skip_existing):
     if new_version:
         (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data) = read_datafile(hf_file);
 
-        np.savetxt(os.path.join(instance_out_dir,'raw_acc'),raw_acc);
-        np.savetxt(os.path.join(instance_out_dir,'raw_magnet'),raw_magnet);
-        np.savetxt(os.path.join(instance_out_dir,'raw_gyro'),raw_gyro);
+        np.savetxt(os.path.join(instance_out_dir,'m_raw_acc'),raw_acc);
+        np.savetxt(os.path.join(instance_out_dir,'m_raw_magnet'),raw_magnet);
+        np.savetxt(os.path.join(instance_out_dir,'m_raw_gyro'),raw_gyro);
 
-        np.savetxt(os.path.join(instance_out_dir,'proc_timeref'),proc_timeref);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_timeref'),proc_timeref);
 
-        np.savetxt(os.path.join(instance_out_dir,'proc_acc'),proc_acc);
-        np.savetxt(os.path.join(instance_out_dir,'proc_magnet'),proc_magnet);
-        np.savetxt(os.path.join(instance_out_dir,'proc_gyro'),proc_gyro);
-        np.savetxt(os.path.join(instance_out_dir,'proc_gravity'),proc_gravity);
-        np.savetxt(os.path.join(instance_out_dir,'proc_attitude'),proc_attitude);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_acc'),proc_acc);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_magnet'),proc_magnet);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_gyro'),proc_gyro);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_gravity'),proc_gravity);
+        np.savetxt(os.path.join(instance_out_dir,'m_proc_attitude'),proc_attitude);
 
-        np.savetxt(os.path.join(instance_out_dir,'location'),location);
+        np.savetxt(os.path.join(instance_out_dir,'m_location'),location);
         pass;
     else:
         (acc,magnet,gyro,location,lf_data) = read_datafile_json_list(hf_file);
-        pass;
 
-    # Save measurement data to modality-separate files:
+        # Save measurement data to modality-separate files:
         np.savetxt(os.path.join(instance_out_dir,'acc'),acc);
         np.savetxt(os.path.join(instance_out_dir,'magnet'),magnet);
         np.savetxt(os.path.join(instance_out_dir,'gyro'),gyro);
         np.savetxt(os.path.join(instance_out_dir,'location'),location);
         pass;
 
-    lf_out_file = os.path.join(instance_out_dir,'lf_measurements.dat');
+    lf_out_file = os.path.join(instance_out_dir,'m_lf_measurements.dat');
     fid = open(lf_out_file,'wb');
     json.dump(lf_data,fid);
     fid.close();
@@ -138,18 +149,35 @@ def collect_single_instance(uuid,timestamp,skip_existing):
 
 def analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp):
     fid = file(active_label_file,'rb');
-    in_jlist = lson.load(fid);
+    in_jlist = json.load(fid);
     fid.close();
 
     out_jlist = {'active_feedback':'true','uuid':uuid,'timestamp':timestamp};
 
     out_jlist['corrected_activity'] = in_jlist['mainActivity'];
     out_jlist['secondary_activities'] = in_jlist['secondaryActivities'];
-    out_jlist['mood'] = in_jlist['mood'];
+    if 'mood' in in_jlist:
+        out_jlist['mood'] = in_jlist['mood'];
+        pass;
 
-    print "++ Active feedback labels copied to feedback file";
+    print "++ Analyzed active feedback file.";
 
-    return;
+    return out_jlist;
+
+def join_data_fields_to_array(jdict,field_names):
+
+    try:
+        list_of_rows = [];
+        for name in field_names:
+            list_of_rows.append(jdict[name]);
+            pass;
+        arr = np.array(list_of_rows).T;
+        pass;
+    except:
+        arr = np.array([np.nan]);
+        pass;
+
+    return arr;
 
 def read_datafile(hf_file):
     # open the file for reading
@@ -157,22 +185,22 @@ def read_datafile(hf_file):
     jdict = json.load(fid);
     fid.close();
 
-    raw_acc = np.array([jdict['raw_acc_timeref'],jdict['raw_acc_x'],jdict['raw_acc_y'],jdict['raw_acc_z']]).T;
-    raw_gyro = np.array([jdict['raw_gyro_timeref'],jdict['raw_gyro_x'],jdict['raw_gyro_y'],jdict['raw_gyro_z']]).T;
-    raw_magnet = np.array([jdict['raw_magnet_timeref'],jdict['raw_magnet_x'],jdict['raw_magnet_y'],jdict['raw_magnet_z']]).T;
+    raw_acc = join_data_fields_to_array(jdict,['raw_acc_timeref','raw_acc_x','raw_acc_y','raw_acc_z']);
+    raw_gyro = join_data_fields_to_array(jdict,['raw_gyro_timeref','raw_gyro_x','raw_gyro_y','raw_gyro_z']);
+    raw_magnet = join_data_fields_to_array(jdict,['raw_magnet_timeref','raw_magnet_x','raw_magnet_y','raw_magnet_z']);
 
-    proc_acc = np.array([jdict['processed_user_acc_x'],jdict['processed_user_acc_y'],jdict['processed_user_acc_z']]).T;
-    proc_magnet = np.array([jdict['processed_magnet_x'],jdict['processed_magnet_y'],jdict['processed_magnet_z']]).T;
-    proc_gyro = np.array([jdict['processed_gyro_x'],jdict['processed_gyro_y'],jdict['processed_gyro_z']]).T;
+    proc_acc = join_data_fields_to_array(jdict,['processed_user_acc_x','processed_user_acc_y','processed_user_acc_z']);
+    proc_magnet = join_data_fields_to_array(jdict,['processed_magnet_x','processed_magnet_y','processed_magnet_z']);
+    proc_gyro = join_data_fields_to_array(jdict,['processed_gyro_x','processed_gyro_y','processed_gyro_z']);
 
-    proc_gravity = np.array([jdict['processed_gravity_x'],jdict['processed_gravity_y'],jdict['processed_gravity_z']]).T;
-    proc_attitude = np.array([jdict['processed_roll'],jdict['processed_pitch'],jdict['processed_yaw']]).T;
+    proc_gravity = join_data_fields_to_array(jdict,['processed_gravity_x','processed_gravity_y','processed_gravity_z']);
+    proc_attitude = join_data_fields_to_array(jdict,['processed_roll','processed_pitch','processed_yaw']);
 
-    proc_timeref = np.array(jdict['processed_timeref']).T;
+    proc_timeref = join_data_fields_to_array(jdict,['processed_timeref']);
 
-    location = np.array([jdict['location_timestamp'],jdict['location_latitude'],jdict['location_longitude'],\
-                             jdict['location_altitude'],jdict['location_speed'],\
-                             jdict['location_horizontal_accuracy'],jdict['location_vertical_accuracy']]).T;
+    location = join_data_fields_to_array(jdict,['location_timestamp','location_latitude','location_longitude',\
+                                              'location_altitude','location_speed',\
+                                              'location_horizontal_accuracy','location_vertical_accuracy']);
     
     lf_data = jdict['low_frequency'];
         
@@ -243,7 +271,7 @@ def main():
         pass;
     fid.close();
 
-    skip_existing = False;
+    skip_existing = True;
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;
