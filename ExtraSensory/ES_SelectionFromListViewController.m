@@ -14,7 +14,8 @@
 @property NSMutableArray *sectionNames;
 @property NSMutableArray *sectionHeaders;
 @property NSArray *searchResults;
-
+@property (strong, nonatomic)NSArray *array;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @end
 
 @implementation ES_SelectionFromListViewController
@@ -42,7 +43,9 @@
 {
     [super viewDidLoad];
     self.searchResults = [[NSArray alloc] init];
-    
+
+   /* self.searchBar.hidden = YES;
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y - self.searchBar.frame.size.height, self.tableView.frame.size.width, self.tableView.frame.size.height + self.searchBar.frame.size.height);*/
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -119,6 +122,12 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    //hide search bar if main activity page
+    if(_useIndex == FALSE){
+        self.tableView.contentOffset = CGPointMake(0, 44);
+    }
+    
     [self recalculateTable];
 }
 
@@ -139,25 +148,51 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return self.sections.count;
+    //return only one section if search matches
+    if(tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        return 1;
+    }
+    else
+    {
+        return self.sections.count;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-       return [self.sections[section] count];
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        return [self.searchResults count];
+    }
+    else
+    {
+        return [self.sections[section] count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
+    //cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
     if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
     {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
+    }
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        cell.textLabel.text = [self.searchResults objectAtIndex:indexPath.row];
+    }
+    else
+    {
+        cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
+        //cell.textLabel.text = [self.array objectAtIndex:indexPath.row];
     }
     return cell;
 }
@@ -255,5 +290,22 @@
     [self.tableView reloadData];
 }
 
+#pragma Search Methods
+-(void)filterContentForSearchText:(NSString *)searchText scope:(NSString*) scope
+{
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@", searchText];
+    self.searchResults = [self.choices filteredArrayUsingPredicate:resultPredicate];
+    //self.searchResults = [self.array filteredArrayUsingPredicate:resultPredicate];
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString
+            scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
+                objectAtIndex:[self.searchDisplayController.searchBar
+                selectedScopeButtonIndex]]];
+    
+    return YES;
+}
 
 @end
