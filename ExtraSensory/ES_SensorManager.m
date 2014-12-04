@@ -476,41 +476,56 @@
     
     [self.soundProcessor startDurRecording];
     
-    [self.motionManager startAccelerometerUpdatesToQueue:queue withHandler:^(CMAccelerometerData *accelerometerData, NSError *error ) {
-        if (error)
-        {
-            NSLog(@"caught error: %@",error);
-        }
-        [self addAccelerationSample:accelerometerData];
-    }];
+    if (self.motionManager.accelerometerAvailable)
+    {
+        [self.motionManager startAccelerometerUpdatesToQueue:queue withHandler:^(CMAccelerometerData *accelerometerData, NSError *error ) {
+            if (error)
+            {
+                NSLog(@"caught error: %@",error);
+            }
+            [self addAccelerationSample:accelerometerData];
+        }];
+    }
     
-    [self.motionManager startGyroUpdatesToQueue:queue withHandler:^(CMGyroData *gyroscopeData, NSError *error) {
-        if (error)
-        {
-            NSLog(@"caught error: %@",error);
-        }
-        [self addGyroscopeSample:gyroscopeData];
-    }];
+    if (self.motionManager.gyroAvailable)
+    {
+        [self.motionManager startGyroUpdatesToQueue:queue withHandler:^(CMGyroData *gyroscopeData, NSError *error) {
+            if (error)
+            {
+                NSLog(@"caught error: %@",error);
+            }
+            [self addGyroscopeSample:gyroscopeData];
+        }];
+    }
     
-    [self.motionManager startMagnetometerUpdatesToQueue:queue withHandler:^(CMMagnetometerData *magnetometerData, NSError *error) {
-        if (error)
-        {
-            NSLog(@"caught error: %@",error);
-        }
-        [self addMagnetometerSample:magnetometerData];
-    }];
+    if (self.motionManager.magnetometerAvailable)
+    {
+        [self.motionManager startMagnetometerUpdatesToQueue:queue withHandler:^(CMMagnetometerData *magnetometerData, NSError *error) {
+            if (error)
+            {
+                NSLog(@"caught error: %@",error);
+            }
+            [self addMagnetometerSample:magnetometerData];
+        }];
+    }
     
-    [self.motionManager startDeviceMotionUpdatesToQueue:queue withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
-        if (error)
-        {
-            NSLog(@"caught error: %@",error);
-        }
-        [self addDeviceMotionSample:deviceMotion];
-    }];
+    if (self.motionManager.deviceMotionAvailable)
+    {
+        [self.motionManager startDeviceMotionUpdatesToQueue:queue withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
+            if (error)
+            {
+                NSLog(@"caught error: %@",error);
+            }
+            [self addDeviceMotionSample:deviceMotion];
+        }];
+    }
     
-    // Stop updating before start updating, to force getting an update:
-    [self.locationManager stopUpdatingLocation];
-    [self.locationManager startUpdatingLocation];
+    if ([CLLocationManager locationServicesEnabled])
+    {
+        // Stop updating before start updating, to force getting an update:
+        [self.locationManager stopUpdatingLocation];
+        [self.locationManager startUpdatingLocation];
+    }
     
     // Add low frequency (one time) measurements:
     [self addDeviceIndicatorsToDataBundle];
