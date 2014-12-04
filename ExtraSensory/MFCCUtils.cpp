@@ -135,13 +135,19 @@ FeatureTypeDTW::Features get_mfcc_features(const boost::shared_ptr<WM::AudioFile
                    left_of_packet,
                    &cepstra);
 
+        
 
         //copy MFCC's 2th to 8th as our features (as in Matlab prototype)
-        FeatureTypeDTW::FeatureVector mfcc_vector;
-        const size_t offset = 1;
-        std::copy(&cepstra[offset], 
-                  &cepstra[offset + FeatureTypeDTW::feature_number_size], 
-                  mfcc_vector.begin());
+        // kat changed to MFCCs 1st to 13th
+        
+        //FeatureTypeDTW::FeatureVector mfcc_vector;
+        //const size_t offset = 0;
+        //std::cout << "sdfdsasfe: " << offset + FeatureTypeDTW::feature_number_size << std::endl;
+        //std::copy(&cepstra[offset],
+        //          &cepstra[offset + FeatureTypeDTW::feature_number_size],
+        //          mfcc_vector.begin());
+        
+        FeatureTypeDTW::FeatureVector mfcc_vector(cepstra);
 
         mfcc_features.push_back(mfcc_vector);
 
