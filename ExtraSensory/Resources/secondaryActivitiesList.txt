@@ -5,6 +5,7 @@ Playing lacrosse
 Skateboarding
 Playing soccer
 Playing frisbee
+Exercising
 Stretching
 Yoga
 Elliptical machine
@@ -24,6 +25,7 @@ Dancing
 Listening to music
 Playing musical instrument
 Singing
+Wistling
 Playing videogames
 Playing phone-games
 Relaxing
@@ -62,6 +64,8 @@ At a bar
 At a concert
 At a party
 At the beach
+At the pool
+At the gym
 At a restaurant
 Outside
 Indoors
