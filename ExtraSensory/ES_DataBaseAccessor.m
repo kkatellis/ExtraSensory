@@ -556,7 +556,8 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR,MFCC_FILE_DUR, nil];
+    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,MFCC_FILE_DUR, nil];
+//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR,MFCC_FILE_DUR, nil];
 //    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE, nil];
     
     return arr;

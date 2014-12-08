@@ -1262,7 +1262,7 @@
 				);
 				New_Setting = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "83752933-00e1-4107-8bb2-a3be6ac9b19f";
+				PROVISIONING_PROFILE = "80f708ec-f3ef-419a-978c-3ff427e851e4";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
