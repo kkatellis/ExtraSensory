@@ -310,9 +310,27 @@
     NSDateComponents *comps = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)
                                      fromDate:date];
     NSDate *today = [cal dateFromComponents:comps];
-    NSNumber *todayNum = [NSNumber numberWithFloat:[today timeIntervalSince1970]];
+    NSNumber *todayNum = [NSNumber numberWithDouble:[today timeIntervalSince1970]];
     
     return todayNum;
+}
+
++ (NSInteger) howManyUnlabeledActivitiesToday
+{
+    NSNumber *todayNum = [self getTimestampOfTodaysStart];
+    NSNumber *now = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+    NSArray *todaysActivities = [self getActivitiesFrom:todayNum to:now];
+    
+    NSInteger numUnlabeled = 0;
+    for (ES_Activity *act in todaysActivities)
+    {
+        if (!act.userCorrection)
+        {
+            numUnlabeled ++;
+        }
+    }
+    
+    return numUnlabeled;
 }
 
 + (NSMutableDictionary *) getTodaysCounts

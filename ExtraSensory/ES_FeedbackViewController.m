@@ -426,6 +426,8 @@
             break;
     }
     
+    [[self appDelegate] updateApplicationBadge];
+    
 }
 
 - (void) submitFeedbackForActivityEvent:(ES_ActivityEvent *)actEvent

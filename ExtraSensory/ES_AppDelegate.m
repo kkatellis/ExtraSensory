@@ -148,6 +148,8 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:message delegate:self cancelButtonTitle:@"o.k." otherButtonTitles: nil];
         [alert show];
     }
+    
+    [self updateApplicationBadge];
 }
 
 
@@ -310,6 +312,12 @@
 
 
 
+
+- (void) updateApplicationBadge
+{
+    NSInteger numUnlabeled = [ES_DataBaseAccessor howManyUnlabeledActivitiesToday];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:numUnlabeled];
+}
 
 - (void) userTurnedOffDataCollection
 {
