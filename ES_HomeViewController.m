@@ -86,7 +86,7 @@
             activityLabel = activity.serverPrediction;
         }
         
-        if ([activityLabel isEqualToString:@"none"] || [activityLabel isEqualToString:@"Don't remember"])
+        if ([activityLabel isEqualToString:@"none"] || [activityLabel isEqualToString:@"don't remember"])
         {
             activityLabel = nil;
         }
