@@ -292,6 +292,12 @@
         }
     }
     
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        NSLog(@"==== selected row from search results. closign search results...");
+        [self.searchDisplayController setActive:NO animated:YES];
+    }
+    
     NSLog(@"reload data");
     [self.tableView reloadData];
 }
