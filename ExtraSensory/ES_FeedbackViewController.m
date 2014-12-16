@@ -310,7 +310,7 @@
     NSArray *minuteChoices = [self choicesForMinutesValidFor];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController *)[storyboard instantiateViewControllerWithIdentifier:@"SelectionFromList"];
-    [selectionController setParametersCategory:VALID_FOR multiSelection:NO useIndex:NO choices:minuteChoices appliedLabels:nil frequentChoices:nil];
+    [selectionController setParametersCategory:VALID_FOR multiSelection:NO useIndex:NO choices:minuteChoices appliedLabels:nil frequentChoices:nil labelsPerSubject:nil];
     [self.navigationController pushViewController:selectionController animated:YES];
 }
 
@@ -473,6 +473,7 @@
     NSArray *choices = nil;
     NSMutableSet *appliedLabels = nil;
     NSArray *frequentChoices = nil;
+    NSDictionary *labelsPerSubject = nil;
     
     if ([segue.identifier isEqualToString:MAIN_ACTIVITY])
     {
@@ -496,6 +497,7 @@
         multiSelection = YES;
         useIndex = YES;
         choices = [ES_ActivitiesStrings secondaryActivities];
+        labelsPerSubject = [ES_ActivitiesStrings secondaryActivitiesPerSubject];
         ES_AppDelegate *appDelegate = (ES_AppDelegate *)[UIApplication sharedApplication].delegate;
         if ([appDelegate.user.settings.homeSensingParticipant boolValue])
         {
@@ -527,7 +529,7 @@
         return;
     }
     
-    [selectionController setParametersCategory:segue.identifier multiSelection:multiSelection useIndex:useIndex choices:choices appliedLabels:appliedLabels frequentChoices:frequentChoices];
+    [selectionController setParametersCategory:segue.identifier multiSelection:multiSelection useIndex:useIndex choices:choices appliedLabels:appliedLabels frequentChoices:frequentChoices labelsPerSubject:labelsPerSubject];
 }
 
 -(IBAction)editedLabels:(UIStoryboardSegue *)segue

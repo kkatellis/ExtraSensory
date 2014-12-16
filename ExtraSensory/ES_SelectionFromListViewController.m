@@ -22,7 +22,7 @@
 @implementation ES_SelectionFromListViewController
 
 
-- (void) setParametersCategory:(NSString *)category multiSelection:(BOOL)multiSelection useIndex:(BOOL)useIndex choices:(NSArray *)choices appliedLabels:(NSMutableSet *)appliedLabels frequentChoices:(NSArray *)frequentChoices
+- (void) setParametersCategory:(NSString *)category multiSelection:(BOOL)multiSelection useIndex:(BOOL)useIndex choices:(NSArray *)choices appliedLabels:(NSMutableSet *)appliedLabels frequentChoices:(NSArray *)frequentChoices labelsPerSubject:(NSDictionary *)labelsPerSubject
 {
     [self setCategory:category];
     [self setMultiSelection:multiSelection];
@@ -30,6 +30,7 @@
     [self setChoices:choices];
     [self setAppliedLabels:appliedLabels];
     [self setFrequentChoices:frequentChoices];
+    [self setLabelsPerSubject:labelsPerSubject];
 }
 
 - (id) initWithStyle:(UITableViewStyle)style
@@ -65,6 +66,18 @@
         self.sections = [NSMutableArray arrayWithCapacity:10];
         self.sectionNames = [NSMutableArray arrayWithCapacity:10];
         self.sectionHeaders = [NSMutableArray arrayWithCapacity:10];
+        
+        if (self.labelsPerSubject)
+        {
+            // Then add a section for each subject:
+            for (NSString *subject in [[self.labelsPerSubject allKeys] sortedArrayUsingSelector:@selector(compare:)])
+            {
+                NSArray *labelsOfThisSubject = [self.labelsPerSubject valueForKey:subject];
+                [self.sections addObject:labelsOfThisSubject];
+                [self.sectionNames addObject:subject];
+                [self.sectionHeaders addObject:subject];
+            }
+        }
         
         if (self.frequentChoices)
         {
