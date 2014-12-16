@@ -142,6 +142,7 @@
 {
     _multiSelection = multiSelection;
     [self.tableView setAllowsMultipleSelection:multiSelection];
+    [self.searchDisplayController.searchResultsTableView setAllowsMultipleSelection:multiSelection];
 }
 
 #pragma mark - Table view data source
@@ -306,6 +307,11 @@
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [self removeFromAppliedLabelsCellToRemove:cell];
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        [self.searchDisplayController setActive:NO animated:YES];
+    }
     [self.tableView reloadData];
 }
 
