@@ -317,7 +317,12 @@
             predictedActivity = @"Sitting";
             NSLog(@"[networkAccessor] Changing the predicted activity driving (deprecated) to be sitting");
         }
-        
+        if ([predictedActivity isEqualToString:@"Standing"])
+        {
+            predictedActivity = @"Standing in place";
+            NSLog(@"[networkAccessor] Changing the predicted activity standing (deprecated) to be 'Standing in place'");
+        }
+
         NSString *uploadedZipFile = [response objectForKey:@"filename"];
         
         ES_AppDelegate *appDelegate = [self appDelegate];

@@ -36,7 +36,7 @@ static NSArray *mainActivitiesColorList = nil;
     
     if (!mainActivitiesList)
     {
-        mainActivitiesList = @[LYING_DOWN, SITTING, STANDING, WALKING, RUNNING, BICYCLING];
+        mainActivitiesList = [self loadStringArrayFromTextFile:@"mainActivitiesList"];//@[LYING_DOWN, SITTING, STANDING, WALKING, RUNNING, BICYCLING];
     }
     
     return mainActivitiesList;

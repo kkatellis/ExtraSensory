@@ -67,6 +67,14 @@
         self.sectionNames = [NSMutableArray arrayWithCapacity:10];
         self.sectionHeaders = [NSMutableArray arrayWithCapacity:10];
         
+        if (self.appliedLabels && [self.appliedLabels count] > 0)
+        {
+            NSArray *selectedLabels = [[self.appliedLabels allObjects] sortedArrayUsingSelector:@selector(compare:)];
+            [self.sections addObject:selectedLabels];
+            [self.sectionNames addObject:@"Selected"];
+            [self.sectionHeaders addObject:@"Selected"];
+        }
+        
         if (self.labelsPerSubject)
         {
             // Then add a section for each subject:
@@ -100,16 +108,24 @@
                 {
                     [self.sections addObject:latestSection];
                     [self.sectionNames addObject:latestLetter];
-                    if ((!self.frequentChoices) || ([self.sections count] > 2))
+                    if ([firstLetter isEqualToString:@"A"])
                     {
-                        // Then we don't want this added section to have a header:
-                        [self.sectionHeaders addObject:@""];
+                        [self.sectionHeaders addObject:@"All labels"];
                     }
                     else
                     {
-                        // Then there was a frequent section and now we added the first alphabetic section. Lets give it a headline:
-                        [self.sectionHeaders addObject:@"All labels"];
+                        [self.sectionHeaders addObject:@""];
                     }
+//                    if ((!self.frequentChoices) || ([self.sections count] > 2))
+//                    {
+//                        // Then we don't want this added section to have a header:
+//                        [self.sectionHeaders addObject:@""];
+//                    }
+//                    else
+//                    {
+//                        // Then there was a frequent section and now we added the first alphabetic section. Lets give it a headline:
+//                        [self.sectionHeaders addObject:@"All labels"];
+//                    }
                 }
                 // Start the new letter section:
                 latestLetter = firstLetter;
