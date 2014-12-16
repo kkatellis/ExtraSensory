@@ -75,8 +75,11 @@
 {
     NSLog(@"[HistoryTableViewController] Scrolling to bottom");
     int lastRowIndex = (int)[self tableView:self.tableView numberOfRowsInSection:0] - 1;
-    NSIndexPath *idp = [NSIndexPath indexPathForRow:lastRowIndex inSection:0];
-    [self.tableView scrollToRowAtIndexPath:idp atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    if (lastRowIndex >= 0)
+    {
+        NSIndexPath *idp = [NSIndexPath indexPathForRow:lastRowIndex inSection:0];
+        [self.tableView scrollToRowAtIndexPath:idp atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
 }
 
 - (void) clearMarkZone
