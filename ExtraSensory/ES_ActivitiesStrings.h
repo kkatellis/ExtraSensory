@@ -18,6 +18,8 @@
 
 +(NSArray *) secondaryActivities;
 
++(NSDictionary *) secondaryActivitiesPerSubject;
+
 +(NSArray *)moods;
 
 +(NSArray *)homeSensingLabels;

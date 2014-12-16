@@ -26,6 +26,7 @@
 
 static NSArray *mainActivitiesList = nil;
 static NSArray *secondaryActivitiesList = nil;
+static NSDictionary *secondaryActivitiesPerSubject = nil;
 static NSArray *moodsList = nil;
 static NSArray *homeSensingList = nil;
 
@@ -91,6 +92,13 @@ static NSArray *mainActivitiesColorList = nil;
 
 + (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename
 {
+    NSDictionary *dictRef = nil;
+    NSArray *arr = [self loadStringArrayFromTextFile:resourceFilename andLoadSubjectsDictionaryInto:&dictRef];
+    return arr;
+}
+
++ (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename andLoadSubjectsDictionaryInto:(NSDictionary **)dictRef
+{
     NSString *resourceFilePath = [[NSBundle mainBundle] pathForResource:resourceFilename ofType:@"txt"];
     NSError *err = nil;
     NSString *allStrings = [NSString stringWithContentsOfFile:resourceFilePath encoding:NSUTF8StringEncoding error:&err];
@@ -110,19 +118,66 @@ static NSArray *mainActivitiesColorList = nil;
     
     NSLog(@"[activitiesStrings] Loaded %lu labels from %@.",(unsigned long)sortedLabels.count,resourceFilename);
     
+    // See if some of the strings include specification of keys/subjects:
+    NSMutableDictionary *dict = [NSMutableDictionary new];
+    for (int ii = 0; ii < sortedLabels.count; ii ++)
+    {
+        NSString *line = [sortedLabels objectAtIndex:ii];
+        NSArray *parts = [line componentsSeparatedByString:@"|"];
+        if ([parts count] > 1)
+        {
+            // Then the first part is the label itself:
+            NSString *theLabel = parts[0];
+            [sortedLabels replaceObjectAtIndex:ii withObject:theLabel];
+            // And the second part should be the label's relevant subjects, separated by comma:
+            NSArray *subjects = [parts[1] componentsSeparatedByString:@","];
+            for (NSString *subject in subjects)
+            {
+                if ([dict objectForKey:subject])
+                {
+                    [[dict objectForKey:subject] addObject:theLabel];
+                }
+                else
+                {
+                    [dict setObject:[NSMutableArray new] forKey:subject];
+                }
+            }
+        }
+    }
+    
+    // Assign the created dictionary to the reference:
+    *dictRef = dict;
+    
     return sortedLabels;
+}
+
++ (void) loadSecondary
+{
+    NSDictionary *subjDict = nil;
+    secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList" andLoadSubjectsDictionaryInto:&subjDict];
+    secondaryActivitiesPerSubject = subjDict;
+    NSLog(@"[activitiesStrings] Loaded secondary subjects: %@",subjDict);
 }
 
 +(NSArray *)secondaryActivities {
     
     if (!secondaryActivitiesList)
     {
-        
-        secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList"];
+        [self loadSecondary];
     }
     
     return secondaryActivitiesList;
     
+}
+
++(NSDictionary *)secondaryActivitiesPerSubject
+{
+    if (!secondaryActivitiesList)
+    {
+        [self loadSecondary];
+    }
+    
+    return secondaryActivitiesPerSubject;
 }
 
 

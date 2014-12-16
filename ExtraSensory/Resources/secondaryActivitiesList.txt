@@ -26,7 +26,7 @@ Listening to music
 Playing musical instrument
 Singing
 Wistling
-Playing videogames
+Playing videogames|Leisure
 Playing phone-games
 Relaxing
 Strolling
@@ -55,15 +55,15 @@ Texting
 Surfing the internet
 Computer work
 Studying
-In class
+In class|Location
 In a meeting
-At home
-At work
+At home|Location
+At work|Location
 At school
 At a bar
 At a concert
-At a party
-At the beach
+At a party|Location,Leisure
+At the beach|Location,Leisure
 At the pool
 At the gym
 At a restaurant
