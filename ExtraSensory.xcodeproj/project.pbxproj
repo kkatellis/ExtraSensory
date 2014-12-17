@@ -18,6 +18,8 @@
 		4E5C5E6919A66D4A00B801BC /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6719A66D4A00B801BC /* back.png */; };
 		4E5C5E6A19A66D4A00B801BC /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E5C5E6819A66D4A00B801BC /* edit.png */; };
 		4E6F48A51A40E8CE00055DAF /* mainActivitiesList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E6F48A41A40E8CE00055DAF /* mainActivitiesList.txt */; };
+		4E6F48A71A421A9500055DAF /* Standing and moving.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E6F48A61A421A9400055DAF /* Standing and moving.png */; };
+		4E6F48A91A421AA800055DAF /* Standing in place.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E6F48A81A421AA800055DAF /* Standing in place.png */; };
 		4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
 		4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */; };
@@ -184,6 +186,8 @@
 		4E5C5E6719A66D4A00B801BC /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		4E5C5E6819A66D4A00B801BC /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
 		4E6F48A41A40E8CE00055DAF /* mainActivitiesList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mainActivitiesList.txt; sourceTree = "<group>"; };
+		4E6F48A61A421A9400055DAF /* Standing and moving.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Standing and moving.png"; sourceTree = "<group>"; };
+		4E6F48A81A421AA800055DAF /* Standing in place.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Standing in place.png"; sourceTree = "<group>"; };
 		4E71BD4819BDA53800BA648B /* ES_SelectionFromListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SelectionFromListViewController.h; sourceTree = "<group>"; };
 		4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SelectionFromListViewController.m; sourceTree = "<group>"; };
 		4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_AlertViewWithUserInfo.h; sourceTree = "<group>"; };
@@ -476,6 +480,8 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4E6F48A81A421AA800055DAF /* Standing in place.png */,
+				4E6F48A61A421A9400055DAF /* Standing and moving.png */,
 				4E4047BC1A1FAD8D00C1D0DF /* textFiles */,
 				4E5C5D93199F6C7F00B801BC /* redCircle.png */,
 				4291F1C4199A7F29008EDCA4 /* calendar */,
@@ -977,6 +983,7 @@
 				703B3652196E3FD100D5D80B /* stats_pie_chart.png in Resources */,
 				4E4047C21A23B5BE00C1D0DF /* moodsList.txt in Resources */,
 				4E4047C01A1FDDF700C1D0DF /* secondaryActivitiesList.txt in Resources */,
+				4E6F48A71A421A9500055DAF /* Standing and moving.png in Resources */,
 				70B8A94B18F87D230076A4F5 /* Sitting.png in Resources */,
 				70B8A93918F87D230076A4F5 /* indicator-driving@2x.png in Resources */,
 				70B8A95518F87D230076A4F5 /* network.png in Resources */,
@@ -1002,6 +1009,7 @@
 				70B8A96018F87D230076A4F5 /* favorite.png in Resources */,
 				70B8A95B18F87D230076A4F5 /* default_playlist.json in Resources */,
 				70B8A95C18F87D230076A4F5 /* icon-ipad.png in Resources */,
+				4E6F48A91A421AA800055DAF /* Standing in place.png in Resources */,
 				70B8A93418F87D230076A4F5 /* exercising.png in Resources */,
 				703B3668196E477500D5D80B /* text-plus-icon.png in Resources */,
 				9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */,
