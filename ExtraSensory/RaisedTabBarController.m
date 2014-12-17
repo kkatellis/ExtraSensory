@@ -183,6 +183,7 @@
 
 -(void) activeFeedback:(UIButton*)button
 {
+    NSLog(@"[raisedTabBar] Active feedback button pressed.");
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     ES_FeedbackViewController *feedbackController = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     feedbackController.feedbackType = ES_FeedbackTypeActive;
