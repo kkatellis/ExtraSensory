@@ -15,12 +15,14 @@ import subprocess;
 import json;
 import zipfile;
 import numpy as np;
-import mlpy;
 import shutil;
 
 
-g__output_superdir = '/Users/yonatan/Documents/collected_data/uuids';
-g__input_superdir = '/Library/WebServer/Documents/rmw/user_input';
+##g__output_superdir = '/Users/yonatan/Documents/data_collection/uuids';
+##g__input_superdir = '/Library/WebServer/Documents/rmw/user_input';
+g__output_superdir = 'data/raw_data';
+g__input_superdir = 'data/raw_zipped_data';
+
 
 g__lf_fields = [\
     'altitude','floor','horizontal_accuracy','vertical_accuracy',\
@@ -155,9 +157,17 @@ def analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp
     out_jlist = {'active_feedback':'true','uuid':uuid,'timestamp':timestamp};
 
     out_jlist['corrected_activity'] = in_jlist['mainActivity'];
-    out_jlist['secondary_activities'] = in_jlist['secondaryActivities'];
+
+    if 'secondaryActivities' in in_jlist:
+        out_jlist['secondary_activities'] = in_jlist['secondaryActivities'];
+        pass;
+    
     if 'mood' in in_jlist:
         out_jlist['mood'] = in_jlist['mood'];
+        pass;
+
+    if 'moods' in in_jlist:
+        out_jlist['moods'] = in_jlist['moods'];
         pass;
 
     print "++ Analyzed active feedback file.";
@@ -271,7 +281,7 @@ def main():
         pass;
     fid.close();
 
-    skip_existing = True;
+    skip_existing = False;
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;

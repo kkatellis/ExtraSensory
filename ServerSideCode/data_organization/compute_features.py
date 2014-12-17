@@ -83,10 +83,11 @@ x: (T x 1) 1 dimensional time series.
 Output:
 '''
 def get_1d_statistics(x):
+    mom3    = scipy.stats.moment(x,moment=3);
     stats   = [\
         numpy.mean(x),\
         numpy.std(x),\
-        scipy.stats.moment(x,moment=3)**(1./3.),\
+        numpy.sign(mom3)*(abs(mom3)**(1./3.)),\
         scipy.stats.moment(x,moment=4)**(1./4.),\
         scipy.stats.entropy(abs(x)),\
         numpy.median(x),\
@@ -210,6 +211,10 @@ Output:
 location_feat: 
 '''
 def get_location_features(X,start_timestamp):
+    # Check if there is actual location data:
+    if len(X.shape) <= 0:
+        return None;
+    
     # First filter out too-old location-updates (from the cache):
     valid_inds      = numpy.where(X[:,LOC_TIME] >= (start_timestamp-0.5))[0];
     X               = X[valid_inds,:];
@@ -344,7 +349,7 @@ def distance_between_geographic_points(r_lat1,r_long1,r_lat2,r_long2):
 
 def main():
     uuid_dir        = 'uuids/EAF71BC5-5744-47E0-A883-CBE0F77BF6B9';
-    instance        = '1415321025'; #'1415333142';#limor-driving#'1415320845';#sitting
+    instance        = '1416418500'; #'1415333142';#limor-driving#'1415320845';#sitting
     instance_dir    = os.path.join(uuid_dir,instance);
     timestamp       = float(instance);
     

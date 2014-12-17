@@ -27,18 +27,24 @@ def get_instance_labels(instance_dir):
     main_activity           = feedback['corrected_activity'];
     
     secondary_activities    = [];
-    for act in feedback['secondary_activities']:
-        if len(act) > 0:
-            secondary_activities.append(act);
-            pass; # end if len(act)....
-        pass; # end for act...
+    if 'secondary_activities' in feedback:
+        for act in feedback['secondary_activities']:
+            if len(act) > 0:
+                secondary_activities.append(act);
+                pass; # end if len(act)....
+            pass; # end for act...
+        pass; # end if secondary in feedback...
 
-    mood                    = feedback['mood'];
-    if (mood == '(NULL)'):
-        mood                = None;
-        pass;
-
-    return (main_activity,secondary_activities,mood);
+    moods                   = [];
+    if 'moods' in feedback:
+        for mood in feedback['moods']:
+            if len(mood) > 0:
+                moods.append(mood);
+                pass; # end if len(mood)...
+            pass; # end for mood
+        pass; # end if moods in feedback...
+    
+    return (main_activity,secondary_activities,moods);
 
 def raise_key_count(count_dict,key):
     if key not in count_dict:
@@ -81,7 +87,7 @@ def statistics_per_user(uuid):
             
             (main_activity,\
              secondary_activities,\
-             mood)          = get_instance_labels(instance_dir);
+             moods)         = get_instance_labels(instance_dir);
 
             if main_activity == None:
                 continue;
@@ -92,7 +98,7 @@ def statistics_per_user(uuid):
             for sec_act in secondary_activities:
                 secondary_counts    = raise_key_count(secondary_counts,sec_act);
                 pass;
-            if mood != None:
+            for mood in moods:
                 mood_counts = raise_key_count(mood_counts,mood);
                 pass;
             
@@ -116,7 +122,7 @@ def statistics_per_user(uuid):
 
 
 def reward_for_participation(user_stats):
-    
+    return;
 
 def main():
 
