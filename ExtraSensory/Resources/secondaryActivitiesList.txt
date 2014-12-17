@@ -1,85 +1,85 @@
-Lifting weights
-Playing baseball
-Playing basketball
-Playing lacrosse
-Skateboarding
-Playing soccer
-Playing frisbee
-Exercising
-Stretching
-Yoga
-Elliptical machine
-Treadmill
-Stationary bike
-Cooking
-Cleaning
-Gardening
-Doing laundry
-Mowing the lawn
-Raking leaves
-Vacuuming
-Washing dishes
-Washing car
-Manual labor
-Dancing
-Listening to music
-Playing musical instrument
-Singing
-Wistling
+Lifting weights|Sports
+Playing baseball|Sports
+Playing basketball|Sports
+Playing lacrosse|Sports
+Skateboarding|Sports|Transportation
+Playing soccer|Sports
+Playing frisbee|Sports
+Exercising|Sports
+Stretching|Sports
+Yoga|Sports
+Elliptical machine|Sports
+Treadmill|Sports
+Stationary bike|Sports
+Cooking|Home
+Cleaning|Home
+Gardening|Home
+Doing laundry|Home
+Mowing the lawn|Home
+Raking leaves|Home
+Vacuuming|Home
+Washing dishes|Home
+Washing car|Home
+Manual labor|Home
+Dancing|Leisure
+Listening to music|Leisure
+Playing musical instrument|Leisure
+Singing|Leisure
+Wistling|Leisure
 Playing videogames|Leisure
-Playing phone-games
-Relaxing
-Strolling
-Hiking
+Playing phone-games|Leisure
+Relaxing|Leisure
+Strolling|Leisure
+Hiking|Leisure
 Shopping
-Watching TV
-Talking with friends
-Reading a book
-Drinking (alcohol)
-Eating
-Drinking (non-alcohol)
-Sleeping
-Toilet
-Bath
-Shower
-Stairs - going up
-Stairs - going down
-Limping
-Jumping
-Laughing
-Crying
-Lab work
-Written work
-Drawing
-Texting
-Surfing the internet
-Computer work
-Studying
+Watching TV|Leisure
+Talking with friends|Leisure
+Reading a book|Leisure
+Drinking (alcohol)|Leisure
+Eating|Basic needs
+Drinking (non-alcohol)|Leisure|Basic needs
+Sleeping|Basic needs
+Toilet|Basic needs
+Bath|Basic needs
+Shower|Basic needs
+Stairs - going up|Physical
+Stairs - going down|Physical
+Limping|Physical
+Jumping|Physical
+Laughing|Physical
+Crying|Physical
+Lab work|Work
+Written work|Work
+Drawing|Work
+Texting|Work,Leisure
+Surfing the internet|Work,Leisure
+Computer work|Work
+Studying|Work
 In class|Location
-In a meeting
+In a meeting|Work,Location
 At home|Location
-At work|Location
-At school
-At a bar
-At a concert
+At work|Location,Work
+At school|Location,Work
+At a bar|Location,Leisure
+At a concert|Location,Leisure
 At a party|Location,Leisure
 At the beach|Location,Leisure
-At the pool
-At the gym
-At a restaurant
-Outside
-Indoors
-On a bus
-On a plane
-On a train
-Elevator
-Motorbike
-Riding an animal
-Drive - I'm the driver
-Drive - I'm a passenger
-In a car
-Phone in pocket
-Phone in hand
-Phone in bag
-Phone on table
-Phone away from me
+At the pool|Sports,Location,Leisure
+At the gym|Sports,Location,Leisure
+At a restaurant|Location,Leisure
+Outside|Location
+Indoors|Location
+On a bus|Location,Transportation
+On a plane|Location,Transportation
+On a train|Location,Transportation
+Elevator|Location,Transportation
+Motorbike|Location,Transportation
+Riding an animal|Location,Transportation
+Drive - I'm the driver|Transportation
+Drive - I'm a passenger|Transportation
+In a car|Location,Transportation
+Phone in pocket|Phone
+Phone in hand|Phone
+Phone in bag|Phone
+Phone on table|Phone
+Phone away from me|Phone

@@ -97,6 +97,7 @@
         
         NSString *latestLetter = @"";
         NSMutableArray *latestSection = nil;
+        BOOL startOfAlphabet = YES;
         for (NSString *label in self.choices)
         {
             NSString *firstLetter = [label substringToIndex:1];
@@ -108,9 +109,10 @@
                 {
                     [self.sections addObject:latestSection];
                     [self.sectionNames addObject:latestLetter];
-                    if ([firstLetter isEqualToString:@"A"])
+                    if (startOfAlphabet)
                     {
                         [self.sectionHeaders addObject:@"All labels"];
+                        startOfAlphabet = NO;
                     }
                     else
                     {

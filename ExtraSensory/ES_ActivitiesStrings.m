@@ -133,14 +133,11 @@ static NSArray *mainActivitiesColorList = nil;
             NSArray *subjects = [parts[1] componentsSeparatedByString:@","];
             for (NSString *subject in subjects)
             {
-                if ([dict objectForKey:subject])
-                {
-                    [[dict objectForKey:subject] addObject:theLabel];
-                }
-                else
+                if (![dict objectForKey:subject])
                 {
                     [dict setObject:[NSMutableArray new] forKey:subject];
                 }
+                [[dict objectForKey:subject] addObject:theLabel];
             }
         }
     }
