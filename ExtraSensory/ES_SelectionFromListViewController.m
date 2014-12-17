@@ -22,11 +22,12 @@
 @implementation ES_SelectionFromListViewController
 
 
-- (void) setParametersCategory:(NSString *)category multiSelection:(BOOL)multiSelection useIndex:(BOOL)useIndex choices:(NSArray *)choices appliedLabels:(NSMutableSet *)appliedLabels frequentChoices:(NSArray *)frequentChoices labelsPerSubject:(NSDictionary *)labelsPerSubject
+- (void) setParametersCategory:(NSString *)category multiSelection:(BOOL)multiSelection useIndex:(BOOL)useIndex useAlphabeticIndex:(BOOL)useAlphabeticIndex choices:(NSArray *)choices appliedLabels:(NSMutableSet *)appliedLabels frequentChoices:(NSArray *)frequentChoices labelsPerSubject:(NSDictionary *)labelsPerSubject
 {
     [self setCategory:category];
     [self setMultiSelection:multiSelection];
     [self setUseIndex:useIndex];
+    [self setUseAlphabeticIndex:useAlphabeticIndex];
     [self setChoices:choices];
     [self setAppliedLabels:appliedLabels];
     [self setFrequentChoices:frequentChoices];
@@ -57,6 +58,7 @@
 
 - (void) recalculateTable
 {
+    
     // Start dividing to sections:
     if (self.useIndex)
     {
@@ -95,52 +97,20 @@
             [self.sectionHeaders addObject:@"Frequently used"];
         }
         
-        NSString *latestLetter = @"";
-        NSMutableArray *latestSection = nil;
-        BOOL startOfAlphabet = YES;
-        for (NSString *label in self.choices)
+        if (self.useAlphabeticIndex)
         {
-            NSString *firstLetter = [label substringToIndex:1];
-            if (![firstLetter isEqualToString:latestLetter])
-            {
-                // Then we have a new letter.
-                // Should we close the previous section:
-                if (latestSection)
-                {
-                    [self.sections addObject:latestSection];
-                    [self.sectionNames addObject:latestLetter];
-                    if (startOfAlphabet)
-                    {
-                        [self.sectionHeaders addObject:@"All labels"];
-                        startOfAlphabet = NO;
-                    }
-                    else
-                    {
-                        [self.sectionHeaders addObject:@""];
-                    }
-//                    if ((!self.frequentChoices) || ([self.sections count] > 2))
-//                    {
-//                        // Then we don't want this added section to have a header:
-//                        [self.sectionHeaders addObject:@""];
-//                    }
-//                    else
-//                    {
-//                        // Then there was a frequent section and now we added the first alphabetic section. Lets give it a headline:
-//                        [self.sectionHeaders addObject:@"All labels"];
-//                    }
-                }
-                // Start the new letter section:
-                latestLetter = firstLetter;
-                latestSection = [NSMutableArray array];
-            }
-            // Add this new label to the latest section:
-            [latestSection addObject:label];
+            // Then add index for each letter:
+            [self addAlphabeticIndexing];
+        }
+        else
+        {
+            // Then add a single section (with single index) for all labels:
+            NSArray *allLabels = [self.choices sortedArrayUsingSelector:@selector(compare:)];
+            [self.sections addObject:allLabels];
+            [self.sectionHeaders addObject:@"All labels"];
+            [self.sectionNames addObject:@"All labels"];
         }
         
-        // Add the last section:
-        [self.sections addObject:latestSection];
-        [self.sectionNames addObject:latestLetter];
-        [self.sectionHeaders addObject:@""];
     }
     else
     {
@@ -149,6 +119,46 @@
     }
     
     [self.tableView reloadData];
+}
+
+- (void) addAlphabeticIndexing
+{
+    NSString *latestLetter = @"";
+    NSMutableArray *latestSection = nil;
+    BOOL startOfAlphabet = YES;
+    for (NSString *label in self.choices)
+    {
+        NSString *firstLetter = [label substringToIndex:1];
+        if (![firstLetter isEqualToString:latestLetter])
+        {
+            // Then we have a new letter.
+            // Should we close the previous section:
+            if (latestSection)
+            {
+                [self.sections addObject:latestSection];
+                [self.sectionNames addObject:latestLetter];
+                if (startOfAlphabet)
+                {
+                    [self.sectionHeaders addObject:@"All labels"];
+                    startOfAlphabet = NO;
+                }
+                else
+                {
+                    [self.sectionHeaders addObject:@""];
+                }
+            }
+            // Start the new letter section:
+            latestLetter = firstLetter;
+            latestSection = [NSMutableArray array];
+        }
+        // Add this new label to the latest section:
+        [latestSection addObject:label];
+    }
+    
+    // Add the last section:
+    [self.sections addObject:latestSection];
+    [self.sectionNames addObject:latestLetter];
+    [self.sectionHeaders addObject:@""];
 }
 
 - (void) viewWillAppear:(BOOL)animated

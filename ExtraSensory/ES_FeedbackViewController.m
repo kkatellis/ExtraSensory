@@ -310,7 +310,7 @@
     NSArray *minuteChoices = [self choicesForMinutesValidFor];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     ES_SelectionFromListViewController *selectionController = (ES_SelectionFromListViewController *)[storyboard instantiateViewControllerWithIdentifier:@"SelectionFromList"];
-    [selectionController setParametersCategory:VALID_FOR multiSelection:NO useIndex:NO choices:minuteChoices appliedLabels:nil frequentChoices:nil labelsPerSubject:nil];
+    [selectionController setParametersCategory:VALID_FOR multiSelection:NO useIndex:NO useAlphabeticIndex:NO choices:minuteChoices appliedLabels:nil frequentChoices:nil labelsPerSubject:nil];
     [self.navigationController pushViewController:selectionController animated:YES];
 }
 
@@ -470,6 +470,7 @@
     
     BOOL multiSelection;
     BOOL useIndex;
+    BOOL useAlphabeticIndex;
     NSArray *choices = nil;
     NSMutableSet *appliedLabels = nil;
     NSArray *frequentChoices = nil;
@@ -479,6 +480,7 @@
     {
         multiSelection = NO;
         useIndex = NO;
+        useAlphabeticIndex = NO;
         choices = [ES_ActivitiesStrings mainActivities];
         if (self.feedbackType != ES_FeedbackTypeActive)
         {
@@ -496,6 +498,7 @@
     {
         multiSelection = YES;
         useIndex = YES;
+        useAlphabeticIndex = NO;
         choices = [ES_ActivitiesStrings secondaryActivities];
         labelsPerSubject = [ES_ActivitiesStrings secondaryActivitiesPerSubject];
         ES_AppDelegate *appDelegate = (ES_AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -516,6 +519,7 @@
     {
         multiSelection = YES;
         useIndex = YES;
+        useAlphabeticIndex = YES;
         choices = [ES_ActivitiesStrings moods];
         if (self.moods)
         {
@@ -529,7 +533,7 @@
         return;
     }
     
-    [selectionController setParametersCategory:segue.identifier multiSelection:multiSelection useIndex:useIndex choices:choices appliedLabels:appliedLabels frequentChoices:frequentChoices labelsPerSubject:labelsPerSubject];
+    [selectionController setParametersCategory:segue.identifier multiSelection:multiSelection useIndex:useIndex useAlphabeticIndex:useAlphabeticIndex choices:choices appliedLabels:appliedLabels frequentChoices:frequentChoices labelsPerSubject:labelsPerSubject];
 }
 
 -(IBAction)editedLabels:(UIStoryboardSegue *)segue
