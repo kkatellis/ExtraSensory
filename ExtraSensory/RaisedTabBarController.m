@@ -29,46 +29,14 @@
     return self;
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     NSLog(@"[raisedTabBar] View did load");
-    [super viewDidLoad];
-    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate setTabBarController:self];
-    NSLog(@"[raisedTabBar] Registered raisedTabBarController with the app delegate");
-//    [self.view addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
-	// Do any additional setup after loading the view.
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    NSLog(@"[raisedTabBar] View will appear");
     [self addCenterButtonWithImage:[UIImage imageNamed:@"text-plus-icon.png"] highlightImage:nil disabledImage:[UIImage imageNamed:@"text-plus-icon_gray.png"]];
     [self addRecordingImage:[UIImage imageNamed:@"redCircle.png"]];
     [self checkIfRecordingOrNot];
 }
 
-- (void) viewDidDisappear:(BOOL)animated
-{
-    NSLog(@"[raisedTabBar] View will disappear");
-    [self hidePlusButton];
-}
-
-//- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-//{
-//    NSLog(@"=== change in raisedTabBar.hidden");
-//    if ([keyPath isEqualToString:@"hidden"])
-//    {
-//        if (self.view.hidden)
-//        {
-//            [self hidePlusButton];
-//        }
-//        else
-//        {
-//            [self showPlusButton];
-//        }
-//    }
-//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -90,14 +58,24 @@
     return newImage;
 }
 
-- (void) disablePlussButton
+- (void) disablePlusButton
 {
-    [[self.view viewWithTag:PLUS_TAG] setUserInteractionEnabled:NO];
+    NSLog(@"[raisedTabBar] Disabling the plus button");
+    UIButton *plusButton = (UIButton *)[self.view viewWithTag:PLUS_TAG];
+    if (plusButton.enabled)
+    {
+        [plusButton setEnabled:NO];
+    }
 }
 
-- (void) enablePlussButton
+- (void) enablePlusButton
 {
-    [[self.view viewWithTag:PLUS_TAG] setUserInteractionEnabled:YES];
+    NSLog(@"[raisedTabBar] Enabling the plus button");
+    UIButton *plusButton = (UIButton *)[self.view viewWithTag:PLUS_TAG];
+    if (!plusButton.enabled)
+    {
+        [plusButton setEnabled:YES];
+    }
 }
 
 - (void) hideViewWithTag:(NSInteger)tag

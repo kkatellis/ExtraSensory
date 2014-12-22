@@ -559,6 +559,7 @@
     
     if (rtbc)
     {
+        NSLog(@"==== found rtbc. telling to show dot");
         [rtbc showRecordingImage];
     }
 }
@@ -571,7 +572,30 @@
     
     if (rtbc)
     {
+        NSLog(@"=== found rtbc. telling to hide dot");
         [rtbc hideRecordingImage];
+    }
+}
+
+- (void) disablePlusButton
+{
+    NSLog(@"[appDelegate] Disabling plus button.");
+    RaisedTabBarController *rtbc = (RaisedTabBarController *)self.window.rootViewController;
+    
+    if (rtbc)
+    {
+        [rtbc disablePlusButton];
+    }
+}
+
+- (void) enablePlusButton
+{
+    NSLog(@"[appDelegate] Enabling plus button.");
+    RaisedTabBarController *rtbc = (RaisedTabBarController *)self.window.rootViewController;
+    
+    if (rtbc)
+    {
+        [rtbc enablePlusButton];
     }
 }
 

@@ -45,7 +45,6 @@
 
 @property (strong, nonatomic) NSMutableArray *countLySiStWaRuBiDr;
 
-@property (strong, nonatomic) RaisedTabBarController *tabBarController;
 
 
 - (BOOL) userTurnedOnDataCollection;
@@ -56,6 +55,8 @@
 
 - (void) markRecordingRightNow;
 - (void) markNotRecordingRightNow;
+- (void) disablePlusButton;
+- (void) enablePlusButton;
 - (void) updateNetworkStackFromStorageFilesIfEmpty;
 - (NSString *) getFirstOnNetworkStack;
 - (BOOL) removeFromNetworkStackFile:(NSString *)filename;

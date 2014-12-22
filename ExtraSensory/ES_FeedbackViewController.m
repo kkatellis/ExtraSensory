@@ -18,7 +18,6 @@
 #import "ES_Mood.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
-#import "RaisedTabBarController.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -109,17 +108,12 @@
     if (self.presentingMinuteByMinuteHistory)
     {
         // Then we're back from the minute-by-minute history, and possibly edited some of the atomic activities, so the information we currently have here is no longer up to date. Need to pop back to History:
-        [self.navigationController popViewControllerAnimated:NO];
+        [self leaveFeedbackView];
         return;
     }
     [self.tableView reloadData];
-    [[self appDelegate].tabBarController disablePlussButton];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[self appDelegate].tabBarController enablePlussButton];
+    NSLog(@"[feedback] Feedback view will appear. Calling disable the plus button");
+    [[self appDelegate] disablePlusButton];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -345,6 +339,7 @@
     if (self.calledFromNotification)
     {
         [self.navigationController popViewControllerAnimated:YES];
+        [[self appDelegate] enablePlusButton];
         return;
     }
     
@@ -352,10 +347,12 @@
     {
         case ES_FeedbackTypeActive:
             [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            [[self appDelegate] enablePlusButton];
             break;
             
         case ES_FeedbackTypeActivityEvent:
             [self.navigationController popViewControllerAnimated:YES];
+            [[self appDelegate] enablePlusButton];
             break;
             
         case ES_FeedbackTypeAtomicActivity:
