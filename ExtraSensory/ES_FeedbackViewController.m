@@ -18,6 +18,7 @@
 #import "ES_Mood.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
+#import "RaisedTabBarController.h"
 
 #define MAIN_ACTIVITY @"Main Activity"
 #define SECONDARY_ACTIVITIES @"Secondary Activities"
@@ -112,6 +113,13 @@
         return;
     }
     [self.tableView reloadData];
+    [[self appDelegate].tabBarController disablePlussButton];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[self appDelegate].tabBarController enablePlussButton];
 }
 
 - (void)didReceiveMemoryWarning {

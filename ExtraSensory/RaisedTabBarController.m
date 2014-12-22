@@ -21,6 +21,7 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    NSLog(@"[raisedTabBar] init with nib name");
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -30,12 +31,44 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"[raisedTabBar] View did load");
     [super viewDidLoad];
-    [self addCenterButtonWithImage:[UIImage imageNamed:@"text-plus-icon.png"] highlightImage:nil];
-    [self addRecordingImage:[UIImage imageNamed:@"redCircle.png"]];
-    [self checkIfRecordingOrNot];
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate setTabBarController:self];
+    NSLog(@"[raisedTabBar] Registered raisedTabBarController with the app delegate");
+//    [self.view addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
 	// Do any additional setup after loading the view.
 }
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    NSLog(@"[raisedTabBar] View will appear");
+    [self addCenterButtonWithImage:[UIImage imageNamed:@"text-plus-icon.png"] highlightImage:nil disabledImage:[UIImage imageNamed:@"text-plus-icon_gray.png"]];
+    [self addRecordingImage:[UIImage imageNamed:@"redCircle.png"]];
+    [self checkIfRecordingOrNot];
+}
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    NSLog(@"[raisedTabBar] View will disappear");
+    [self hidePlusButton];
+}
+
+//- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+//{
+//    NSLog(@"=== change in raisedTabBar.hidden");
+//    if ([keyPath isEqualToString:@"hidden"])
+//    {
+//        if (self.view.hidden)
+//        {
+//            [self hidePlusButton];
+//        }
+//        else
+//        {
+//            [self showPlusButton];
+//        }
+//    }
+//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -55,6 +88,16 @@
     UIGraphicsEndImageContext();
     
     return newImage;
+}
+
+- (void) disablePlussButton
+{
+    [[self.view viewWithTag:PLUS_TAG] setUserInteractionEnabled:NO];
+}
+
+- (void) enablePlussButton
+{
+    [[self.view viewWithTag:PLUS_TAG] setUserInteractionEnabled:YES];
 }
 
 - (void) hideViewWithTag:(NSInteger)tag
@@ -131,7 +174,7 @@
     [self.view addSubview:imageView];
 }
 
--(void) addCenterButtonWithImage:(UIImage*)buttonImage highlightImage:(UIImage*)highlightImage
+-(void) addCenterButtonWithImage:(UIImage*)buttonImage highlightImage:(UIImage*)highlightImage disabledImage:(UIImage *)disabledImage
 {
     //begin tinting
     UIGraphicsBeginImageContextWithOptions (buttonImage.size, NO, [[UIScreen mainScreen] scale]); // for correct resolution on retina, thanks @MobileVet
@@ -161,6 +204,7 @@
     button.frame = CGRectMake(0.0, 0.0, buttonImage.size.width, buttonImage.size.height);
     [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [button setBackgroundImage:highlightImage forState:UIControlStateHighlighted];
+    [button setBackgroundImage:disabledImage forState:UIControlStateDisabled];
     
     CGFloat heightDifference = buttonImage.size.height - self.tabBar.frame.size.height;
     if (heightDifference < 0)

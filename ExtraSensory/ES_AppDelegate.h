@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "ES_Activity.h"
 
-@class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler;
+@class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler, RaisedTabBarController;
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
@@ -44,6 +44,8 @@
 @property (strong, nonatomic) ES_User *user;
 
 @property (strong, nonatomic) NSMutableArray *countLySiStWaRuBiDr;
+
+@property (strong, nonatomic) RaisedTabBarController *tabBarController;
 
 
 - (BOOL) userTurnedOnDataCollection;

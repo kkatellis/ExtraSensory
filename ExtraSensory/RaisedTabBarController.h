@@ -12,10 +12,12 @@
 
 -(void) addCenterButtonWithImage:(UIImage*)buttonImage highlightImage:(UIImage*)highlightImage;
 
+-(void) disablePlussButton;
+-(void) enablePlussButton;
 -(void) hidePlusButton;
 -(void) showPlusButton;
 -(void) hideRecordingImage;
 -(void) showRecordingImage;
-- (void)checkIfRecordingOrNot;
+-(void) checkIfRecordingOrNot;
 
 @end
