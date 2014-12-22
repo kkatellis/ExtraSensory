@@ -720,6 +720,8 @@
         feedback.feedbackType = ES_FeedbackTypeActivityEvent;
     }
     
+    //[feedback setHidesBottomBarWhenPushed:YES];
+    
     // Mark that we are moving to the feedback view:
     self.editingActivityEvent = YES;
     

@@ -1245,7 +1245,7 @@
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bf788b6f-3026-483c-8f59-cb45140069a6";
+				PROVISIONING_PROFILE = "92c2ae90-c60e-442f-8673-4ba55d2b60f7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
