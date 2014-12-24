@@ -86,6 +86,11 @@
                 [self.sections addObject:labelsOfThisSubject];
                 [self.sectionNames addObject:subject];
                 [self.sectionHeaders addObject:subject];
+                
+                // Add another dummy section to create a space between two index items:
+                [self.sections addObject:[NSArray arrayWithObjects:nil]];
+                [self.sectionNames addObject:@" "];
+                [self.sectionHeaders addObject:@""];
             }
         }
         
@@ -95,6 +100,11 @@
             [self.sections addObject:self.frequentChoices];
             [self.sectionNames addObject:@"frequent"];
             [self.sectionHeaders addObject:@"Frequently used"];
+            
+            // Add another dummy section to create a space between two index items:
+            [self.sections addObject:[NSArray arrayWithObjects:nil]];
+            [self.sectionNames addObject:@" "];
+            [self.sectionHeaders addObject:@""];
         }
         
         if (self.useAlphabeticIndex)
@@ -119,6 +129,22 @@
     }
     
     [self.tableView reloadData];
+    [self setIndexAppearance];
+}
+
+- (void) setIndexAppearance
+{
+    for (UIView *sview in [self.tableView subviews])
+    {
+        if ([sview respondsToSelector:@selector(setIndexColor:)])
+        {
+            NSLog(@"=== found sub view of type: %@.",[sview class]);
+            if ([sview respondsToSelector:@selector(setFont:)])
+            {
+                [sview performSelector:@selector(setFont:) withObject:[UIFont systemFontOfSize:15.0]];
+            }
+        }
+    }
 }
 
 - (void) addAlphabeticIndexing
@@ -240,7 +266,7 @@
         [_checkedArray addObject:indexPath];
         [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
     }
-    NSLog(@"cell returned is %@", cell.textLabel.text);
+//    NSLog(@"cell returned is %@", cell.textLabel.text);
     return cell;
 }
 
