@@ -9,6 +9,7 @@ import os.path;
 import json;
 import numpy;
 import sklearn.svm;
+import sklearn.linear_model;
 
 import collect_features;
 import annotation_retrieval;
@@ -76,6 +77,9 @@ def cross_validation(feats_per_uuid,main_per_uuid,secondary_per_uuid,mood_per_uu
     uuids                   = sorted(feats_per_uuid.keys());
 
     for ui in range(len(uuids)):
+        print "#"*30;
+        print "#### CV fold %d. Test uuid: %s" % (ui,uuids[ui]);
+        
         # Train set:
         train_uuids         = set(uuids);
         train_uuids.remove(uuids[ui]);
@@ -85,14 +89,17 @@ def cross_validation(feats_per_uuid,main_per_uuid,secondary_per_uuid,mood_per_uu
             secondary_per_uuid,mood_per_uuid);
 
         # Test set:
-        test_uuids          = [ui];
+        test_uuids          = [uuids[ui]];
         (test_labels,test_feats,test_uinds)  = collect_sublist_features(\
             test_uuids,feats_per_uuid,main_per_uuid,\
             secondary_per_uuid,mood_per_uuid);
 
+        print "### Train models...";
         model_per_sensor    = train_models(train_labels,train_feats,train_uinds);
-        class_prob          = classify(model_per_sensor,test_feats);
-        scores              = get_classification_scores(class_prob,test_labels,test_uinds);
+        print "### Classification probabilities...";
+        (class_prob,prob_tensors,sensor_vals)   = classify(model_per_sensor,test_feats);
+        print "### Calc scores...";
+        scores              = get_classification_scores(class_prob,prob_tensors,sensor_vals,test_labels,test_uinds);
         pdb.set_trace();
         pass; # end for ui...
 
@@ -101,7 +108,7 @@ def cross_validation(feats_per_uuid,main_per_uuid,secondary_per_uuid,mood_per_uu
 def get_valid_examples(feats):
     n_examples          = feats.shape[0];
     invalid             = numpy.where(numpy.isnan(feats));
-    invalid_inds        = set(invalid_inds[0]);
+    invalid_inds        = set(invalid[0]);
 
     valid_inds          = list(set(range(n_examples)).difference(invalid_inds));
     valid_examples      = feats[valid_inds,:];
@@ -126,7 +133,16 @@ def train_models(train_labels,train_feats,train_uinds):
             # Now go over every label and train a simple model for it:
             model_per_label     = [];
             for li in range(label_mat.shape[1]):
-                model           = train_model(label_mat[:,li],sensor_feats);
+                label_vec       = label_mat[:,li];
+                has_negatives   = not numpy.prod(label_vec,dtype=bool);
+                has_positives   = numpy.sum(label_vec) > 0;
+                if (has_negatives and has_positives):
+                    model       = train_single_model(label_vec,sensor_feats);
+                    print "%s. %s: %d." % (sensor,label_type,li);
+                    pass;
+                else:
+                    model       = None;
+                    pass;
                 model_per_label.append(model);
                 pass; # end for li...
 
@@ -139,62 +155,93 @@ def train_models(train_labels,train_feats,train_uinds):
     return model_per_sensor;
 
 def train_single_model(y,X):
-###############
+    single_model    = sklearn.linear_model.LogisticRegression(\
+        class_weight='auto',fit_intercept=True);
+    single_model.fit(X,y);
+    
     return single_model;
 
 def predict_with_single_model(X,single_model):
-###############
+    prob_mat        = single_model.predict_proba(X);
+    pos_ind         = single_model.label_.tolist().index(1);
+    prob_vec        = prob_mat[:,pos_ind];
+    
     return prob_vec;
 
 def classify(model_per_sensor,test_feats):
 
-    n_sensors   = len(test_feats.keys());
-    n_examples  = test_feats[0].shape[0];
+    sensor_vals = test_feats.keys();
+    n_sensors   = len(sensor_vals);
+    n_examples  = test_feats[sensor_vals[0]].shape[0];
+    label_types = model_per_sensor[sensor_vals[0]].keys();
+    
     class_prob  = {};
-    for label_type in test_labels.keys():
-        n_labels        = test_labels[label_type].shape[1];
+    prob_tensors= {};
+    for label_type in label_types:
+        n_labels        = len(model_per_sensor[sensor_vals[0]][label_type]);
         prob_tensor     = numpy.nan*numpy.ones((n_examples,n_labels,n_sensors));
 
-        for (si,sensor) in enumerate(test_feats.keys()):
-            X           = test_feats[sensor];
+        for (si,sensor) in enumerate(sensor_vals):
+            X                   = test_feats[sensor];
+            (valid_inds,X)       = get_valid_examples(X);
+
             model_per_label     = model_per_sensor[sensor][label_type];
             
             for li in range(len(model_per_label)):
+                single_model    = model_per_label[li];
+                if (single_model == None):
+                    continue;
+
+                print "predic: %s. %s. %d" % (label_type,sensor,li);
                 prob_vec        = predict_with_single_model(X,model_per_label[li]);
-                prob_tensor[:,li,si)    = prob_vec;
+                prob_tensor[valid_inds,li,si]   = prob_vec;
                 pass; # for li ...
             
             pass; # end for sensor...
 
+        prob_tensors[label_type]= prob_tensor;
         # Now we can take the average probability over the ensemble of sensors:
         avr_prob        = numpy.nanmean(prob_tensor,axis=2);
         class_prob[label_type]  = avr_prob;
         pass; # end for label_type...
 
-    return class_prob;
+    return (class_prob,prob_tensors,sensor_vals);
 
-def get_classification_scores(class_prob,test_labels,test_uinds):
+def get_classification_scores(class_prob,prob_tensors,sensor_vals,test_labels,test_uinds):
+    scores       = {};
+
+    for label_type in class_prob.keys():
+        scores[label_type]  = {};
+        scores[label_type]['avr_sensor']    = get_classification_scores_single_mat(\
+            class_prob[label_type],test_labels[label_type],test_uinds);
+        for (si,sensor) in enumerate(sensor_vals):
+            scores[label_type][sensor]      = get_classification_scores_single_mat(\
+                prob_tensors[label_type][:,:si],test_labels[label_type],test_uinds);
+            pass;
+        pass;
+
+    return scores;
+    
+def get_classification_scores_single_mat(class_prob,test_labels,test_uinds):
     scores      = {};
-    for label_type in class_prob.key():
-        ann     = annotation_retrieval.\
-                  get_performance_measures(\
-                      class_prob[label_type],test_labels[label_type],\
-                      desired_measures=['annotation']);
-        ret     = annotation_retrieval.\
-                  get_performance_measures(\
-                      class_prob[label_type].T,test_labels[label_type].T,\
-                      desired_measures=['auc','p10','mean_ap']);
-        scores[lable_type]  = {};
-        for measure in ['precision','recall','f']:
-            scores[label_type][measure]     = ann[measure];
-            per_tag                         = "%s_per_tag" % measure;
-            scores[label_type][per_tag]     = ann[per_tag];
-            pass;
-        for measure in ['auc','p10','mean_ap']:
-            scores[label_type][measure]     = ret[measure];
-            pass;
-        
-        pass; # end for label_type...
+    ann     = annotation_retrieval.\
+              get_performance_measures(\
+                  class_prob[label_type],test_labels[label_type],\
+                  desired_measures=['annotation']);
+    ret     = annotation_retrieval.\
+              get_performance_measures(\
+                  class_prob[label_type].T,test_labels[label_type].T,\
+                  desired_measures=['auc','p10','mean_ap']);
+    for measure in ['precision','recall','f']:
+        scores[measure]     = ann[measure];
+        per_tag                         = "%s_per_tag" % measure;
+        scores[per_tag]     = ann[per_tag];
+        pass;
+    for measure in ['auc','p10','mean_ap']:
+        scores[measure]     = ret[measure];
+        pass;
+
+    scores['correlation']   = numpy.nanmean(class_prob*test_labels-class_prob*numpy.logical_not(test_labels),axis=0);
 
     return scores;
 
@@ -217,16 +264,20 @@ def main():
     secondary_labels        = collect_features.read_secondary_labels();
     mood_labels             = collect_features.read_mood_labels();
 
+
+    print "#"*30;
+    print "#### Reading all features...";
     feats_per_uuid          = {};
     main_per_uuid           = {};
     secondary_per_uuid      = {};
     mood_per_uuid           = {};
     for uuid in uuids:
         print "="*20;
-        print "=== uuid: %s" % uuid;
+        print "== uuid: %s" % uuid;
         (uuid_feats,main_vec,main_mat,\
          secondary_mat,mood_mat)    = collect_features.features_per_user(\
              uuid,sensors);
+
         feats_per_uuid[uuid]        = uuid_feats;
         main_per_uuid[uuid]         = main_mat;
         secondary_per_uuid[uuid]    = secondary_mat;
