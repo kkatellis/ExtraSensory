@@ -99,7 +99,9 @@ def features_per_user(uuid,sensors):
     mood_mat                = numpy.zeros((n_instances,len(g__moods)),dtype=bool);
     
     for (ii,timestamp_str) in enumerate(user_instances):
-        print "%d) %s" % (ii,timestamp_str);
+        if not ii%20:
+            print "%d) %s" % (ii,timestamp_str);
+            pass;
         instance_dir = os.path.join(uuid_dir,timestamp_str);
         if not os.path.isdir(instance_dir):
             continue;
