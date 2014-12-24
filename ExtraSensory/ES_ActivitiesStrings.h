@@ -24,6 +24,7 @@
 
 +(NSArray *)homeSensingLabels;
 
+
 /*
  * This is a helping utility function to convert an array of ES_Label objects into an array of Strings.
  */

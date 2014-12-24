@@ -512,6 +512,9 @@
             NSMutableArray *arr = [NSMutableArray arrayWithArray:[ES_ActivitiesStrings homeSensingLabels]];
             [arr addObjectsFromArray:choices];
             choices = [NSArray arrayWithArray:arr];
+            
+            // Add a new subject:
+            [labelsPerSubject setValue:[ES_ActivitiesStrings homeSensingLabels] forKey:@"household"];
         }
         
         if (self.secondaryActivities)
