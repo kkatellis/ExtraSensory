@@ -11,16 +11,16 @@ Yoga|Sports
 Elliptical machine|Sports
 Treadmill|Sports
 Stationary bike|Sports
-Cooking|Home
-Cleaning|Home
-Gardening|Home
-Doing laundry|Home
-Mowing the lawn|Home
-Raking leaves|Home
-Vacuuming|Home
-Washing dishes|Home
-Washing car|Home
-Manual labor|Home
+Cooking
+Cleaning|Housework
+Gardening|Housework
+Doing laundry|Housework
+Mowing the lawn|Housework
+Raking leaves|Housework
+Vacuuming|Housework
+Washing dishes|Housework
+Washing car|Housework
+Manual labor|Housework
 Dancing|Leisure
 Listening to music|Leisure
 Playing musical instrument|Leisure
@@ -57,7 +57,7 @@ Computer work|Work
 Studying|Work
 In class|Location
 In a meeting|Work,Location
-At home|Location
+At home|Location,Housework
 At work|Location,Work
 At school|Location,Work
 At a bar|Location,Leisure

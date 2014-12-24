@@ -56,6 +56,18 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void) addSectionWithArrayOfItemStrings:(NSArray *)sectionItems name:(NSString *)name andHeader:(NSString *)header
+{
+    [self.sections addObject:sectionItems];
+    [self.sectionNames addObject:name];
+    [self.sectionHeaders addObject:header];
+}
+
+- (void) addDummySection
+{
+    [self addSectionWithArrayOfItemStrings:[NSArray arrayWithObjects:nil] name:@" " andHeader:@""];
+}
+
 - (void) recalculateTable
 {
     
@@ -72,9 +84,8 @@
         if (self.appliedLabels && [self.appliedLabels count] > 0)
         {
             NSArray *selectedLabels = [[self.appliedLabels allObjects] sortedArrayUsingSelector:@selector(compare:)];
-            [self.sections addObject:selectedLabels];
-            [self.sectionNames addObject:@"Selected"];
-            [self.sectionHeaders addObject:@"Selected"];
+            [self addSectionWithArrayOfItemStrings:selectedLabels name:@"Selected" andHeader:@"Selected"];
+//            [self addDummySection];
         }
         
         if (self.labelsPerSubject)
@@ -83,28 +94,20 @@
             for (NSString *subject in [[self.labelsPerSubject allKeys] sortedArrayUsingSelector:@selector(compare:)])
             {
                 NSArray *labelsOfThisSubject = [self.labelsPerSubject valueForKey:subject];
-                [self.sections addObject:labelsOfThisSubject];
-                [self.sectionNames addObject:subject];
-                [self.sectionHeaders addObject:subject];
+                [self addSectionWithArrayOfItemStrings:labelsOfThisSubject name:subject andHeader:subject];
                 
                 // Add another dummy section to create a space between two index items:
-                [self.sections addObject:[NSArray arrayWithObjects:nil]];
-                [self.sectionNames addObject:@" "];
-                [self.sectionHeaders addObject:@""];
+//                [self addDummySection];
             }
         }
         
         if (self.frequentChoices)
         {
             // Make the first section be dedicated to the frequently used labels:
-            [self.sections addObject:self.frequentChoices];
-            [self.sectionNames addObject:@"frequent"];
-            [self.sectionHeaders addObject:@"Frequently used"];
+            [self addSectionWithArrayOfItemStrings:self.frequentChoices name:@"frequent" andHeader:@"Frequently used"];
             
             // Add another dummy section to create a space between two index items:
-            [self.sections addObject:[NSArray arrayWithObjects:nil]];
-            [self.sectionNames addObject:@" "];
-            [self.sectionHeaders addObject:@""];
+//            [self addDummySection];
         }
         
         if (self.useAlphabeticIndex)
@@ -116,9 +119,7 @@
         {
             // Then add a single section (with single index) for all labels:
             NSArray *allLabels = [self.choices sortedArrayUsingSelector:@selector(compare:)];
-            [self.sections addObject:allLabels];
-            [self.sectionHeaders addObject:@"All labels"];
-            [self.sectionNames addObject:@"All labels"];
+            [self addSectionWithArrayOfItemStrings:allLabels name:@"All labels" andHeader:@"All labels"];
         }
         
     }
@@ -129,7 +130,10 @@
     }
     
     [self.tableView reloadData];
-    [self setIndexAppearance];
+    if (self.useIndex)
+    {
+        [self setIndexAppearance];
+    }
 }
 
 - (void) setIndexAppearance
@@ -138,11 +142,21 @@
     {
         if ([sview respondsToSelector:@selector(setIndexColor:)])
         {
-            NSLog(@"=== found sub view of type: %@.",[sview class]);
+            NSLog(@"[selectionFromList] === found sub view of type: %@.",[sview class]);
             if ([sview respondsToSelector:@selector(setFont:)])
             {
-                [sview performSelector:@selector(setFont:) withObject:[UIFont systemFontOfSize:15.0]];
+                [sview performSelector:@selector(setFont:) withObject:[UIFont systemFontOfSize:17.5]];
             }
+            if ([sview respondsToSelector:@selector(setTextAlignment:)])
+            {
+                NSLog(@"[selectionFromList] Setting index alignment");
+                [sview performSelector:@selector(setTextAlignment:) withObject:NSTextAlignmentLeft];
+            }
+            else
+            {
+                NSLog(@"[selectionFromList] Sub view (index) doesnt respond to function setTextAlignment");
+            }
+            
         }
     }
 }
@@ -248,11 +262,12 @@
     //cell.textLabel.text = [self.sections[indexPath.section] objectAtIndex:indexPath.row];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
+    cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.textLabel.numberOfLines = 0;
+    
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
         cell.textLabel.text = [self.searchResults objectAtIndex:indexPath.row];
-        //checkedArray =
-        NSLog(@"search result match: %@", cell.textLabel.text);
     }
     else
     {
@@ -266,7 +281,7 @@
         [_checkedArray addObject:indexPath];
         [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
     }
-//    NSLog(@"cell returned is %@", cell.textLabel.text);
+
     return cell;
 }
 
