@@ -209,38 +209,37 @@ def classify(model_per_sensor,test_feats):
 
 def get_classification_scores(class_prob,prob_tensors,sensor_vals,test_labels,test_uinds):
     scores       = {};
-
     for label_type in class_prob.keys():
         scores[label_type]  = {};
         scores[label_type]['avr_sensor']    = get_classification_scores_single_mat(\
             class_prob[label_type],test_labels[label_type],test_uinds);
         for (si,sensor) in enumerate(sensor_vals):
             scores[label_type][sensor]      = get_classification_scores_single_mat(\
-                prob_tensors[label_type][:,:si],test_labels[label_type],test_uinds);
+                prob_tensors[label_type][:,:,si],test_labels[label_type],test_uinds);
             pass;
         pass;
 
+    pdb.set_trace();
     return scores;
     
 def get_classification_scores_single_mat(class_prob,test_labels,test_uinds):
     scores      = {};
-    ann     = annotation_retrieval.\
-              get_performance_measures(\
-                  class_prob[label_type],test_labels[label_type],\
-                  desired_measures=['annotation']);
-    ret     = annotation_retrieval.\
-              get_performance_measures(\
-                  class_prob[label_type].T,test_labels[label_type].T,\
-                  desired_measures=['auc','p10','mean_ap']);
-    for measure in ['precision','recall','f']:
-        scores[measure]     = ann[measure];
-        per_tag                         = "%s_per_tag" % measure;
-        scores[per_tag]     = ann[per_tag];
-        pass;
-    for measure in ['auc','p10','mean_ap']:
-        scores[measure]     = ret[measure];
-        pass;
-
+##    ann     = annotation_retrieval.\
+##              get_performance_measures(\
+##                  class_prob,test_labels,\
+##                  desired_measures=['annotation']);
+##    ret     = annotation_retrieval.\
+##              get_performance_measures(\
+##                  class_prob.T,test_labels.T,\
+##                  desired_measures=['auc','p10','mean_ap']);
+##    for measure in ['precision','recall','f']:
+##        scores[measure]     = ann[measure];
+##        per_tag             = "%s_per_tag" % measure;
+##        scores[per_tag]     = ann[per_tag];
+##        pass;
+##    for measure in ['auc','p10','mean_ap']:
+##        scores[measure]     = ret[measure];
+##        pass;
     scores['correlation']   = numpy.nanmean(class_prob*test_labels-class_prob*numpy.logical_not(test_labels),axis=0);
 
     return scores;

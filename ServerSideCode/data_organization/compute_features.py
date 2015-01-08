@@ -84,12 +84,19 @@ Output:
 '''
 def get_1d_statistics(x):
     mom3    = scipy.stats.moment(x,moment=3);
+    absx    = abs(x);
+    if sum(absx)>0:
+        ent = scipy.stats.entropy(absx);
+        pass;
+    else:
+        ent = 0.;
+        pass;
     stats   = [\
         numpy.mean(x),\
         numpy.std(x),\
         numpy.sign(mom3)*(abs(mom3)**(1./3.)),\
         scipy.stats.moment(x,moment=4)**(1./4.),\
-        scipy.stats.entropy(abs(x)),\
+        ent,\
         numpy.median(x),\
         ];
 
