@@ -42,6 +42,7 @@ Sleeping|Basic needs
 Toilet|Basic needs
 Bath|Basic needs
 Shower|Basic needs
+Grooming|Basic needs
 Stairs - going up|Physical
 Stairs - going down|Physical
 Limping|Physical
