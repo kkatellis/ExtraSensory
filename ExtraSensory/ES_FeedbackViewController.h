@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ES_Activity.h"
 #import "ES_ActivityEvent.h"
+#import "ES_DataBaseAccessor.h"
 
 typedef enum ES_FeedbackType : NSInteger
 {
@@ -21,6 +22,8 @@ typedef enum ES_FeedbackType : NSInteger
 
 @property (nonatomic) ES_FeedbackType feedbackType;
 @property (nonatomic) BOOL calledFromNotification;
+
+@property (nonatomic) LabelSource labelSource;
 
 @property (nonatomic, strong) ES_Activity *preexistingActivity;
 @property (nonatomic, strong) ES_ActivityEvent *activityEvent;

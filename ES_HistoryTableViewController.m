@@ -718,6 +718,7 @@
         // Then the feedback is for a "long" activity event:
         feedback.activityEvent = activityEvent;
         feedback.feedbackType = ES_FeedbackTypeActivityEvent;
+        feedback.labelSource = LabelSourceHistory;
     }
     
     //[feedback setHidesBottomBarWhenPushed:YES];

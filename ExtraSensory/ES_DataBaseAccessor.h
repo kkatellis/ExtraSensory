@@ -10,6 +10,17 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef NS_ENUM(NSInteger, LabelSource)
+{
+    LabelSourceDefault,
+    LabelSourceActiveFeedbackStart,
+    LabelSourceActiveFeedbackContinue,
+    LabelSourceHistory,
+    LabelSourceNotificationBlank,
+    LabelSourceNotificationAnswerCorrect,
+    LabelSourceNotificationAnsewrNotExactly
+};
+
 @class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel, ES_Label, ES_SecondaryActivity, ES_Mood;
 
 @interface ES_DataBaseAccessor : NSObject {

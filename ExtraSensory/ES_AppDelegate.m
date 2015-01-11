@@ -493,6 +493,7 @@
     ES_FeedbackViewController *activeFeedback = (ES_FeedbackViewController *)[storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     activeFeedback.feedbackType = ES_FeedbackTypeActive;
     activeFeedback.calledFromNotification = YES;
+    activeFeedback.labelSource = LabelSourceNotificationBlank;
     
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
@@ -517,6 +518,7 @@
     if (userApproved)
     {
         ES_FeedbackViewController *controller = [[ES_FeedbackViewController alloc] init];
+        controller.labelSource = LabelSourceNotificationAnswerCorrect;
         [controller submitFeedbackForActivityEvent:activityEvent];
         return;
     }
@@ -527,6 +529,7 @@
     activityFeedback.feedbackType = ES_FeedbackTypeActivityEvent;
     activityFeedback.activityEvent = activityEvent;
     activityFeedback.calledFromNotification = YES;
+    activityFeedback.labelSource = LabelSourceNotificationAnsewrNotExactly;
     
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
