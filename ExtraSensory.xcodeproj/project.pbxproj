@@ -142,10 +142,8 @@
 		939600A5181B0194006221C6 /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A4181B0194006221C6 /* ES_User.m */; };
 		939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A7181B0195006221C6 /* ES_UserPopulation.m */; };
 		93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */; };
-		93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71A91808A91800D58E77 /* ES_CalendarViewCell.m */; };
 		93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71AC1808D41000D58E77 /* ES_Format.m */; };
 		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
-		93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */; };
 		93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */; };
 		93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */; };
 		93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678ED17F81F42000638CB /* ES_HomeViewController.m */; };
@@ -348,14 +346,10 @@
 		939600A7181B0195006221C6 /* ES_UserPopulation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_UserPopulation.m; sourceTree = "<group>"; };
 		93AC71A5180878A000D58E77 /* ES_SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsViewController.h; sourceTree = "<group>"; };
 		93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsViewController.m; sourceTree = "<group>"; };
-		93AC71A81808A91800D58E77 /* ES_CalendarViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewCell.h; sourceTree = "<group>"; };
-		93AC71A91808A91800D58E77 /* ES_CalendarViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_CalendarViewCell.m; sourceTree = "<group>"; };
 		93AC71AB1808D41000D58E77 /* ES_Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Format.h; sourceTree = "<group>"; };
 		93AC71AC1808D41000D58E77 /* ES_Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Format.m; sourceTree = "<group>"; };
 		93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Scheduler.h; sourceTree = "<group>"; };
 		93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Scheduler.m; sourceTree = "<group>"; };
-		93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewTableViewController.h; sourceTree = "<group>"; };
-		93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_CalendarViewTableViewController.m; sourceTree = "<group>"; };
 		93F659D517F6857B000638CB /* ES_DataBaseAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_DataBaseAccessor.h; sourceTree = "<group>"; };
 		93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_DataBaseAccessor.m; sourceTree = "<group>"; };
 		93F659DC17F6B280000638CB /* ES_NetworkAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_NetworkAccessor.h; sourceTree = "<group>"; };
@@ -640,17 +634,6 @@
 			name = Home;
 			sourceTree = "<group>";
 		};
-		70C156CD18D66623007CCB39 /* History */ = {
-			isa = PBXGroup;
-			children = (
-				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
-				93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */,
-				93AC71A81808A91800D58E77 /* ES_CalendarViewCell.h */,
-				93AC71A91808A91800D58E77 /* ES_CalendarViewCell.m */,
-			);
-			name = History;
-			sourceTree = "<group>";
-		};
 		70C156CE18D6669F007CCB39 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -763,7 +746,6 @@
 				70C156C918D6656C007CCB39 /* Summary */,
 				70C156CB18D665D7007CCB39 /* Feedback */,
 				70C156CC18D665F1007CCB39 /* Home */,
-				70C156CD18D66623007CCB39 /* History */,
 				70C156CA18D665A8007CCB39 /* Settings */,
 			);
 			name = ViewControllers;
@@ -1060,7 +1042,6 @@
 				4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
-				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				709F5AEB19FEBFED00F3386C /* CAHostTimeBase.cpp in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
 				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
@@ -1099,7 +1080,6 @@
 				709F5AED19FEBFED00F3386C /* CAXException.cpp in Sources */,
 				93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */,
 				4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */,
-				93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
 				9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */,
 				709F5AE919FEBFED00F3386C /* CADebugMacros.cpp in Sources */,
