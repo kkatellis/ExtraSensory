@@ -14,7 +14,6 @@
 #import "ES_User.h"
 #import "ES_Settings.h"
 #import "ES_ActivityStatistic.h"
-#import "ES_FeedbackViewController.h"
 
 @interface ES_HomeViewController ()
 
@@ -185,14 +184,5 @@
     self.networkStackSizeLabel.text = storageString;
 }
 
-//- (IBAction)ActiveFeedback:(UIButton *)sender {
-//    NSLog(@"[home] Active feedback button pressed");
-//    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
-//    ES_FeedbackViewController *feedback = [storyboard instantiateInitialViewController];
-//    feedback.feedbackType = ES_FeedbackTypeActive;
-//    feedback.modalPresentationStyle = UIModalPresentationFormSheet;
-////    [self.navigationController pushViewController:feedback animated:YES];
-//    [self presentViewController:feedback animated:YES completion:nil];
-//}
 
 @end
