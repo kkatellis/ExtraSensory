@@ -4,6 +4,7 @@
     API functions to handle data analyzing and feedback from the device
 '''
 import os
+import os.path
 import datetime
 import json
 import pymongo
@@ -278,9 +279,28 @@ def handle_feedback():
             raise Exception( 'Can''t find corresponding data on the server' )
         else:
             feedback_file = os.path.join(instance_dir,'feedback');
+            if os.path.exists(feedback_file):
+                fp_in = open(feedback_file,'r');
+                old_fback = json.load(fp_in);
+                fp_in.close();
+                
+                if type(old_fback) == list:
+                    fbacks = old_fback;
+                    pass;
+                else:
+                    fbacks = [old_fback];
+                    pass;
+                pass;
+            else:
+                # No older feedback file:
+                fbacks = [];
+                pass;
+
+            # Add the new feedback to the feedback history:
+            fbacks.append(fback);
 
             fp = open(feedback_file,'w')
-            json.dump( fback, fp)
+            json.dump( fbacks, fp)
             fp.close()
     
 
