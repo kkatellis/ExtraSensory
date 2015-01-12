@@ -96,6 +96,13 @@
     return appDelegate;
 }
 
+- (id) init
+{
+    self = [super init];
+    self.labelSource = LabelSourceDefault;
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -382,6 +389,8 @@
             [ES_DataBaseAccessor setSecondaryActivities:[self.secondaryActivities allObjects] forActivity:newActivity];
             [ES_DataBaseAccessor setMoods:[self.moods allObjects] forActivity:newActivity];
             
+            newActivity.labelSource = [NSNumber numberWithInteger:self.labelSource];
+            
             // Should we set the selected labels as predetermined for future measurements:
             if (self.validForNumberOfMinutes && [self.validForNumberOfMinutes intValue] > 0)
             {
@@ -442,6 +451,8 @@
         act.userCorrection = actEvent.userCorrection;
         [ES_DataBaseAccessor setSecondaryActivities:[actEvent.secondaryActivitiesStrings allObjects] forActivity:act];
         [ES_DataBaseAccessor setMoods:[actEvent.moodsStrings allObjects] forActivity:act];
+        
+        act.labelSource = [NSNumber numberWithInteger:self.labelSource];
         [self sendAtomicActivityLabelsIfRelevant:act];
     }
 }

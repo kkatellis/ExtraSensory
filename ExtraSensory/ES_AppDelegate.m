@@ -563,7 +563,6 @@
     
     if (rtbc)
     {
-        NSLog(@"==== found rtbc. telling to show dot");
         [rtbc showRecordingImage];
     }
 }
@@ -576,7 +575,6 @@
     
     if (rtbc)
     {
-        NSLog(@"=== found rtbc. telling to hide dot");
         [rtbc hideRecordingImage];
     }
 }

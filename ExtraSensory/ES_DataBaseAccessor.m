@@ -92,6 +92,8 @@
     ES_Activity *act = (ES_Activity *)actObj;
     act.user = [self user];
     act.uuid = act.user.uuid;
+    act.labelSource = [NSNumber numberWithInteger:LabelSourceDefault];
+
     NSLog(@"[databaseAccessor] Created new activity with uuid: %@.",act.user.uuid);
     
     return act;

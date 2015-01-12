@@ -96,6 +96,31 @@
     return _recievedData;
 }
 
+- (NSString *) getStringFromLabelSourceCodeNumber:(NSNumber *)labelSourceNumebr
+{
+    if (!labelSourceNumebr)
+    {
+        return @"missing";
+    }
+    
+    LabelSource labelSource = [labelSourceNumebr integerValue];
+    switch (labelSource)
+    {
+        case LabelSourceDefault: return @"default";break;
+        case LabelSourceActiveFeedbackStart: return @"active_feedback_start";break;
+        case LabelSourceActiveFeedbackContinue: return @"active_feedback_continue";break;
+        case LabelSourceHistory: return @"history";break;
+        case LabelSourceNotificationBlank: return @"notification_blank";break;
+        case LabelSourceNotificationAnswerCorrect: return @"notification_answer_correct";break;
+        case LabelSourceNotificationAnsewrNotExactly: return @"notification_answer_not_exactly";break;
+            
+        default:
+            NSLog(@"[network] !!! Found unfamiliar label-source value: %d",labelSource);
+            return [NSString stringWithFormat:@"unfamiliar_value_%d",labelSource];
+            break;
+    }
+}
+
 - (void) sendFeedback: (ES_Activity *)activity
 {
     [self apiCall:[NSString stringWithFormat:@"%@%@",API_PREFIX,API_FEEDBACK] withParams:activity];
@@ -117,6 +142,8 @@
     
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"uuid",activity.user.uuid]];
     [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"timestamp",activity.timestamp]];
+    
+    [dataValues addObject:[NSString stringWithFormat:@"%@=%@",@"label_source",[self getStringFromLabelSourceCodeNumber:activity.labelSource]]];
     
     NSLog(@"[networkAccessor] sending api call with data: %@",dataValues);
     //NSString *combined = [[params objectForKey:key] componentsJoinedByString:@","];

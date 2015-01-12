@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */; };
+		4E1336571A630E9700683B84 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1336561A630E9700683B84 /* ES_Activity.m */; };
 		4E4047C01A1FDDF700C1D0DF /* secondaryActivitiesList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */; };
 		4E4047C21A23B5BE00C1D0DF /* moodsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047C11A23B5BE00C1D0DF /* moodsList.txt */; };
 		4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C41A23F19600C1D0DF /* ES_Label.m */; };
@@ -23,7 +24,6 @@
 		4E6F48AB1A48C6B400055DAF /* text-plus-icon_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E6F48AA1A48C6B400055DAF /* text-plus-icon_gray.png */; };
 		4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
-		4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */; };
 		4EE9AC801A2D2BBF004CB8C2 /* homeSensingLabelsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7F1A2D2BBF004CB8C2 /* homeSensingLabelsList.txt */; };
 		4EE9AC831A2D4A0E004CB8C2 /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
@@ -173,6 +173,8 @@
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ES_SoundWaveProcessor.mm; sourceTree = "<group>"; };
+		4E1336551A630E9700683B84 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
+		4E1336561A630E9700683B84 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
 		4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secondaryActivitiesList.txt; sourceTree = "<group>"; };
 		4E4047C11A23B5BE00C1D0DF /* moodsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = moodsList.txt; sourceTree = "<group>"; };
 		4E4047C31A23F19600C1D0DF /* ES_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Label.h; sourceTree = "<group>"; };
@@ -192,8 +194,6 @@
 		4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SelectionFromListViewController.m; sourceTree = "<group>"; };
 		4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_AlertViewWithUserInfo.h; sourceTree = "<group>"; };
 		4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_AlertViewWithUserInfo.m; sourceTree = "<group>"; };
-		4EE9AC7C1A25760F004CB8C2 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
-		4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
 		4EE9AC7F1A2D2BBF004CB8C2 /* homeSensingLabelsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = homeSensingLabelsList.txt; sourceTree = "<group>"; };
 		4EE9AC811A2D4A0E004CB8C2 /* ES_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Settings.h; sourceTree = "<group>"; };
 		4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Settings.m; sourceTree = "<group>"; };
@@ -769,9 +769,9 @@
 			children = (
 				4EE9AC811A2D4A0E004CB8C2 /* ES_Settings.h */,
 				4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */,
-				4EE9AC7C1A25760F004CB8C2 /* ES_Activity.h */,
-				4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */,
 				9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */,
+				4E1336551A630E9700683B84 /* ES_Activity.h */,
+				4E1336561A630E9700683B84 /* ES_Activity.m */,
 				4E4047C91A24F54300C1D0DF /* ES_Mood.h */,
 				4E4047CA1A24F54300C1D0DF /* ES_Mood.m */,
 				4E4047C61A24F54100C1D0DF /* ES_SecondaryActivity.h */,
@@ -1039,7 +1039,6 @@
 				70C156C718D52BD1007CCB39 /* ES_SwapViewController.m in Sources */,
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
-				4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				709F5AEB19FEBFED00F3386C /* CAHostTimeBase.cpp in Sources */,
@@ -1070,6 +1069,7 @@
 				701DEDD51A2FC578006F411E /* TriangleFilter.cpp in Sources */,
 				70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */,
 				701DEDD41A2FC578006F411E /* MelFilterBank.cpp in Sources */,
+				4E1336571A630E9700683B84 /* ES_Activity.m in Sources */,
 				70C156BE18D526EB007CCB39 /* ES_ContainerViewController.m in Sources */,
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
 				70C156C418D52864007CCB39 /* Empty.m in Sources */,
