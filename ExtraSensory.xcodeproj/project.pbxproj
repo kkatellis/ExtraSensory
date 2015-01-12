@@ -441,7 +441,6 @@
 				709F514019FEA72500F3386C /* MFCCProcessor.hpp */,
 				701DEDD01A2FC578006F411E /* MelFilterBank.cpp */,
 				701DEDD61A2FC71D006F411E /* dtw.hpp */,
-				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				701DEDD11A2FC578006F411E /* MelFilterBank.hpp */,
 				701DEDD21A2FC578006F411E /* TriangleFilter.cpp */,
 				701DEDD31A2FC578006F411E /* TriangleFilter.hpp */,
@@ -756,6 +755,7 @@
 			children = (
 				709F513B19FEA6B200F3386C /* MFCC */,
 				93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */,
+				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */,
 				933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */,
 				10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */,
