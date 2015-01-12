@@ -12,7 +12,8 @@
 
 #define LYING_DOWN  @"Lying down"
 #define SITTING     @"Sitting"
-#define STANDING    @"Standing"
+#define STANDING_IN_PLACE    @"Standing in place"
+#define STANDING_AND_MOVING  @"Standing and moving"
 #define WALKING     @"Walking"
 #define RUNNING     @"Running"
 #define BICYCLING   @"Bicycling"
@@ -36,7 +37,7 @@ static NSArray *mainActivitiesColorList = nil;
     
     if (!mainActivitiesList)
     {
-        mainActivitiesList = [self loadStringArrayFromTextFile:@"mainActivitiesList"];//@[LYING_DOWN, SITTING, STANDING, WALKING, RUNNING, BICYCLING];
+        mainActivitiesList = [self loadStringArrayFromTextFile:@"mainActivitiesList"];
     }
     
     return mainActivitiesList;
@@ -62,13 +63,17 @@ static NSArray *mainActivitiesColorList = nil;
 {
     if ([activity isEqualToString:LYING_DOWN])
     {
-        return [UIColor purpleColor];
+        return [UIColor magentaColor];
     }
     if ([activity isEqualToString:SITTING])
     {
+        return [UIColor purpleColor];
+    }
+    if ([activity isEqualToString:STANDING_IN_PLACE])
+    {
         return [UIColor blueColor];
     }
-    if ([activity isEqualToString:STANDING])
+    if ([activity isEqualToString:STANDING_AND_MOVING])
     {
         return [UIColor greenColor];
     }
