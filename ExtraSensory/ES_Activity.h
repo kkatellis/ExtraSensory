@@ -2,8 +2,8 @@
 //  ES_Activity.h
 //  ExtraSensory
 //
-//  Created by yonatan vaizman on 11/25/14.
-//  Copyright (c) 2014 Bryan Grounds. All rights reserved.
+//  Created by yonatan vaizman on 1/11/15.
+//  Copyright (c) 2015 Bryan Grounds. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSNumber * timestamp;
 @property (nonatomic, retain) NSString * userCorrection;
 @property (nonatomic, retain) NSString * uuid;
+@property (nonatomic, retain) NSNumber * labelSource;
 @property (nonatomic, retain) NSSet *moods;
 @property (nonatomic, retain) NSSet *secondaryActivities;
 @property (nonatomic, retain) ES_User *user;

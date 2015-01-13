@@ -316,6 +316,7 @@
         NSArray *moodsStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[predeterminedLabels.moods allObjects]];
         [ES_DataBaseAccessor setSecondaryActivities:userActivitiesStrings forActivity:newActivity];
         [ES_DataBaseAccessor setMoods:moodsStrings forActivity:newActivity];
+        newActivity.labelSource = [NSNumber numberWithInteger:ES_LabelSourceActiveFeedbackContinue];
         
         NSLog(@"[scheduler] There are predetermined labels to attach to this new activity");
         [self.sensorManager setCurrentActivity:newActivity];

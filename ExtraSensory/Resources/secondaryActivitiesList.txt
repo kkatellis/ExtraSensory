@@ -65,6 +65,7 @@ At a bar|Location,Leisure
 At a concert|Location,Leisure
 At a party|Location,Leisure
 At the beach|Location,Leisure
+At sea|Location,Leisure
 At the pool|Sports,Location,Leisure
 At the gym|Sports,Location,Leisure
 At a restaurant|Location,Leisure
@@ -73,6 +74,7 @@ Indoors|Location
 On a bus|Location,Transportation
 On a plane|Location,Transportation
 On a train|Location,Transportation
+On a boat|Location,Transportation,Leisure
 Elevator|Location,Transportation
 Motorbike|Location,Transportation
 Riding an animal|Location,Transportation

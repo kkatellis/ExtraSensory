@@ -4,6 +4,7 @@
     API functions to handle data analyzing and feedback from the device
 '''
 import os
+import os.path
 import datetime
 import json
 import pymongo
@@ -233,6 +234,8 @@ def handle_feedback():
 
         mood - The mood of the user
 
+        label_source - a string to describe in which mechanism the user supplied these labels
+
         Results
         -------
         JSON success if all params are present and correctly parsed
@@ -257,6 +260,8 @@ def handle_feedback():
             raise Exception( 'Missing secondary_activities' )
         if 'moods' not in request.args:
             raise Exception( 'Missing moods' )
+        if 'label_source' not in request.args:
+            raise Exception( 'Missing label_source' )
 
         fback[ 'uuid' ]                 	= request.args.get( 'uuid' )
         fback[ 'timestamp' ]		    	= request.args.get( 'timestamp' ) 
@@ -264,6 +269,7 @@ def handle_feedback():
         fback[ 'corrected_activity' ]     	= request.args.get( 'corrected_activity' ).upper()
         fback[ 'secondary_activities' ]         = request.args.get( 'secondary_activities' ).upper().split( ',' )
         fback[ 'moods' ]                        = request.args.get( 'moods' ).upper().split( ',' )
+        fback[ 'label_source' ]                 = request.args.get( 'label_source' ).upper();
 
         UUID 	= str(fback['uuid'])
         UTime 	= str(fback['timestamp'])
@@ -273,12 +279,31 @@ def handle_feedback():
             raise Exception( 'Can''t find corresponding data on the server' )
         else:
             feedback_file = os.path.join(instance_dir,'feedback');
-#            fp = open(os.path.join(fpath,'feedback'),'w')
+            if os.path.exists(feedback_file):
+                fp_in = open(feedback_file,'r');
+                old_fback = json.load(fp_in);
+                fp_in.close();
+                
+                if type(old_fback) == list:
+                    fbacks = old_fback;
+                    pass;
+                else:
+                    fbacks = [old_fback];
+                    pass;
+                pass;
+            else:
+                # No older feedback file:
+                fbacks = [];
+                pass;
+
+            # Add the new feedback to the feedback history:
+            fbacks.append(fback);
+
             fp = open(feedback_file,'w')
-            json.dump( fback, fp)
+            json.dump( fbacks, fp)
             fp.close()
     
-#        feedback.insert( fback )        
+
         sys.stdout.flush()
     except Exception, exception:
         print exception

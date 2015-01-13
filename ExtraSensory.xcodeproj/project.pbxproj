@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */; };
+		4E1336571A630E9700683B84 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1336561A630E9700683B84 /* ES_Activity.m */; };
 		4E4047C01A1FDDF700C1D0DF /* secondaryActivitiesList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */; };
 		4E4047C21A23B5BE00C1D0DF /* moodsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047C11A23B5BE00C1D0DF /* moodsList.txt */; };
 		4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C41A23F19600C1D0DF /* ES_Label.m */; };
@@ -23,7 +24,6 @@
 		4E6F48AB1A48C6B400055DAF /* text-plus-icon_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E6F48AA1A48C6B400055DAF /* text-plus-icon_gray.png */; };
 		4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
-		4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */; };
 		4EE9AC801A2D2BBF004CB8C2 /* homeSensingLabelsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7F1A2D2BBF004CB8C2 /* homeSensingLabelsList.txt */; };
 		4EE9AC831A2D4A0E004CB8C2 /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
@@ -142,10 +142,8 @@
 		939600A5181B0194006221C6 /* ES_User.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A4181B0194006221C6 /* ES_User.m */; };
 		939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */ = {isa = PBXBuildFile; fileRef = 939600A7181B0195006221C6 /* ES_UserPopulation.m */; };
 		93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */; };
-		93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71A91808A91800D58E77 /* ES_CalendarViewCell.m */; };
 		93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AC71AC1808D41000D58E77 /* ES_Format.m */; };
 		93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */; };
-		93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */; };
 		93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */; };
 		93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F659DD17F6B280000638CB /* ES_NetworkAccessor.m */; };
 		93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F678ED17F81F42000638CB /* ES_HomeViewController.m */; };
@@ -176,6 +174,8 @@
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ES_SoundWaveProcessor.mm; sourceTree = "<group>"; };
+		4E1336551A630E9700683B84 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
+		4E1336561A630E9700683B84 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
 		4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secondaryActivitiesList.txt; sourceTree = "<group>"; };
 		4E4047C11A23B5BE00C1D0DF /* moodsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = moodsList.txt; sourceTree = "<group>"; };
 		4E4047C31A23F19600C1D0DF /* ES_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Label.h; sourceTree = "<group>"; };
@@ -195,8 +195,6 @@
 		4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SelectionFromListViewController.m; sourceTree = "<group>"; };
 		4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_AlertViewWithUserInfo.h; sourceTree = "<group>"; };
 		4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_AlertViewWithUserInfo.m; sourceTree = "<group>"; };
-		4EE9AC7C1A25760F004CB8C2 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
-		4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
 		4EE9AC7F1A2D2BBF004CB8C2 /* homeSensingLabelsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = homeSensingLabelsList.txt; sourceTree = "<group>"; };
 		4EE9AC811A2D4A0E004CB8C2 /* ES_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Settings.h; sourceTree = "<group>"; };
 		4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Settings.m; sourceTree = "<group>"; };
@@ -349,14 +347,10 @@
 		939600A7181B0195006221C6 /* ES_UserPopulation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_UserPopulation.m; sourceTree = "<group>"; };
 		93AC71A5180878A000D58E77 /* ES_SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsViewController.h; sourceTree = "<group>"; };
 		93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsViewController.m; sourceTree = "<group>"; };
-		93AC71A81808A91800D58E77 /* ES_CalendarViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewCell.h; sourceTree = "<group>"; };
-		93AC71A91808A91800D58E77 /* ES_CalendarViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_CalendarViewCell.m; sourceTree = "<group>"; };
 		93AC71AB1808D41000D58E77 /* ES_Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Format.h; sourceTree = "<group>"; };
 		93AC71AC1808D41000D58E77 /* ES_Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Format.m; sourceTree = "<group>"; };
 		93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Scheduler.h; sourceTree = "<group>"; };
 		93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Scheduler.m; sourceTree = "<group>"; };
-		93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_CalendarViewTableViewController.h; sourceTree = "<group>"; };
-		93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_CalendarViewTableViewController.m; sourceTree = "<group>"; };
 		93F659D517F6857B000638CB /* ES_DataBaseAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_DataBaseAccessor.h; sourceTree = "<group>"; };
 		93F659D617F6857B000638CB /* ES_DataBaseAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_DataBaseAccessor.m; sourceTree = "<group>"; };
 		93F659DC17F6B280000638CB /* ES_NetworkAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_NetworkAccessor.h; sourceTree = "<group>"; };
@@ -450,7 +444,6 @@
 				709F514019FEA72500F3386C /* MFCCProcessor.hpp */,
 				701DEDD01A2FC578006F411E /* MelFilterBank.cpp */,
 				701DEDD61A2FC71D006F411E /* dtw.hpp */,
-				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				701DEDD11A2FC578006F411E /* MelFilterBank.hpp */,
 				701DEDD21A2FC578006F411E /* TriangleFilter.cpp */,
 				701DEDD31A2FC578006F411E /* TriangleFilter.hpp */,
@@ -643,17 +636,6 @@
 			name = Home;
 			sourceTree = "<group>";
 		};
-		70C156CD18D66623007CCB39 /* History */ = {
-			isa = PBXGroup;
-			children = (
-				93E29C1B17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.h */,
-				93E29C1C17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m */,
-				93AC71A81808A91800D58E77 /* ES_CalendarViewCell.h */,
-				93AC71A91808A91800D58E77 /* ES_CalendarViewCell.m */,
-			);
-			name = History;
-			sourceTree = "<group>";
-		};
 		70C156CE18D6669F007CCB39 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -766,7 +748,6 @@
 				70C156C918D6656C007CCB39 /* Summary */,
 				70C156CB18D665D7007CCB39 /* Feedback */,
 				70C156CC18D665F1007CCB39 /* Home */,
-				70C156CD18D66623007CCB39 /* History */,
 				70C156CA18D665A8007CCB39 /* Settings */,
 			);
 			name = ViewControllers;
@@ -777,6 +758,7 @@
 			children = (
 				709F513B19FEA6B200F3386C /* MFCC */,
 				93BC42BA17FB4C2900F06844 /* ES_Scheduler.h */,
+				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */,
 				933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */,
 				10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */,
@@ -790,9 +772,9 @@
 			children = (
 				4EE9AC811A2D4A0E004CB8C2 /* ES_Settings.h */,
 				4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */,
-				4EE9AC7C1A25760F004CB8C2 /* ES_Activity.h */,
-				4EE9AC7D1A25760F004CB8C2 /* ES_Activity.m */,
 				9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */,
+				4E1336551A630E9700683B84 /* ES_Activity.h */,
+				4E1336561A630E9700683B84 /* ES_Activity.m */,
 				4E4047C91A24F54300C1D0DF /* ES_Mood.h */,
 				4E4047CA1A24F54300C1D0DF /* ES_Mood.m */,
 				4E4047C61A24F54100C1D0DF /* ES_SecondaryActivity.h */,
@@ -1062,10 +1044,8 @@
 				70C156C718D52BD1007CCB39 /* ES_SwapViewController.m in Sources */,
 				9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */,
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
-				4EE9AC7E1A25760F004CB8C2 /* ES_Activity.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
-				93E29C1D17FE1D3800BE0AD2 /* ES_CalendarViewTableViewController.m in Sources */,
 				709F5AEB19FEBFED00F3386C /* CAHostTimeBase.cpp in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
 				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
@@ -1095,6 +1075,7 @@
 				701DEDD51A2FC578006F411E /* TriangleFilter.cpp in Sources */,
 				70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */,
 				701DEDD41A2FC578006F411E /* MelFilterBank.cpp in Sources */,
+				4E1336571A630E9700683B84 /* ES_Activity.m in Sources */,
 				70C156BE18D526EB007CCB39 /* ES_ContainerViewController.m in Sources */,
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
 				70C156C418D52864007CCB39 /* Empty.m in Sources */,
@@ -1105,7 +1086,6 @@
 				709F5AED19FEBFED00F3386C /* CAXException.cpp in Sources */,
 				93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */,
 				4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */,
-				93AC71AA1808A91800D58E77 /* ES_CalendarViewCell.m in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
 				9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */,
 				709F5AE919FEBFED00F3386C /* CADebugMacros.cpp in Sources */,
@@ -1255,7 +1235,7 @@
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "92c2ae90-c60e-442f-8673-4ba55d2b60f7";
+				PROVISIONING_PROFILE = "3994ad3e-e030-41f4-ad45-2535f02f85e9";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
