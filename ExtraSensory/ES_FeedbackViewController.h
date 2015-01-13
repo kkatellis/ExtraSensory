@@ -23,7 +23,7 @@ typedef enum ES_FeedbackType : NSInteger
 @property (nonatomic) ES_FeedbackType feedbackType;
 @property (nonatomic) BOOL calledFromNotification;
 
-@property (nonatomic) LabelSource labelSource;
+@property (nonatomic) ES_LabelSource labelSource;
 
 @property (nonatomic, strong) ES_Activity *preexistingActivity;
 @property (nonatomic, strong) ES_ActivityEvent *activityEvent;

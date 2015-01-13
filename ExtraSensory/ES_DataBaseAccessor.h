@@ -10,15 +10,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-typedef NS_ENUM(NSInteger, LabelSource)
+typedef NS_ENUM(NSInteger, ES_LabelSource)
 {
-    LabelSourceDefault,
-    LabelSourceActiveFeedbackStart,
-    LabelSourceActiveFeedbackContinue,
-    LabelSourceHistory,
-    LabelSourceNotificationBlank,
-    LabelSourceNotificationAnswerCorrect,
-    LabelSourceNotificationAnsewrNotExactly
+    ES_LabelSourceDefault,
+    ES_LabelSourceActiveFeedbackStart,
+    ES_LabelSourceActiveFeedbackContinue,
+    ES_LabelSourceHistory,
+    ES_LabelSourceNotificationBlank,
+    ES_LabelSourceNotificationAnswerCorrect,
+    ES_LabelSourceNotificationAnsewrNotExactly
 };
 
 @class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel, ES_Label, ES_SecondaryActivity, ES_Mood;

@@ -209,7 +209,7 @@
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     ES_FeedbackViewController *feedbackController = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     feedbackController.feedbackType = ES_FeedbackTypeActive;
-    feedbackController.labelSource = LabelSourceActiveFeedbackStart;
+    feedbackController.labelSource = ES_LabelSourceActiveFeedbackStart;
       
     feedbackController.modalPresentationStyle = UIModalPresentationFormSheet;
     

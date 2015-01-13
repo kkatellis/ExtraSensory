@@ -99,7 +99,7 @@
 - (id) init
 {
     self = [super init];
-    self.labelSource = LabelSourceDefault;
+    self.labelSource = ES_LabelSourceDefault;
     
     return self;
 }

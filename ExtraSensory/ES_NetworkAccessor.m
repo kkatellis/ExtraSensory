@@ -103,16 +103,16 @@
         return @"missing";
     }
     
-    LabelSource labelSource = [labelSourceNumebr integerValue];
+    ES_LabelSource labelSource = [labelSourceNumebr integerValue];
     switch (labelSource)
     {
-        case LabelSourceDefault: return @"default";break;
-        case LabelSourceActiveFeedbackStart: return @"active_feedback_start";break;
-        case LabelSourceActiveFeedbackContinue: return @"active_feedback_continue";break;
-        case LabelSourceHistory: return @"history";break;
-        case LabelSourceNotificationBlank: return @"notification_blank";break;
-        case LabelSourceNotificationAnswerCorrect: return @"notification_answer_correct";break;
-        case LabelSourceNotificationAnsewrNotExactly: return @"notification_answer_not_exactly";break;
+        case ES_LabelSourceDefault: return @"default";break;
+        case ES_LabelSourceActiveFeedbackStart: return @"active_feedback_start";break;
+        case ES_LabelSourceActiveFeedbackContinue: return @"active_feedback_continue";break;
+        case ES_LabelSourceHistory: return @"history";break;
+        case ES_LabelSourceNotificationBlank: return @"notification_blank";break;
+        case ES_LabelSourceNotificationAnswerCorrect: return @"notification_answer_correct";break;
+        case ES_LabelSourceNotificationAnsewrNotExactly: return @"notification_answer_not_exactly";break;
             
         default:
             NSLog(@"[network] !!! Found unfamiliar label-source value: %d",labelSource);
