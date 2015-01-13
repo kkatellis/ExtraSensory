@@ -158,6 +158,7 @@
 		9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
 		9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */; };
 		9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */; };
+		A3B31FCE1A5BFFDB00732075 /* ES_UIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = A3B31FCD1A5BFFDB00732075 /* ES_UIColor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -379,6 +380,8 @@
 		9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEventTableCell.m; sourceTree = "<group>"; };
 		9FA74F5518AAF3A50095834B /* ES_ActivityEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivityEvent.h; sourceTree = "<group>"; };
 		9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivityEvent.m; sourceTree = "<group>"; };
+		A3B31FCC1A5BFF2700732075 /* ES_UIColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ES_UIColor.h; sourceTree = "<group>"; };
+		A3B31FCD1A5BFFDB00732075 /* ES_UIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_UIColor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -818,6 +821,8 @@
 		93F659DB17F6B1BE000638CB /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				A3B31FCC1A5BFF2700732075 /* ES_UIColor.h */,
+				A3B31FCD1A5BFFDB00732075 /* ES_UIColor.m */,
 				70FE414618B695D900F277FB /* ES_ActivitiesStrings.h */,
 				70FE414718B695D900F277FB /* ES_ActivitiesStrings.m */,
 				93F659D517F6857B000638CB /* ES_DataBaseAccessor.h */,
@@ -1076,6 +1081,7 @@
 				709F5AEC19FEBFED00F3386C /* CAStreamBasicDescription.cpp in Sources */,
 				93BC42BC17FB4C2900F06844 /* ES_Scheduler.m in Sources */,
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
+				A3B31FCE1A5BFFDB00732075 /* ES_UIColor.m in Sources */,
 				10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */,
 				939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */,
 				709F5AEA19FEBFED00F3386C /* CADebugPrintf.cpp in Sources */,
