@@ -8,5 +8,9 @@
     <string name="data_collection_on">on</string>
     <string name="data_collection_off">off</string>
     <string name="database_name">extra_sensory_db</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_active_feedback">active feedback</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
 
 </resources>

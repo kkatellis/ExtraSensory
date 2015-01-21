@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import edu.ucsd.calab.extrasensory.data.ESActivity;
 import edu.ucsd.calab.extrasensory.sensors.ESSensorManager;
 
 /**
@@ -35,6 +36,9 @@ public class ESApplication extends Application {
 
     }
 
+    /**
+     * Start a repeating schedule of recording sessions (every 1 minute) from now.
+     */
     public void startRecordingSchedule() {
         if (_alarmManager == null) {
             Log.e(LOG_TAG,"Alarm manager is null");
@@ -42,6 +46,9 @@ public class ESApplication extends Application {
         }
 
         PendingIntent pendingIntent = createESPendingIntent(ESIntentService.ACTION_START_RECORDING);
+        // Before registering the repeating alarm, make sure that any similar alarm is canceled:
+        _alarmManager.cancel(pendingIntent);
+
         Log.i(LOG_TAG,"Scheduling the recording sessions with interval of " + RECORDING_SESSIONS_INTERVAL_MILLIS/1000 + " seconds.");
         _alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 WAIT_BEFORE_START_FIRST_RECORDING_MILLIS,
@@ -52,11 +59,14 @@ public class ESApplication extends Application {
     private PendingIntent createESPendingIntent(String action) {
         Intent intent = new Intent(getApplicationContext(),ESIntentService.class);
         intent.setAction(action);
-        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(),0,intent,0);
 
-        return pendingIntent;
+        return PendingIntent.getService(getApplicationContext(),0,intent,0);
     }
 
+    /**
+     * Stop the current recording session (if one exists),
+     * and cancel the periodic schedule of recording sessions.
+     */
     public void stopCurrentRecordingAndRecordingSchedule() {
         stopRecordingSchedule();
         stopCurrentRecording();

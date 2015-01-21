@@ -1,7 +1,9 @@
 package edu.ucsd.calab.extrasensory.ui;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
+import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,11 +22,26 @@ public class MainActivity extends ActionBarActivity {
         return (ESApplication)getApplication();
     }
 
+    private FragmentTabHost fragmentTabHost;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("Creating main activity");
         setContentView(R.layout.activity_main);
+
+        fragmentTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
+        fragmentTabHost.setup(getApplicationContext(),getSupportFragmentManager(),android.R.id.tabcontent);
+
+        // Add the tabs:
+        fragmentTabHost.addTab(fragmentTabHost.newTabSpec("home").setIndicator("Home"),
+                HomeFragment.class, null);
+        fragmentTabHost.addTab(fragmentTabHost.newTabSpec("history").setIndicator("History"),
+                HistoryFragment.class, null);
+        fragmentTabHost.addTab(fragmentTabHost.newTabSpec("summary").setIndicator("Summary"),
+                SummaryFragment.class,null);
+
     }
 
 
@@ -41,10 +58,16 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent;
+        switch (id) {
+            case R.id.action_settings:
+                intent = new Intent(getApplicationContext(),SettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_active_feedback:
+                intent = new Intent(getApplicationContext(),FeedbackActivity.class);
+                startActivity(intent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
