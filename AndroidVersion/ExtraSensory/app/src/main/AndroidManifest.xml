@@ -19,20 +19,12 @@
         </activity>
 
         <service
-            android:name=".sensors.ESTriggerStartRecording"
-            android:exported="false" >
-        </service>
-        <service
             android:name=".ESIntentService"
             android:exported="false" >
         </service>
 
         <activity
             android:name=".ui.SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
-        <activity
-            android:name=".ui.SettingActivity"
             android:label="@string/title_activity_setting"
             android:parentActivityName=".ui.MainActivity" >
             <meta-data

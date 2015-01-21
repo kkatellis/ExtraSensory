@@ -115,6 +115,7 @@ public class ESContinuousActivity {
 
     /**
      * Get the array of secondary activity labels associated with this continuous activity.
+     * The order of the secondary activities is arbitrary.
      *
      * @return The array of secondary activities
      */
@@ -128,6 +129,7 @@ public class ESContinuousActivity {
 
     /**
      * Get the array of mood labels associated with this continuous activity.
+     * The order of the moods is arbitrary.
      *
      * @return The array of moods.
      */
@@ -139,15 +141,34 @@ public class ESContinuousActivity {
         return _minuteActivities[0].get_moods();
     }
 
+
+    // Static interface:
+
+
     /**
      * Create an array of continuous activities out of an array of atomic activities,
      * by merging every sequence of consecutive atomic activities with the same labels into a single
-     * continuous activity object.
+     * continuous activity object. For collections of labels (secondary activities or moods) the order
+     * of the Strings in the array doesn't matter, just the set of strings.
      *
      * @param minuteActivities The sequence of atomic activities (assumed sorted in ascending order of timestamp)
      * @return The sequence of continuous activities, sorted in ascending order of start-timestamp
      */
     public static ESContinuousActivity[] mergeContinuousActivities(ESActivity[] minuteActivities) {
+        //TODO.................
         return null;
+    }
+
+    /**
+     * Compare the two sets of labels, ignoring the orders,
+     * to see if both sets contain exactly the same labels.
+     *
+     * @param labelSet1 Array of labels of set1 (arbitrary order)
+     * @param labelSet2 Array of labels of set2 (arbitrary order)
+     * @return True iff both sets contain exactly the same labels
+     */
+    private static boolean areTwoSetsOfLabelsTheSame(String[] labelSet1,String[] labelSet2) {
+        //TODO..............
+        return false;
     }
 }

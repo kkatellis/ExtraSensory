@@ -22,6 +22,12 @@ public class ESApplication extends Application {
     private static final long WAIT_BEFORE_START_FIRST_RECORDING_MILLIS = 500;
     private static final long RECORDING_SESSIONS_INTERVAL_MILLIS = 1000*3;
 
+    private static Context _appContext;
+
+    public static Context getTheAppContext() {
+        return _appContext;
+    }
+
     private ESSensorManager _sensorManager;
     private AlarmManager _alarmManager;
 
@@ -32,6 +38,7 @@ public class ESApplication extends Application {
         _sensorManager = ESSensorManager.getESSensorManager(getApplicationContext());
         _alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
+        _appContext = getApplicationContext();
         // Start the scheduling of periodic recordings:
 
     }

@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
         Intent intent;
         switch (id) {
             case R.id.action_settings:
-                intent = new Intent(getApplicationContext(),SettingActivity.class);
+                intent = new Intent(getApplicationContext(),SettingsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.action_active_feedback:
