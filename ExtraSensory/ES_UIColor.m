@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Bryan Grounds. All rights reserved.
 //
 
-#import "UIColor+CustomColors.h"
+/*#import "UIColor+CustomColors.h"
 
 @interface UIColor (CustomColors)
 
@@ -21,3 +21,4 @@
 }
 
 @end
+*/

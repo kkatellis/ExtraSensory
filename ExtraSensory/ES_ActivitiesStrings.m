@@ -59,39 +59,68 @@ static NSArray *mainActivitiesColorList = nil;
     return mainActivitiesColorList;
 }
 
-+(UIColor *)getColorForMainActivity:(NSString *)activity
++(UIColor *)getColorForMainActivity:(NSString *)activity //indexValue:(int)index
 {
+   // UIColor *darkBlue = [[UIColor alloc] initWithRed:20.0 / 255 green:59.0 / 255 blue:102.0 / 255 alpha:1.0];
+   // NSArray *colors = [[UIColor magentaColor], [UIColor purpleColor], [UIColor blueColor], [UIColor purpleColor],[UIColor blueColor], [UIColor greenColor], [UIColor yellowColor], [UIColor orangeColor], [UIColor redColor], [UIColor grayColor]];
+    NSMutableArray *colors = [NSMutableArray array];
+    
+    float INCREMENT = 0.1;
+    for (float hue = 0.7; hue >= 0.0; hue -= INCREMENT) {
+        UIColor *color = [UIColor colorWithHue:hue
+                                    saturation:1.0
+                                    brightness:1.0
+                                         alpha:1.0];
+        [colors addObject:color];
+    }
+    
+    int i = 0;
+    for (NSString *label in mainActivitiesList){
+        if ([label isEqualToString: activity]){
+            return [colors objectAtIndex: i];
+        }
+        i = i+1;
+    }
+    
+   /*
     if ([activity isEqualToString:LYING_DOWN])
     {
-        return [UIColor magentaColor];
+        //return [UIColor magentaColor];
+        return [colors objectAtIndex: 0];
     }
     if ([activity isEqualToString:SITTING])
     {
-        return [UIColor purpleColor];
+        //return [UIColor purpleColor];
+        return [colors objectAtIndex: 1];
     }
     if ([activity isEqualToString:STANDING_IN_PLACE])
     {
-        return [UIColor blueColor];
+        //return [UIColor blueColor];
+        return [colors objectAtIndex: 2];
     }
     if ([activity isEqualToString:STANDING_AND_MOVING])
     {
-        return [UIColor greenColor];
+        //return [UIColor greenColor];
+        return [colors objectAtIndex: 3];
     }
     if ([activity isEqualToString:WALKING])
     {
-        return [UIColor yellowColor];
+        //return [UIColor yellowColor];
+        return [colors objectAtIndex: 4];
     }
     if ([activity isEqualToString:RUNNING])
     {
-        return [UIColor orangeColor];
+        //return [UIColor orangeColor];
+        return [colors objectAtIndex: 5];
     }
     if ([activity isEqualToString:BICYCLING])
     {
-        return [UIColor redColor];
+        //return [UIColor redColor];
+        return [colors objectAtIndex: 6];
     }
-    
+    */
     return [UIColor grayColor];
-    
+   
     return nil;
 }
 

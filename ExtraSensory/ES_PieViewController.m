@@ -10,6 +10,8 @@
 #import "ES_ActivitiesStrings.h"
 #import "ES_PieChartView.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface ES_PieViewController ()
 
 //@property (weak, nonatomic) IBOutlet UILabel *border;
@@ -35,12 +37,10 @@
 @end
 
 
-
 @implementation ES_PieViewController
 
 @synthesize legendColors = _legendColors;
 @synthesize legendNames = _legendNames;
-
 
 - (NSArray *)legendColors
 {
@@ -92,7 +92,6 @@
         colorLabel.backgroundColor = activityColor;
         colorLabel.layer.cornerRadius = 10;
     }
-    
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -106,6 +105,7 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 - (void) redrawPie
