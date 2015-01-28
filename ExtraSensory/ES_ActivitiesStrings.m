@@ -82,43 +82,6 @@ static NSArray *mainActivitiesColorList = nil;
         i = i+1;
     }
     
-   /*
-    if ([activity isEqualToString:LYING_DOWN])
-    {
-        //return [UIColor magentaColor];
-        return [colors objectAtIndex: 0];
-    }
-    if ([activity isEqualToString:SITTING])
-    {
-        //return [UIColor purpleColor];
-        return [colors objectAtIndex: 1];
-    }
-    if ([activity isEqualToString:STANDING_IN_PLACE])
-    {
-        //return [UIColor blueColor];
-        return [colors objectAtIndex: 2];
-    }
-    if ([activity isEqualToString:STANDING_AND_MOVING])
-    {
-        //return [UIColor greenColor];
-        return [colors objectAtIndex: 3];
-    }
-    if ([activity isEqualToString:WALKING])
-    {
-        //return [UIColor yellowColor];
-        return [colors objectAtIndex: 4];
-    }
-    if ([activity isEqualToString:RUNNING])
-    {
-        //return [UIColor orangeColor];
-        return [colors objectAtIndex: 5];
-    }
-    if ([activity isEqualToString:BICYCLING])
-    {
-        //return [UIColor redColor];
-        return [colors objectAtIndex: 6];
-    }
-    */
     return [UIColor grayColor];
    
     return nil;
