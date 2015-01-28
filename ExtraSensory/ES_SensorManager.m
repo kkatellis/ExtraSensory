@@ -145,6 +145,8 @@
 #define BATTERY_LEVEL   @"battery_level"
 #define BATTERY_STATE   @"battery_state"
 
+#define SCREEN_BRIGHT   @"screen_brightness"
+
 -(ES_SoundWaveProcessor *) soundProcessor
 {
     if(!_soundProcessor)
@@ -718,6 +720,9 @@
     
     BOOL onThePhone = ((self.callCenter.currentCalls) && ([self.callCenter.currentCalls count] > 0));
     [lfData setValue:[NSNumber numberWithBool:onThePhone] forKey:ON_THE_PHONE];
+    
+    CGFloat screenBrightness = [UIScreen mainScreen].brightness;
+    [lfData setValue:[NSNumber numberWithFloat:screenBrightness] forKey:SCREEN_BRIGHT];
     
     // Add these measurements to the data bundle:
     [self.hfData setValue:lfData forKey:LOW_FREQ];

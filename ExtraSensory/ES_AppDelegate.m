@@ -59,7 +59,6 @@
 
 
 
-
 - (ES_User *)user
 {
     if (!_user)

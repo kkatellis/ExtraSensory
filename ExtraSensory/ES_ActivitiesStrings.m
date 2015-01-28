@@ -37,7 +37,7 @@ static NSArray *mainActivitiesColorList = nil;
     
     if (!mainActivitiesList)
     {
-        mainActivitiesList = [self loadStringArrayFromTextFile:@"mainActivitiesList"];
+        mainActivitiesList = [self loadStringArrayFromTextFile:@"mainActivitiesList" andSortLabels:NO];
     }
     
     return mainActivitiesList;
@@ -124,14 +124,14 @@ static NSArray *mainActivitiesColorList = nil;
     return nil;
 }
 
-+ (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename
++ (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename andSortLabels:(BOOL)sort
 {
     NSDictionary *dictRef = nil;
-    NSArray *arr = [self loadStringArrayFromTextFile:resourceFilename andLoadSubjectsDictionaryInto:&dictRef];
+    NSArray *arr = [self loadStringArrayFromTextFile:resourceFilename andLoadSubjectsDictionaryInto:&dictRef andSortLabels:sort];
     return arr;
 }
 
-+ (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename andLoadSubjectsDictionaryInto:(NSDictionary **)dictRef
++ (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename andLoadSubjectsDictionaryInto:(NSDictionary **)dictRef andSortLabels:(BOOL)sort
 {
     NSString *resourceFilePath = [[NSBundle mainBundle] pathForResource:resourceFilename ofType:@"txt"];
     NSError *err = nil;
@@ -145,9 +145,14 @@ static NSArray *mainActivitiesColorList = nil;
     
     // Separate the labels from the total string:
     NSArray *labelsStrings = [allStrings componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-    // Sort the labels alphabetically:
-    NSMutableArray *sortedLabels = [NSMutableArray arrayWithArray:[labelsStrings sortedArrayUsingSelector:@selector(compare:)]];
+    NSMutableArray *sortedLabels;
+    if (sort) {
+        // Sort the labels alphabetically:
+        sortedLabels = [NSMutableArray arrayWithArray:[labelsStrings sortedArrayUsingSelector:@selector(compare:)]];
+    }
+    else {
+        sortedLabels = [NSMutableArray arrayWithArray:labelsStrings];
+    }
     [sortedLabels removeObject:@""];
     
     NSLog(@"[activitiesStrings] Loaded %lu labels from %@.",(unsigned long)sortedLabels.count,resourceFilename);
@@ -185,7 +190,7 @@ static NSArray *mainActivitiesColorList = nil;
 + (void) loadSecondary
 {
     NSDictionary *subjDict = nil;
-    secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList" andLoadSubjectsDictionaryInto:&subjDict];
+    secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList" andLoadSubjectsDictionaryInto:&subjDict andSortLabels:YES];
     secondaryActivitiesPerSubject = subjDict;
     NSLog(@"[activitiesStrings] Loaded secondary subjects: %@",subjDict);
 }
@@ -215,7 +220,7 @@ static NSArray *mainActivitiesColorList = nil;
 +(NSArray *)moods {
     if (!moodsList)
     {
-        moodsList = [self loadStringArrayFromTextFile:@"moodsList"];
+        moodsList = [self loadStringArrayFromTextFile:@"moodsList" andSortLabels:YES];
     }
     
     return moodsList;
@@ -224,7 +229,7 @@ static NSArray *mainActivitiesColorList = nil;
 +(NSArray *)homeSensingLabels{
     if (!homeSensingList)
     {
-        homeSensingList = [self loadStringArrayFromTextFile:@"homeSensingLabelsList"];
+        homeSensingList = [self loadStringArrayFromTextFile:@"homeSensingLabelsList" andSortLabels:YES];
     }
     
     return homeSensingList;
