@@ -154,12 +154,17 @@
 
 - (NSString *) getFirstOnNetworkStack
 {
-    return [self.networkStack firstObject];
+    NSString *item = [self.networkStack firstObject];
+    // Move the item to the end of the queue:
+    [self.networkStack removeObjectAtIndex:0];
+    [self.networkStack addObject:item];
+    
+    return item;
 }
 
 - (BOOL) removeFromNetworkStackFile:(NSString *)filename
 {
-    for (int ii = 0; ii < [self.networkStack count]; ii++)
+    for (int ii = [self.networkStack count]-1; ii >= 0; ii--)
     {
         if ([filename isEqualToString:[self.networkStack objectAtIndex:ii]])
         {
