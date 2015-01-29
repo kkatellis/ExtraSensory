@@ -59,39 +59,31 @@ static NSArray *mainActivitiesColorList = nil;
     return mainActivitiesColorList;
 }
 
-+(UIColor *)getColorForMainActivity:(NSString *)activity
++(UIColor *)getColorForMainActivity:(NSString *)activity //indexValue:(int)index
 {
-    if ([activity isEqualToString:LYING_DOWN])
-    {
-        return [UIColor magentaColor];
+   // UIColor *darkBlue = [[UIColor alloc] initWithRed:20.0 / 255 green:59.0 / 255 blue:102.0 / 255 alpha:1.0];
+   // NSArray *colors = [[UIColor magentaColor], [UIColor purpleColor], [UIColor blueColor], [UIColor purpleColor],[UIColor blueColor], [UIColor greenColor], [UIColor yellowColor], [UIColor orangeColor], [UIColor redColor], [UIColor grayColor]];
+    NSMutableArray *colors = [NSMutableArray array];
+    
+    float INCREMENT = 0.1;
+    for (float hue = 0.7; hue >= 0.0; hue -= INCREMENT) {
+        UIColor *color = [UIColor colorWithHue:hue
+                                    saturation:1.0
+                                    brightness:1.0
+                                         alpha:1.0];
+        [colors addObject:color];
     }
-    if ([activity isEqualToString:SITTING])
-    {
-        return [UIColor purpleColor];
-    }
-    if ([activity isEqualToString:STANDING_IN_PLACE])
-    {
-        return [UIColor blueColor];
-    }
-    if ([activity isEqualToString:STANDING_AND_MOVING])
-    {
-        return [UIColor greenColor];
-    }
-    if ([activity isEqualToString:WALKING])
-    {
-        return [UIColor yellowColor];
-    }
-    if ([activity isEqualToString:RUNNING])
-    {
-        return [UIColor orangeColor];
-    }
-    if ([activity isEqualToString:BICYCLING])
-    {
-        return [UIColor redColor];
+    
+    int i = 0;
+    for (NSString *label in mainActivitiesList){
+        if ([label isEqualToString: activity]){
+            return [colors objectAtIndex: i];
+        }
+        i = i+1;
     }
     
     return [UIColor grayColor];
-    
+   
     return nil;
 }
 
