@@ -16,44 +16,13 @@
 #import "ES_SoundWaveProcessor.h"
 #import "Reachability.h"
 #import "ES_NetworkAccessor.h"
+#import "ES_ImageProcessor.h"
 
 // In Hertz
 #define HF_SAMPLING_RATE    40
 
 #define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
 #define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
-
-@interface ES_SensorManager()
-
-@property NSTimer *timer;
-@property NSTimer *soundTimer;
-@property NSNumber *counter;
-
-@property (nonatomic, strong)  ES_AppDelegate *appDelegate;
-
-@property (nonatomic, strong) NSMutableDictionary *hfData;
-@property (nonatomic) BOOL usingTimerForSampling;
-
-
-@end
-
-@implementation ES_SensorManager
-
-@synthesize soundProcessor = _soundProcessor;
-@synthesize currentLocation = _currentLocation;
-@synthesize motionManager = _motionManager;
-@synthesize locationManager = _locationManager;
-@synthesize callCenter = _callCenter;
-@synthesize timer = _timer;
-@synthesize soundTimer = _soundTimer;
-@synthesize counter = _counter;
-@synthesize sampleFrequency = _sampleFrequency;
-@synthesize interval = _interval;
-@synthesize sampleDuration = _sampleDuration;
-@synthesize isReady = _isReady;
-@synthesize user = _user;
-@synthesize currentActivity = _currentActivity;
-@synthesize usingTimerForSampling = _usingTimerForSampling;
 
 //--// API data keys
 
@@ -146,6 +115,43 @@
 #define BATTERY_STATE   @"battery_state"
 
 #define SCREEN_BRIGHT   @"screen_brightness"
+#define CAMERA          @"camera"
+
+@interface ES_SensorManager()
+
+@property NSTimer *timer;
+@property NSTimer *soundTimer;
+@property NSNumber *counter;
+
+@property (nonatomic, strong)  ES_AppDelegate *appDelegate;
+
+@property (nonatomic, strong) NSMutableDictionary *hfData;
+@property (nonatomic) BOOL usingTimerForSampling;
+
+@property (nonatomic, strong) ES_ImageProcessor *cameraProcessor;
+
+@end
+
+@implementation ES_SensorManager
+
+@synthesize soundProcessor = _soundProcessor;
+@synthesize currentLocation = _currentLocation;
+@synthesize motionManager = _motionManager;
+@synthesize locationManager = _locationManager;
+@synthesize callCenter = _callCenter;
+@synthesize timer = _timer;
+@synthesize soundTimer = _soundTimer;
+@synthesize counter = _counter;
+@synthesize sampleFrequency = _sampleFrequency;
+@synthesize interval = _interval;
+@synthesize sampleDuration = _sampleDuration;
+@synthesize isReady = _isReady;
+@synthesize user = _user;
+@synthesize currentActivity = _currentActivity;
+@synthesize usingTimerForSampling = _usingTimerForSampling;
+@synthesize cameraProcessor = _cameraProcessor;
+
+
 
 -(ES_SoundWaveProcessor *) soundProcessor
 {
@@ -249,6 +255,13 @@
 {
     _usingTimerForSampling = NO;
     return _usingTimerForSampling;
+}
+
+- (ES_ImageProcessor *)cameraProcessor {
+    if (!_cameraProcessor) {
+        _cameraProcessor = [ES_ImageProcessor new];
+    }
+    return _cameraProcessor;
 }
 
 
@@ -360,6 +373,7 @@
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
     [self.soundProcessor pauseDurRecording];
+    [self.cameraProcessor stopSession];
     [self.appDelegate markNotRecordingRightNow];
 }
 
@@ -529,6 +543,14 @@
         [self.locationManager startUpdatingLocation];
     }
     
+    // Data from cameras:
+    if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusAuthorized) {
+        [[self cameraProcessor] startCameraCycle];
+    }
+    else {
+        NSLog(@"[sensorManager] Not authorized to use camera");
+    }
+
     // Add low frequency (one time) measurements:
     [self addDeviceIndicatorsToDataBundle];
     
@@ -724,6 +746,7 @@
     CGFloat screenBrightness = [UIScreen mainScreen].brightness;
     [lfData setValue:[NSNumber numberWithFloat:screenBrightness] forKey:SCREEN_BRIGHT];
     
+    
     // Add these measurements to the data bundle:
     [self.hfData setValue:lfData forKey:LOW_FREQ];
     
@@ -756,6 +779,9 @@
     
     NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
     
+    // Add camera data:
+    [self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
+    
     [self handleFinishedDataBundle];
 }
 
@@ -767,6 +793,7 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
+    [self.cameraProcessor stopSession];
 }
 
 - (void) handleFinishedDataBundle

@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */; };
-		299617F11A76C9850082112D /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 299617F01A76C9850082112D /* XYPieChart.m */; };
 		299617F31A78AE6F0082112D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 299617F21A78AE6E0082112D /* QuartzCore.framework */; };
 		4E1336571A630E9700683B84 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1336561A630E9700683B84 /* ES_Activity.m */; };
+		4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */; };
 		4E4047C01A1FDDF700C1D0DF /* secondaryActivitiesList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */; };
 		4E4047C21A23B5BE00C1D0DF /* moodsList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047C11A23B5BE00C1D0DF /* moodsList.txt */; };
 		4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C41A23F19600C1D0DF /* ES_Label.m */; };
@@ -175,11 +175,11 @@
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ES_SoundWaveProcessor.mm; sourceTree = "<group>"; };
-		299617EF1A76C9850082112D /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XYPieChart.h; path = "../../../Downloads/XYPieChart-master/XYPieChart/XYPieChart.h"; sourceTree = "<group>"; };
-		299617F01A76C9850082112D /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XYPieChart.m; path = "../../../Downloads/XYPieChart-master/XYPieChart/XYPieChart.m"; sourceTree = "<group>"; };
 		299617F21A78AE6E0082112D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4E1336551A630E9700683B84 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
 		4E1336561A630E9700683B84 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
+		4E1336591A78125E00683B84 /* ES_ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ImageProcessor.h; sourceTree = "<group>"; };
+		4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ImageProcessor.m; sourceTree = "<group>"; };
 		4E4047BF1A1FDDF700C1D0DF /* secondaryActivitiesList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secondaryActivitiesList.txt; sourceTree = "<group>"; };
 		4E4047C11A23B5BE00C1D0DF /* moodsList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = moodsList.txt; sourceTree = "<group>"; };
 		4E4047C31A23F19600C1D0DF /* ES_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Label.h; sourceTree = "<group>"; };
@@ -598,8 +598,6 @@
 		70C156C918D6656C007CCB39 /* Summary */ = {
 			isa = PBXGroup;
 			children = (
-				299617EF1A76C9850082112D /* XYPieChart.h */,
-				299617F01A76C9850082112D /* XYPieChart.m */,
 				70C156BC18D526EB007CCB39 /* ES_ContainerViewController.h */,
 				70C156BD18D526EB007CCB39 /* ES_ContainerViewController.m */,
 				70C156C518D52BD1007CCB39 /* ES_SwapViewController.h */,
@@ -769,6 +767,8 @@
 				933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */,
 				10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */,
 				10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */,
+				4E1336591A78125E00683B84 /* ES_ImageProcessor.h */,
+				4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -1051,6 +1051,7 @@
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
 				709F5AEB19FEBFED00F3386C /* CAHostTimeBase.cpp in Sources */,
+				4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
 				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
@@ -1076,7 +1077,6 @@
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
 				4E4047C81A24F54100C1D0DF /* ES_SecondaryActivity.m in Sources */,
 				701DEDD51A2FC578006F411E /* TriangleFilter.cpp in Sources */,
-				299617F11A76C9850082112D /* XYPieChart.m in Sources */,
 				70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */,
 				701DEDD41A2FC578006F411E /* MelFilterBank.cpp in Sources */,
 				4E1336571A630E9700683B84 /* ES_Activity.m in Sources */,

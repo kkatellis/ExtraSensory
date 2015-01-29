@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "XYPieChart.h"
+//#import "XYPieChart.h"
 
-@interface ES_PieViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource>
+@interface ES_PieViewController : UIViewController //<XYPieChartDelegate, XYPieChartDataSource>
 
-@property (strong, nonatomic) IBOutlet XYPieChart *pieChartRight;
-@property (strong, nonatomic) IBOutlet XYPieChart *pieChartLeft;
+//@property (strong, nonatomic) IBOutlet XYPieChart *pieChartRight;
+//@property (strong, nonatomic) IBOutlet XYPieChart *pieChartLeft;
 @property (strong, nonatomic) IBOutlet UILabel *percentageLabel;
 @property (strong, nonatomic) IBOutlet UILabel *selectedSliceLabel;
 @property (strong, nonatomic) IBOutlet UITextField *numOfSlices;

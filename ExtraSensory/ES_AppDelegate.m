@@ -21,12 +21,19 @@
 
 // Some constants:
 #define APP_NAME_TITLE_STR @"ExtraSensory"
-#define FOUND_VERIFIED @"foundVerified"
 #define NOT_NOW_BUTTON_STR @"Cancel"
 #define YES_STR @"Yes"
 #define CORRECT_STR @"Correct"
 #define NOT_EXACTLY_STR @"Not exactly"
 #define ALERT_DISMISS_TIME 45
+#define MAX_UPLOAD_STRIKES 3
+
+#define FOUND_VERIFIED_KEY      @"foundVerified"
+#define NAG_CHECK_TIMESTAMP_KEY @"nagCheckTimestamp"
+#define MAIN_ACTIVITY_KEY       @"mainActivity"
+#define SECONDARY_ACT_KEY       @"secondaryActivitiesStrings"
+#define MOODS_KEY               @"moodsStrings"
+#define LATEST_VERIFIED_KEY     @"latestVerifiedTimestamp"
 
 @interface ES_AppDelegate()
 
@@ -35,6 +42,8 @@
 @property (nonatomic) ES_Activity *exampleWithPredeterminedLabels;
 @property (nonatomic, strong) NSDate *predeterminedLabelsValidUntil;
 @property (nonatomic, strong) NSTimer *predeterminedLabelsExpirationTimer;
+
+@property (nonatomic,strong) NSMutableDictionary *uploadStrikeCounts;
 
 @end
 
@@ -46,6 +55,7 @@
 @synthesize uuid = _uuid;
 
 @synthesize sensorManager = _sensorManager;
+@synthesize uploadStrikeCounts = _uploadStrikeCounts;
 
 @synthesize networkStack = _networkStack;
 
@@ -129,6 +139,13 @@
     return _networkStack;
 }
 
+- (NSMutableDictionary *)uploadStrikeCounts {
+    if (!_uploadStrikeCounts) {
+        _uploadStrikeCounts = [NSMutableDictionary dictionaryWithCapacity:1];
+    }
+    return _uploadStrikeCounts;
+}
+
 - (void) postNetworkStackNotification
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"NetworkStackSize" object:self];
@@ -154,12 +171,17 @@
 
 - (NSString *) getFirstOnNetworkStack
 {
-    return [self.networkStack firstObject];
+    NSString *item = [self.networkStack firstObject];
+    // Move the item to the end of the queue:
+    [self.networkStack removeObjectAtIndex:0];
+    [self.networkStack addObject:item];
+    
+    return item;
 }
 
 - (BOOL) removeFromNetworkStackFile:(NSString *)filename
 {
-    for (int ii = 0; ii < [self.networkStack count]; ii++)
+    for (int ii = (int)[self.networkStack count]-1; ii >= 0; ii--)
     {
         if ([filename isEqualToString:[self.networkStack objectAtIndex:ii]])
         {
@@ -205,7 +227,26 @@
     return res1 && res2;
 }
 
-
+- (void) markStrikeForUploadingFile:(NSString *)filename
+{
+    int newStrikeCount = 1;
+    NSNumber *currentCount = [[self uploadStrikeCounts] valueForKey:filename];
+    if (currentCount) {
+        newStrikeCount = [currentCount intValue] + 1;
+    }
+    
+    if (newStrikeCount > MAX_UPLOAD_STRIKES) {
+        // Then this zip file failed too many times to upload properly on the server.
+        [self removeFromeNetworkStackAndDeleteFile:filename];
+        [[self uploadStrikeCounts] removeObjectForKey:filename];
+        NSLog(@"[appDelegate] Zip file %@ had enough failures trying to upload to server. Deleting it",filename);
+    }
+    else {
+        // Update the strike count for this zip file:
+        [[self uploadStrikeCounts] setValue:[NSNumber numberWithInt:newStrikeCount] forKey:filename];
+        NSLog(@"[appDelegate] Zip file %@ had another strike trying to upload to server. Strike count: %d",filename,newStrikeCount);
+    }
+}
 
 
 // Getter
@@ -260,8 +301,15 @@
     {
         NSLog(@"[appDelegate] App is authorized to use location services. Authorization status=%d",[CLLocationManager authorizationStatus]);
     }
-//    [self.locationManager startUpdatingLocation];
 
+    // Permission to use camera:
+    if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            NSLog(@"[appDelegate] Authorization to use video media: %b",granted);
+        }];
+    }
+    
+    
     UIImage *navBackgroundImage = [UIImage imageNamed:@"iOS7-blue"];
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
 
@@ -405,7 +453,7 @@
     if (userInfo)
     {
         // Check if there was found a verified activity in the recent period of time:
-        if ([userInfo valueForKey:FOUND_VERIFIED])
+        if ([userInfo valueForKey:FOUND_VERIFIED_KEY])
         {
             [self pushActivityEventFeedbackViewWithUserInfo:userInfo userAlreadyApproved:userApproved];
         }
@@ -435,7 +483,7 @@
             
             // Use the single alert we maintain. First see if there is an open one that we need to dismiss:
             [self dismissLatestAlert];
-            if ([notification.userInfo valueForKey:FOUND_VERIFIED])
+            if ([notification.userInfo valueForKey:FOUND_VERIFIED_KEY])
             {
                 NSLog(@"[appDelegate] notification user info has verified labels. So preparing alert for activityEvent feedback");
                 // Then prepare alert for activityEvent feedback:
@@ -466,21 +514,22 @@
     }
 }
 
+
 - (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings moods:(NSArray *)moodsStrings latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp
 {
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:nagCheckTimestamp forKey:@"nagCheckTimestamp"];
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:nagCheckTimestamp forKey:NAG_CHECK_TIMESTAMP_KEY];
     
     if (foundVerified)
     {
-        [userInfo setValue:@1 forKey:FOUND_VERIFIED];
-        [userInfo setValue:mainActivity forKey:@"mainActivity"];
-        [userInfo setValue:secondaryActivitiesStrings forKey:@"secondaryActivitiesStrings"];
-        [userInfo setValue:moodsStrings forKey:@"moodsStrings"];
-        [userInfo setValue:latestVerifiedTimestamp forKey:@"latestVerifiedTimestamp"];
+        [userInfo setValue:@1 forKey:FOUND_VERIFIED_KEY];
+        [userInfo setValue:mainActivity forKey:MAIN_ACTIVITY_KEY];
+        [userInfo setValue:secondaryActivitiesStrings forKey:SECONDARY_ACT_KEY];
+        [userInfo setValue:moodsStrings forKey:MOODS_KEY];
+        [userInfo setValue:latestVerifiedTimestamp forKey:LATEST_VERIFIED_KEY];
     }
     else
     {
-        [userInfo setValue:nil forKey:FOUND_VERIFIED];
+        [userInfo setValue:nil forKey:FOUND_VERIFIED_KEY];
     }
     
     return userInfo;
@@ -503,15 +552,15 @@
 - (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved
 {
     // Create an ES_ActivityEvent object to initially describe what was presumably done in the recent period of time:
-    NSNumber *startTimestamp = [userInfo valueForKey:@"latestVerifiedTimestamp"];
-    NSNumber *endTimestamp = [userInfo valueForKey:@"nagCheckTimestamp"];
+    NSNumber *startTimestamp = [userInfo valueForKey:LATEST_VERIFIED_KEY];
+    NSNumber *endTimestamp = [userInfo valueForKey:NAG_CHECK_TIMESTAMP_KEY];
     
     NSMutableArray *minuteActivities = [NSMutableArray arrayWithArray:[ES_DataBaseAccessor getActivitiesFrom:startTimestamp to:endTimestamp]];
     
-    NSSet *secondaryActivitiesStringsSet = [NSSet setWithArray:[userInfo valueForKey:@"secondaryActivitiesStrings"]];
-    NSSet *moodsStringsSet = [NSSet setWithArray:[userInfo valueForKey:@"moodsStrings"]];
+    NSSet *secondaryActivitiesStringsSet = [NSSet setWithArray:[userInfo valueForKey:SECONDARY_ACT_KEY]];
+    NSSet *moodsStringsSet = [NSSet setWithArray:[userInfo valueForKey:MOODS_KEY]];
     
-    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithServerPrediction:@"" userCorrection:[userInfo valueForKey:@"mainActivity"] secondaryActivitiesStrings:secondaryActivitiesStringsSet moodsStrings:moodsStringsSet startTimestamp:[userInfo valueForKey:@"latestVerifiedTimestamp"] endTimestamp:[userInfo valueForKey:@"nagCheckTimestamp"] minuteActivities:minuteActivities];
+    ES_ActivityEvent *activityEvent = [[ES_ActivityEvent alloc] initWithServerPrediction:@"" userCorrection:[userInfo valueForKey:MAIN_ACTIVITY_KEY] secondaryActivitiesStrings:secondaryActivitiesStringsSet moodsStrings:moodsStringsSet startTimestamp:[userInfo valueForKey:LATEST_VERIFIED_KEY] endTimestamp:[userInfo valueForKey:NAG_CHECK_TIMESTAMP_KEY] minuteActivities:minuteActivities];
     
     // If user already approved labels, we can send the feedback right-away, without opening the feedback view:
     if (userApproved)

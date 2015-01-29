@@ -113,7 +113,7 @@ def collect_single_instance(uuid,timestamp,skip_existing):
     # Read the measurements file and save the different modalities to files:
     new_version = True;
     if new_version:
-        (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data) = read_datafile(hf_file);
+        (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,front_camera,back_camera) = read_datafile(hf_file);
 
         np.savetxt(os.path.join(instance_out_dir,'m_raw_acc'),raw_acc);
         np.savetxt(os.path.join(instance_out_dir,'m_raw_magnet'),raw_magnet);
@@ -128,6 +128,9 @@ def collect_single_instance(uuid,timestamp,skip_existing):
         np.savetxt(os.path.join(instance_out_dir,'m_proc_attitude'),proc_attitude);
 
         np.savetxt(os.path.join(instance_out_dir,'m_location'),location);
+
+        save_json_file(os.path.join(instance_out_dir,'m_front_camera'),front_camera);
+        save_json_file(os.path.join(instance_out_dir,'m_back_camera'),back_camera);
         pass;
     else:
         (acc,magnet,gyro,location,lf_data) = read_datafile_json_list(hf_file);
@@ -139,15 +142,18 @@ def collect_single_instance(uuid,timestamp,skip_existing):
         np.savetxt(os.path.join(instance_out_dir,'location'),location);
         pass;
 
-    lf_out_file = os.path.join(instance_out_dir,'m_lf_measurements.dat');
-    fid = open(lf_out_file,'wb');
-    json.dump(lf_data,fid);
-    fid.close();
+    save_json_file(os.path.join(instance_out_dir,'m_lf_measurements.dat'),lf_data);
     if len(lf_data) > 0:
         print "++ Created low-frequency measures file";
         pass;
 
     return True;
+
+def save_json_file(out_file,json_data):
+    fid = open(out_file,'wb');
+    json.dump(json_data,fid);
+    fid.close();
+    return;
 
 def analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp):
     fid = file(active_label_file,'rb');
@@ -213,8 +219,10 @@ def read_datafile(hf_file):
                                               'location_horizontal_accuracy','location_vertical_accuracy']);
     
     lf_data = jdict['low_frequency'];
-        
-    return (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data);
+    front_camera = jdict['front_camera'] if 'front_camera' in jdict else None;
+    back_camera = jdict['back_camera'] if 'back_camera' in jdict else None;
+
+    return (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,front_camera,back_camera);
 
 def read_datafile_json_list(hf_file):
     # open the file for reading
@@ -281,7 +289,7 @@ def main():
         pass;
     fid.close();
 
-    skip_existing = False;
+    skip_existing = True;
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;

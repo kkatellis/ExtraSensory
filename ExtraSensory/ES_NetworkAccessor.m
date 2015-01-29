@@ -353,34 +353,40 @@
         NSString *uploadedZipFile = [response objectForKey:@"filename"];
         
         ES_AppDelegate *appDelegate = [self appDelegate];
-        [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
+        BOOL uploadSuccess = [[response objectForKey:@"success"] boolValue];
+        if (uploadSuccess) {
+            [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
+            ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
+            
+            if (activity)
+            {
+                [appDelegate.predictions insertObject:activity atIndex:0];
+                
+                // set the predicted activity for our local Activity object
+                [activity setValue: predictedActivity forKey: @"serverPrediction" ];
+                
+                connection = nil;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
+                
+                // Check if there is already some non-trivial labels that should be sent for this activity:
+                if ([self isThereUserUpdateForActivity:activity])
+                {
+                    NSLog(@"[networkAccessor] Activity that just received prediction (timestamp %@) already has some user-labeling, so sending it now...",time);
+                    [self sendFeedback:activity];
+                }
+                
+            }
+            else
+            {
+                NSLog(@"[networkAccessor] Didn't find an existing activity record for timestamp: %@ (%@).",time,[NSDate dateWithTimeIntervalSince1970:[time doubleValue]]);
+            }
+        }
+        else {
+            [appDelegate markStrikeForUploadingFile:uploadedZipFile];
+        }
         isReady = YES;
         
-        ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
-
-        if (activity)
-        {
-            [appDelegate.predictions insertObject:activity atIndex:0];
-        
-            // set the predicted activity for our local Activity object
-            [activity setValue: predictedActivity forKey: @"serverPrediction" ];
-        
-            connection = nil;
-        
-            [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
-
-            // Check if there is already some non-trivial labels that should be sent for this activity:
-            if ([self isThereUserUpdateForActivity:activity])
-            {
-                NSLog(@"[networkAccessor] Activity that just received prediction (timestamp %@) already has some user-labeling, so sending it now...",time);
-                [self sendFeedback:activity];
-            }
-            
-        }
-        else
-        {
-            NSLog(@"[networkAccessor] Didn't find an existing activity record for timestamp: %@ (%@).",time,[NSDate dateWithTimeIntervalSince1970:[time doubleValue]]);
-        }
         
         //[appDelegate updateNetworkStackFromStorageFilesIfEmpty];
         NSLog(@"[networkAccessor] network stack size (1): %lu",(unsigned long)appDelegate.networkStack.count);
