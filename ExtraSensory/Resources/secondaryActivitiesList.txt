@@ -22,7 +22,8 @@ Washing dishes|Housework
 Washing car|Housework
 Manual labor|Housework
 Dancing|Leisure
-Listening to music|Leisure
+Listening to music (with earphones)|Leisure
+Listening to music (no earphones)|Leisure
 Playing musical instrument|Leisure
 Singing|Leisure
 Wistling|Leisure
@@ -36,6 +37,7 @@ Watching TV|Leisure
 Talking with friends|Leisure
 Reading a book|Leisure
 Drinking (alcohol)|Leisure
+Smoking|Leisure,Basic needs
 Eating|Basic needs
 Drinking (non-alcohol)|Leisure|Basic needs
 Sleeping|Basic needs
@@ -49,6 +51,8 @@ Limping|Physical
 Jumping|Physical
 Laughing|Physical
 Crying|Physical
+Using crutches|Physical
+Wheelchair|Physical,Transportation
 Lab work|Work
 Written work|Work
 Drawing|Work
