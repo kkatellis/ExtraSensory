@@ -260,8 +260,15 @@
     {
         NSLog(@"[appDelegate] App is authorized to use location services. Authorization status=%d",[CLLocationManager authorizationStatus]);
     }
-//    [self.locationManager startUpdatingLocation];
 
+    // Permission to use camera:
+    if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            NSLog(@"[appDelegate] Authorization to use video media: %b",granted);
+        }];
+    }
+    
+    
     UIImage *navBackgroundImage = [UIImage imageNamed:@"iOS7-blue"];
     [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
 
