@@ -33,6 +33,9 @@ static NSArray *homeSensingList = nil;
 
 static NSArray *mainActivitiesColorList = nil;
 
+static NSMutableDictionary *actToColor = nil;
+
+
 +(NSArray *)mainActivities {
     
     if (!mainActivitiesList)
@@ -63,28 +66,31 @@ static NSArray *mainActivitiesColorList = nil;
 {
    // UIColor *darkBlue = [[UIColor alloc] initWithRed:20.0 / 255 green:59.0 / 255 blue:102.0 / 255 alpha:1.0];
    // NSArray *colors = [[UIColor magentaColor], [UIColor purpleColor], [UIColor blueColor], [UIColor purpleColor],[UIColor blueColor], [UIColor greenColor], [UIColor yellowColor], [UIColor orangeColor], [UIColor redColor], [UIColor grayColor]];
-    NSMutableArray *colors = [NSMutableArray array];
     
-    float INCREMENT = 0.1;
-    for (float hue = 0.7; hue >= 0.0; hue -= INCREMENT) {
-        UIColor *color = [UIColor colorWithHue:hue
-                                    saturation:1.0
-                                    brightness:1.0
-                                         alpha:1.0];
-        [colors addObject:color];
-    }
+    //fill in dictionary for first time
     
-    int i = 0;
-    for (NSString *label in mainActivitiesList){
-        if ([label isEqualToString: activity]){
-            return [colors objectAtIndex: i];
+    if(actToColor == nil){
+        actToColor = [[NSMutableDictionary alloc] init];
+        float hue = 0.7;
+        float INCREMENT = 0.1;
+        
+        for (NSString *label in mainActivitiesList){
+            if(hue >= 0.0){
+                UIColor *color = [UIColor colorWithHue:hue
+                                            saturation:1.0
+                                            brightness:1.0
+                                                 alpha:1.0];
+                [actToColor setObject:color forKey:label];
+                hue -= INCREMENT;
+            }
         }
-        i = i+1;
     }
-    
+
+    if(actToColor[activity] != nil){
+        return actToColor[activity];
+    }
+
     return [UIColor grayColor];
-   
-    return nil;
 }
 
 + (NSArray *) loadStringArrayFromTextFile:(NSString *)resourceFilename andSortLabels:(BOOL)sort
