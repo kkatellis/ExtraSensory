@@ -241,7 +241,7 @@
 
 - (void) handleCapturedData:(CMSampleBufferRef)imageSampleBuffer {
     UIImage *image = [self imageFromSampleBuffer:imageSampleBuffer];
-    NSLog(@"[imageProcessor] Got image: %@",image);
+    NSLog(@"[imageProcessor] Took snapshot to calculate image-features from");
     [self.session stopRunning];
     [self calculateFeaturesForImage:image];
 }
@@ -365,7 +365,7 @@
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CVPixelBufferRef pixelBuffer = imageBuffer;
     // Lock the base address of the pixel buffer
-    CVReturn ret = CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
+    CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
     
     // Get the number of bytes per row for the pixel buffer
     void *baseAddress = CVPixelBufferGetBaseAddress(imageBuffer);
