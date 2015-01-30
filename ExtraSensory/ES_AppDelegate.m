@@ -27,6 +27,7 @@
 #define CORRECT_STR @"Correct"
 #define NOT_EXACTLY_STR @"Not exactly"
 #define ALERT_DISMISS_TIME 45
+#define MAX_UPLOAD_STRIKES 3
 
 @interface ES_AppDelegate()
 
@@ -35,6 +36,8 @@
 @property (nonatomic) ES_Activity *exampleWithPredeterminedLabels;
 @property (nonatomic, strong) NSDate *predeterminedLabelsValidUntil;
 @property (nonatomic, strong) NSTimer *predeterminedLabelsExpirationTimer;
+
+@property (nonatomic,strong) NSMutableDictionary *uploadStrikeCounts;
 
 @end
 
@@ -46,6 +49,7 @@
 @synthesize uuid = _uuid;
 
 @synthesize sensorManager = _sensorManager;
+@synthesize uploadStrikeCounts = _uploadStrikeCounts;
 
 @synthesize networkStack = _networkStack;
 
@@ -129,6 +133,13 @@
     return _networkStack;
 }
 
+- (NSMutableDictionary *)uploadStrikeCounts {
+    if (!_uploadStrikeCounts) {
+        _uploadStrikeCounts = [NSMutableDictionary dictionaryWithCapacity:1];
+    }
+    return _uploadStrikeCounts;
+}
+
 - (void) postNetworkStackNotification
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"NetworkStackSize" object:self];
@@ -164,7 +175,7 @@
 
 - (BOOL) removeFromNetworkStackFile:(NSString *)filename
 {
-    for (int ii = [self.networkStack count]-1; ii >= 0; ii--)
+    for (int ii = (int)[self.networkStack count]-1; ii >= 0; ii--)
     {
         if ([filename isEqualToString:[self.networkStack objectAtIndex:ii]])
         {
@@ -210,7 +221,26 @@
     return res1 && res2;
 }
 
-
+- (void) markStrikeForUploadingFile:(NSString *)filename
+{
+    int newStrikeCount = 1;
+    NSNumber *currentCount = [[self uploadStrikeCounts] valueForKey:filename];
+    if (currentCount) {
+        newStrikeCount = [currentCount intValue] + 1;
+    }
+    
+    if (newStrikeCount > MAX_UPLOAD_STRIKES) {
+        // Then this zip file failed too many times to upload properly on the server.
+        [self removeFromeNetworkStackAndDeleteFile:filename];
+        [[self uploadStrikeCounts] removeObjectForKey:filename];
+        NSLog(@"[appDelegate] Zip file %@ had enough failures trying to upload to server. Deleting it",filename);
+    }
+    else {
+        // Update the strike count for this zip file:
+        [[self uploadStrikeCounts] setValue:[NSNumber numberWithInt:newStrikeCount] forKey:filename];
+        NSLog(@"[appDelegate] Zip file %@ had another strike trying to upload to server. Strike count: %d",filename,newStrikeCount);
+    }
+}
 
 
 // Getter

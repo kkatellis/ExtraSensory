@@ -61,6 +61,7 @@
 - (NSString *) getFirstOnNetworkStack;
 - (BOOL) removeFromNetworkStackFile:(NSString *)filename;
 - (BOOL) removeFromeNetworkStackAndDeleteFile:(NSString *)filename;
+- (void) markStrikeForUploadingFile:(NSString *)filename;
 - (void) pushOnNetworkStack: (NSString *) file;
 - (void) logNetworkStackAndZipFiles;
 - (void) updateApplicationBadge;

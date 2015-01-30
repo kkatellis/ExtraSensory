@@ -353,7 +353,13 @@
         NSString *uploadedZipFile = [response objectForKey:@"filename"];
         
         ES_AppDelegate *appDelegate = [self appDelegate];
-        [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
+        BOOL uploadSuccess = [@"true" isEqualToString:[response objectForKey:@"success"]];
+        if (uploadSuccess) {
+            [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
+        }
+        else {
+            [appDelegate markStrikeForUploadingFile:uploadedZipFile];
+        }
         isReady = YES;
         
         ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
