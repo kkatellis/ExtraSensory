@@ -9,17 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-typedef enum {
-    ES_CameraSourceFront,
-    ES_CameraSourceBack
-} ES_CameraSource;
 
 @interface ES_ImageProcessor : NSObject
 
-@property (nonatomic) ES_CameraSource cameraSource;
 
-- (id) initWithCameraSource:(ES_CameraSource)cameraSource;
-- (BOOL) takePictureAndProcessIfPossible;
+- (void) startCameraCycle;
 - (NSDictionary *) outputMeasurements;
 - (void) stopSession;
 

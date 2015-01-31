@@ -14,34 +14,58 @@
 @property (nonatomic,retain) NSMutableDictionary *features;
 
 @property (nonatomic) NSNumber *pixelFormatType;
+@property (nonatomic) BOOL finishedFrontCamera;
 
 @end
 
 @implementation ES_ImageProcessor
 
-@synthesize cameraSource = _cameraSource;
 @synthesize pixelFormatType = _pixelFormatType;
 
-- (id) init {
-    self = [super init];
-    self.features = [[NSMutableDictionary alloc] initWithCapacity:17];
-    return self;
+
+- (NSString *) cameraNameForPosition:(AVCaptureDevicePosition)position {
+    switch (position) {
+        case AVCaptureDevicePositionFront:
+            return @"front";
+            break;
+        case AVCaptureDevicePositionBack:
+            return @"back";
+            break;
+            
+        default:
+            return nil;
+            break;
+    }
 }
 
-- (id) initWithCameraSource:(ES_CameraSource)cameraSource {
-    self = [self init];
-    _cameraSource = cameraSource;
-    return self;
+- (NSString *) cameraNameForCycleState {
+    return [self cameraNameForPosition:[self desiredPosition]];
 }
 
 - (AVCaptureDevicePosition) desiredPosition {
-    switch (_cameraSource) {
-        case ES_CameraSourceFront:
-            return AVCaptureDevicePositionFront;
-        case ES_CameraSourceBack:
-            return AVCaptureDevicePositionBack;
-        default:
-            return AVCaptureDevicePositionUnspecified;
+    if (self.finishedFrontCamera) {
+        return AVCaptureDevicePositionBack;
+    }
+    else {
+        return AVCaptureDevicePositionFront;
+    }
+//    switch (_cameraSource) {
+//        case ES_CameraSourceFront:
+//            return AVCaptureDevicePositionFront;
+//        case ES_CameraSourceBack:
+//            return AVCaptureDevicePositionBack;
+//        default:
+//            return AVCaptureDevicePositionUnspecified;
+//    }
+}
+
+- (void) startCameraCycle {
+    self.features = [NSMutableDictionary dictionaryWithCapacity:2];
+    self.finishedFrontCamera = NO;
+    if (![self takePictureAndProcessIfPossible]) {
+        // Then failed with front camera. Try back camera:
+        self.finishedFrontCamera = YES;
+        [self takePictureAndProcessIfPossible];
     }
 }
 
@@ -95,7 +119,7 @@
         [camera unlockForConfiguration];
     }
     else {
-        NSLog(@"[ImageProcessor] Failed to lock camera for configuration. Error: %@",error);
+        NSLog(@"[ImageProcessor] Failed to lock %@ camera for configuration. Error: %@",[self cameraNameForPosition:camera.position], error);
         return NO;
     }
     
@@ -241,9 +265,16 @@
 
 - (void) handleCapturedData:(CMSampleBufferRef)imageSampleBuffer {
     UIImage *image = [self imageFromSampleBuffer:imageSampleBuffer];
-    NSLog(@"[imageProcessor] Took snapshot to calculate image-features from");
+    NSLog(@"[imageProcessor] Took snapshot from %@ camera to calculate image-features from",[self cameraNameForCycleState]);
     [self.session stopRunning];
     [self calculateFeaturesForImage:image];
+    
+//    if (!self.finishedFrontCamera) {
+//        // Then right now we are done with front camera. Lets move to the back:
+//        self.finishedFrontCamera = YES;
+//        NSLog(@"[imageProcessor] Done with front camera. Moving to back camera");
+//        [self takePictureAndProcessIfPossible];
+//    }
 }
 
 - (void) calculateFeaturesForImage:(UIImage *)image {
@@ -329,29 +360,33 @@
     double std_blue = sqrt((sum_sq_blue/num_pixels) - (avr_blue*avr_blue));
     double std_brightness = sqrt((sum_sq_brightness/num_pixels) - (avr_brightness*avr_brightness));
     
-    [self.features setValue:[NSNumber numberWithUnsignedLong:num_pixels] forKey:@"num_pixels"];
+    NSMutableDictionary *cameraFeatures = [NSMutableDictionary dictionaryWithCapacity:17];
     
-    [self.features setValue:[NSNumber numberWithDouble:avr_red] forKey:@"avr_red"];
-    [self.features setValue:[NSNumber numberWithDouble:avr_green] forKey:@"avr_green"];
-    [self.features setValue:[NSNumber numberWithDouble:avr_blue] forKey:@"avr_blue"];
-    [self.features setValue:[NSNumber numberWithDouble:avr_brightness] forKey:@"avr_brightness"];
+    [cameraFeatures setValue:[NSNumber numberWithUnsignedLong:num_pixels] forKey:@"num_pixels"];
     
-    [self.features setValue:[NSNumber numberWithDouble:max_red] forKey:@"max_red"];
-    [self.features setValue:[NSNumber numberWithDouble:max_green] forKey:@"max_green"];
-    [self.features setValue:[NSNumber numberWithDouble:max_blue] forKey:@"max_blue"];
-    [self.features setValue:[NSNumber numberWithDouble:max_brightness] forKey:@"max_brightness"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:avr_red] forKey:@"avr_red"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:avr_green] forKey:@"avr_green"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:avr_blue] forKey:@"avr_blue"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:avr_brightness] forKey:@"avr_brightness"];
     
-    [self.features setValue:[NSNumber numberWithDouble:min_red] forKey:@"min_red"];
-    [self.features setValue:[NSNumber numberWithDouble:min_green] forKey:@"min_green"];
-    [self.features setValue:[NSNumber numberWithDouble:min_blue] forKey:@"min_blue"];
-    [self.features setValue:[NSNumber numberWithDouble:min_brightness] forKey:@"min_brightness"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:max_red] forKey:@"max_red"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:max_green] forKey:@"max_green"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:max_blue] forKey:@"max_blue"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:max_brightness] forKey:@"max_brightness"];
+    
+    [cameraFeatures setValue:[NSNumber numberWithDouble:min_red] forKey:@"min_red"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:min_green] forKey:@"min_green"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:min_blue] forKey:@"min_blue"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:min_brightness] forKey:@"min_brightness"];
      
-    [self.features setValue:[NSNumber numberWithDouble:std_red] forKey:@"std_red"];
-    [self.features setValue:[NSNumber numberWithDouble:std_green] forKey:@"std_green"];
-    [self.features setValue:[NSNumber numberWithDouble:std_blue] forKey:@"std_blue"];
-    [self.features setValue:[NSNumber numberWithDouble:std_brightness] forKey:@"std_brightness"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:std_red] forKey:@"std_red"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:std_green] forKey:@"std_green"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:std_blue] forKey:@"std_blue"];
+    [cameraFeatures setValue:[NSNumber numberWithDouble:std_brightness] forKey:@"std_brightness"];
     
-    NSLog(@"[imageProcessor] Added image features.");
+    [self.features setValue:cameraFeatures forKey:[NSString stringWithFormat:@"%@_camera",[self cameraNameForCycleState]]];
+    
+    NSLog(@"[imageProcessor] Added image features from %@ camera.",[self cameraNameForCycleState]);
 }
 
 - (double) brightnessFromRed:(double)red green:(double)green blue:(double)blue {
@@ -407,7 +442,7 @@
 
 - (void) stopSession {
     [self.session stopRunning];
-    self.features = [[NSMutableDictionary alloc] initWithCapacity:17];
+    self.features = nil;//[[NSMutableDictionary alloc] initWithCapacity:17];
 }
 
 @end

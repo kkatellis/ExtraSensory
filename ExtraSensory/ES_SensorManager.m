@@ -115,8 +115,7 @@
 #define BATTERY_STATE   @"battery_state"
 
 #define SCREEN_BRIGHT   @"screen_brightness"
-#define FRONT_CAMERA    @"front_camera"
-#define BACK_CAMERA     @"back_camera"
+#define CAMERA          @"camera"
 
 @interface ES_SensorManager()
 
@@ -129,8 +128,7 @@
 @property (nonatomic, strong) NSMutableDictionary *hfData;
 @property (nonatomic) BOOL usingTimerForSampling;
 
-@property (nonatomic, strong) ES_ImageProcessor *frontCameraProcessor;
-@property (nonatomic, strong) ES_ImageProcessor *backCameraProcessor;
+@property (nonatomic, strong) ES_ImageProcessor *cameraProcessor;
 
 @end
 
@@ -151,8 +149,7 @@
 @synthesize user = _user;
 @synthesize currentActivity = _currentActivity;
 @synthesize usingTimerForSampling = _usingTimerForSampling;
-@synthesize frontCameraProcessor = _frontCameraProcessor;
-@synthesize backCameraProcessor = _backCameraProcessor;
+@synthesize cameraProcessor = _cameraProcessor;
 
 
 
@@ -260,18 +257,11 @@
     return _usingTimerForSampling;
 }
 
-- (ES_ImageProcessor *)frontCameraProcessor {
-    if (!_frontCameraProcessor) {
-        _frontCameraProcessor = [[ES_ImageProcessor alloc] initWithCameraSource:ES_CameraSourceFront];
+- (ES_ImageProcessor *)cameraProcessor {
+    if (!_cameraProcessor) {
+        _cameraProcessor = [ES_ImageProcessor new];
     }
-    return _frontCameraProcessor;
-}
-
-- (ES_ImageProcessor *)backCameraProcessor {
-    if (!_backCameraProcessor) {
-        _backCameraProcessor = [[ES_ImageProcessor alloc] initWithCameraSource:ES_CameraSourceBack];
-    }
-    return _backCameraProcessor;
+    return _cameraProcessor;
 }
 
 
@@ -383,8 +373,7 @@
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
     [self.soundProcessor pauseDurRecording];
-    [self.frontCameraProcessor stopSession];
-    [self.backCameraProcessor stopSession];
+    [self.cameraProcessor stopSession];
     [self.appDelegate markNotRecordingRightNow];
 }
 
@@ -556,8 +545,7 @@
     
     // Data from cameras:
     if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusAuthorized) {
-        [[self frontCameraProcessor] takePictureAndProcessIfPossible];
-        [[self backCameraProcessor] takePictureAndProcessIfPossible];
+        [[self cameraProcessor] startCameraCycle];
     }
     else {
         NSLog(@"[sensorManager] Not authorized to use camera");
@@ -792,8 +780,7 @@
     NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
     
     // Add camera data:
-    [self.hfData setValue:[[self frontCameraProcessor] outputMeasurements] forKey:FRONT_CAMERA];
-    [self.hfData setValue:[[self backCameraProcessor] outputMeasurements] forKey:BACK_CAMERA];
+    [self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
     
     [self handleFinishedDataBundle];
 }
@@ -806,8 +793,7 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
-    [self.frontCameraProcessor stopSession];
-    [self.backCameraProcessor stopSession];
+    [self.cameraProcessor stopSession];
 }
 
 - (void) handleFinishedDataBundle
