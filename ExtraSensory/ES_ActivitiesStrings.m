@@ -69,28 +69,30 @@ static NSMutableDictionary *actToColor = nil;
 
 +(UIColor *)getColorForMainActivity:(NSString *)activity //indexValue:(int)index
 {
-   // UIColor *darkBlue = [[UIColor alloc] initWithRed:20.0 / 255 green:59.0 / 255 blue:102.0 / 255 alpha:1.0];
-   // NSArray *colors = [[UIColor magentaColor], [UIColor purpleColor], [UIColor blueColor], [UIColor purpleColor],[UIColor blueColor], [UIColor greenColor], [UIColor yellowColor], [UIColor orangeColor], [UIColor redColor], [UIColor grayColor]];
-    
-    //fill in dictionary for first time
     
     if(actToColor == nil){
-        actToColor = [[NSMutableDictionary alloc] init];
-        float hue = 0.7;
-        float INCREMENT = 0.1;
+        // Create the activity-to-color map:
+
+        actToColor = [NSMutableDictionary dictionaryWithCapacity:[self mainActivities].count];
+        float startHue = 0.7;
+        float finishHue = 0.01;
+        float hue = startHue;
+        // We want the hues to go from starting hue all the way to 0.1. We should dynamically set the increment to fit it:
+        float increment = (startHue - finishHue) / ((float)[self mainActivities].count-1);
         
-        for (NSString *label in mainActivitiesList){
+        for (NSString *label in [self mainActivities]){
             if(hue >= 0.0){
+                
                 UIColor *color = [UIColor colorWithHue:hue
                                             saturation:1.0
                                             brightness:1.0
                                                  alpha:1.0];
                 [actToColor setObject:color forKey:label];
-                hue -= INCREMENT;
+                hue -= increment;
             }
         }
     }
-
+    
     if(actToColor[activity] != nil){
         return actToColor[activity];
     }
