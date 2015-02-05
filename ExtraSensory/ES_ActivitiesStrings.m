@@ -10,13 +10,18 @@
 #import "ES_DataBaseAccessor.h"
 #import "ES_Label.h"
 
-#define LYING_DOWN  @"Lying down"
-#define SITTING     @"Sitting"
-#define STANDING_IN_PLACE    @"Standing in place"
-#define STANDING_AND_MOVING  @"Standing and moving"
-#define WALKING     @"Walking"
-#define RUNNING     @"Running"
-#define BICYCLING   @"Bicycling"
+//#define LYING_DOWN  @"Lying down"
+//#define SITTING     @"Sitting"
+//#define STANDING_IN_PLACE    @"Standing in place"
+//#define STANDING_AND_MOVING  @"Standing and moving"
+//#define WALKING     @"Walking"
+//#define RUNNING     @"Running"
+//#define BICYCLING   @"Bicycling"
+
+#define MAIN_ACTIVITIES_FILE    @"main_activities_list"
+#define SECONDARY_ACT_FILE      @"secondary_activities_list"
+#define MOOD_FILE               @"moods_list"
+#define HOME_SENSING_FILE       @"home_sensing_labels_list"
 
 @interface ES_ActivitiesStrings()
 
@@ -40,7 +45,7 @@ static NSMutableDictionary *actToColor = nil;
     
     if (!mainActivitiesList)
     {
-        mainActivitiesList = [self loadStringArrayFromTextFile:@"mainActivitiesList" andSortLabels:NO];
+        mainActivitiesList = [self loadStringArrayFromTextFile:MAIN_ACTIVITIES_FILE andSortLabels:NO];
     }
     
     return mainActivitiesList;
@@ -159,7 +164,7 @@ static NSMutableDictionary *actToColor = nil;
 + (void) loadSecondary
 {
     NSDictionary *subjDict = nil;
-    secondaryActivitiesList = [self loadStringArrayFromTextFile:@"secondaryActivitiesList" andLoadSubjectsDictionaryInto:&subjDict andSortLabels:YES];
+    secondaryActivitiesList = [self loadStringArrayFromTextFile:SECONDARY_ACT_FILE andLoadSubjectsDictionaryInto:&subjDict andSortLabels:YES];
     secondaryActivitiesPerSubject = subjDict;
     NSLog(@"[activitiesStrings] Loaded secondary subjects: %@",subjDict);
 }
@@ -189,7 +194,7 @@ static NSMutableDictionary *actToColor = nil;
 +(NSArray *)moods {
     if (!moodsList)
     {
-        moodsList = [self loadStringArrayFromTextFile:@"moodsList" andSortLabels:YES];
+        moodsList = [self loadStringArrayFromTextFile:MOOD_FILE andSortLabels:YES];
     }
     
     return moodsList;
@@ -198,7 +203,7 @@ static NSMutableDictionary *actToColor = nil;
 +(NSArray *)homeSensingLabels{
     if (!homeSensingList)
     {
-        homeSensingList = [self loadStringArrayFromTextFile:@"homeSensingLabelsList" andSortLabels:YES];
+        homeSensingList = [self loadStringArrayFromTextFile:HOME_SENSING_FILE andSortLabels:YES];
     }
     
     return homeSensingList;
