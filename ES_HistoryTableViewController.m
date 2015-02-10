@@ -34,12 +34,23 @@
 @property (retain, nonatomic) NSNumber *markZoneEndTimestamp;
 //@property (retain, nonatomic) NSMutableSet *markZoneActivityEvents;
 
+@property (retain, nonatomic) UIImage *checkmarkImage;
+
 - (void) segueToEditEvent:(ES_ActivityEvent *)activityEvent;
 
 @end
 
 @implementation ES_HistoryTableViewController
 
+@synthesize checkmarkImage = _checkmarkImage;
+
+- (UIImage *) checkmarkImage {
+    if (!_checkmarkImage) {
+        _checkmarkImage = [UIImage imageNamed:@"checkMarkInCircle"];
+    }
+    
+    return _checkmarkImage;
+}
 
 - (NSMutableArray *)eventHistory
 {
@@ -516,7 +527,7 @@
     if ([self allowEditingLabels])
     {
         // Visually mark/unmark the cell according to the mark zone:
-        [self changeVisualMarkingForCell:cell mark:[self checkIfCellShouldBeMarked:cell]];
+        [self changeVisualMarkingForCell:cell indexPath:indexPath mark:[self checkIfCellShouldBeMarked:cell]];
 
         // Add a swipe gesture recognizer:
         UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGestureFromRecognizer:)];
@@ -584,16 +595,44 @@
     return;
 }
 
-- (void) changeVisualMarkingForCell:(ES_ActivityEventTableCell *)cell mark:(BOOL)mark
+- (void) changeVisualMarkingForCell:(ES_ActivityEventTableCell *)cell indexPath:(NSIndexPath *)indexPath mark:(BOOL)mark
 {
     if (mark)
     {
-        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+        
+        UIImageView *checkmark = [[UIImageView alloc] initWithImage:[self checkmarkImage]];
+        
+        // Adjust the size of the checkmark icon to fit the cell row:
+        CGRect cellRect = [self.tableView rectForRowAtIndexPath:indexPath];
+        CGFloat rowHeight = cellRect.size.height;
+        CGFloat strechRatio = (rowHeight/2.0)/checkmark.frame.size.height;
+        CGFloat newWidth = checkmark.frame.size.width * strechRatio;
+        CGFloat newHeight = checkmark.frame.size.height * strechRatio;
+
+        checkmark.frame = CGRectMake(0, 0, newWidth, newHeight);
+        
+        cell.accessoryView = checkmark;
     }
     else
     {
         [cell setAccessoryType:UITableViewCellAccessoryNone];
+        [cell setAccessoryView:nil];
     }
+}
+
+
+- (UIImage *)resizeImage:(UIImage *)image toHaveHeight:(CGFloat)newHeight
+{
+    CGFloat stretchRatio = newHeight / image.size.height;
+    CGFloat newWidth = stretchRatio * image.size.width;
+    CGSize newSize = CGSizeMake(newWidth, newHeight);
+    
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0.0, 0.0, newWidth, newHeight)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
 }
 
 - (UIColor *) getChangedColor:(UIColor *)color clearer:(BOOL)clearer
