@@ -27,7 +27,6 @@
 		4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E71BD4919BDA53800BA648B /* ES_SelectionFromListViewController.m */; };
 		4EB5226B198DF0B300BBC678 /* ES_AlertViewWithUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */; };
 		4EC1325B1A8403CB003300B5 /* checkMarkInCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EC1325A1A8403CB003300B5 /* checkMarkInCircle.png */; };
-		4EC1325D1A89BDBC003300B5 /* ExtraSensoryIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EC1325C1A89BDB7003300B5 /* ExtraSensoryIcon.png */; };
 		4EE9AC801A2D2BBF004CB8C2 /* home_sensing_labels_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7F1A2D2BBF004CB8C2 /* home_sensing_labels_list.txt */; };
 		4EE9AC831A2D4A0E004CB8C2 /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
@@ -202,7 +201,6 @@
 		4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_AlertViewWithUserInfo.h; sourceTree = "<group>"; };
 		4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_AlertViewWithUserInfo.m; sourceTree = "<group>"; };
 		4EC1325A1A8403CB003300B5 /* checkMarkInCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkMarkInCircle.png; sourceTree = "<group>"; };
-		4EC1325C1A89BDB7003300B5 /* ExtraSensoryIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ExtraSensoryIcon.png; sourceTree = "<group>"; };
 		4EE9AC7F1A2D2BBF004CB8C2 /* home_sensing_labels_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = home_sensing_labels_list.txt; sourceTree = "<group>"; };
 		4EE9AC811A2D4A0E004CB8C2 /* ES_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Settings.h; sourceTree = "<group>"; };
 		4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Settings.m; sourceTree = "<group>"; };
@@ -485,7 +483,6 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4EC1325C1A89BDB7003300B5 /* ExtraSensoryIcon.png */,
 				4EC1325A1A8403CB003300B5 /* checkMarkInCircle.png */,
 				4E6F48AA1A48C6B400055DAF /* text-plus-icon_gray.png */,
 				4E6F48A81A421AA800055DAF /* Standing in place.png */,
@@ -1009,7 +1006,6 @@
 				4E5C5E6919A66D4A00B801BC /* back.png in Resources */,
 				70B8A96018F87D230076A4F5 /* favorite.png in Resources */,
 				70B8A95B18F87D230076A4F5 /* default_playlist.json in Resources */,
-				4EC1325D1A89BDBC003300B5 /* ExtraSensoryIcon.png in Resources */,
 				70B8A95C18F87D230076A4F5 /* icon-ipad.png in Resources */,
 				4E6F48A91A421AA800055DAF /* Standing in place.png in Resources */,
 				70B8A93418F87D230076A4F5 /* exercising.png in Resources */,
