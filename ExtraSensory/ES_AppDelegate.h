@@ -11,6 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "ES_Activity.h"
 
+
 @class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler, RaisedTabBarController;
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
