@@ -16,7 +16,7 @@
 #import "ES_SoundWaveProcessor.h"
 #import "Reachability.h"
 #import "ES_NetworkAccessor.h"
-#import "ES_ImageProcessor.h"
+//#import "ES_ImageProcessor.h"
 
 // In Hertz
 #define HF_SAMPLING_RATE    40
@@ -128,7 +128,7 @@
 @property (nonatomic, strong) NSMutableDictionary *hfData;
 @property (nonatomic) BOOL usingTimerForSampling;
 
-@property (nonatomic, strong) ES_ImageProcessor *cameraProcessor;
+//@property (nonatomic, strong) ES_ImageProcessor *cameraProcessor;
 
 @end
 
@@ -149,7 +149,7 @@
 @synthesize user = _user;
 @synthesize currentActivity = _currentActivity;
 @synthesize usingTimerForSampling = _usingTimerForSampling;
-@synthesize cameraProcessor = _cameraProcessor;
+//@synthesize cameraProcessor = _cameraProcessor;
 
 
 
@@ -257,13 +257,13 @@
     return _usingTimerForSampling;
 }
 
-- (ES_ImageProcessor *)cameraProcessor {
-    if (!_cameraProcessor) {
-        _cameraProcessor = [ES_ImageProcessor new];
-    }
-    return _cameraProcessor;
-}
-
+//- (ES_ImageProcessor *)cameraProcessor {
+//    if (!_cameraProcessor) {
+//        _cameraProcessor = [ES_ImageProcessor new];
+//    }
+//    return _cameraProcessor;
+//}
+//
 
 
 /* starts recording of microphone depending on filename*/
@@ -373,7 +373,7 @@
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
     [self.soundProcessor pauseDurRecording];
-    [self.cameraProcessor stopSession];
+    //[self.cameraProcessor stopSession];
     [self.appDelegate markNotRecordingRightNow];
 }
 
@@ -543,13 +543,13 @@
         [self.locationManager startUpdatingLocation];
     }
     
-    // Data from cameras:
-    if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusAuthorized) {
-        [[self cameraProcessor] startCameraCycle];
-    }
-    else {
-        NSLog(@"[sensorManager] Not authorized to use camera");
-    }
+//    // Data from cameras:
+//    if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusAuthorized) {
+//        [[self cameraProcessor] startCameraCycle];
+//    }
+//    else {
+//        NSLog(@"[sensorManager] Not authorized to use camera");
+//    }
 
     // Add low frequency (one time) measurements:
     [self addDeviceIndicatorsToDataBundle];
@@ -780,8 +780,8 @@
     
     NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
     
-    // Add camera data:
-    [self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
+//    // Add camera data:
+//    [self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
     
     [self handleFinishedDataBundle];
 }
@@ -794,7 +794,7 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
-    [self.cameraProcessor stopSession];
+//    [self.cameraProcessor stopSession];
 }
 
 - (void) handleFinishedDataBundle
