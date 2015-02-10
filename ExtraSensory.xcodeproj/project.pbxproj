@@ -1293,7 +1293,7 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "31a38b4f-89cf-4cff-bd98-1ac62492d976";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1323,7 +1323,7 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "31a38b4f-89cf-4cff-bd98-1ac62492d976";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

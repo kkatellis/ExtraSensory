@@ -782,7 +782,7 @@
     NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
     
     // Add camera data:
-    [self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
+    //[self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
     // ADD WAIT FOR WATCH DATA
     
     [self handleFinishedDataBundle];
