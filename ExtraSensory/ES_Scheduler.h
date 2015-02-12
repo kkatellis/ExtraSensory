@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <PebbleKit/PebbleKit.h>
 
 @class ES_HomeViewController, ES_User, ES_Activity;
 
 @interface ES_Scheduler : NSObject
 
 @property (nonatomic, weak) ES_User* user;
+@property (nonatomic, strong) PBWatch *myWatch;
 
 - (BOOL) isPeriodicRecordingMechanismOn;
 - (void) sampleSaveSendCycler;

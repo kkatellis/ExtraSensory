@@ -18,6 +18,7 @@
 #import "ES_AlertViewWithUserInfo.h"
 #import "ES_FeedbackViewController.h"
 #import "RaisedTabBarController.h"
+#include <PebbleKit/PebbleKit.h>
 
 // Some constants:
 #define APP_NAME_TITLE_STR @"ExtraSensory"
@@ -35,7 +36,7 @@
 #define MOODS_KEY               @"moodsStrings"
 #define LATEST_VERIFIED_KEY     @"latestVerifiedTimestamp"
 
-@interface ES_AppDelegate()
+@interface ES_AppDelegate() <PBPebbleCentralDelegate>
 
 @property ES_AlertViewWithUserInfo *latestAlert;
 @property BOOL userSelectedDataCollectionOn;
@@ -44,6 +45,7 @@
 @property (nonatomic, strong) NSTimer *predeterminedLabelsExpirationTimer;
 
 @property (nonatomic,strong) NSMutableDictionary *uploadStrikeCounts;
+@property (nonatomic, strong) PBWatch *myWatch;
 
 @end
 
@@ -274,9 +276,6 @@
 }
 
 
-
-
-
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
     NSLog(@"[appDelegate] Application finished launching.");
@@ -323,6 +322,22 @@
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
     }
 }
+
+
+- (void)pebbleCentral:(PBPebbleCentral*)central watchDidConnect:(PBWatch*)watch isNew:(BOOL)isNew {
+    NSLog(@"Pebble connected: %@", [watch name]);
+    self.myWatch = watch;
+}
+
+- (void)pebbleCentral:(PBPebbleCentral*)central watchDidDisconnect:(PBWatch*)watch {
+    NSLog(@"Pebble disconnected: %@", [watch name]);
+    
+    if (self.myWatch == watch || [watch isEqual:self.myWatch]) {
+        self.myWatch = nil;
+    }
+}
+
+
 
 - (void) applicationDidBecomeActive:(UIApplication *)application
 {
@@ -547,7 +562,24 @@
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
     [nav pushViewController:activeFeedback animated:NO];
 }
-
+//
+//-(void)recieveMessageFromWatch {
+//    
+//[self.myWatch appMessagesAddReceiveUpdateHandler:^BOOL(PBWatch *watch, NSDictionary *update) {
+//    NSLog(@"Received message: %@", update);
+//    // if update yes, call pushActivity
+//    NSString *temp = [update objectForKey:@42];
+//    if([temp  isEqual: @"YES"]) {
+//        [self pushActivityEventFeedbackViewWithUserInfo:userInfo userAlreadyApproved: YES];
+//    }
+//    // else do nothing
+//        
+//    
+//    // if update no, call pushActivity
+//    return YES;
+//}];
+//    
+//}
 
 - (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved
 {

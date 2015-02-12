@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */; };
+		10BDF8F91A8ABD89000C4C26 /* PebbleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF8F81A8ABD89000C4C26 /* PebbleKit.framework */; };
+		10BDF8FB1A8ABD9F000C4C26 /* PebbleVendor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF8FA1A8ABD9E000C4C26 /* PebbleVendor.framework */; };
+		10BDF8FD1A8ABE9E000C4C26 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF8FC1A8ABE9E000C4C26 /* ExternalAccessory.framework */; };
+		10BDF8FF1A8ABEBB000C4C26 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF8FE1A8ABEBB000C4C26 /* libz.dylib */; };
+		10BDF9011A8ABEC5000C4C26 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF9001A8ABEC5000C4C26 /* CoreBluetooth.framework */; };
+		10BDF9031A8ABEDB000C4C26 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF9021A8ABEDB000C4C26 /* CFNetwork.framework */; };
+		10BDF9051A8ABEE7000C4C26 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF9041A8ABEE7000C4C26 /* MessageUI.framework */; };
 		299617F31A78AE6F0082112D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 299617F21A78AE6E0082112D /* QuartzCore.framework */; };
 		4E1336571A630E9700683B84 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1336561A630E9700683B84 /* ES_Activity.m */; };
 		4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */; };
@@ -176,6 +183,13 @@
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
 		10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ES_SoundWaveProcessor.mm; sourceTree = "<group>"; };
+		10BDF8F81A8ABD89000C4C26 /* PebbleKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PebbleKit.framework; path = "../../../pebble-dev/PebbleSDK-2.0.2/PebbleKit-iOS/PebbleKit.framework"; sourceTree = "<group>"; };
+		10BDF8FA1A8ABD9E000C4C26 /* PebbleVendor.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PebbleVendor.framework; path = "../../../pebble-dev/PebbleSDK-2.0.2/PebbleKit-iOS/PebbleVendor.framework"; sourceTree = "<group>"; };
+		10BDF8FC1A8ABE9E000C4C26 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		10BDF8FE1A8ABEBB000C4C26 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		10BDF9001A8ABEC5000C4C26 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		10BDF9021A8ABEDB000C4C26 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		10BDF9041A8ABEE7000C4C26 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		299617F21A78AE6E0082112D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4E1336551A630E9700683B84 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
 		4E1336561A630E9700683B84 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
@@ -387,12 +401,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10BDF9051A8ABEE7000C4C26 /* MessageUI.framework in Frameworks */,
+				10BDF9031A8ABEDB000C4C26 /* CFNetwork.framework in Frameworks */,
+				10BDF9011A8ABEC5000C4C26 /* CoreBluetooth.framework in Frameworks */,
+				10BDF8FF1A8ABEBB000C4C26 /* libz.dylib in Frameworks */,
+				10BDF8FD1A8ABE9E000C4C26 /* ExternalAccessory.framework in Frameworks */,
 				299617F31A78AE6F0082112D /* QuartzCore.framework in Frameworks */,
 				7015789019FF0585003CCA95 /* libz.1.2.5.dylib in Frameworks */,
 				709F5AF119FEC0A800F3386C /* AudioToolbox.framework in Frameworks */,
+				10BDF8F91A8ABD89000C4C26 /* PebbleKit.framework in Frameworks */,
 				709F5AEF19FEC06F00F3386C /* Accelerate.framework in Frameworks */,
 				4EFADB3119F08BD800262568 /* CoreTelephony.framework in Frameworks */,
 				9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */,
+				10BDF8FB1A8ABD9F000C4C26 /* PebbleVendor.framework in Frameworks */,
 				9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */,
 				9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */,
 				9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */,
@@ -678,8 +699,15 @@
 		9307CBB317F1A78A00D95E05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				10BDF9041A8ABEE7000C4C26 /* MessageUI.framework */,
+				10BDF9021A8ABEDB000C4C26 /* CFNetwork.framework */,
+				10BDF9001A8ABEC5000C4C26 /* CoreBluetooth.framework */,
+				10BDF8FE1A8ABEBB000C4C26 /* libz.dylib */,
+				10BDF8FC1A8ABE9E000C4C26 /* ExternalAccessory.framework */,
+				10BDF8FA1A8ABD9E000C4C26 /* PebbleVendor.framework */,
 				299617F21A78AE6E0082112D /* QuartzCore.framework */,
 				7015788F19FF0585003CCA95 /* libz.1.2.5.dylib */,
+				10BDF8F81A8ABD89000C4C26 /* PebbleKit.framework */,
 				709F5AF019FEC0A800F3386C /* AudioToolbox.framework */,
 				709F5AEE19FEC06F00F3386C /* Accelerate.framework */,
 				4EFADB3019F08BD500262568 /* CoreTelephony.framework */,
@@ -907,7 +935,7 @@
 				ORGANIZATIONNAME = "Bryan Grounds";
 				TargetAttributes = {
 					9307CBB017F1A78A00D95E05 = {
-						DevelopmentTeam = AG7H7A9P2Q;
+						DevelopmentTeam = G956NUTNQ6;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -915,6 +943,7 @@
 						};
 					};
 					9307CBD117F1A78A00D95E05 = {
+						DevelopmentTeam = G956NUTNQ6;
 						TestTargetID = 9307CBB017F1A78A00D95E05;
 					};
 				};
@@ -1237,13 +1266,19 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/rafaelaguayo/pebble-dev/PebbleSDK-2.0.2/PebbleKit-iOS",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/boost_ext/include\"";
 				INFOPLIST_FILE = "ExtraSensory/ExtraSensory-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				New_Setting1 = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3994ad3e-e030-41f4-ad45-2535f02f85e9";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1253,8 +1288,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/rafaelaguayo/pebble-dev/PebbleSDK-2.0.2/PebbleKit-iOS",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/boost_ext/include\"";
@@ -1265,8 +1304,10 @@
 					"$(PROJECT_DIR)/ExtraSensory/boost_ext/lib",
 				);
 				New_Setting = "";
+				New_Setting1 = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "80f708ec-f3ef-419a-978c-3ff427e851e4";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
