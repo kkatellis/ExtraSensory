@@ -735,6 +735,7 @@
     
     [UIDevice currentDevice].proximityMonitoringEnabled = YES;
     [lfData setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:PROXIMITY];
+    [UIDevice currentDevice].proximityMonitoringEnabled = NO;
     
     [UIDevice currentDevice].batteryMonitoringEnabled = YES;
     [lfData setValue:[NSNumber numberWithFloat:[[UIDevice currentDevice] batteryLevel]] forKey:BATTERY_LEVEL];
