@@ -491,6 +491,7 @@
     /// Notice: when used a new queue (or separate new queue for each sensor) there were bugs after finished sampling (red dot took time to disappear and network connection failed to get response)
     
     [self.soundProcessor startDurRecording];
+    // ADD WATCHRECORDING HERE
     
     if (self.motionManager.accelerometerAvailable)
     {
@@ -782,6 +783,7 @@
     
     // Add camera data:
     [self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
+    // ADD WAIT FOR WATCH DATA
     
     [self handleFinishedDataBundle];
 }
