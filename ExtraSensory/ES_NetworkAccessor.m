@@ -78,8 +78,9 @@
 {
     if ([self reachabilityStatus] == ReachableViaWiFi)
     {
-        NSLog(@"[networkAccessor] WiFi is now available. Set timer to call upload in 3 seconds.");
-        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(upload) userInfo:nil repeats:NO];
+        NSLog(@"[networkAccessor] WiFi is now available. Set timer to call send-feedback in 3 seconds and to call upload in 5 seconds.");
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(sendNextFeedbackFromQueue) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(upload) userInfo:nil repeats:NO];
     }
     else
     {
