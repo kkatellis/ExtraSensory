@@ -47,6 +47,9 @@
 @property (nonatomic,strong) NSMutableDictionary *uploadStrikeCounts;
 @property (nonatomic, strong) PBWatch *myWatch;
 
+@property (nonatomic, strong) NSMutableArray *networkFeedbackQueueTimestamps;
+@property (nonatomic, strong) NSMutableDictionary *networkFeedbackQueueTimestampToActivityMap;
+
 @end
 
 @implementation ES_AppDelegate
@@ -60,6 +63,9 @@
 @synthesize uploadStrikeCounts = _uploadStrikeCounts;
 
 @synthesize networkStack = _networkStack;
+@synthesize networkFeedbackQueueTimestamps = _networkFeedbackQueueTimestamps;
+@synthesize networkFeedbackQueueTimestampToActivityMap = _networkFeedbackQueueTimestampToActivityMap;
+
 
 @synthesize networkAccessor = _networkAccessor;
 
@@ -99,6 +105,47 @@
     return _networkAccessor;
 }
 
+- (void) checkUnsentFeedbacksAndUpdateNetworkFeedbackQueue
+{
+    NSString *storagePath = [ES_DataBaseAccessor feedbackDirectory];
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:storagePath error:nil];
+    NSPredicate *feedbackPredicate = [NSPredicate predicateWithFormat:@"self ENDSWITH '.feedback'"];
+    NSMutableArray *feedbackFiles = [NSMutableArray arrayWithArray:[directoryContent filteredArrayUsingPredicate:feedbackPredicate]];
+
+    for (NSString *filename in feedbackFiles) {
+        NSString *timestampStr = [filename stringByReplacingOccurrencesOfString:@".feedback" withString:@""];
+        NSNumber *timestamp = [NSNumber numberWithInt:[timestampStr intValue]];
+        ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime:timestamp];
+        if (!activity) {
+            // Then this file should be removed:
+            [ES_DataBaseAccessor clearFeedbackFile:timestamp];
+            continue;
+        }
+        // Add this activity to the queue:
+    }
+    
+}
+
+- (void) addToFeedbackQueueActivity:(ES_Activity *)activity  {
+    [[self networkFeedbackQueueTimestamps] addObject:[activity timestamp]];
+    [[self networkFeedbackQueueTimestampToActivityMap] setObject:activity forKey:[activity timestamp]];
+    [ES_DataBaseAccessor createFeedbackFile:[activity timestamp]];
+}
+
+- (void) removeFromFeedbackQueueTimestamp:(NSNumber *)timestamp {
+    [[self networkFeedbackQueueTimestamps] removeObject:timestamp];
+    [[self networkFeedbackQueueTimestampToActivityMap] removeObjectForKey:timestamp];
+    [ES_DataBaseAccessor clearFeedbackFile:timestamp];
+}
+
+- (ES_Activity *)getNextActivityInFeedbackQueue {
+    NSNumber *timestamp = [[self networkFeedbackQueueTimestamps] objectAtIndex:0];
+    [[self networkFeedbackQueueTimestamps] removeObjectAtIndex:0];
+    // Add this at the end of the queue:
+    [[self networkFeedbackQueueTimestamps] addObject:timestamp];
+    return [[self networkFeedbackQueueTimestampToActivityMap] objectForKey:timestamp];
+}
+
 - (NSMutableArray *) getUnsentZipFiles
 {
     NSString *storagePath = [ES_DataBaseAccessor zipDirectory];
@@ -127,6 +174,24 @@
         NSLog(@"[appDelegate] after adding stored unsent zip files to the network stack, calling for upload.");
         [self.networkAccessor upload];
     }
+}
+
+- (NSMutableArray *) netwrokFeedbackQueueTimestamps
+{
+    if (!_networkFeedbackQueueTimestampToActivityMap) {
+        _networkFeedbackQueueTimestampToActivityMap = [NSMutableDictionary new];
+    }
+    if (!_networkFeedbackQueueTimestamps) {
+        _networkFeedbackQueueTimestamps = [NSMutableArray new];
+    }
+    
+    return _networkFeedbackQueueTimestamps;
+}
+
+- (NSMutableDictionary *) networkFeedbackQueueTimestampToActivityMap
+{
+    [self networkFeedbackQueueTimestamps];
+    return _networkFeedbackQueueTimestampToActivityMap;
 }
 
 - (NSMutableArray *)networkStack

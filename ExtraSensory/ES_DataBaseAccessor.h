@@ -31,9 +31,12 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
 + (void) save;
 + (NSString *) applicationDocumentsDirectory;
 + (NSString *) dataDirectory;
++ (NSString *) feedbackDirectory;
 + (NSString *) zipDirectory;
 + (void) writeData: (NSArray *)data;
 + (void) writeSensorData: (NSDictionary *)data;
++ (void) createFeedbackFile:(NSNumber *)timestamp;
++ (void) clearFeedbackFile:(NSNumber *)timestamp;
 + (void) clearHFDataFile;
 + (void) clearLabelFile;
 + (void) clearSoundFile;

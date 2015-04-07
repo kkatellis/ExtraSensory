@@ -67,6 +67,10 @@
 - (void) logNetworkStackAndZipFiles;
 - (void) updateApplicationBadge;
 
+- (void) addToFeedbackQueueActivity:(ES_Activity *)activity;
+- (void) removeFromFeedbackQueueTimestamp:(NSNumber *)timestamp;
+- (ES_Activity *)getNextActivityInFeedbackQueue;
+
 - (NSMutableDictionary *) constructUserInfoForNaggingWithCheckTime:(NSNumber *)nagCheckTimestamp foundVerified:(BOOL)foundVerified main:(NSString *)mainActivity secondary:(NSArray *)secondaryActivitiesStrings moods:(NSArray *)moodsStrings latestVerifiedTime:(NSNumber *)latestVerifiedTimestamp;
 
 - (void) setLabelsFromNowOnUntil:(NSDate *)validUntil toBeSameAsForActivity:(ES_Activity *)activity;

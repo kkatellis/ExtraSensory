@@ -568,6 +568,25 @@
     return directory;
 }
 
++ (NSString *) feedbackDirectory
+{
+    NSString *directory = [[self applicationDocumentsDirectory] stringByAppendingString: @"/feedback"];
+    
+    NSFileManager *fileManager= [NSFileManager defaultManager];
+    
+    BOOL isDir;
+    
+    if (![fileManager fileExistsAtPath:directory isDirectory: &isDir ])
+    {
+        NSError *error = nil;
+        if(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:&error])
+        {
+            NSLog(@"[databaseAccessor] !!! Failed to create directory \"%@\". Error: %@", directory, error);
+        }
+    }
+    return directory;
+}
+
 + (NSString *) zipFileName: (NSNumber *)time
 {
     ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -803,6 +822,20 @@
         BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
         if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
     }
+}
+
++ (NSString *) feedbackFileFullPathForTimestamp:(NSNumber *)timestamp {
+    NSString *feedbackFileFullPath = [NSString stringWithFormat:@"%@/%@.feedback",[self feedbackDirectory],timestamp];
+    return feedbackFileFullPath;
+}
+
++ (void) createFeedbackFile:(NSNumber *)timestamp {
+    NSString *content = @" ";
+    [[NSFileManager defaultManager] createFileAtPath:[self feedbackFileFullPathForTimestamp:timestamp] contents:content attributes:nil];
+}
+
++ (void) clearFeedbackFile:(NSNumber *)timestamp {
+    [self clearDataFile:[self feedbackFileFullPathForTimestamp:timestamp]];
 }
 
 + (void) clearHFDataFile
