@@ -121,10 +121,28 @@
     }
 }
 
+- (void) sendNextFeedbackFromQueue
+{
+    if(! [self reachabilityStatus] == ReachableViaWiFi) {
+        NSLog(@"[networkAccessor] No WiFi. Not sending feedback.");
+        return;
+    }
+    
+    ES_Activity *activity = [self.appDelegate getNextActivityInFeedbackQueue];
+    if (!activity) {
+        NSLog(@"[networkAccessor] The feedback queue is empty, nothing to send");
+        return;
+    }
+    
+    NSLog(@"[networkAccessor] Sending feedback for timestamp: %@",[activity timestamp]);
+    [self apiCall:[NSString stringWithFormat:@"%@%@",API_PREFIX,API_FEEDBACK] withParams:activity];
+}
+
 - (void) sendFeedback: (ES_Activity *)activity
 {
-    [self apiCall:[NSString stringWithFormat:@"%@%@",API_PREFIX,API_FEEDBACK] withParams:activity];
-    
+    NSLog(@"[networkAccessor] Got activity for feedback. Adding it to feedback queue. timestamp: %@",[activity timestamp]);
+    [self.appDelegate addToFeedbackQueueActivity:activity];
+    [self sendNextFeedbackFromQueue];
 }
 
 - (void) apiCall:(NSString *)api withParams:(ES_Activity *)activity{
@@ -356,7 +374,7 @@
         BOOL uploadSuccess = [[response objectForKey:@"success"] boolValue];
         if (uploadSuccess) {
             [appDelegate removeFromeNetworkStackAndDeleteFile:uploadedZipFile];
-            ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time ];
+            ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime: time];
             
             if (activity)
             {
@@ -399,7 +417,11 @@
     }
     else
     {
-        NSLog(@"[networkAccessor] Response is not for the 'upload' api, but '%@'",api_type);
+        NSLog(@"[networkAccessor] Response is not for the 'upload' api, but '%@' (probably feedback)",api_type);
+        // Mark that we got response for this timestamp, regardless if the request succeeded or not:
+        NSNumber *timestamp = [NSNumber numberWithDouble:[[response objectForKey: @"timestamp"] doubleValue]];
+        [self.appDelegate removeFromFeedbackQueueTimestamp:timestamp];
+        [self sendNextFeedbackFromQueue];
     }
     self.appDelegate.currentlyUploading = NO;
 }

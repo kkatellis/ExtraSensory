@@ -23,6 +23,7 @@ BOOL isReady;   //only upload one at a time
 
 - (id)init;
 - (void) upload;
+- (void) sendNextFeedbackFromQueue;
 - (void) sendFeedback: (ES_Activity *)feedback;
 
 - (NetworkStatus) reachabilityStatus;

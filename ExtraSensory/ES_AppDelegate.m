@@ -114,7 +114,7 @@
 
     for (NSString *filename in feedbackFiles) {
         NSString *timestampStr = [filename stringByReplacingOccurrencesOfString:@".feedback" withString:@""];
-        NSNumber *timestamp = [NSNumber numberWithInt:[timestampStr intValue]];
+        NSNumber *timestamp = [NSNumber numberWithDouble:[timestampStr doubleValue]];
         ES_Activity *activity = [ES_DataBaseAccessor getActivityWithTime:timestamp];
         if (!activity) {
             // Then this file should be removed:
@@ -122,28 +122,46 @@
             continue;
         }
         // Add this activity to the queue:
+        [self addToFeedbackQueueActivity:activity];
     }
+    
+    [self.networkAccessor sendNextFeedbackFromQueue];
     
 }
 
 - (void) addToFeedbackQueueActivity:(ES_Activity *)activity  {
-    [[self networkFeedbackQueueTimestamps] addObject:[activity timestamp]];
+    NSNumber *timestamp = [activity timestamp];
+    NSLog(@"[appDelegate] Adding to feedback queue: %@",timestamp);
+    if (![[self networkFeedbackQueueTimestamps] containsObject:timestamp]) {
+        [[self networkFeedbackQueueTimestamps] addObject:[activity timestamp]];
+        [ES_DataBaseAccessor createFeedbackFile:[activity timestamp]];
+    }
     [[self networkFeedbackQueueTimestampToActivityMap] setObject:activity forKey:[activity timestamp]];
-    [ES_DataBaseAccessor createFeedbackFile:[activity timestamp]];
+    NSLog(@"[appDelegate] Now feedback queue is: %@",[self networkFeedbackQueueTimestamps]);
 }
 
 - (void) removeFromFeedbackQueueTimestamp:(NSNumber *)timestamp {
+    NSLog(@"[appDelegate] Removing from feedback queue: %@",timestamp);
     [[self networkFeedbackQueueTimestamps] removeObject:timestamp];
     [[self networkFeedbackQueueTimestampToActivityMap] removeObjectForKey:timestamp];
     [ES_DataBaseAccessor clearFeedbackFile:timestamp];
+    NSLog(@"[appDelegate] Now feedback queue is: %@",[self networkFeedbackQueueTimestamps]);
 }
 
 - (ES_Activity *)getNextActivityInFeedbackQueue {
+    NSLog(@"[appDelegate] Before getting next item, feedback queue is: %@",[self networkFeedbackQueueTimestamps]);
+    if (self.networkFeedbackQueueTimestamps.count <= 0) {
+        NSLog(@"[appDelegate] Feedback queue is empty.");
+        return nil;
+    }
+    
     NSNumber *timestamp = [[self networkFeedbackQueueTimestamps] objectAtIndex:0];
     [[self networkFeedbackQueueTimestamps] removeObjectAtIndex:0];
     // Add this at the end of the queue:
     [[self networkFeedbackQueueTimestamps] addObject:timestamp];
-    return [[self networkFeedbackQueueTimestampToActivityMap] objectForKey:timestamp];
+    ES_Activity *activity = [[self networkFeedbackQueueTimestampToActivityMap] objectForKey:timestamp];
+    
+    return activity;
 }
 
 - (NSMutableArray *) getUnsentZipFiles
@@ -176,23 +194,12 @@
     }
 }
 
-- (NSMutableArray *) netwrokFeedbackQueueTimestamps
+- (void) initializeFeedbackQueue
 {
-    if (!_networkFeedbackQueueTimestampToActivityMap) {
-        _networkFeedbackQueueTimestampToActivityMap = [NSMutableDictionary new];
-    }
-    if (!_networkFeedbackQueueTimestamps) {
-        _networkFeedbackQueueTimestamps = [NSMutableArray new];
-    }
-    
-    return _networkFeedbackQueueTimestamps;
+    _networkFeedbackQueueTimestamps = [NSMutableArray new];
+    _networkFeedbackQueueTimestampToActivityMap = [NSMutableDictionary new];
 }
 
-- (NSMutableDictionary *) networkFeedbackQueueTimestampToActivityMap
-{
-    [self networkFeedbackQueueTimestamps];
-    return _networkFeedbackQueueTimestampToActivityMap;
-}
 
 - (NSMutableArray *)networkStack
 {
@@ -382,6 +389,10 @@
     // Initialize the network stack:
     NSMutableArray *ns = self.networkStack;
     NSLog(@"[appDelegate] Network stack has items: %@",ns);
+    
+    // Initialize the feedback queue:
+    [self initializeFeedbackQueue];
+    [self checkUnsentFeedbacksAndUpdateNetworkFeedbackQueue];
     
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
