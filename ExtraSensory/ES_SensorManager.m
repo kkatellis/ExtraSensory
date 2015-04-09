@@ -292,7 +292,7 @@
 }
 
 - (BOOL) record
-{
+{    
     if ([self usingTimerForSampling])
     {
         [self recordUsingTimer];
@@ -812,6 +812,9 @@
 
     //[self.timer invalidate];
     [ES_DataBaseAccessor writeSensorData:self.hfData andActivity:self.currentActivity];
+    
+    // Since we're finished with this activity, stop holding it:
+    self.currentActivity = nil;
     
     // Mark finished recording:
     [self.appDelegate markNotRecordingRightNow];

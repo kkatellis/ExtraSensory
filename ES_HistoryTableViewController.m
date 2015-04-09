@@ -326,7 +326,8 @@
     NSNumber *historyPageStart = [self getTimestampOfStartOfDay:self.timeInDayOfFocus];
     NSNumber *historyPageEnd = [NSNumber numberWithDouble:([historyPageStart doubleValue] + SECONDS_IN_24HRS)];
     
-    NSArray *activities = [ES_DataBaseAccessor getWhileDeletingOrphansActivitiesFrom:historyPageStart to:historyPageEnd];
+//    NSArray *activities = [ES_DataBaseAccessor getWhileDeletingOrphansActivitiesFrom:historyPageStart to:historyPageEnd];
+    NSArray *activities = [ES_DataBaseAccessor getActivitiesFrom:historyPageStart to:historyPageEnd];
     
     // Group together consecutive timepoints with similar activities to unified activity-events:
     ES_Activity *startOfActivity = nil;

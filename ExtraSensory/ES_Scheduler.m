@@ -373,7 +373,12 @@
 -(void) firstOpActive: (ES_Activity *) activity
 {
     NSLog(@"[scheduler] Active feedback newly created activity was given.");
-    
+    // If in the middle of a recording, stop that recording and then start a new one:
+    if (self.appDelegate.recordingRightNow) {
+        NSLog(@"[scheduler] Stopping the recording that was already started...");
+        [self.sensorManager turnOffRecording];
+    }
+
     NSLog(@"[scheduler] Record Sensors");
     [self.sensorManager setCurrentActivity: activity];
     [self.sensorManager record];

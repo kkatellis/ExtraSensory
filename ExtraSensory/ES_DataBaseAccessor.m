@@ -124,6 +124,7 @@
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:zipFile])
     {
+        NSLog(@"====== still holding zip file %@, so activity is not orphan",zipFile);
         // Then this activity's data may still be sent to the server
         return NO;
     }

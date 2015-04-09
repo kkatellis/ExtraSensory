@@ -142,7 +142,7 @@
     {
         if ([sview respondsToSelector:@selector(setIndexColor:)])
         {
-            NSLog(@"[selectionFromList] === found sub view of type: %@.",[sview class]);
+//            NSLog(@"[selectionFromList] === found sub view of type: %@.",[sview class]);
             if ([sview respondsToSelector:@selector(setFont:)])
             {
                 [sview performSelector:@selector(setFont:) withObject:[UIFont systemFontOfSize:17.5]];
@@ -276,7 +276,6 @@
     
     if ([self doesAppliedLabelsContainLabel:cell.textLabel.text])
     {
-        NSLog(@"applied label contains label");
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [_checkedArray addObject:indexPath];
         [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
@@ -355,7 +354,6 @@
     }
     else
     {
-        NSLog(@"Selection made");
         if(!self.appliedLabels)
         {//this is for labling samples which is not labled by server (probably because the app is stoped)
             self.appliedLabels=[NSMutableSet setWithObject:(cell.textLabel.text)];
@@ -377,11 +375,9 @@
     
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
-        NSLog(@"==== selected row from search results. closign search results...");
         [self.searchDisplayController setActive:NO animated:YES];
     }
     
-    NSLog(@"reload data");
     [self.tableView reloadData];
 }
 
