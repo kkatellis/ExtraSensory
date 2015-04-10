@@ -129,6 +129,10 @@
     
 }
 
+- (NSInteger) getFeedbackQueueSize {
+    return self.networkFeedbackQueueTimestamps.count;
+}
+
 - (void) addToFeedbackQueueActivity:(ES_Activity *)activity  {
     NSNumber *timestamp = [activity timestamp];
     NSLog(@"[appDelegate] Adding to feedback queue: %@",timestamp);
@@ -138,6 +142,8 @@
     }
     [[self networkFeedbackQueueTimestampToActivityMap] setObject:activity forKey:[activity timestamp]];
     NSLog(@"[appDelegate] Now feedback queue is: %@",[self networkFeedbackQueueTimestamps]);
+    
+    [self postFeedbackQueueNotification];
 }
 
 - (void) removeFromFeedbackQueueTimestamp:(NSNumber *)timestamp {
@@ -146,6 +152,8 @@
     [[self networkFeedbackQueueTimestampToActivityMap] removeObjectForKey:timestamp];
     [ES_DataBaseAccessor clearFeedbackFile:timestamp];
     NSLog(@"[appDelegate] Now feedback queue is: %@",[self networkFeedbackQueueTimestamps]);
+    
+    [self postFeedbackQueueNotification];
 }
 
 - (ES_Activity *)getNextActivityInFeedbackQueue {
@@ -218,6 +226,11 @@
         _uploadStrikeCounts = [NSMutableDictionary dictionaryWithCapacity:1];
     }
     return _uploadStrikeCounts;
+}
+
+- (void) postFeedbackQueueNotification
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FeedbackQueueSize" object:self];
 }
 
 - (void) postNetworkStackNotification

@@ -20,6 +20,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *mostRecentActivityLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *mostRecentActivityImage;
 @property (weak, nonatomic) IBOutlet UILabel *networkStackSizeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *feedbackQueueSizeLabel;
 
 @property NSMutableArray *activityCountArray;
 
@@ -55,6 +56,10 @@
     // Current storage state:
     [self updateCurrentStorageLabel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentStorageLabel) name:@"NetworkStackSize" object:[self appDelegate]];
+    
+    // Current feedback queue:
+    [self updateCurrentFeedbackQueueLabel];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentFeedbackQueueLabel) name:@"FeedbackQueueSize" object:[self appDelegate]];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -171,6 +176,17 @@
     }
 }
 
+- (void) updateCurrentFeedbackQueueLabel
+{
+    NSString *fQString = @"";
+    NSInteger qSize = [[self appDelegate] getFeedbackQueueSize];
+    if (qSize > 0)
+    {
+        NSString *lastWord = (qSize == 1) ? @"sample" : @"samples";
+        fQString = [NSString stringWithFormat:@"%lu %@ labels waiting.",qSize,lastWord];
+    }
+    self.feedbackQueueSizeLabel.text = fQString;
+}
 
 - (void) updateCurrentStorageLabel
 {

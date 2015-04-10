@@ -67,6 +67,7 @@
 - (void) logNetworkStackAndZipFiles;
 - (void) updateApplicationBadge;
 
+- (NSInteger) getFeedbackQueueSize;
 - (void) addToFeedbackQueueActivity:(ES_Activity *)activity;
 - (void) removeFromFeedbackQueueTimestamp:(NSNumber *)timestamp;
 - (ES_Activity *)getNextActivityInFeedbackQueue;
