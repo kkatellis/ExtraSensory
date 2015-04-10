@@ -47,11 +47,17 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    ES_Activity *mostRecentActivity = [ES_DataBaseAccessor getMostRecentActivity];
-    [self updateMostRecentActivity:mostRecentActivity];
-    
+    [self updateMostRecentActivity];
     // Register to listen to activity-change notifications:
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"Activities" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"Activities" object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSLog(@"[homeView] Caught activity change notification");
+        NSNumber *timestamp = [[note userInfo] objectForKey:@"timestamp"];
+        double secondsAgo = [[NSDate date] timeIntervalSince1970] - [timestamp doubleValue];
+        if (!timestamp || (secondsAgo < 80)) {
+            NSLog(@"[homeView] The updated activity is very recent, so update the view");
+            [self updateMostRecentActivity];
+        }
+    }];
     
     // Current storage state:
     [self updateCurrentStorageLabel];
@@ -60,6 +66,7 @@
     // Current feedback queue:
     [self updateCurrentFeedbackQueueLabel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentFeedbackQueueLabel) name:@"FeedbackQueueSize" object:[self appDelegate]];
+    
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -69,8 +76,16 @@
     
 }
 
-- (void) updateMostRecentActivity:(ES_Activity*) activity;
+- (void) updateMostRecentActivity
 {
+    // Are we in background? Cause if we are there is no use doing this computation:
+    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+        NSLog(@"[homeView] Asked to update recent activity view, but we're not in foreground anyway, so there's no use.");
+        return;
+    }
+    
+    ES_Activity *activity = [ES_DataBaseAccessor getMostRecentActivity];
+    
     NSString *activityLabel;
     NSString *dateString;
     if (activity)
@@ -118,14 +133,6 @@
     
 }
 
-- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context {
-    
-//    NSLog(@"========== observer change: %@",change);
-//    if ([keyPath isEqual:@"mostRecentActivity"]) {
-//        ES_Activity* changedActivity = [change objectForKey:NSKeyValueChangeNewKey];
-//        [self updateMostRecentActivity:changedActivity];
-//    }
-}
 
 - (NSString *) timeString: (int) index
 {

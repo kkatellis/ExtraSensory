@@ -386,7 +386,7 @@
                 
                 connection = nil;
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName: @"Activities" object: nil ];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Activities" object:nil userInfo:[NSDictionary dictionaryWithObject:activity.timestamp forKey:@"timestamp"]];
                 
                 // Check if there is already some non-trivial labels that should be sent for this activity:
                 if ([self isThereUserUpdateForActivity:activity])
