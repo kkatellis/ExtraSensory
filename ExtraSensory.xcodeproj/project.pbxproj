@@ -142,11 +142,6 @@
 		9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */; };
 		9307CBC817F1A78A00D95E05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBC617F1A78A00D95E05 /* Main.storyboard */; };
 		9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBCC17F1A78A00D95E05 /* Images.xcassets */; };
-		9307CBD417F1A78A00D95E05 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBD317F1A78A00D95E05 /* XCTest.framework */; };
-		9307CBD517F1A78A00D95E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB417F1A78A00D95E05 /* Foundation.framework */; };
-		9307CBD617F1A78A00D95E05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB817F1A78A00D95E05 /* UIKit.framework */; };
-		9307CBDE17F1A78A00D95E05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */; };
-		9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */; };
 		9307CBEA17F1CA9E00D95E05 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */; };
 		9307CC3517F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9307CC3317F2075C00D95E05 /* ES_UserDataModel.xcdatamodeld */; };
 		93146B8B18024A9D00F2AAC7 /* ES_ActivityStatistic.m in Sources */ = {isa = PBXBuildFile; fileRef = 93146B8A18024A9D00F2AAC7 /* ES_ActivityStatistic.m */; };
@@ -166,20 +161,9 @@
 		93F679C617F978AF000638CB /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F679BF17F978AF000638CB /* zip.c */; };
 		93F679C717F978AF000638CB /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 93F679C217F978AF000638CB /* ZipArchive.mm */; };
 		9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
-		9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59F66618A9A9C5002C94B9 /* ES_HistoryTableViewController.m */; };
 		9F90A5CA18AD7A6700E6E29B /* ES_ActivityEventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F90A5C918AD7A6700E6E29B /* ES_ActivityEventTableCell.m */; };
 		9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA74F5618AAF3A50095834B /* ES_ActivityEvent.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9307CBD717F1A78A00D95E05 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9307CBA917F1A78A00D95E05 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9307CBB017F1A78A00D95E05;
-			remoteInfo = ExtraSensory;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1025D75618CB15BA00D854BE /* ES_PieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_PieViewController.h; sourceTree = "<group>"; };
@@ -238,6 +222,7 @@
 		703B364F196E3FA800D5D80B /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = ../gear.png; sourceTree = "<group>"; };
 		703B3651196E3FD100D5D80B /* stats_pie_chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_pie_chart.png; path = ../stats_pie_chart.png; sourceTree = "<group>"; };
 		703B3667196E477500D5D80B /* text-plus-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text-plus-icon.png"; sourceTree = "<group>"; };
+		706E11B61ADD8EC80012E923 /* ExtraSensory.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ExtraSensory.entitlements; sourceTree = "<group>"; };
 		707762DE18CF7C9800ED0134 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		707762DF18CF7C9800ED0134 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		707762E118D125BD00ED0134 /* ES_SummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SummaryViewController.h; sourceTree = "<group>"; };
@@ -355,11 +340,7 @@
 		9307CBC417F1A78A00D95E05 /* ES_AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ES_AppDelegate.m; sourceTree = "<group>"; };
 		9307CBC717F1A78A00D95E05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9307CBCC17F1A78A00D95E05 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		9307CBD217F1A78A00D95E05 /* ExtraSensoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExtraSensoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9307CBD317F1A78A00D95E05 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		9307CBDB17F1A78A00D95E05 /* ExtraSensoryTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExtraSensoryTests-Info.plist"; sourceTree = "<group>"; };
-		9307CBDD17F1A78A00D95E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtraSensoryTests.m; sourceTree = "<group>"; };
 		9307CBE917F1CA9E00D95E05 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		9307CC3417F2075C00D95E05 /* ES_UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ES_UserDataModel.xcdatamodel; sourceTree = "<group>"; };
 		93146B8918024A9D00F2AAC7 /* ES_ActivityStatistic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES_ActivityStatistic.h; path = ../ES_ActivityStatistic.h; sourceTree = "<group>"; };
@@ -424,16 +405,6 @@
 				9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */,
 				9307CBB917F1A78A00D95E05 /* UIKit.framework in Frameworks */,
 				9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9307CBCF17F1A78A00D95E05 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9307CBD417F1A78A00D95E05 /* XCTest.framework in Frameworks */,
-				9307CBD617F1A78A00D95E05 /* UIKit.framework in Frameworks */,
-				9307CBD517F1A78A00D95E05 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,7 +661,6 @@
 			children = (
 				709F5ADB19FEBFEC00F3386C /* CAPublicUtility */,
 				9307CBBA17F1A78A00D95E05 /* ExtraSensory */,
-				9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */,
 				9307CBB317F1A78A00D95E05 /* Frameworks */,
 				9307CBB217F1A78A00D95E05 /* Products */,
 			);
@@ -700,7 +670,6 @@
 			isa = PBXGroup;
 			children = (
 				9307CBB117F1A78A00D95E05 /* ExtraSensory.app */,
-				9307CBD217F1A78A00D95E05 /* ExtraSensoryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -732,6 +701,7 @@
 		9307CBBA17F1A78A00D95E05 /* ExtraSensory */ = {
 			isa = PBXGroup;
 			children = (
+				706E11B61ADD8EC80012E923 /* ExtraSensory.entitlements */,
 				4EB52269198DF0B200BBC678 /* ES_AlertViewWithUserInfo.h */,
 				4EB5226A198DF0B200BBC678 /* ES_AlertViewWithUserInfo.m */,
 				9307CBC317F1A78A00D95E05 /* ES_AppDelegate.h */,
@@ -761,24 +731,6 @@
 				9307CBBD17F1A78A00D95E05 /* InfoPlist.strings */,
 				9307CBC017F1A78A00D95E05 /* main.m */,
 				9307CBC217F1A78A00D95E05 /* ExtraSensory-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		9307CBD917F1A78A00D95E05 /* ExtraSensoryTests */ = {
-			isa = PBXGroup;
-			children = (
-				9307CBDF17F1A78A00D95E05 /* ExtraSensoryTests.m */,
-				9307CBDA17F1A78A00D95E05 /* Supporting Files */,
-			);
-			path = ExtraSensoryTests;
-			sourceTree = "<group>";
-		};
-		9307CBDA17F1A78A00D95E05 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				9307CBDB17F1A78A00D95E05 /* ExtraSensoryTests-Info.plist */,
-				9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -917,24 +869,6 @@
 			productReference = 9307CBB117F1A78A00D95E05 /* ExtraSensory.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9307CBD117F1A78A00D95E05 /* ExtraSensoryTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9307CBE617F1A78A00D95E05 /* Build configuration list for PBXNativeTarget "ExtraSensoryTests" */;
-			buildPhases = (
-				9307CBCE17F1A78A00D95E05 /* Sources */,
-				9307CBCF17F1A78A00D95E05 /* Frameworks */,
-				9307CBD017F1A78A00D95E05 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9307CBD817F1A78A00D95E05 /* PBXTargetDependency */,
-			);
-			name = ExtraSensoryTests;
-			productName = ExtraSensoryTests;
-			productReference = 9307CBD217F1A78A00D95E05 /* ExtraSensoryTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -946,16 +880,12 @@
 				ORGANIZATIONNAME = "Bryan Grounds";
 				TargetAttributes = {
 					9307CBB017F1A78A00D95E05 = {
-						DevelopmentTeam = G956NUTNQ6;
+						DevelopmentTeam = AG7H7A9P2Q;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
 						};
-					};
-					9307CBD117F1A78A00D95E05 = {
-						DevelopmentTeam = G956NUTNQ6;
-						TestTargetID = 9307CBB017F1A78A00D95E05;
 					};
 				};
 			};
@@ -973,7 +903,6 @@
 			projectRoot = "";
 			targets = (
 				9307CBB017F1A78A00D95E05 /* ExtraSensory */,
-				9307CBD117F1A78A00D95E05 /* ExtraSensoryTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1075,14 +1004,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9307CBD017F1A78A00D95E05 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9307CBDE17F1A78A00D95E05 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1144,24 +1065,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9307CBCE17F1A78A00D95E05 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9F59F66818A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
-				9307CBE017F1A78A00D95E05 /* ExtraSensoryTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9307CBD817F1A78A00D95E05 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9307CBB017F1A78A00D95E05 /* ExtraSensory */;
-			targetProxy = 9307CBD717F1A78A00D95E05 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		70228E2918B19FF200189063 /* ActiveFeedback.storyboard */ = {
@@ -1187,14 +1091,6 @@
 				9307CBC717F1A78A00D95E05 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		9307CBDC17F1A78A00D95E05 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9307CBDD17F1A78A00D95E05 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1278,6 +1174,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = ExtraSensory/ExtraSensory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1293,7 +1190,7 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "31a38b4f-89cf-4cff-bd98-1ac62492d976";
+				PROVISIONING_PROFILE = "15180d76-2a3a-4340-b44e-e541fe0744d8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1303,6 +1200,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = ExtraSensory/ExtraSensory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1323,48 +1221,8 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "31a38b4f-89cf-4cff-bd98-1ac62492d976";
+				PROVISIONING_PROFILE = "15180d76-2a3a-4340-b44e-e541fe0744d8";
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		9307CBE717F1A78A00D95E05 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ExtraSensory.app/ExtraSensory";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "ExtraSensoryTests/ExtraSensoryTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		9307CBE817F1A78A00D95E05 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ExtraSensory.app/ExtraSensory";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
-				INFOPLIST_FILE = "ExtraSensoryTests/ExtraSensoryTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -1385,15 +1243,6 @@
 			buildConfigurations = (
 				9307CBE417F1A78A00D95E05 /* Debug */,
 				9307CBE517F1A78A00D95E05 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9307CBE617F1A78A00D95E05 /* Build configuration list for PBXNativeTarget "ExtraSensoryTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9307CBE717F1A78A00D95E05 /* Debug */,
-				9307CBE817F1A78A00D95E05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
