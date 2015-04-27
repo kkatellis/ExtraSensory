@@ -10,13 +10,12 @@
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
-//#import "ES_MFCC.h"
 #include "AudioFileReader.hpp"
 #include "MFCCUtils.h"
+#include "ES_DataBaseAccessor.h"
 
 #define HF_SOUND_FILE_PRE   @"HF_SOUNDWAVE_PRE"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
-#define MFCC_FILE_DUR   @"MFCC_SOUNDWAVE_DUR"
 
 typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 
@@ -152,7 +151,7 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
         }
     }
     soundFileURLDur = [NSURL fileURLWithPath:soundFilePath];
-    NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:MFCC_FILE_DUR]];
+    NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:[ES_DataBaseAccessor getMFCCFilename]]];
     NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
     [self callAudio:(CFURLRef)soundFileURLDur toMFCC:MFCCFileURLDur];
 }

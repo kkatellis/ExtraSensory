@@ -27,6 +27,9 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
     
 }
 
++ (NSString *)getMFCCFilename;
++ (NSString *)getHFDataFilename;
+
 + (NSArray *) read: (NSString *)entityDescription;
 + (void) save;
 + (NSString *) applicationDocumentsDirectory;

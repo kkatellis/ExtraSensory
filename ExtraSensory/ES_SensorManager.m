@@ -21,8 +21,6 @@
 // In Hertz
 #define HF_SAMPLING_RATE    40
 
-#define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
-#define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
 
 //--// API data keys
 

@@ -24,11 +24,22 @@
 
 #define ROOT_DATA_OBJECT @"ES_User"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
-#define MFCC_FILE_DUR   @"MFCC_SOUNDWAVE_DUR"
+#define MFCC_FILE_DUR       @"sound.mfcc"
 #define HF_DATA_FILE_DUR    @"HF_DUR_DATA.txt"
 #define LABEL_FILE          @"label.txt"
 
 #define SECONDS_IN_WEEK     604800.0
+
+
++ (NSString *)getMFCCFilename
+{
+    return MFCC_FILE_DUR;
+}
+
++ (NSString *)getHFDataFilename
+{
+    return HF_DATA_FILE_DUR;
+}
 
 + (ES_User *)user
 {
@@ -596,9 +607,7 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,MFCC_FILE_DUR, nil];
-//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE,HF_SOUND_FILE_DUR,MFCC_FILE_DUR, nil];
-//    NSArray *arr = [NSArray arrayWithObjects:HF_DATA_FILE_DUR,LABEL_FILE, nil];
+    NSArray *arr = [NSArray arrayWithObjects:[self getHFDataFilename],LABEL_FILE,[self getMFCCFilename], nil];
     
     return arr;
 }
@@ -679,96 +688,13 @@
                                            userInfo: zipFileName
                                             repeats: NO];
     
-//    NSLog(@"==== in wriet activity . scheduled timer: %@ for time %@",timer,timer.fireDate);
     
 }
 
-//+ (void) writeData2:(NSArray *)array
-//{
-//    //old version, use writeData:
-//    NSError * error1 = [NSError new];
-//    
-//    NSURL *soundFileURLDur;
-//    
-//    NSData *soundData;
-//    
-//    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: array options:0 error:&error1];
-//
-//    NSString *filePath = [[self dataDirectory] stringByAppendingString: HF_DATA_FILE_DUR];
-//    
-//    // path to which sound file will be saved to along with the other data sensors
-//    NSString *soundFileStringPath = [[self dataDirectory] stringByAppendingString:HF_SOUND_FILE_DUR];
-//    
-//    NSFileManager *fileManager = [NSFileManager defaultManager];
-//    
-//    NSURL *dataPath = [fileManager URLForDirectory: NSDocumentDirectory
-//                                          inDomain: NSUserDomainMask
-//                                 appropriateForURL: nil
-//                                            create: YES
-//                                             error: nil];
-//    
-//    // grab the sound file url path which was created in sensor manager
-//    soundFileURLDur = [NSURL fileURLWithPath:[[dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_DUR]];
-//    
-//    // write contents of url to data object
-//    soundData = [NSData dataWithContentsOfURL: soundFileURLDur];
-//    
-//    //NSLog(@"soundFileURLDur is %@", soundFileURLDur);
-// 
-//    NSError *error;
-//    
-//    // deleting any old contents in sound file path
-//    BOOL soundFileExists = [fileManager fileExistsAtPath:soundFileStringPath];
-//    //NSLog(@"Path to sound file: %@", soundFileStringPath);
-//    //NSLog(@"Sound File exists: %d", soundFileExists);
-//    //NSLog(@"Is deletable sound file at path: %d", [fileManager isDeletableFileAtPath:soundFileStringPath]);
-//    
-//    if(soundFileExists)
-//    {
-//        //NSLog(@"previous sound file existed there");
-//        BOOL success = [fileManager removeItemAtPath:soundFileStringPath error:&error];
-//        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
-//    }
-//    
-//    BOOL writeSoundFileSuccess = [soundData writeToFile:soundFileStringPath atomically:YES];
-//    
-//    if (writeSoundFileSuccess)
-//    {
-//        NSLog(@"[databaseAccessor] Sound file successfully written to new url");
-//    }
-//    else
-//    {
-//        NSLog(@"[databaseAccessor] !!! Error writing sound data to file!!");
-//    }
-//    
-//    // deleting any old contents in sensor data path
-//    BOOL fileExists = [fileManager fileExistsAtPath:filePath];
-//    //NSLog(@"Path to file: %@", filePath);
-//    //NSLog(@"File exists: %d", fileExists);
-//    //NSLog(@"Is deletable file at path: %d", [fileManager isDeletableFileAtPath:filePath]);
-//    
-//    if (fileExists)
-//    {
-//        BOOL success = [fileManager removeItemAtPath:filePath error:&error];
-//        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
-//    }
-//
-//    
-//    BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
-//    if (writeFileSuccess)
-//    {
-//        NSLog(@"[databaseAccessor] Data successfully written to file");
-//    }
-//    else
-//    {
-//        NSLog(@"[databaseAccessor] !!! Error writing data to file!!");
-//    }
-//
-//}
 
 + (NSString *) HFDataFileFullPath
 {
-    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],HF_DATA_FILE_DUR];
+    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],[self getHFDataFilename]];
 }
 
 + (NSString *) labelFileFullPath
