@@ -389,7 +389,7 @@
     // Permission to use camera:
     if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
         [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-            NSLog(@"[appDelegate] Authorization to use video media: %b",granted);
+            NSLog(@"[appDelegate] Authorization to use video media: %d",granted);
         }];
     }
     

@@ -758,7 +758,7 @@
 
 + (void) createFeedbackFile:(NSNumber *)timestamp {
     NSString *content = @" ";
-    [[NSFileManager defaultManager] createFileAtPath:[self feedbackFileFullPathForTimestamp:timestamp] contents:content attributes:nil];
+    [[NSFileManager defaultManager] createFileAtPath:[self feedbackFileFullPathForTimestamp:timestamp] contents:[content dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
 }
 
 + (void) clearFeedbackFile:(NSNumber *)timestamp {

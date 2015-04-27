@@ -190,7 +190,7 @@
     if (qSize > 0)
     {
         NSString *lastWord = (qSize == 1) ? @"sample" : @"samples";
-        fQString = [NSString stringWithFormat:@"%lu %@ labels waiting.",qSize,lastWord];
+        fQString = [NSString stringWithFormat:@"%lu %@ labels waiting.",(long)qSize,lastWord];
     }
     self.feedbackQueueSizeLabel.text = fQString;
 }
