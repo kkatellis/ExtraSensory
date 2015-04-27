@@ -13,11 +13,15 @@
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_ActivitiesStrings.h"
-//#import "ES_UserActivityLabels.h"
 
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
+#define HOSTNAME        @"137.110.112.50"
+#define HTTP_PREFIX     @"http://"
+#define HTTPS_PREFIX    @"https://"
+#define HTTP_PORT       @"8080"
+#define HTTPS_PORT      @"443"
 
-#define API_PREFIX      @"http://137.110.112.50:8080/api/"
+//#define API_PREFIX      @"http://137.110.112.50:8080/api/"
 #define API_UPLOAD      @"feedback_upload"
 #define API_FEEDBACK    @"feedback?%@"
 
@@ -25,6 +29,7 @@
 
 
 @property (nonatomic, strong) ES_AppDelegate* appDelegate;
+@property (nonatomic) BOOL useHTTPS;
 
 @end
 
@@ -34,11 +39,15 @@
 
 @synthesize predictions = _predictions;
 
+@synthesize useHTTPS = _useHTTPS;
+
 -(id) init
 {
     self = [super init];
     if( self != nil ) {
     
+        self.useHTTPS = NO;
+        
         //--// Set up reachability class for wifi check
         wifiReachable = [Reachability reachabilityForLocalWiFi];
         [wifiReachable startNotifier];
@@ -47,8 +56,19 @@
         
         isReady = YES;
         
+        
     }
     return self;
+}
+
+- (NSString *)getApiPrefix
+{
+    if (self.useHTTPS) {
+        return [NSString stringWithFormat:@"%@%@:%@/api/",HTTPS_PREFIX,HOSTNAME,HTTPS_PORT];
+    }
+    else {
+        return [NSString stringWithFormat:@"%@%@:%@/api/",HTTP_PREFIX,HOSTNAME,HTTP_PORT];
+    }
 }
 
 -(ES_AppDelegate*) appDelegate
@@ -136,7 +156,7 @@
     }
     
     NSLog(@"[networkAccessor] Sending feedback for timestamp: %@",[activity timestamp]);
-    [self apiCall:[NSString stringWithFormat:@"%@%@",API_PREFIX,API_FEEDBACK] withParams:activity];
+    [self apiCall:[NSString stringWithFormat:@"%@%@",[self getApiPrefix],API_FEEDBACK] withParams:activity];
 }
 
 - (void) sendFeedback: (ES_Activity *)activity
@@ -235,7 +255,7 @@
             NSLog(@"[networkAccessor] Loaded zip file's data");
         }
     
-        NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"%@%@",API_PREFIX,API_UPLOAD]];
+        NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"%@%@",[self getApiPrefix],API_UPLOAD]];
         NSURLRequest *urlRequest = [self postRequestWithURL: url
                                                 boundry: BOUNDARY
                                                    data: data
@@ -306,6 +326,13 @@
     
     return urlRequest;
 }
+
+
+
+
+
+//////////////////////////////////
+// The network connection delegate:
 
 - (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
