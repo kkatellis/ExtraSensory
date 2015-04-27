@@ -24,7 +24,6 @@
 {
     CLLocationManager *locationManager;
     
-    CLLocation *currentLocation;
     
     @private
     //-// HF Data Management
@@ -34,9 +33,6 @@
 
 @property(strong, nonatomic)ES_SoundWaveProcessor *soundProcessor;
 
-@property (strong, nonatomic) CLLocation *currentLocation;
-
-@property (strong, nonatomic) CLLocation *previousLocation;
 
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -56,7 +52,6 @@
 -(void) turnOffRecording;
 -(void) _prepStage:(NSString*) fileName;
 
-//- (void) packHFData:(NSTimer *)timer;
 
 
 

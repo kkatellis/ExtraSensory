@@ -110,7 +110,6 @@
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
 @property (nonatomic, strong) NSMutableDictionary *hfData;
-@property (nonatomic) BOOL usingTimerForSampling;
 
 //@property (nonatomic, strong) ES_ImageProcessor *cameraProcessor;
 
@@ -119,11 +118,9 @@
 @implementation ES_SensorManager
 
 @synthesize soundProcessor = _soundProcessor;
-@synthesize currentLocation = _currentLocation;
 @synthesize motionManager = _motionManager;
 @synthesize locationManager = _locationManager;
 @synthesize callCenter = _callCenter;
-@synthesize timer = _timer;
 @synthesize soundTimer = _soundTimer;
 @synthesize counter = _counter;
 @synthesize sampleFrequency = _sampleFrequency;
@@ -132,7 +129,6 @@
 @synthesize isReady = _isReady;
 @synthesize user = _user;
 @synthesize currentActivity = _currentActivity;
-@synthesize usingTimerForSampling = _usingTimerForSampling;
 //@synthesize cameraProcessor = _cameraProcessor;
 
 
@@ -235,11 +231,6 @@
     return _sampleDuration;
 }
 
-- (BOOL) usingTimerForSampling
-{
-    _usingTimerForSampling = NO;
-    return _usingTimerForSampling;
-}
 
 //- (ES_ImageProcessor *)cameraProcessor {
 //    if (!_cameraProcessor) {
@@ -307,24 +298,6 @@
     [self.appDelegate markNotRecordingRightNow];
 }
 
-- (NSMutableDictionary *) addDeviceIndicatorsAndLowFreqMeasurements:(NSMutableDictionary *)HFDataList
-{
-    // Discrete indicators:
-    [HFDataList setValue:[NSNumber numberWithInt:[[self networkAccessor] reachabilityStatus]] forKey:[NSString stringWithFormat:@"lf_%@",WIFI_STATUS]];
-    [HFDataList setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:[NSString stringWithFormat:@"lf_%@",APP_STATE]];
-    [HFDataList setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:[NSString stringWithFormat:@"lf_%@",DEV_ORIENTATION]];
-    [HFDataList setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:[NSString stringWithFormat:@"lf_%@",PROXIMITY]];
-    BOOL onThePhone = ((self.callCenter.currentCalls) && ([self.callCenter.currentCalls count] > 0));
-    [HFDataList setValue:[NSNumber numberWithBool:onThePhone] forKey:[NSString stringWithFormat:@"lf_%@",ON_THE_PHONE]];
-    
-    // Scalar measurements:
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.altitude] forKey:[NSString stringWithFormat:@"lf_%@",ALTITUDE]];
-    [HFDataList setValue:[NSNumber numberWithInteger:self.currentLocation.floor.level] forKey:[NSString stringWithFormat:@"lf_%@",FLOOR]];
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.horizontalAccuracy] forKey:[NSString stringWithFormat:@"lf_%@",HOR_ACCURACY]];
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.verticalAccuracy] forKey:[NSString stringWithFormat:@"lf_%@",VER_ACCURACY]];
-    
-    return HFDataList;
-}
 
 
 // #############################################################
@@ -713,14 +686,7 @@
 {
     CLLocation *latestLocation = locations.lastObject;
     
-    if ([self usingTimerForSampling])
-    {
-        self.currentLocation = latestLocation;
-    }
-    else
-    {
-        [self addLocationSample:latestLocation];
-    }
+    [self addLocationSample:latestLocation];
 }
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
