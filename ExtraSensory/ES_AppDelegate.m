@@ -386,12 +386,12 @@
         NSLog(@"[appDelegate] App is authorized to use location services. Authorization status=%d",[CLLocationManager authorizationStatus]);
     }
 
-    // Permission to use camera:
-    if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-            NSLog(@"[appDelegate] Authorization to use video media: %b",granted);
-        }];
-    }
+//    // Permission to use camera:
+//    if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusAuthorized) {
+//        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+//            NSLog(@"[appDelegate] Authorization to use video media: %d",granted);
+//        }];
+//    }
     
     
     UIImage *navBackgroundImage = [UIImage imageNamed:@"iOS7-blue"];

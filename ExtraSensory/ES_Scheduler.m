@@ -19,8 +19,6 @@
 #import "ES_ActivitiesStrings.h"
 //#import "ES_UserActivityLabels.h"
 
-#define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
-#define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
 
 @interface ES_Scheduler() <PBPebbleCentralDelegate>
 

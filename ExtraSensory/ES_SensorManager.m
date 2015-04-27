@@ -21,27 +21,9 @@
 // In Hertz
 #define HF_SAMPLING_RATE    40
 
-#define HF_PRE_FNAME        @"HF_PRE_DATA.txt"
-#define HF_DUR_FNAME        @"HF_DUR_DATA.txt"
 
 //--// API data keys
 
-#define ACC_X           @"acc_x"
-#define ACC_Y           @"acc_y"
-#define ACC_Z           @"acc_z"
-
-#define GYR_X           @"gyro_x"
-#define GYR_Y           @"gyro_y"
-#define GYR_Z           @"gyro_z"
-
-#define MAG_X           @"magnet_x"
-#define MAG_Y           @"magnet_y"
-#define MAG_Z           @"magnet_z"
-
-#define LAT             @"lat"
-#define LNG             @"long"
-#define SPEED           @"speed"
-#define TIMESTAMP       @"timestamp"
 
 //#################
 // New sampling method fields:
@@ -126,7 +108,6 @@
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
 @property (nonatomic, strong) NSMutableDictionary *hfData;
-@property (nonatomic) BOOL usingTimerForSampling;
 
 //@property (nonatomic, strong) ES_ImageProcessor *cameraProcessor;
 
@@ -135,11 +116,9 @@
 @implementation ES_SensorManager
 
 @synthesize soundProcessor = _soundProcessor;
-@synthesize currentLocation = _currentLocation;
 @synthesize motionManager = _motionManager;
 @synthesize locationManager = _locationManager;
 @synthesize callCenter = _callCenter;
-@synthesize timer = _timer;
 @synthesize soundTimer = _soundTimer;
 @synthesize counter = _counter;
 @synthesize sampleFrequency = _sampleFrequency;
@@ -148,7 +127,6 @@
 @synthesize isReady = _isReady;
 @synthesize user = _user;
 @synthesize currentActivity = _currentActivity;
-@synthesize usingTimerForSampling = _usingTimerForSampling;
 //@synthesize cameraProcessor = _cameraProcessor;
 
 
@@ -251,11 +229,6 @@
     return _sampleDuration;
 }
 
-- (BOOL) usingTimerForSampling
-{
-    _usingTimerForSampling = NO;
-    return _usingTimerForSampling;
-}
 
 //- (ES_ImageProcessor *)cameraProcessor {
 //    if (!_cameraProcessor) {
@@ -293,61 +266,7 @@
 
 - (BOOL) record
 {    
-    if ([self usingTimerForSampling])
-    {
-        [self recordUsingTimer];
-    }
-    else
-    {
-        [self recordWithoutNSTimer];
-    }
-    
-    return YES;
-}
-
-- (BOOL) recordUsingTimer
-{
-    // Setup HFData array
-    if( HFDataBundle) {
-        NSLog(@"[sensorManager] Clearing old HFDataBundle.");
-        [HFDataBundle removeAllObjects];
-    }
-    else {
-        HFDataBundle = [[NSMutableArray alloc] init];
-    }
-    [ES_DataBaseAccessor clearHFDataFile];
-    [ES_DataBaseAccessor clearLabelFile];
-    [ES_DataBaseAccessor clearSoundFile];
-    
-    // Mark begining recording:
-    [self.appDelegate markRecordingRightNow];
-    
-    self.currentActivity.startTime = [NSDate date];
-    self.currentActivity.timestamp = [NSNumber numberWithInt:(int)[self.currentActivity.startTime timeIntervalSince1970]];
-    
-    self.motionManager.accelerometerUpdateInterval = self.interval;
-    self.motionManager.gyroUpdateInterval = self.interval;
-    self.motionManager.magnetometerUpdateInterval = self.interval;
-    self.motionManager.deviceMotionUpdateInterval = self.interval;
-    
-    [self.locationManager setDelegate: self];
-    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-    [self.locationManager setDistanceFilter: kCLDistanceFilterNone];
-    [self.locationManager setPausesLocationUpdatesAutomatically: NO];
-    [self.locationManager startUpdatingLocation];
-        
-    [self.motionManager startDeviceMotionUpdates];
-    [self.motionManager startAccelerometerUpdates];
-    [self.motionManager startGyroUpdates];
-    [self.motionManager startMagnetometerUpdates];
-    
-    [self.soundProcessor startDurRecording];
-    [self.timer invalidate];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval: self.interval
-                                                  target: self
-                                                selector: @selector(packHFData)
-                                                userInfo: nil
-                                                 repeats: YES];
+    [self recordWithoutNSTimer];
     
     return YES;
 }
@@ -377,24 +296,6 @@
     [self.appDelegate markNotRecordingRightNow];
 }
 
-- (NSMutableDictionary *) addDeviceIndicatorsAndLowFreqMeasurements:(NSMutableDictionary *)HFDataList
-{
-    // Discrete indicators:
-    [HFDataList setValue:[NSNumber numberWithInt:[[self networkAccessor] reachabilityStatus]] forKey:[NSString stringWithFormat:@"lf_%@",WIFI_STATUS]];
-    [HFDataList setValue:[NSNumber numberWithInteger:[UIApplication sharedApplication].applicationState] forKey:[NSString stringWithFormat:@"lf_%@",APP_STATE]];
-    [HFDataList setValue:[NSNumber numberWithInt:[[UIDevice currentDevice] orientation]] forKey:[NSString stringWithFormat:@"lf_%@",DEV_ORIENTATION]];
-    [HFDataList setValue:[NSNumber numberWithBool:[[UIDevice currentDevice] proximityState]] forKey:[NSString stringWithFormat:@"lf_%@",PROXIMITY]];
-    BOOL onThePhone = ((self.callCenter.currentCalls) && ([self.callCenter.currentCalls count] > 0));
-    [HFDataList setValue:[NSNumber numberWithBool:onThePhone] forKey:[NSString stringWithFormat:@"lf_%@",ON_THE_PHONE]];
-    
-    // Scalar measurements:
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.altitude] forKey:[NSString stringWithFormat:@"lf_%@",ALTITUDE]];
-    [HFDataList setValue:[NSNumber numberWithInteger:self.currentLocation.floor.level] forKey:[NSString stringWithFormat:@"lf_%@",FLOOR]];
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.horizontalAccuracy] forKey:[NSString stringWithFormat:@"lf_%@",HOR_ACCURACY]];
-    [HFDataList setValue:[NSNumber numberWithDouble:self.currentLocation.verticalAccuracy] forKey:[NSString stringWithFormat:@"lf_%@",VER_ACCURACY]];
-    
-    return HFDataList;
-}
 
 -(void) packHFData
 {
@@ -876,14 +777,7 @@
 {
     CLLocation *latestLocation = locations.lastObject;
     
-    if ([self usingTimerForSampling])
-    {
-        self.currentLocation = latestLocation;
-    }
-    else
-    {
-        [self addLocationSample:latestLocation];
-    }
+    [self addLocationSample:latestLocation];
 }
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
