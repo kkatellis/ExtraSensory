@@ -424,6 +424,21 @@
     
     NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:13];
     
+    if ([self.user.settings.hideHome boolValue]) {
+        NSLog(@"[sensorManager] Hiding home");
+        if ([self inBubble]) {
+            [HFDataList setObject: [NSNumber numberWithDouble: -1000 ] forKey: LAT];
+            [HFDataList setObject: [NSNumber numberWithDouble: -1000 ] forKey: LNG];
+        } else {
+            [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
+            [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ] forKey: LNG];
+        }
+    } else {
+        [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
+        [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ] forKey: LNG];
+    }
+    NSLog(@"current location: (%f, %f)", self.currentLocation.coordinate.latitude, self.currentLocation.coordinate.longitude);
+    
     [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.speed ] forKey: SPEED];
     [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
     [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ] forKey: LNG];
@@ -446,6 +461,22 @@
     
     [HFDataBundle addObject:HFDataList];
     
+}
+
+- (BOOL) inBubble
+{
+    if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorized) {
+        NSLog(@"authorized");
+    };
+    CLLocation *locA = self.currentLocation;//[[CLLocation alloc] initWithLatitude:self.currentLocation.coordinate.latitude longitude:self.currentLocation.coordinate.longitude];
+    NSLog(@"current location: (%f, %f)", self.currentLocation.coordinate.latitude, self.currentLocation.coordinate.longitude);
+    CLLocation *locB = [[CLLocation alloc] initWithLatitude:[self.user.settings.homeLat doubleValue] longitude:[self.user.settings.homeLon doubleValue]];
+    NSLog(@"home location: (%f, %f)", locB.coordinate.latitude, locB.coordinate.longitude);
+    CLLocationDistance distance = [locA distanceFromLocation:locB];
+    NSLog(@"%f away from home location", distance);
+    if (distance < 500){
+        return TRUE;
+    } else { return FALSE; }
 }
 
 // #############################################################
@@ -714,8 +745,19 @@
 
 - (void) addLocationSample:(CLLocation *)location
 {
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+    NSLog(@"addLocationSample");
+    if ([self.user.settings.hideHome boolValue]) {
+        if ([self inBubble]) {
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LAT];
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LONG];
+        } else {
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+        }
+    } else {
+        [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
+        [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+    }
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.altitude] forField:LOC_ALT];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.speed] forField:LOC_SPEED];
     
