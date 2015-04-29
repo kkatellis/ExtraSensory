@@ -491,37 +491,11 @@
     SecTrustRef serverTrust = protectionSpace.serverTrust;
     SecTrustCreateWithCertificates(certArrayRef, policyRef, &serverTrust);
     SecTrustSetAnchorCertificates(serverTrust, certArrayRef);
-//    NSLog(@"===== certArray: %@. serverTrust: %@",certArrayRef,serverTrust);
+    SecTrustSetAnchorCertificatesOnly(serverTrust, YES);
     
     // Verify that trust.
     SecTrustResultType trustResult;
-    OSStatus stat = SecTrustEvaluate(serverTrust, &trustResult);
-    switch (trustResult) {
-        case kSecTrustResultInvalid:
-//            NSLog(@"== invalid");
-            break;
-        case kSecTrustResultProceed:
-//            NSLog(@"== proceed");
-            break;
-        case kSecTrustResultConfirm:
-//            NSLog(@"== confirm");
-            break;
-        case kSecTrustResultDeny:
-//            NSLog(@"== deny");
-            break;
-        case kSecTrustResultUnspecified:
-//            NSLog(@"== unsepcified");
-            break;
-        case kSecTrustResultRecoverableTrustFailure:
-//            NSLog(@"== recoverable trust fail");
-            break;
-        case kSecTrustResultFatalTrustFailure:
-//            NSLog(@"== fatal fail");
-            break;
-        case kSecTrustResultOtherError:
-//            NSLog(@"== other error");
-            break;
-    }
+    SecTrustEvaluate(serverTrust, &trustResult);
     
     // Clean up.
     CFRelease(certArrayRef);
