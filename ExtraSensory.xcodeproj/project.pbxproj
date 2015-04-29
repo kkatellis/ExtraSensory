@@ -137,6 +137,8 @@
 		70C156D118D75E34007CCB39 /* RaisedTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C156D018D75E34007CCB39 /* RaisedTabBarController.m */; };
 		70E0EF4E1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E0EF4D1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m */; };
 		70E0EF571AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E0EF561AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m */; };
+		70ED4B541AF14362003C4E12 /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 70ED4B531AF14362003C4E12 /* XYPieChart.m */; };
+		70ED4B571AF14851003C4E12 /* ES_NewPieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70ED4B561AF14851003C4E12 /* ES_NewPieViewController.m */; };
 		70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 70FE414718B695D900F277FB /* ES_ActivitiesStrings.m */; };
 		9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB417F1A78A00D95E05 /* Foundation.framework */; };
 		9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */; };
@@ -336,6 +338,10 @@
 		70E0EF4D1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsTableViewController.m; sourceTree = "<group>"; };
 		70E0EF551AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsPickTableViewController.h; sourceTree = "<group>"; };
 		70E0EF561AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsPickTableViewController.m; sourceTree = "<group>"; };
+		70ED4B521AF14320003C4E12 /* XYPieChart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
+		70ED4B531AF14362003C4E12 /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
+		70ED4B551AF14851003C4E12 /* ES_NewPieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_NewPieViewController.h; sourceTree = "<group>"; };
+		70ED4B561AF14851003C4E12 /* ES_NewPieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_NewPieViewController.m; sourceTree = "<group>"; };
 		70FE414618B695D900F277FB /* ES_ActivitiesStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivitiesStrings.h; sourceTree = "<group>"; };
 		70FE414718B695D900F277FB /* ES_ActivitiesStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivitiesStrings.m; sourceTree = "<group>"; };
 		9307CBB117F1A78A00D95E05 /* ExtraSensory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExtraSensory.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -622,6 +628,8 @@
 				707762E218D125BD00ED0134 /* ES_SummaryViewController.m */,
 				1025D75618CB15BA00D854BE /* ES_PieViewController.h */,
 				1025D75718CB15BA00D854BE /* ES_PieViewController.m */,
+				70ED4B551AF14851003C4E12 /* ES_NewPieViewController.h */,
+				70ED4B561AF14851003C4E12 /* ES_NewPieViewController.m */,
 			);
 			name = Summary;
 			sourceTree = "<group>";
@@ -812,6 +820,8 @@
 			children = (
 				939562FB1806481800BF448E /* ES_PieChartView.h */,
 				939562FC1806481800BF448E /* ES_PieChartView.m */,
+				70ED4B521AF14320003C4E12 /* XYPieChart.h */,
+				70ED4B531AF14362003C4E12 /* XYPieChart.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1035,6 +1045,7 @@
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
+				70ED4B571AF14851003C4E12 /* ES_NewPieViewController.m in Sources */,
 				709F5AEB19FEBFED00F3386C /* CAHostTimeBase.cpp in Sources */,
 				4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
@@ -1071,6 +1082,7 @@
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
 				70C156C418D52864007CCB39 /* Empty.m in Sources */,
 				709F513E19FEA6E700F3386C /* AudioFileReader.cpp in Sources */,
+				70ED4B541AF14362003C4E12 /* XYPieChart.m in Sources */,
 				709F513A19FEA6A100F3386C /* MFCCUtils.cpp in Sources */,
 				93F679C617F978AF000638CB /* zip.c in Sources */,
 				709F514119FEA72500F3386C /* MFCCProcessor.cpp in Sources */,

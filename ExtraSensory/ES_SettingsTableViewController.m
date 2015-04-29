@@ -107,7 +107,7 @@
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
             toggleSwitch.on = self.appDelegate.networkAccessor.useHTTPS;
-            toggleSwitch.tag = 0;
+            toggleSwitch.tag = 3;
             [toggleSwitch addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventValueChanged];
         }
     } else if (indexPath.section == 1) {

@@ -578,7 +578,6 @@
 
 - (void) addLocationSample:(CLLocation *)location
 {
-    NSLog(@"addLocationSample");
     if ([self.user.settings.hideHome boolValue]) {
         if ([self inBubble:location]) {
             [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LAT];
