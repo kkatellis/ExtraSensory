@@ -19,7 +19,7 @@ BOOL isReady;   //only upload one at a time
 }
 @property (strong, nonatomic) NSMutableData *recievedData;
 @property (strong, nonatomic) NSMutableArray *predictions;
-
+@property (nonatomic) BOOL useHTTPS;
 
 - (id)init;
 - (void) upload;

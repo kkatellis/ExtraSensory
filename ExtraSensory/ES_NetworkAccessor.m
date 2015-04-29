@@ -13,13 +13,18 @@
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_ActivitiesStrings.h"
-//#import "ES_UserActivityLabels.h"
 
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
+#define HOSTNAME        @"137.110.112.50"
+#define HTTP_PREFIX     @"http://"
+#define HTTPS_PREFIX    @"https://"
+#define HTTP_PORT       @"8080"
+#define HTTPS_PORT      @"443"
 
-#define API_PREFIX      @"http://137.110.112.50:8080/api/"
 #define API_UPLOAD      @"feedback_upload"
 #define API_FEEDBACK    @"feedback?%@"
+
+#define CERT_FILENAME   @"calab-macserver.ucsd.edu"
 
 @interface ES_NetworkAccessor()
 
@@ -34,11 +39,15 @@
 
 @synthesize predictions = _predictions;
 
+@synthesize useHTTPS = _useHTTPS;
+
 -(id) init
 {
     self = [super init];
     if( self != nil ) {
     
+        self.useHTTPS = YES;
+        
         //--// Set up reachability class for wifi check
         wifiReachable = [Reachability reachabilityForLocalWiFi];
         [wifiReachable startNotifier];
@@ -47,8 +56,19 @@
         
         isReady = YES;
         
+        
     }
     return self;
+}
+
+- (NSString *)getApiPrefix
+{
+    if (self.useHTTPS) {
+        return [NSString stringWithFormat:@"%@%@:%@/api/",HTTPS_PREFIX,HOSTNAME,HTTPS_PORT];
+    }
+    else {
+        return [NSString stringWithFormat:@"%@%@:%@/api/",HTTP_PREFIX,HOSTNAME,HTTP_PORT];
+    }
 }
 
 -(ES_AppDelegate*) appDelegate
@@ -136,7 +156,7 @@
     }
     
     NSLog(@"[networkAccessor] Sending feedback for timestamp: %@",[activity timestamp]);
-    [self apiCall:[NSString stringWithFormat:@"%@%@",API_PREFIX,API_FEEDBACK] withParams:activity];
+    [self apiCall:[NSString stringWithFormat:@"%@%@",[self getApiPrefix],API_FEEDBACK] withParams:activity];
 }
 
 - (void) sendFeedback: (ES_Activity *)activity
@@ -235,7 +255,7 @@
             NSLog(@"[networkAccessor] Loaded zip file's data");
         }
     
-        NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"%@%@",API_PREFIX,API_UPLOAD]];
+        NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"%@%@",[self getApiPrefix],API_UPLOAD]];
         NSURLRequest *urlRequest = [self postRequestWithURL: url
                                                 boundry: BOUNDARY
                                                    data: data
@@ -307,6 +327,13 @@
     return urlRequest;
 }
 
+
+
+
+
+//////////////////////////////////
+// The network connection delegate:
+
 - (void) connection: (NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     NSLog( @"[networkAccessor] connectiondidReceiveResponse.");
@@ -340,6 +367,7 @@
     NSString *reply = [[NSString alloc] initWithData: self.recievedData
                                             encoding: NSUTF8StringEncoding];
     
+    NSLog(@"[networkAccessor] Got reply for request URL: %@",connection.originalRequest.URL);
     NSLog( @"[networkAccessor] Got reply = %@", [reply description]);
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
@@ -445,6 +473,80 @@
     
     return NO;
     
+}
+
+- (BOOL)shouldTrustProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+    
+    // Load up the bundled certificate.
+    NSString *resourceFilePath = [[NSBundle mainBundle] pathForResource:CERT_FILENAME ofType:@"der"];
+    NSData *certData = [[NSData alloc] initWithContentsOfFile:resourceFilePath];
+    CFDataRef certDataRef = (__bridge_retained CFDataRef)certData;
+    SecCertificateRef cert = SecCertificateCreateWithData(nil, certDataRef);
+    
+    // Establish a chain of trust anchored on our bundled certificate.
+    CFArrayRef certArrayRef = CFArrayCreate(nil, (void *)&cert, 1, nil);
+    //NSString *trustedHostname = @"Computer Audition Lab at UCSD";
+    //CFStringRef trustedHostnameRef = (__bridge_retained CFStringRef)trustedHostname;
+    SecPolicyRef policyRef = SecPolicyCreateSSL(YES, nil);
+    SecTrustRef serverTrust = protectionSpace.serverTrust;
+    SecTrustCreateWithCertificates(certArrayRef, policyRef, &serverTrust);
+    SecTrustSetAnchorCertificates(serverTrust, certArrayRef);
+//    NSLog(@"===== certArray: %@. serverTrust: %@",certArrayRef,serverTrust);
+    
+    // Verify that trust.
+    SecTrustResultType trustResult;
+    OSStatus stat = SecTrustEvaluate(serverTrust, &trustResult);
+    switch (trustResult) {
+        case kSecTrustResultInvalid:
+//            NSLog(@"== invalid");
+            break;
+        case kSecTrustResultProceed:
+//            NSLog(@"== proceed");
+            break;
+        case kSecTrustResultConfirm:
+//            NSLog(@"== confirm");
+            break;
+        case kSecTrustResultDeny:
+//            NSLog(@"== deny");
+            break;
+        case kSecTrustResultUnspecified:
+//            NSLog(@"== unsepcified");
+            break;
+        case kSecTrustResultRecoverableTrustFailure:
+//            NSLog(@"== recoverable trust fail");
+            break;
+        case kSecTrustResultFatalTrustFailure:
+//            NSLog(@"== fatal fail");
+            break;
+        case kSecTrustResultOtherError:
+//            NSLog(@"== other error");
+            break;
+    }
+    
+    // Clean up.
+    CFRelease(certArrayRef);
+    CFRelease(cert);
+    CFRelease(certDataRef);
+    
+    // id our custom trust chain evaluate successfully
+    return trustResult == kSecTrustResultUnspecified;
+}
+
+- (BOOL) connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
+{
+    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+}
+
+- (void) connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+    if ([self shouldTrustProtectionSpace:challenge.protectionSpace]) {
+        NSLog(@"[networkAccessor] Trusting the server. Sending the (encrypted) message");
+        [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+    }
+    else {
+        NSLog(@"[networkAccessor] Not trusting the server!!!");
+        [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+    }
 }
 
 
