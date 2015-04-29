@@ -30,7 +30,6 @@
 
 
 @property (nonatomic, strong) ES_AppDelegate* appDelegate;
-@property (nonatomic) BOOL useHTTPS;
 
 @end
 
@@ -368,6 +367,7 @@
     NSString *reply = [[NSString alloc] initWithData: self.recievedData
                                             encoding: NSUTF8StringEncoding];
     
+    NSLog(@"[networkAccessor] Got reply for request URL: %@",connection.originalRequest.URL);
     NSLog( @"[networkAccessor] Got reply = %@", [reply description]);
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData: self.recievedData options:NSJSONReadingMutableContainers error: &error];
