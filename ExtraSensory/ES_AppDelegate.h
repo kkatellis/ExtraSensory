@@ -20,6 +20,8 @@
 
 @property BOOL recordingRightNow;
 
+@property BOOL userSelectedDataCollectionOn;
+
 @property (strong, nonatomic) UIWindow *window;
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;

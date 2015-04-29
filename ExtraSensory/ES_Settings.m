@@ -19,6 +19,9 @@
 @dynamic timeBetweenSampling;
 @dynamic timeBetweenUserNags;
 @dynamic homeSensingParticipant;
+@dynamic hideHome;
+@dynamic homeLat;
+@dynamic homeLon;
 @dynamic user;
 
 @end

@@ -39,7 +39,6 @@
 @interface ES_AppDelegate() <PBPebbleCentralDelegate>
 
 @property ES_AlertViewWithUserInfo *latestAlert;
-@property BOOL userSelectedDataCollectionOn;
 @property (nonatomic) ES_Activity *exampleWithPredeterminedLabels;
 @property (nonatomic, strong) NSDate *predeterminedLabelsValidUntil;
 @property (nonatomic, strong) NSTimer *predeterminedLabelsExpirationTimer;
@@ -410,6 +409,7 @@
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
     }
+    [self updateApplicationBadge];
 }
 
 
@@ -436,6 +436,7 @@
 - (void) applicationDidEnterBackground:(UIApplication *)application
 {
     NSLog(@"[appDelegate] App did enter background");
+    [self updateApplicationBadge];
     [ES_DataBaseAccessor save];
 }
 
@@ -456,11 +457,10 @@
 - (void) applicationWillTerminate:(UIApplication *)application
 {
     NSLog(@"[appDelegate] Application is being terminated.");
+    [self updateApplicationBadge];
     [ES_DataBaseAccessor save];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
-
-
 
 
 

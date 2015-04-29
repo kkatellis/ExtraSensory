@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ES_Activity" representedClassName="ES_Activity" syncable="YES">
         <attribute name="labelSource" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="serverPrediction" optional="YES" attributeType="String" syncable="YES"/>
@@ -34,8 +34,11 @@
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_Activity" inverseName="secondaryActivities" inverseEntity="ES_Activity" syncable="YES"/>
     </entity>
     <entity name="ES_Settings" representedClassName="ES_Settings" syncable="YES">
+        <attribute name="hideHome" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="homeLat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="homeLon" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="homeSensingParticipant" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="maxZipFilesStored" optional="YES" attributeType="Double" defaultValueString="120" syncable="YES"/>
+        <attribute name="maxZipFilesStored" optional="YES" attributeType="Double" defaultValueString="600" syncable="YES"/>
         <attribute name="recentTimePeriod" optional="YES" attributeType="Double" defaultValueString="1200" syncable="YES"/>
         <attribute name="sampleDuration" attributeType="Double" minValueString="5" defaultValueString="20" syncable="YES"/>
         <attribute name="sampleRate" attributeType="Double" minValueString="1" maxValueString="1000" defaultValueString="40" syncable="YES"/>
@@ -58,14 +61,14 @@
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ES_User" inverseName="userPopulation" inverseEntity="ES_User" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ES_Activity" positionX="0" positionY="0" width="128" height="180"/>
-        <element name="ES_ActivityStatistics" positionX="0" positionY="0" width="128" height="210"/>
-        <element name="ES_Label" positionX="9" positionY="90" width="128" height="58"/>
-        <element name="ES_Mood" positionX="27" positionY="108" width="128" height="58"/>
-        <element name="ES_SecondaryActivity" positionX="18" positionY="99" width="128" height="58"/>
-        <element name="ES_Settings" positionX="0" positionY="0" width="128" height="165"/>
-        <element name="ES_User" positionX="0" positionY="0" width="128" height="135"/>
-        <element name="ES_UserActivityLabels" positionX="0" positionY="0" width="128" height="60"/>
-        <element name="ES_UserPopulation" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="ES_Activity" positionX="88" positionY="117" width="128" height="180"/>
+        <element name="ES_ActivityStatistics" positionX="70" positionY="324" width="128" height="210"/>
+        <element name="ES_Label" positionX="196" positionY="153" width="128" height="58"/>
+        <element name="ES_Mood" positionX="196" positionY="63" width="128" height="58"/>
+        <element name="ES_SecondaryActivity" positionX="196" positionY="248" width="128" height="58"/>
+        <element name="ES_Settings" positionX="-272" positionY="261" width="128" height="210"/>
+        <element name="ES_User" positionX="-90" positionY="162" width="128" height="135"/>
+        <element name="ES_UserActivityLabels" positionX="0" positionY="-108" width="128" height="60"/>
+        <element name="ES_UserPopulation" positionX="-99" positionY="360" width="128" height="60"/>
     </elements>
 </model>

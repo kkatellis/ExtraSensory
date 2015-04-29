@@ -296,7 +296,21 @@
     [self.appDelegate markNotRecordingRightNow];
 }
 
-
+- (BOOL) inBubble:(CLLocation *)location
+{
+    if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorized) {
+        NSLog(@"authorized");
+    };
+    NSLog(@"current location: (%f, %f)", location.coordinate.latitude, location.coordinate.longitude);
+    CLLocation *locB = [[CLLocation alloc] initWithLatitude:[self.user.settings.homeLat doubleValue] longitude:[self.user.settings.homeLon doubleValue]];
+    NSLog(@"home location: (%f, %f)", locB.coordinate.latitude, locB.coordinate.longitude);
+    CLLocationDistance distance = [location distanceFromLocation:locB];
+    NSLog(@"%f away from home location", distance);
+    if (distance < 500){
+        NSLog(@"in bubble!");
+        return TRUE;
+    } else { return FALSE; }
+}
 
 // #############################################################
 // New version of recording measurements (not relying on NSTimer, which is no accurate, especially, when app goes to background):
@@ -564,8 +578,19 @@
 
 - (void) addLocationSample:(CLLocation *)location
 {
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+    NSLog(@"addLocationSample");
+    if ([self.user.settings.hideHome boolValue]) {
+        if ([self inBubble:location]) {
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LAT];
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LONG];
+        } else {
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
+            [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+        }
+    } else {
+        [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
+        [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+    }
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.altitude] forField:LOC_ALT];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.speed] forField:LOC_SPEED];
     
