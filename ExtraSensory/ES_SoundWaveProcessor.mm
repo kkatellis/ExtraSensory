@@ -17,6 +17,11 @@
 #define HF_SOUND_FILE_PRE   @"HF_SOUNDWAVE_PRE"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
 
+#define SAMPLING_RATE       22050.0
+#define WINDOW_SIZE         2048
+#define HOP_SIZE            1024
+#define PREEMPH_COEF        0.97
+
 typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 
 @implementation ES_SoundWaveProcessor
@@ -162,7 +167,7 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     AudioFileReaderRef someReader = AudioFileReaderRef(new WM::AudioFileReader(audioURL));
     
     FeatureTypeDTW::Features feats;
-    feats = get_mfcc_features(someReader);
+    feats = get_mfcc_features(someReader,WINDOW_SIZE,SAMPLING_RATE,HOP_SIZE,PREEMPH_COEF);
     std::cout << "mfcc_features: " << feats.size() << "x" << feats[0].size() << std::endl;
     
     NSMutableString* arrayString = [[NSMutableString alloc] init];
