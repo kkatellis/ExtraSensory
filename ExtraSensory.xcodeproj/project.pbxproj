@@ -21,6 +21,7 @@
 		4E1336571A630E9700683B84 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1336561A630E9700683B84 /* ES_Activity.m */; };
 		4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */; };
 		4E1DEA491AEECE84003E3343 /* calab_macserver_ucsd_edu.crt in Resources */ = {isa = PBXBuildFile; fileRef = 4E1DEA481AEECE7E003E3343 /* calab_macserver_ucsd_edu.crt */; };
+		4E1DEA4B1AF035B6003E3343 /* calab-macserver.ucsd.edu.der in Resources */ = {isa = PBXBuildFile; fileRef = 4E1DEA4A1AF035B5003E3343 /* calab-macserver.ucsd.edu.der */; };
 		4E4047C01A1FDDF700C1D0DF /* secondary_activities_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047BF1A1FDDF700C1D0DF /* secondary_activities_list.txt */; };
 		4E4047C21A23B5BE00C1D0DF /* moods_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047C11A23B5BE00C1D0DF /* moods_list.txt */; };
 		4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C41A23F19600C1D0DF /* ES_Label.m */; };
@@ -186,6 +187,7 @@
 		4E1336591A78125E00683B84 /* ES_ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ImageProcessor.h; sourceTree = "<group>"; };
 		4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ImageProcessor.m; sourceTree = "<group>"; };
 		4E1DEA481AEECE7E003E3343 /* calab_macserver_ucsd_edu.crt */ = {isa = PBXFileReference; lastKnownFileType = file; path = calab_macserver_ucsd_edu.crt; sourceTree = "<group>"; };
+		4E1DEA4A1AF035B5003E3343 /* calab-macserver.ucsd.edu.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = "calab-macserver.ucsd.edu.der"; sourceTree = "<group>"; };
 		4E4047BF1A1FDDF700C1D0DF /* secondary_activities_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secondary_activities_list.txt; sourceTree = "<group>"; };
 		4E4047C11A23B5BE00C1D0DF /* moods_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = moods_list.txt; sourceTree = "<group>"; };
 		4E4047C31A23F19600C1D0DF /* ES_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Label.h; sourceTree = "<group>"; };
@@ -484,6 +486,7 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4E1DEA4A1AF035B5003E3343 /* calab-macserver.ucsd.edu.der */,
 				4E1DEA481AEECE7E003E3343 /* calab_macserver_ucsd_edu.crt */,
 				4EC132601A89C4C2003300B5 /* ExtraSensoryIcon@2x.png */,
 				4EC1325E1A89C4A4003300B5 /* ExtraSensoryIcon.png */,
@@ -960,6 +963,7 @@
 				70B8A94D18F87D230076A4F5 /* studying.png in Resources */,
 				70B8A96518F87D230076A4F5 /* table-bg.png in Resources */,
 				70B8A96A18F87D230076A4F5 /* rdio-logo.png in Resources */,
+				4E1DEA4B1AF035B6003E3343 /* calab-macserver.ucsd.edu.der in Resources */,
 				70B8A95918F87D230076A4F5 /* button-bg.png in Resources */,
 				9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */,
 				70B8A93018F87D230076A4F5 /* 32-iphone.png in Resources */,
