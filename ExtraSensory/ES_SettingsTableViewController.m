@@ -106,7 +106,7 @@
             UISwitch *toggleSwitch = [[UISwitch alloc] init];
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
-            toggleSwitch.on = self.appDelegate.networkAccessor.useHttps;
+            toggleSwitch.on = self.appDelegate.networkAccessor.useHTTPS;
             toggleSwitch.tag = 0;
             [toggleSwitch addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventValueChanged];
         }
@@ -196,7 +196,7 @@
         self.showHomeLatLon = aswitch.on;
         [self.tableView reloadData];
     } else if (aswitch.tag == 3) {
-        self.appDelegate.networkAccessor.useHttps = aswitch.on;
+        self.appDelegate.networkAccessor.useHTTPS = aswitch.on;
     }
 }
 
