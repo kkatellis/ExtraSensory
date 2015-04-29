@@ -296,86 +296,18 @@
     [self.appDelegate markNotRecordingRightNow];
 }
 
-
--(void) packHFData
-{
-    //--// Pack most recent data and place it within Data Bundle
-    if( [HFDataBundle count] % 100 == 0 ) {
-        NSLog( @"[sensorManager] Collected %lu HF samples", (unsigned long)[HFDataBundle count]);
-        NSLog(@"==== now: %f. interval: %f",[[NSDate date] timeIntervalSince1970], self.interval);
-    }
-    if ([HFDataBundle count] == self.samplesPerBatch )
-    {
-        [self.timer invalidate];
-        self.timer = nil;
-        
-        [self.locationManager stopUpdatingLocation];
-        [self.motionManager stopAccelerometerUpdates];
-        [self.motionManager stopGyroUpdates];
-        [self.motionManager stopMagnetometerUpdates];
-        [self.motionManager stopDeviceMotionUpdates];
-        
-        [ES_DataBaseAccessor writeData: HFDataBundle];
-        [ES_DataBaseAccessor writeActivity: self.currentActivity];
-        
-        // Mark finished recording:
-        [self.appDelegate markNotRecordingRightNow];
-    }
-    
-    
-    NSMutableDictionary *HFDataList = [[NSMutableDictionary alloc] initWithCapacity:13];
-    
-    if ([self.user.settings.hideHome boolValue]) {
-        NSLog(@"[sensorManager] Hiding home");
-        if ([self inBubble]) {
-            [HFDataList setObject: [NSNumber numberWithDouble: -1000 ] forKey: LAT];
-            [HFDataList setObject: [NSNumber numberWithDouble: -1000 ] forKey: LNG];
-        } else {
-            [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
-            [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ] forKey: LNG];
-        }
-    } else {
-        [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
-        [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ] forKey: LNG];
-    }
-    NSLog(@"current location: (%f, %f)", self.currentLocation.coordinate.latitude, self.currentLocation.coordinate.longitude);
-    
-    [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.speed ] forKey: SPEED];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.latitude ] forKey: LAT];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.currentLocation.coordinate.longitude ] forKey: LNG];
-    
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.timestamp ] forKey: TIMESTAMP];
-    
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.x ] forKey: GYR_X];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.x ] forKey: ACC_X];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.magnetometerData.magneticField.x] forKey:MAG_X];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.y ] forKey: GYR_Y];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.y ] forKey: ACC_Y];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.magnetometerData.magneticField.y] forKey:MAG_Y];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.rotationRate.z ] forKey: GYR_Z];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.deviceMotion.userAcceleration.z ] forKey: ACC_Z];
-    [HFDataList setObject: [NSNumber numberWithDouble: self.motionManager.magnetometerData.magneticField.z] forKey:MAG_Z];
-    
-    if( [HFDataBundle count] % 100 == 0 ) {
-        HFDataList = [self addDeviceIndicatorsAndLowFreqMeasurements:HFDataList];
-    }
-    
-    [HFDataBundle addObject:HFDataList];
-    
-}
-
-- (BOOL) inBubble
+- (BOOL) inBubble:(CLLocation *)location
 {
     if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorized) {
         NSLog(@"authorized");
     };
-    CLLocation *locA = self.currentLocation;//[[CLLocation alloc] initWithLatitude:self.currentLocation.coordinate.latitude longitude:self.currentLocation.coordinate.longitude];
-    NSLog(@"current location: (%f, %f)", self.currentLocation.coordinate.latitude, self.currentLocation.coordinate.longitude);
+    NSLog(@"current location: (%f, %f)", location.coordinate.latitude, location.coordinate.longitude);
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[self.user.settings.homeLat doubleValue] longitude:[self.user.settings.homeLon doubleValue]];
     NSLog(@"home location: (%f, %f)", locB.coordinate.latitude, locB.coordinate.longitude);
-    CLLocationDistance distance = [locA distanceFromLocation:locB];
+    CLLocationDistance distance = [location distanceFromLocation:locB];
     NSLog(@"%f away from home location", distance);
     if (distance < 500){
+        NSLog(@"in bubble!");
         return TRUE;
     } else { return FALSE; }
 }
@@ -648,7 +580,7 @@
 {
     NSLog(@"addLocationSample");
     if ([self.user.settings.hideHome boolValue]) {
-        if ([self inBubble]) {
+        if ([self inBubble:location]) {
             [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LAT];
             [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LONG];
         } else {

@@ -5,6 +5,7 @@
 //  Created by Bryan Grounds on 10/11/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
+// this is the old version - see ES_SettingsTableViewController
 
 #import "ES_SettingsViewController.h"
 #import "ES_AppDelegate.h"
@@ -103,6 +104,9 @@
     } else {
         NSLog(@"Not hiding home");
     }
+    
+    self.latInput.placeholder = [self.appDelegate.user.settings.homeLat stringValue];
+    self.lonInput.placeholder = [self.appDelegate.user.settings.homeLon stringValue];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
