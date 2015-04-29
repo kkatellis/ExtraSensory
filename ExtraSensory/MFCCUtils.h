@@ -34,6 +34,10 @@ typedef boost::scoped_array<WMFeatureType> FeatureTypeArray;
 typedef simod1::DTW<WMFeatureType, 13> FeatureTypeDTW;
 
 FeatureTypeDTW::Features get_mfcc_features(const AudioFileReaderRef& reader,
+                                           const size_t window_frame_size,
+                                           const Float64 sample_rate,
+                                           const size_t interval_frame_size,
+                                           const float preemphasis_coefficient,
                                            WMAudioFilePreProcessInfo* reader_info = NULL);
 
 #endif //WORD_MATCH_MFCC_UTILS_H
