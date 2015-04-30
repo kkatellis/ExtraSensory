@@ -85,7 +85,7 @@
         {
             NSArray *selectedLabels = [[self.appliedLabels allObjects] sortedArrayUsingSelector:@selector(compare:)];
             [self addSectionWithArrayOfItemStrings:selectedLabels name:@"Selected" andHeader:@"Selected"];
-//            [self addDummySection];
+            [self addDummySection];
         }
         
         if (self.labelsPerSubject)
@@ -97,7 +97,7 @@
                 [self addSectionWithArrayOfItemStrings:labelsOfThisSubject name:subject andHeader:subject];
                 
                 // Add another dummy section to create a space between two index items:
-//                [self addDummySection];
+                [self addDummySection];
             }
         }
         
@@ -107,7 +107,7 @@
             [self addSectionWithArrayOfItemStrings:self.frequentChoices name:@"frequent" andHeader:@"Frequently used"];
             
             // Add another dummy section to create a space between two index items:
-//            [self addDummySection];
+            [self addDummySection];
         }
         
         if (self.useAlphabeticIndex)
@@ -142,10 +142,10 @@
     {
         if ([sview respondsToSelector:@selector(setIndexColor:)])
         {
-//            NSLog(@"[selectionFromList] === found sub view of type: %@.",[sview class]);
+            NSLog(@"[selectionFromList] === found sub view of type: %@.",[sview class]);
             if ([sview respondsToSelector:@selector(setFont:)])
             {
-                [sview performSelector:@selector(setFont:) withObject:[UIFont systemFontOfSize:17.5]];
+                //[sview performSelector:@selector(setFont:) withObject:[UIFont systemFontOfSize:17.5]];
             }
             if ([sview respondsToSelector:@selector(setTextAlignment:)])
             {
