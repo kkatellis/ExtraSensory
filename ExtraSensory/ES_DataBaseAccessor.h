@@ -29,6 +29,8 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
 
 + (NSString *)getMFCCFilename;
 + (NSString *)getHFDataFilename;
++ (NSString *)getAudioPropertiesFilename;
++ (NSString *) getDataFileFullPathForFilename:(NSString *)filename;
 
 + (NSArray *) read: (NSString *)entityDescription;
 + (void) save;
@@ -40,9 +42,7 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
 + (void) writeSensorData: (NSDictionary *)data;
 + (void) createFeedbackFile:(NSNumber *)timestamp;
 + (void) clearFeedbackFile:(NSNumber *)timestamp;
-+ (void) clearHFDataFile;
-+ (void) clearLabelFile;
-+ (void) clearSoundFile;
++ (void) clearDataFiles;
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
 + (void) deleteActivity: (ES_Activity *) activity;

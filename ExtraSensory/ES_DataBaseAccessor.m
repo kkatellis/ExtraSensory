@@ -25,6 +25,7 @@
 #define ROOT_DATA_OBJECT @"ES_User"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
 #define MFCC_FILE_DUR       @"sound.mfcc"
+#define AUDIO_PROP_FILE     @"m_audio_properties.json"
 #define HF_DATA_FILE_DUR    @"HF_DUR_DATA.txt"
 #define LABEL_FILE          @"label.txt"
 
@@ -39,6 +40,11 @@
 + (NSString *)getHFDataFilename
 {
     return HF_DATA_FILE_DUR;
+}
+
++ (NSString *)getAudioPropertiesFilename
+{
+    return AUDIO_PROP_FILE;
 }
 
 + (ES_User *)user
@@ -607,7 +613,7 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-    NSArray *arr = [NSArray arrayWithObjects:[self getHFDataFilename],LABEL_FILE,[self getMFCCFilename], nil];
+    NSArray *arr = [NSArray arrayWithObjects:[self getHFDataFilename],LABEL_FILE,[self getMFCCFilename],[self getAudioPropertiesFilename], nil];
     
     return arr;
 }
@@ -691,27 +697,17 @@
     
 }
 
-
-+ (NSString *) HFDataFileFullPath
++ (NSString *) getDataFileFullPathForFilename:(NSString *)filename
 {
-    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],[self getHFDataFilename]];
+    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],filename];
 }
 
-+ (NSString *) labelFileFullPath
-{
-    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],LABEL_FILE];
-}
-
-+ (NSString *) soundFileFullPath
-{
-    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],HF_SOUND_FILE_DUR];
-}
 
 + (void) writeSensorData:(NSDictionary *)data
 {
     NSError *error = [NSError new];
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:data options:0 error:&error];
-    NSString *filePath = [self HFDataFileFullPath];
+    NSString *filePath = [self getDataFileFullPathForFilename:HF_DATA_FILE_DUR];
     
     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
@@ -728,7 +724,7 @@
 {
     NSError *error = [NSError new];
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: array options:0 error:&error];
-    NSString *filePath = [self HFDataFileFullPath];
+    NSString *filePath = [self getDataFileFullPathForFilename:HF_DATA_FILE_DUR];
     
     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
@@ -765,20 +761,14 @@
     [self clearDataFile:[self feedbackFileFullPathForTimestamp:timestamp]];
 }
 
-+ (void) clearHFDataFile
++ (void) clearDataFiles
 {
-    [self clearDataFile:[self HFDataFileFullPath]];
+    for (NSString *filePath in [self filesToPackInsizeZipFile]) {
+        [self clearDataFile:filePath];
+    }
+    [self clearDataFile:[self getDataFileFullPathForFilename:HF_SOUND_FILE_DUR]];
 }
 
-+ (void) clearLabelFile
-{
-    [self clearDataFile:[self labelFileFullPath]];
-}
-
-+ (void) clearSoundFile
-{
-    [self clearDataFile:[self soundFileFullPath]];
-}
 
 + (void) writeLabels:(ES_Activity*)activity
 {
@@ -812,7 +802,7 @@
                                                            forKeys: keys];
     
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
-    NSString *filePath = [self labelFileFullPath];
+    NSString *filePath = [self getDataFileFullPathForFilename:LABEL_FILE];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     BOOL fileExists = [fileManager fileExistsAtPath:filePath];

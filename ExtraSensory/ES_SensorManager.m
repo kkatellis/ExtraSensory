@@ -327,9 +327,8 @@
     {
         self.hfData = [NSMutableDictionary dictionaryWithCapacity:20];
     }
-    [ES_DataBaseAccessor clearHFDataFile];
-    [ES_DataBaseAccessor clearLabelFile];
-    [ES_DataBaseAccessor clearSoundFile];
+
+    [ES_DataBaseAccessor clearDataFiles];
     
     // Mark begining recording:
     [self.appDelegate markRecordingRightNow];

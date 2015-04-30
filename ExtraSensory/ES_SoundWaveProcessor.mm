@@ -22,6 +22,9 @@
 #define HOP_SIZE            1024
 #define PREEMPH_COEF        0.97
 
+#define MAX_ABS_VAL_KEY     @"max_abs_value"
+#define NORMALIZER_KEY      @"normalization_multiplier"
+
 typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 
 @implementation ES_SoundWaveProcessor
@@ -173,13 +176,14 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     AudioFileReaderRef someReader = AudioFileReaderRef(new WM::AudioFileReader(audioURL));
     
     float max_abs_value = someReader->peak_abs_value();
-    std::cout << "Before mfcc features. Analyzed audio peak magnitude: " << max_abs_value << std::endl;
+    float normalization_multiplier = 1 / max_abs_value;
+    [self writeAudioPropertiesFileWithMaxAbsVal:[NSNumber numberWithFloat:max_abs_value] andNormalizingMultiplier:[NSNumber numberWithFloat:normalization_multiplier]];
 
     FeatureTypeDTW::Features feats;
     WMAudioFilePreProcessInfo reader_info;
     reader_info.threshold_start_time = 0;
     reader_info.threshold_end_time = someReader->duration();
-    reader_info.normalization_factor = max_abs_value;
+    reader_info.normalization_factor = normalization_multiplier;
     
     std::cout << "Computing MFCC features..." << std::endl;
     
@@ -198,6 +202,27 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     BOOL success = [arrayString writeToURL:MFCCURL atomically:YES encoding:NSUTF8StringEncoding error:&err];
     if (success){
         NSLog(@"MFCC successfully written\n");
+    }
+}
+
+- (void) writeAudioPropertiesFileWithMaxAbsVal:(NSNumber *)maxAbsVal andNormalizingMultiplier:(NSNumber *)normalizingMultiplier
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+    [dict setValue:maxAbsVal forKey:MAX_ABS_VAL_KEY];
+    [dict setValue:normalizingMultiplier forKey:NORMALIZER_KEY];
+    
+    NSLog(@"[soundWaveProcessor] Audio properties: %@",dict);
+    
+    NSError *error;
+    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+    
+    NSString *outFilePath = [ES_DataBaseAccessor getDataFileFullPathForFilename:[ES_DataBaseAccessor getAudioPropertiesFilename]];
+    
+    if ([jsonObject writeToFile:outFilePath atomically:YES]) {
+        NSLog(@"[soundWaveProcessor] Wrote audio properties file.");
+    }
+    else {
+        NSLog(@"[soundWaveProcessor] Failed writing audio properties file.");
     }
 }
 
