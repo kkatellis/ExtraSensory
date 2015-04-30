@@ -156,24 +156,40 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
         }
     }
     soundFileURLDur = [NSURL fileURLWithPath:soundFilePath];
+    // Check audio file size:
+    NSNumber *wavFileSize = nil;
+    NSError *error = nil;
+    [soundFileURLDur getResourceValue:&wavFileSize forKey:NSURLFileSizeKey error:&error];
+    NSLog(@"[SoundWaveProcessor] Recorded sound file of size %@: %@",wavFileSize,soundFilePath);
+    
+    
     NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:[ES_DataBaseAccessor getMFCCFilename]]];
     NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
     [self callAudio:(CFURLRef)soundFileURLDur toMFCC:MFCCFileURLDur];
 }
+
 - (void) callAudio: (const CFURLRef&)audioURL toMFCC:(NSURL*)MFCCURL {
-    
-    std::cout << "compute_mfcc_features\n";
     
     AudioFileReaderRef someReader = AudioFileReaderRef(new WM::AudioFileReader(audioURL));
     
+    float max_abs_value = someReader->peak_abs_value();
+    std::cout << "Before mfcc features. Analyzed audio peak magnitude: " << max_abs_value << std::endl;
+
     FeatureTypeDTW::Features feats;
-    feats = get_mfcc_features(someReader,WINDOW_SIZE,SAMPLING_RATE,HOP_SIZE,PREEMPH_COEF);
+    WMAudioFilePreProcessInfo reader_info;
+    reader_info.threshold_start_time = 0;
+    reader_info.threshold_end_time = someReader->duration();
+    reader_info.normalization_factor = max_abs_value;
+    
+    std::cout << "Computing MFCC features..." << std::endl;
+    
+    feats = get_mfcc_features(someReader,WINDOW_SIZE,SAMPLING_RATE,HOP_SIZE,PREEMPH_COEF,&reader_info);
     std::cout << "mfcc_features: " << feats.size() << "x" << feats[0].size() << std::endl;
     
     NSMutableString* arrayString = [[NSMutableString alloc] init];
     for (int i = 0; i<feats.size(); ++i) {
         for (int j = 0; j<feats[i].size(); ++j) {
-            [arrayString appendString:[NSString stringWithFormat:@"%f ", feats[i].at(j)]];
+            [arrayString appendString:[NSString stringWithFormat:@"%f,", feats[i].at(j)]];
         }
         [arrayString appendString:@"\n"];
     }

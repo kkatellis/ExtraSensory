@@ -85,12 +85,17 @@ FeatureTypeDTW::Features get_mfcc_features(const boost::shared_ptr<WM::AudioFile
         info = reader->preprocess(-27,
                                   -40,
                                   normalized_amplitude);
+        std::cout << "Preprocessed and got normalizing factor of: " << info.normalization_factor << std::endl;
         
     } else {
         info = *reader_info;
     }
     
     float duration = info.threshold_end_time - info.threshold_start_time;
+    ///// Yonatan change:
+    std::cout << "[MFCC] After preprocessing, begin: " << info.threshold_start_time << ", end: " << info.threshold_end_time << ". Resulting in duration of " << duration << std::endl;
+    ///// end Yonatan change.
+    
     if (duration <= 0) {
         std::cout << "Error: thresholding yields negative duration." << std::endl;
         return mfcc_features;
