@@ -324,6 +324,19 @@
     } else { return FALSE; }
 }
 
+- (void) clearTempLocationCoordinates
+{
+    if (!self.tempLocationCoordinates) {
+        self.tempLocationCoordinates = [NSMutableDictionary dictionaryWithCapacity:2];
+    }
+    else {
+        [self.tempLocationCoordinates removeAllObjects];
+    }
+    
+    [self.tempLocationCoordinates setObject:[NSMutableArray arrayWithCapacity:10] forKey:LOC_LAT];
+    [self.tempLocationCoordinates setObject:[NSMutableArray arrayWithCapacity:10] forKey:LOC_LONG];
+}
+
 // #############################################################
 // New version of recording measurements (not relying on NSTimer, which is no accurate, especially, when app goes to background):
 
@@ -334,15 +347,12 @@
     {
         NSLog(@"[sensorManager] Clearing old HF data.");
         [self.hfData removeAllObjects];
-        [self.tempLocationCoordinates removeAllObjects];
     }
     else
     {
         self.hfData = [NSMutableDictionary dictionaryWithCapacity:20];
-        self.tempLocationCoordinates = [NSMutableDictionary dictionaryWithCapacity:2];
-        [self.tempLocationCoordinates setObject:[NSMutableArray arrayWithCapacity:10] forKey:LOC_LAT];
-        [self.tempLocationCoordinates setObject:[NSMutableArray arrayWithCapacity:10] forKey:LOC_LONG];
     }
+    [self clearTempLocationCoordinates];
 
     [ES_DataBaseAccessor clearDataFiles];
     
@@ -797,7 +807,7 @@
     NSLog(@"[sensorManager] Calculated quick location features: %@",locFeatures);
     
     // Clear the temporary coordinates:
-    [self.tempLocationCoordinates removeAllObjects];
+    [self clearTempLocationCoordinates];
 }
 
 #pragma mark Location Manager Delegate Methods
