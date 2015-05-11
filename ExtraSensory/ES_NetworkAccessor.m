@@ -220,6 +220,7 @@
  */
 - (void) upload
 {
+    
     NSLog( @"[networkAccessor] called for upload. Current network Stack size = %lu", (unsigned long)[self.appDelegate.networkStack count]);
     if (!isReady)
     {

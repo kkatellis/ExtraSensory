@@ -257,12 +257,17 @@
 
 - (NSString *) getFirstOnNetworkStack
 {
-    NSString *item = [self.networkStack firstObject];
-    // Move the item to the end of the queue:
-    [self.networkStack removeObjectAtIndex:0];
-    [self.networkStack addObject:item];
+    @synchronized(self.networkStack) {
+        if ([self.networkStack count] <= 0) {
+            return nil;
+        }
+        NSString *item = [self.networkStack firstObject];
+        // Move the item to the end of the queue:
+        [self.networkStack removeObjectAtIndex:0];
+        [self.networkStack addObject:item];
+        return item;
+    }
     
-    return item;
 }
 
 - (BOOL) removeFromNetworkStackFile:(NSString *)filename

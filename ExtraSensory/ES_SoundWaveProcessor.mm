@@ -213,6 +213,10 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     
     NSLog(@"[soundWaveProcessor] Audio properties: %@",dict);
     
+    if (![NSJSONSerialization isValidJSONObject:dict]) {
+        NSLog(@"[databaseAccessor] !!! Cannot write sound properties: not valid object for JSON. Data: %@",dict);
+        return;
+    }
     NSError *error;
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
     

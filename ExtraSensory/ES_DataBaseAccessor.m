@@ -804,7 +804,11 @@
     
     NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values
                                                            forKeys: keys];
-    
+    if (![NSJSONSerialization isValidJSONObject:feedback]) {
+        NSLog(@"[databaseAccessor] !!! Cannot write feedback to labels file: not valid object for JSON. Feedback: %@",feedback);
+        return;
+    }
+
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
     NSString *filePath = [self getDataFileFullPathForFilename:LABEL_FILE];
     NSFileManager *fileManager = [NSFileManager defaultManager];
