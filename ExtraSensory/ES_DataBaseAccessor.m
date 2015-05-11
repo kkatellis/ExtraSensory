@@ -705,6 +705,10 @@
 
 + (void) writeSensorData:(NSDictionary *)data
 {
+    if (![NSJSONSerialization isValidJSONObject:data]) {
+        NSLog(@"[databaseAccessor] !!! Given sensor data is not valid object for JSON. Data: %@",data);
+        return;
+    }
     NSError *error = [NSError new];
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:data options:0 error:&error];
     NSString *filePath = [self getDataFileFullPathForFilename:HF_DATA_FILE_DUR];
