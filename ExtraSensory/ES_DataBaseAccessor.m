@@ -675,27 +675,6 @@
     [self zipFilesWithZipFilename:zipFilename];
 }
 
-+ (void) writeActivity: (ES_Activity *)activity
-{
-    //[self writeData: [self arrayFromActivity: activity]];
-    NSLog(@"[databaseAccessor] Writing activity label: %@", activity.userCorrection);
-    if (activity.userCorrection)
-    {
-        [self writeLabels: activity];
-    }
-    
-    NSString *zipFileName = [self zipFileName: activity.timestamp];
-    NSLog(@"=== in write activity. should create zip file: %@",zipFileName);
-
-    NSTimer *timer;
-    timer = [NSTimer scheduledTimerWithTimeInterval: 2
-                                             target: self
-                                           selector: @selector(zipFilesWithTimer: )
-                                           userInfo: zipFileName
-                                            repeats: NO];
-    
-    
-}
 
 + (NSString *) getDataFileFullPathForFilename:(NSString *)filename
 {

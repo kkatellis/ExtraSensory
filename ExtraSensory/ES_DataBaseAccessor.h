@@ -53,14 +53,11 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
 + (ES_Activity *) getMostRecentActivity;
 + (ES_Activity *) getLatestCorrectedActivityWithinTheLatest:(NSNumber *)seconds;
 + (NSMutableDictionary *) getTodaysCounts;
-//+ (NSMutableDictionary *) getRecentCountsForSecondaryActivities:(NSArray *)secondaryActivities;
-//+ (NSMutableDictionary *) getRecentCountsForMoods:(NSArray *)moods;
 
 + (NSArray *) getRecentFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities;
 + (NSArray *) getRecentFrequentMoodsOutOf:(NSArray *)moods;
 
 + (void) writeSensorData:(NSDictionary *)data andActivity:(ES_Activity *)activity;
-+ (void) writeActivity: (ES_Activity *)activity;
 + (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
 + (int) howManyUnlabeledActivitiesToday;
 + (NSArray *) getWhileDeletingOrphansActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
