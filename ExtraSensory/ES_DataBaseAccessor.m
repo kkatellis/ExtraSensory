@@ -613,7 +613,7 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-    NSArray *arr = [NSArray arrayWithObjects:[self getHFDataFilename],LABEL_FILE,[self getMFCCFilename],[self getAudioPropertiesFilename], nil];
+    NSArray *arr = [NSArray arrayWithObjects:[self getHFDataFilename],[self getMFCCFilename],[self getAudioPropertiesFilename], nil];
     
     return arr;
 }
