@@ -747,7 +747,15 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
     {
         BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
+        if (success) {
+            NSLog(@"[databaseAccessor] Deleted file %@",filePath);
+        }
+        else {
+            NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
+        }
+    }
+    else {
+        NSLog(@"[databaseAccessor] File doesn't exist, so can't clear it. %@",filePath);
     }
 }
 
@@ -767,8 +775,9 @@
 
 + (void) clearDataFiles
 {
-    for (NSString *filePath in [self filesToPackInsizeZipFile]) {
-        [self clearDataFile:filePath];
+    for (NSString *fileName in [self filesToPackInsizeZipFile]) {
+        NSString *fullPath = [NSString stringWithFormat:@"%@/%@",[self dataDirectory],fileName];
+        [self clearDataFile:fullPath];
     }
     [self clearDataFile:[self getDataFileFullPathForFilename:HF_SOUND_FILE_DUR]];
 }
