@@ -80,7 +80,8 @@
         self.sections = [NSMutableArray arrayWithCapacity:10];
         self.sectionNames = [NSMutableArray arrayWithCapacity:10];
         self.sectionHeaders = [NSMutableArray arrayWithCapacity:10];
-        
+
+        // Already selected labels:
         if (self.appliedLabels && [self.appliedLabels count] > 0)
         {
             NSArray *selectedLabels = [[self.appliedLabels allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -88,6 +89,17 @@
             [self addDummySection];
         }
         
+        // Frequently used labels:
+        if (self.frequentChoices)
+        {
+            // Make the first section be dedicated to the frequently used labels:
+            [self addSectionWithArrayOfItemStrings:self.frequentChoices name:@"frequent" andHeader:@"Frequently used"];
+            
+            // Add another dummy section to create a space between two index items:
+            [self addDummySection];
+        }
+        
+        // Sections by subject (from index):
         if (self.labelsPerSubject)
         {
             // Then add a section for each subject:
@@ -101,15 +113,7 @@
             }
         }
         
-        if (self.frequentChoices)
-        {
-            // Make the first section be dedicated to the frequently used labels:
-            [self addSectionWithArrayOfItemStrings:self.frequentChoices name:@"frequent" andHeader:@"Frequently used"];
-            
-            // Add another dummy section to create a space between two index items:
-            [self addDummySection];
-        }
-        
+        // Alphabetic index or all labels:
         if (self.useAlphabeticIndex)
         {
             // Then add index for each letter:
