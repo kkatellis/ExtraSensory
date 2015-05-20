@@ -25,8 +25,9 @@
 #define ROOT_DATA_OBJECT @"ES_User"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
 #define MFCC_FILE_DUR       @"sound.mfcc"
+#define AUDIO_PROP_FILE     @"m_audio_properties.json"
 #define HF_DATA_FILE_DUR    @"HF_DUR_DATA.txt"
-#define LABEL_FILE          @"label.txt"
+//#define LABEL_FILE          @"label.txt"
 
 #define SECONDS_IN_WEEK     604800.0
 
@@ -39,6 +40,11 @@
 + (NSString *)getHFDataFilename
 {
     return HF_DATA_FILE_DUR;
+}
+
++ (NSString *)getAudioPropertiesFilename
+{
+    return AUDIO_PROP_FILE;
 }
 
 + (ES_User *)user
@@ -607,7 +613,7 @@
 
 + (NSArray *) filesToPackInsizeZipFile
 {
-    NSArray *arr = [NSArray arrayWithObjects:[self getHFDataFilename],LABEL_FILE,[self getMFCCFilename], nil];
+    NSArray *arr = [NSArray arrayWithObjects:[self getHFDataFilename],[self getMFCCFilename],[self getAudioPropertiesFilename], nil];
     
     return arr;
 }
@@ -658,60 +664,33 @@
 + (void) writeSensorData:(NSDictionary *)data andActivity:(ES_Activity *)activity
 {
     [self writeSensorData:data];
-    NSLog(@"[databaseAccessor] activity has label: %@",activity.userCorrection);
-    if (activity.userCorrection)
-    {
-        [self writeLabels:activity];
-    }
+    NSLog(@"[databaseAccessor] activity has label: %@, but we're not writing labels now. Wait to get response from server that it got the zip file.",activity.userCorrection);
+//    if (activity.userCorrection)
+//    {
+//        [self writeLabels:activity];
+//    }
     
     NSString *zipFilename = [self zipFileName:activity.timestamp];
-    NSLog(@"=== in write .... zip file: %@",zipFilename);
+    NSLog(@"[databaseAccessor] zipping file: %@...",zipFilename);
     [self zipFilesWithZipFilename:zipFilename];
 }
 
-+ (void) writeActivity: (ES_Activity *)activity
-{
-    //[self writeData: [self arrayFromActivity: activity]];
-    NSLog(@"[databaseAccessor] Writing activity label: %@", activity.userCorrection);
-    if (activity.userCorrection)
-    {
-        [self writeLabels: activity];
-    }
-    
-    NSString *zipFileName = [self zipFileName: activity.timestamp];
-    NSLog(@"=== in write activity. should create zip file: %@",zipFileName);
 
-    NSTimer *timer;
-    timer = [NSTimer scheduledTimerWithTimeInterval: 2
-                                             target: self
-                                           selector: @selector(zipFilesWithTimer: )
-                                           userInfo: zipFileName
-                                            repeats: NO];
-    
-    
++ (NSString *) getDataFileFullPathForFilename:(NSString *)filename
+{
+    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],filename];
 }
 
-
-+ (NSString *) HFDataFileFullPath
-{
-    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],[self getHFDataFilename]];
-}
-
-+ (NSString *) labelFileFullPath
-{
-    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],LABEL_FILE];
-}
-
-+ (NSString *) soundFileFullPath
-{
-    return [NSString stringWithFormat:@"%@/%@",[self dataDirectory],HF_SOUND_FILE_DUR];
-}
 
 + (void) writeSensorData:(NSDictionary *)data
 {
+    if (![NSJSONSerialization isValidJSONObject:data]) {
+        NSLog(@"[databaseAccessor] !!! Given sensor data is not valid object for JSON. Data: %@",data);
+        return;
+    }
     NSError *error = [NSError new];
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:data options:0 error:&error];
-    NSString *filePath = [self HFDataFileFullPath];
+    NSString *filePath = [self getDataFileFullPathForFilename:HF_DATA_FILE_DUR];
     
     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
@@ -728,7 +707,7 @@
 {
     NSError *error = [NSError new];
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: array options:0 error:&error];
-    NSString *filePath = [self HFDataFileFullPath];
+    NSString *filePath = [self getDataFileFullPathForFilename:HF_DATA_FILE_DUR];
     
     BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
     if (writeFileSuccess)
@@ -747,7 +726,15 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
     {
         BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
+        if (success) {
+            NSLog(@"[databaseAccessor] Deleted file %@",filePath);
+        }
+        else {
+            NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
+        }
+    }
+    else {
+        NSLog(@"[databaseAccessor] File doesn't exist, so can't clear it. %@",filePath);
     }
 }
 
@@ -765,73 +752,72 @@
     [self clearDataFile:[self feedbackFileFullPathForTimestamp:timestamp]];
 }
 
-+ (void) clearHFDataFile
++ (void) clearDataFiles
 {
-    [self clearDataFile:[self HFDataFileFullPath]];
+    for (NSString *fileName in [self filesToPackInsizeZipFile]) {
+        NSString *fullPath = [NSString stringWithFormat:@"%@/%@",[self dataDirectory],fileName];
+        [self clearDataFile:fullPath];
+    }
+    [self clearDataFile:[self getDataFileFullPathForFilename:HF_SOUND_FILE_DUR]];
 }
 
-+ (void) clearLabelFile
-{
-    [self clearDataFile:[self labelFileFullPath]];
-}
 
-+ (void) clearSoundFile
-{
-    [self clearDataFile:[self soundFileFullPath]];
-}
-
-+ (void) writeLabels:(ES_Activity*)activity
-{
-    NSError *error = [NSError new];
-    
-    NSMutableArray* keys = [NSMutableArray arrayWithArray:@[@"mainActivity"]];
-    NSMutableArray* values = [NSMutableArray arrayWithArray:@[activity.userCorrection]];
-    
-    if (activity.secondaryActivities)
-    {
-        NSMutableArray *secondaryLabels = [NSMutableArray new];
-        for (ES_SecondaryActivity* label in activity.secondaryActivities)
-        {
-            [secondaryLabels addObject:label.label];
-        }
-        [keys addObject:@"secondaryActivities"];
-        [values addObject:secondaryLabels];
-    }
-    if (activity.moods)
-    {
-        NSMutableArray *moodLabels = [NSMutableArray new];
-        for (ES_Mood *label in activity.moods)
-        {
-            [moodLabels addObject:label.label];
-        }
-        [keys addObject:@"moods"];
-        [values addObject:moodLabels];
-    }
-    
-    NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values
-                                                           forKeys: keys];
-    
-    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
-    NSString *filePath = [self labelFileFullPath];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    BOOL fileExists = [fileManager fileExistsAtPath:filePath];
-    if (fileExists)
-    {
-        BOOL success = [fileManager removeItemAtPath:filePath error:&error];
-        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
-    }
-    BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
-    if (writeFileSuccess)
-    {
-        NSLog(@"[databaseAccessor] Label successfully written to file");
-    }
-    else
-    {
-        NSLog(@"[databaseAccessor] !!! Error writing label to file!!");
-    }
-    
-}
+//+ (void) writeLabels:(ES_Activity*)activity
+//{
+//    NSError *error = [NSError new];
+//    
+//    NSMutableArray* keys = [NSMutableArray arrayWithArray:@[@"mainActivity"]];
+//    NSMutableArray* values = [NSMutableArray arrayWithArray:@[activity.userCorrection]];
+//    
+//    if (activity.secondaryActivities)
+//    {
+//        NSMutableArray *secondaryLabels = [NSMutableArray new];
+//        for (ES_SecondaryActivity* label in activity.secondaryActivities)
+//        {
+//            [secondaryLabels addObject:label.label];
+//        }
+//        [keys addObject:@"secondaryActivities"];
+//        [values addObject:secondaryLabels];
+//    }
+//    if (activity.moods)
+//    {
+//        NSMutableArray *moodLabels = [NSMutableArray new];
+//        for (ES_Mood *label in activity.moods)
+//        {
+//            [moodLabels addObject:label.label];
+//        }
+//        [keys addObject:@"moods"];
+//        [values addObject:moodLabels];
+//    }
+//    
+//    NSDictionary *feedback = [[NSDictionary alloc] initWithObjects: values
+//                                                           forKeys: keys];
+//    if (![NSJSONSerialization isValidJSONObject:feedback]) {
+//        NSLog(@"[databaseAccessor] !!! Cannot write feedback to labels file: not valid object for JSON. Feedback: %@",feedback);
+//        return;
+//    }
+//
+//    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject: feedback options:0 error:&error];
+//    NSString *filePath = [self getDataFileFullPathForFilename:LABEL_FILE];
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    
+//    BOOL fileExists = [fileManager fileExistsAtPath:filePath];
+//    if (fileExists)
+//    {
+//        BOOL success = [fileManager removeItemAtPath:filePath error:&error];
+//        if (!success) NSLog(@"[databaseAccessor] !!! Error: %@", [error localizedDescription]);
+//    }
+//    BOOL writeFileSuccess = [jsonObject writeToFile: filePath atomically:YES];
+//    if (writeFileSuccess)
+//    {
+//        NSLog(@"[databaseAccessor] Label successfully written to file");
+//    }
+//    else
+//    {
+//        NSLog(@"[databaseAccessor] !!! Error writing label to file!!");
+//    }
+//    
+//}
 
 + (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp
 {

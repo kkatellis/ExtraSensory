@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ES_SettingsViewController : UIViewController
+@interface ES_SettingsViewController : UIViewController <UITextFieldDelegate>
 
 @end

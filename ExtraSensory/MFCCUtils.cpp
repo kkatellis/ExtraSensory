@@ -29,8 +29,12 @@
 /**
  * Processes a complete file and returns a vector of MFCC features for DTW.
  */
-FeatureTypeDTW::Features get_mfcc_features(const boost::shared_ptr<WM::AudioFileReader>& reader, 
-                                           WMAudioFilePreProcessInfo* reader_info) 
+FeatureTypeDTW::Features get_mfcc_features(const boost::shared_ptr<WM::AudioFileReader>& reader,
+    const size_t window_frame_size,
+    const Float64 sample_rate,
+    const size_t interval_frame_size,
+    const float preemphasis_coefficient,
+    WMAudioFilePreProcessInfo* reader_info)
 {
 
     FeatureTypeDTW::Features mfcc_features;
@@ -38,13 +42,16 @@ FeatureTypeDTW::Features get_mfcc_features(const boost::shared_ptr<WM::AudioFile
     //This seems to be a pretty robust configuration, and is the same
     //as we used in our Matlab prototype.
     
-    static const size_t window_frame_size = 1100;
-    static const Float64 sample_rate = 44100.0f;//16000.0f;
-    static const float interval_time_duration = 0.01f;
-    static const float preemphasis_coefficient = 0.97f;
-    static const float min_frequency = 133.33f;
-    static const float max_frequency = 6855.6f;
+    ///// Yonatan change: (getting these parameters as arguments, instead of hard coded here):
+//    static const size_t window_frame_size = 1100;
+//    static const Float64 sample_rate = 44100.0f;//16000.0f;
+//    static const float interval_time_duration = 0.01f;
+//    static const float preemphasis_coefficient = 0.97f;
+    static const float min_frequency = 40.f; //133.33f;
+    static const float max_frequency = sample_rate/2; //6855.6f;
 
+    ///// end Yonatan change.
+    
     static const float normalized_amplitude = 0.9f;
     
     WMAudioSampleType data[window_frame_size];
@@ -57,7 +64,10 @@ FeatureTypeDTW::Features get_mfcc_features(const boost::shared_ptr<WM::AudioFile
     
     std::fill(&data[0], &data[window_frame_size], 0);    
     
-    static const size_t interval_frame_size = interval_time_duration * (size_t)sample_rate;
+    ///// Yonatan change:
+//    static const size_t interval_frame_size = interval_time_duration * (size_t)sample_rate;
+    static const float interval_time_duration = (float)interval_frame_size / sample_rate;
+    ///// end Yonatan change.
     static const float window_time_duration = window_frame_size / (float)sample_rate;
     static const int overlap_frame_size = window_frame_size - interval_frame_size;
     
@@ -75,12 +85,17 @@ FeatureTypeDTW::Features get_mfcc_features(const boost::shared_ptr<WM::AudioFile
         info = reader->preprocess(-27,
                                   -40,
                                   normalized_amplitude);
+        std::cout << "Preprocessed and got normalizing factor of: " << info.normalization_factor << std::endl;
         
     } else {
         info = *reader_info;
     }
     
     float duration = info.threshold_end_time - info.threshold_start_time;
+    ///// Yonatan change:
+    std::cout << "[MFCC] After preprocessing, begin: " << info.threshold_start_time << ", end: " << info.threshold_end_time << ". Resulting in duration of " << duration << std::endl;
+    ///// end Yonatan change.
+    
     if (duration <= 0) {
         std::cout << "Error: thresholding yields negative duration." << std::endl;
         return mfcc_features;

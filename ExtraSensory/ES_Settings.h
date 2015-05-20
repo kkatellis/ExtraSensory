@@ -20,6 +20,9 @@
 @property (nonatomic, retain) NSNumber * timeBetweenSampling;
 @property (nonatomic, retain) NSNumber * timeBetweenUserNags;
 @property (nonatomic, retain) NSNumber * homeSensingParticipant;
+@property (nonatomic, retain) NSNumber * hideHome;
+@property (nonatomic, retain) NSNumber * homeLat;
+@property (nonatomic, retain) NSNumber * homeLon;
 @property (nonatomic, retain) ES_User *user;
 
 @end

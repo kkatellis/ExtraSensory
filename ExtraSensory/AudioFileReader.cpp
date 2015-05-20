@@ -198,50 +198,59 @@ void AudioFileReader::reset() {
         std::cout << "Error resetting audio file to first frame." << std::endl;
 }
 
-WMAudioFilePreProcessInfo AudioFileReader::preprocess(float begin_threshold_db,
-                                                      float end_threshold_db,
-                                                      float normalized_amplitude) 
+float AudioFileReader::peak_abs_value()
 {
-
-    reset();    
+    reset();
     
-    WMAudioFilePreProcessInfo info;
-    memset(&info, 0, sizeof(WMAudioFilePreProcessInfo));    
-    
-
     static const int packet_size = 1024;
-
-    // we convert the threshold given in db to an amplitude power level
-    float normalized_begin_threshold = decibel_to_amplitude(begin_threshold_db);
-    float normalized_end_threshold = decibel_to_amplitude(end_threshold_db);    
     
     AudioProcessBuffer audio_data(new WMAudioSampleType[packet_size]);
     std::fill(&audio_data[0], &audio_data[packet_size], 0);
     
     AudioProcessBuffer process_data(new WMAudioSampleType[packet_size]);
-    std::fill(&process_data[0], &process_data[packet_size], 0);    
+    std::fill(&process_data[0], &process_data[packet_size], 0);
     
     size_t samples_read = packet_size;
-        
+    
     // Calculate the maximum peak magnitude of the whole audio file
+    float max_abs_value = 0;
     while (samples_read > 0) {
         
         bool success = read_floats(samples_read, audio_data.get());
         if (!success) {
             std::cout << "Could not read packages during max-peak determination." << std::endl;
-            return info;
+            return max_abs_value;
         }
         
         if (samples_read > 0) {
             float max_in_packet = 0;
             vDSP_maxmgv(audio_data.get(), 1, &max_in_packet, samples_read);
             
-            if (info.max_peak < max_in_packet)
-                info.max_peak = max_in_packet;
+            if (max_abs_value < max_in_packet)
+                max_abs_value = max_in_packet;
         }
         
     }
     
+    reset();
+    return max_abs_value;
+}
+
+WMAudioFilePreProcessInfo AudioFileReader::preprocess(float begin_threshold_db,
+                                                      float end_threshold_db,
+                                                      float normalized_amplitude) 
+{
+
+    WMAudioFilePreProcessInfo info;
+    memset(&info, 0, sizeof(WMAudioFilePreProcessInfo));
+    
+    // Get the peak magnitude:
+    info.max_peak = peak_abs_value();
+    
+    // we convert the threshold given in db to an amplitude power level
+    float normalized_begin_threshold = decibel_to_amplitude(begin_threshold_db);
+    float normalized_end_threshold = decibel_to_amplitude(end_threshold_db);
+
     //scale factor in order to normalize
     info.normalization_factor = normalized_amplitude / info.max_peak;
     float normalization_factor_inv = 1.0f / info.normalization_factor;
@@ -256,9 +265,13 @@ WMAudioFilePreProcessInfo AudioFileReader::preprocess(float begin_threshold_db,
     reset();
     
     size_t total_samples_read = 0;
-    
+    static const int packet_size = 1024;
     bool looking_for_beginning = true;
+    size_t samples_read;
     
+    AudioProcessBuffer audio_data(new WMAudioSampleType[packet_size]);
+    AudioProcessBuffer process_data(new WMAudioSampleType[packet_size]);
+
     //We are now performing the thresholding operation. We look for a begin and
     //end location in time corresponding to the first and second crossing of an 
     //average threshold per packet.

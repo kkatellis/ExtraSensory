@@ -101,6 +101,12 @@ namespace WM {
                                              float normalized_amplitude);
         
         /**
+         * This method calculates the peak absolute value of the whole audio signal.
+         * Added by Yonatan.
+         */
+        float peak_abs_value();
+        
+        /**
          * Convert decibel to amplitude level. This assume a reference level
          * at 0 db for an amplitude of 1 and -inf for an amplitude of 0.
          */

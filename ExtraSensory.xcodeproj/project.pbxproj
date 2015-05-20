@@ -20,7 +20,7 @@
 		299617F31A78AE6F0082112D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 299617F21A78AE6E0082112D /* QuartzCore.framework */; };
 		4E1336571A630E9700683B84 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1336561A630E9700683B84 /* ES_Activity.m */; };
 		4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */; };
-		4E1DEA491AEECE84003E3343 /* calab_macserver_ucsd_edu.crt in Resources */ = {isa = PBXBuildFile; fileRef = 4E1DEA481AEECE7E003E3343 /* calab_macserver_ucsd_edu.crt */; };
+		4E1DEA4B1AF035B6003E3343 /* calab-macserver.ucsd.edu.der in Resources */ = {isa = PBXBuildFile; fileRef = 4E1DEA4A1AF035B5003E3343 /* calab-macserver.ucsd.edu.der */; };
 		4E4047C01A1FDDF700C1D0DF /* secondary_activities_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047BF1A1FDDF700C1D0DF /* secondary_activities_list.txt */; };
 		4E4047C21A23B5BE00C1D0DF /* moods_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E4047C11A23B5BE00C1D0DF /* moods_list.txt */; };
 		4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4047C41A23F19600C1D0DF /* ES_Label.m */; };
@@ -134,6 +134,10 @@
 		70C156C418D52864007CCB39 /* Empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C156C318D52864007CCB39 /* Empty.m */; };
 		70C156C718D52BD1007CCB39 /* ES_SwapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C156C618D52BD1007CCB39 /* ES_SwapViewController.m */; };
 		70C156D118D75E34007CCB39 /* RaisedTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C156D018D75E34007CCB39 /* RaisedTabBarController.m */; };
+		70E0EF4E1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E0EF4D1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m */; };
+		70E0EF571AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E0EF561AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m */; };
+		70ED4B541AF14362003C4E12 /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 70ED4B531AF14362003C4E12 /* XYPieChart.m */; };
+		70ED4B571AF14851003C4E12 /* ES_NewPieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70ED4B561AF14851003C4E12 /* ES_NewPieViewController.m */; };
 		70FE414818B695D900F277FB /* ES_ActivitiesStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 70FE414718B695D900F277FB /* ES_ActivitiesStrings.m */; };
 		9307CBB517F1A78A00D95E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB417F1A78A00D95E05 /* Foundation.framework */; };
 		9307CBB717F1A78A00D95E05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9307CBB617F1A78A00D95E05 /* CoreGraphics.framework */; };
@@ -185,7 +189,7 @@
 		4E1336561A630E9700683B84 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
 		4E1336591A78125E00683B84 /* ES_ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ImageProcessor.h; sourceTree = "<group>"; };
 		4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ImageProcessor.m; sourceTree = "<group>"; };
-		4E1DEA481AEECE7E003E3343 /* calab_macserver_ucsd_edu.crt */ = {isa = PBXFileReference; lastKnownFileType = file; path = calab_macserver_ucsd_edu.crt; sourceTree = "<group>"; };
+		4E1DEA4A1AF035B5003E3343 /* calab-macserver.ucsd.edu.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = "calab-macserver.ucsd.edu.der"; sourceTree = "<group>"; };
 		4E4047BF1A1FDDF700C1D0DF /* secondary_activities_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = secondary_activities_list.txt; sourceTree = "<group>"; };
 		4E4047C11A23B5BE00C1D0DF /* moods_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = moods_list.txt; sourceTree = "<group>"; };
 		4E4047C31A23F19600C1D0DF /* ES_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Label.h; sourceTree = "<group>"; };
@@ -328,6 +332,14 @@
 		70C156C618D52BD1007CCB39 /* ES_SwapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SwapViewController.m; sourceTree = "<group>"; };
 		70C156CF18D75E34007CCB39 /* RaisedTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RaisedTabBarController.h; sourceTree = "<group>"; };
 		70C156D018D75E34007CCB39 /* RaisedTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RaisedTabBarController.m; sourceTree = "<group>"; };
+		70E0EF4C1AEEF5F100ED3DCE /* ES_SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsTableViewController.h; sourceTree = "<group>"; };
+		70E0EF4D1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsTableViewController.m; sourceTree = "<group>"; };
+		70E0EF551AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SettingsPickTableViewController.h; sourceTree = "<group>"; };
+		70E0EF561AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_SettingsPickTableViewController.m; sourceTree = "<group>"; };
+		70ED4B521AF14320003C4E12 /* XYPieChart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
+		70ED4B531AF14362003C4E12 /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
+		70ED4B551AF14851003C4E12 /* ES_NewPieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_NewPieViewController.h; sourceTree = "<group>"; };
+		70ED4B561AF14851003C4E12 /* ES_NewPieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_NewPieViewController.m; sourceTree = "<group>"; };
 		70FE414618B695D900F277FB /* ES_ActivitiesStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_ActivitiesStrings.h; sourceTree = "<group>"; };
 		70FE414718B695D900F277FB /* ES_ActivitiesStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_ActivitiesStrings.m; sourceTree = "<group>"; };
 		9307CBB117F1A78A00D95E05 /* ExtraSensory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExtraSensory.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -484,7 +496,7 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4E1DEA481AEECE7E003E3343 /* calab_macserver_ucsd_edu.crt */,
+				4E1DEA4A1AF035B5003E3343 /* calab-macserver.ucsd.edu.der */,
 				4EC132601A89C4C2003300B5 /* ExtraSensoryIcon@2x.png */,
 				4EC1325E1A89C4A4003300B5 /* ExtraSensoryIcon.png */,
 				4EC1325A1A8403CB003300B5 /* checkMarkInCircle.png */,
@@ -613,6 +625,8 @@
 				707762E218D125BD00ED0134 /* ES_SummaryViewController.m */,
 				1025D75618CB15BA00D854BE /* ES_PieViewController.h */,
 				1025D75718CB15BA00D854BE /* ES_PieViewController.m */,
+				70ED4B551AF14851003C4E12 /* ES_NewPieViewController.h */,
+				70ED4B561AF14851003C4E12 /* ES_NewPieViewController.m */,
 			);
 			name = Summary;
 			sourceTree = "<group>";
@@ -622,6 +636,10 @@
 			children = (
 				93AC71A5180878A000D58E77 /* ES_SettingsViewController.h */,
 				93AC71A6180878A000D58E77 /* ES_SettingsViewController.m */,
+				70E0EF4C1AEEF5F100ED3DCE /* ES_SettingsTableViewController.h */,
+				70E0EF4D1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m */,
+				70E0EF551AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.h */,
+				70E0EF561AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -799,6 +817,8 @@
 			children = (
 				939562FB1806481800BF448E /* ES_PieChartView.h */,
 				939562FC1806481800BF448E /* ES_PieChartView.m */,
+				70ED4B521AF14320003C4E12 /* XYPieChart.h */,
+				70ED4B531AF14362003C4E12 /* XYPieChart.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -960,6 +980,7 @@
 				70B8A94D18F87D230076A4F5 /* studying.png in Resources */,
 				70B8A96518F87D230076A4F5 /* table-bg.png in Resources */,
 				70B8A96A18F87D230076A4F5 /* rdio-logo.png in Resources */,
+				4E1DEA4B1AF035B6003E3343 /* calab-macserver.ucsd.edu.der in Resources */,
 				70B8A95918F87D230076A4F5 /* button-bg.png in Resources */,
 				9307CBCD17F1A78A00D95E05 /* Images.xcassets in Resources */,
 				70B8A93018F87D230076A4F5 /* 32-iphone.png in Resources */,
@@ -1001,7 +1022,6 @@
 				70B8A95A18F87D230076A4F5 /* danger-btn-bg.png in Resources */,
 				70B8A93B18F87D230076A4F5 /* indicator-exercising@2x.png in Resources */,
 				70B8A92D18F87D230076A4F5 /* 17-bar-chart.png in Resources */,
-				4E1DEA491AEECE84003E3343 /* calab_macserver_ucsd_edu.crt in Resources */,
 				70B8A93E18F87D230076A4F5 /* indicator-party.png in Resources */,
 				70B8A93618F87D230076A4F5 /* indicator-biking.png in Resources */,
 				70B8A93A18F87D230076A4F5 /* indicator-exercising.png in Resources */,
@@ -1021,6 +1041,7 @@
 				933F7CCB17F4C80B00B05C96 /* ES_SensorManager.m in Sources */,
 				9FA74F5718AAF3A50095834B /* ES_ActivityEvent.m in Sources */,
 				939562FD1806481800BF448E /* ES_PieChartView.m in Sources */,
+				70ED4B571AF14851003C4E12 /* ES_NewPieViewController.m in Sources */,
 				709F5AEB19FEBFED00F3386C /* CAHostTimeBase.cpp in Sources */,
 				4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
@@ -1040,12 +1061,14 @@
 				93F659DE17F6B280000638CB /* ES_NetworkAccessor.m in Sources */,
 				10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */,
 				939600A8181B0195006221C6 /* ES_UserPopulation.m in Sources */,
+				70E0EF4E1AEEF5F100ED3DCE /* ES_SettingsTableViewController.m in Sources */,
 				709F5AEA19FEBFED00F3386C /* CADebugPrintf.cpp in Sources */,
 				707762E318D125BD00ED0134 /* ES_SummaryViewController.m in Sources */,
 				9307CBC517F1A78A00D95E05 /* ES_AppDelegate.m in Sources */,
 				93F678EE17F81F42000638CB /* ES_HomeViewController.m in Sources */,
 				9307CBC117F1A78A00D95E05 /* main.m in Sources */,
 				4E4047CB1A24F54300C1D0DF /* ES_Mood.m in Sources */,
+				70E0EF571AEF1CE900ED3DCE /* ES_SettingsPickTableViewController.m in Sources */,
 				93F679C317F978AF000638CB /* ioapi.c in Sources */,
 				4E4047C81A24F54100C1D0DF /* ES_SecondaryActivity.m in Sources */,
 				701DEDD51A2FC578006F411E /* TriangleFilter.cpp in Sources */,
@@ -1056,6 +1079,7 @@
 				93AC71AD1808D41000D58E77 /* ES_Format.m in Sources */,
 				70C156C418D52864007CCB39 /* Empty.m in Sources */,
 				709F513E19FEA6E700F3386C /* AudioFileReader.cpp in Sources */,
+				70ED4B541AF14362003C4E12 /* XYPieChart.m in Sources */,
 				709F513A19FEA6A100F3386C /* MFCCUtils.cpp in Sources */,
 				93F679C617F978AF000638CB /* zip.c in Sources */,
 				709F514119FEA72500F3386C /* MFCCProcessor.cpp in Sources */,

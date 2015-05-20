@@ -38,7 +38,6 @@
 @interface ES_AppDelegate() <PBPebbleCentralDelegate>
 
 @property ES_AlertViewWithUserInfo *latestAlert;
-@property BOOL userSelectedDataCollectionOn;
 @property (nonatomic) ES_Activity *exampleWithPredeterminedLabels;
 @property (nonatomic, strong) NSDate *predeterminedLabelsValidUntil;
 @property (nonatomic, strong) NSTimer *predeterminedLabelsExpirationTimer;
@@ -259,12 +258,17 @@
 
 - (NSString *) getFirstOnNetworkStack
 {
-    NSString *item = [self.networkStack firstObject];
-    // Move the item to the end of the queue:
-    [self.networkStack removeObjectAtIndex:0];
-    [self.networkStack addObject:item];
+    @synchronized(self.networkStack) {
+        if ([self.networkStack count] <= 0) {
+            return nil;
+        }
+        NSString *item = [self.networkStack firstObject];
+        // Move the item to the end of the queue:
+        [self.networkStack removeObjectAtIndex:0];
+        [self.networkStack addObject:item];
+        return item;
+    }
     
-    return item;
 }
 
 - (BOOL) removeFromNetworkStackFile:(NSString *)filename
@@ -418,6 +422,7 @@
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:nil]];
     }
+    [self updateApplicationBadge];
 }
 
 
@@ -429,6 +434,7 @@
 - (void) applicationDidEnterBackground:(UIApplication *)application
 {
     NSLog(@"[appDelegate] App did enter background");
+    [self updateApplicationBadge];
     [ES_DataBaseAccessor save];
 }
 
@@ -449,6 +455,7 @@
 - (void) applicationWillTerminate:(UIApplication *)application
 {
     NSLog(@"[appDelegate] Application is being terminated.");
+    [self updateApplicationBadge];
     [ES_DataBaseAccessor save];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [self.watchProcessor closeWatchApp];

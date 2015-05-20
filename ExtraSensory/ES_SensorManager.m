@@ -82,6 +82,17 @@
 
 #define LOC_TIME            @"location_timestamp"
 
+//############
+// Quick location features:
+#define LOC_QUICK_FEAT      @"location_quick_features"
+#define LOC_STD_LAT         @"std_lat"
+#define LOC_STD_LONG        @"std_long"
+#define LOC_LAT_CHANGE      @"lat_change"
+#define LOC_LONG_CHANGE     @"long_change"
+#define LOC_LAT_DERIV       @"mean_abs_lat_deriv"
+#define LOC_LONG_DERIV      @"mean_abs_long_deriv"
+
+
 #define LOW_FREQ            @"low_frequency"
 
 //############
@@ -112,6 +123,7 @@
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
 @property (nonatomic, strong) NSMutableDictionary *hfData;
+@property (nonatomic, strong) NSMutableDictionary *tempLocationCoordinates;
 
 //@property (nonatomic, strong) PBWatch *myWatch;
 
@@ -308,7 +320,34 @@
     [self.appDelegate markNotRecordingRightNow];
 }
 
+- (BOOL) inBubble:(CLLocation *)location
+{
+    if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorized) {
+        NSLog(@"authorized");
+    };
+    NSLog(@"current location: (%f, %f)", location.coordinate.latitude, location.coordinate.longitude);
+    CLLocation *locB = [[CLLocation alloc] initWithLatitude:[self.user.settings.homeLat doubleValue] longitude:[self.user.settings.homeLon doubleValue]];
+    NSLog(@"home location: (%f, %f)", locB.coordinate.latitude, locB.coordinate.longitude);
+    CLLocationDistance distance = [location distanceFromLocation:locB];
+    NSLog(@"%f away from home location", distance);
+    if (distance < 500){
+        NSLog(@"in bubble!");
+        return TRUE;
+    } else { return FALSE; }
+}
 
+- (void) clearTempLocationCoordinates
+{
+    if (!self.tempLocationCoordinates) {
+        self.tempLocationCoordinates = [NSMutableDictionary dictionaryWithCapacity:2];
+    }
+    else {
+        [self.tempLocationCoordinates removeAllObjects];
+    }
+    
+    [self.tempLocationCoordinates setObject:[NSMutableArray arrayWithCapacity:10] forKey:LOC_LAT];
+    [self.tempLocationCoordinates setObject:[NSMutableArray arrayWithCapacity:10] forKey:LOC_LONG];
+}
 
 // #############################################################
 // New version of recording measurements (not relying on NSTimer, which is no accurate, especially, when app goes to background):
@@ -325,9 +364,9 @@
     {
         self.hfData = [NSMutableDictionary dictionaryWithCapacity:30]; // was 20 before
     }
-    [ES_DataBaseAccessor clearHFDataFile];
-    [ES_DataBaseAccessor clearLabelFile];
-    [ES_DataBaseAccessor clearSoundFile];
+    [self clearTempLocationCoordinates];
+
+    [ES_DataBaseAccessor clearDataFiles];
     
     // Mark begining recording:
     [self.appDelegate markRecordingRightNow];
@@ -578,8 +617,22 @@
 
 - (void) addLocationSample:(CLLocation *)location
 {
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.latitude] forField:LOC_LAT];
-    [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.coordinate.longitude] forField:LOC_LONG];
+    NSNumber *latitude = [NSNumber numberWithDouble:location.coordinate.latitude];
+    NSNumber *longitude = [NSNumber numberWithDouble:location.coordinate.longitude];
+    // Should we send the location coordinates?
+    if ([self.user.settings.hideHome boolValue] && [self inBubble:location]) {
+        NSLog(@"[sensorManager] Hiding location coordinates");
+        [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LAT];
+        [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LONG];
+    } else {
+        NSLog(@"[sensorManager] Sending location coordinates");
+        [self addToHighFrequencyDataNumericValue:latitude forField:LOC_LAT];
+        [self addToHighFrequencyDataNumericValue:longitude forField:LOC_LONG];
+    }
+    // In both cases, we need to save the coordinates temporarily in order to compute the basic location features:
+    [[self.tempLocationCoordinates objectForKey:LOC_LAT] addObject:latitude];
+    [[self.tempLocationCoordinates objectForKey:LOC_LONG] addObject:longitude];
+
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.altitude] forField:LOC_ALT];
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:location.speed] forField:LOC_SPEED];
     
@@ -681,8 +734,11 @@
     // Make sure to stop the sensing:
     [self stopAllSamplers];
     
-    //added MFCC extraction here
+    // added MFCC extraction here
     [self.soundProcessor processMFCC];
+    
+    // Calculate quick location features:
+    [self addQuickLocationFeatures];
 
     //[self.timer invalidate];
     [ES_DataBaseAccessor writeSensorData:self.hfData andActivity:self.currentActivity];
@@ -695,7 +751,88 @@
     
 }
 
-
+- (void) addQuickLocationFeatures
+{
+    NSArray *latitudes = self.tempLocationCoordinates[LOC_LAT];
+    NSArray *longitudes = self.tempLocationCoordinates[LOC_LONG];
+    NSArray *timerefs = self.hfData[LOC_TIME];
+    
+    if (!latitudes || !longitudes) {
+        NSLog(@"[sensorManager] !!! Missing internal location coordinates");
+        return;
+    }
+    
+    if (!timerefs) {
+        NSLog(@"[sensorManager] !!! Missing location updates' time references");
+        return;
+    }
+    
+    NSInteger count = latitudes.count;
+    if (longitudes.count != count) {
+        NSLog(@"[sensorManager] !!! Mismatch between number of longitudes and number of latitudes");
+        return;
+    }
+    if (timerefs.count != count) {
+        NSLog(@"[sensorManager] !!! Mismatch between number of location time references to location coordinates");
+        return;
+    }
+    
+    if (count <= 0) {
+        NSLog(@"[sensorManager] No location updates in this recording session");
+        return;
+    }
+    
+    double sumLat = 0, sumLong = 0, sumSqLat = 0, sumSqLong = 0;
+    double sumAbsLatDeriv = 0, sumAbsLongDeriv = 0;
+    for (int i=0; i < count; i ++) {
+        double latval = [[latitudes objectAtIndex:i] doubleValue];
+        double longval = [[longitudes objectAtIndex:i] doubleValue];
+        
+        sumLat += latval;
+        sumLong += longval;
+        sumSqLat += latval*latval;
+        sumSqLong += longval*longval;
+        
+        if (i>0) {
+            double timeDiff = [[timerefs objectAtIndex:i] doubleValue] -
+            [[timerefs objectAtIndex:i-1] doubleValue];
+            double latDiff = latval - [[latitudes objectAtIndex:i-1] doubleValue];
+            double longDiff = longval - [[longitudes objectAtIndex:i-1] doubleValue];
+            sumAbsLatDeriv += fabs(latDiff) / timeDiff;
+            sumAbsLongDeriv += fabs(longDiff) / timeDiff;
+        }
+    }
+    
+    // Now taking the averages:
+    double meanLat = sumLat / count;
+    double meanLong = sumLong / count;
+    double meanSqLat = sumSqLat / count;
+    double meanSqLong = sumSqLong / count;
+    double varLat = meanSqLat - (meanLat*meanLat);
+    double varLong = meanSqLong - (meanLong*meanLong);
+    
+    NSNumber *meanAbsLatDeriv = [NSNumber numberWithDouble:count > 1 ?
+                                 (sumAbsLatDeriv/(count-1)) : 0];
+    NSNumber *meanAbsLongDeriv = [NSNumber numberWithDouble:count > 1 ?
+                                  (sumAbsLongDeriv/(count-1)) : 0];
+    NSNumber *latStd = [NSNumber numberWithDouble:sqrt(varLat)];
+    NSNumber *longStd = [NSNumber numberWithDouble:sqrt(varLong)];
+    NSNumber *latChange = [NSNumber numberWithDouble:[[latitudes objectAtIndex:count-1] doubleValue] - [[latitudes objectAtIndex:0] doubleValue]];
+    NSNumber *longChange = [NSNumber numberWithDouble:[[longitudes objectAtIndex:count-1] doubleValue] - [[longitudes objectAtIndex:0] doubleValue]];
+    
+    NSMutableDictionary *locFeatures = [NSMutableDictionary dictionaryWithCapacity:6];
+    [locFeatures setObject:meanAbsLatDeriv forKey:LOC_LAT_DERIV];
+    [locFeatures setObject:meanAbsLongDeriv forKey:LOC_LONG_DERIV];
+    [locFeatures setObject:latStd forKey:LOC_STD_LAT];
+    [locFeatures setObject:longStd forKey:LOC_STD_LONG];
+    [locFeatures setObject:latChange forKey:LOC_LAT_CHANGE];
+    [locFeatures setObject:longChange forKey:LOC_LONG_CHANGE];
+    [self.hfData setObject:locFeatures forKey:LOC_QUICK_FEAT];
+    NSLog(@"[sensorManager] Calculated quick location features: %@",locFeatures);
+    
+    // Clear the temporary coordinates:
+    [self clearTempLocationCoordinates];
+}
 
 #pragma mark Location Manager Delegate Methods
 

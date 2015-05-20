@@ -13,7 +13,8 @@ import numpy;
 import pdb;
 
 
-g__data_superdir            = 'uuids';
+g__data_superdir            = 'data/raw_data';
+g__dont_remember            = "DON'T_REMEMBER";
 
 def get_instance_labels(instance_dir):
     feedback_file           = os.path.join(instance_dir,'feedback');
@@ -21,8 +22,15 @@ def get_instance_labels(instance_dir):
         return (None,None,None);
 
     fid = file(feedback_file,'rb');
-    feedback                = json.load(fid);
+    feedback_list           = json.load(fid);
     fid.close();
+    # Get the most up-to-date feedback:
+    if (type(feedback_list) == list):
+        feedback            = feedback_list[-1];
+        pass;
+    else:
+        feedback            = feedback_list;
+        pass;
 
     main_activity           = feedback['corrected_activity'];
     
@@ -71,10 +79,16 @@ def calc_entropy(count_dict):
     return entropy;
 
 def statistics_per_user(uuid):
+    global g__dont_remember;
+    
     uuid_dir = os.path.join(g__data_superdir,uuid);
 
     instance_count          = 0;
     labeled_count           = 0;
+    main_label_count        = 0;
+    sec_1or2_count          = 0;
+    sec_more_than2_count    = 0;
+    mood_count              = 0;
     
     main_counts             = {};
     secondary_counts        = {};
@@ -91,9 +105,30 @@ def statistics_per_user(uuid):
 
             if main_activity == None:
                 continue;
-
-            labeled_count   = labeled_count + 1;
             
+            # update general counts:
+            labeled_count   = labeled_count + 1;
+            if main_activity != g__dont_remember:
+                main_label_count    = main_label_count + 1;
+                pass;
+            else:
+                print "detected don't remember label: ", main_activity;
+                pass;
+
+            if len(secondary_activities) > 0:
+                if len(secondary_activities) > 2:
+                    sec_more_than2_count    = sec_more_than2_count + 1;
+                    pass;
+                else:
+                    sec_1or2_count          = sec_1or2_count + 1;
+                    pass;
+                pass;
+
+            if len(moods) > 0:
+                mood_count          = mood_count + 1;
+                pass;
+
+            # update label-specific counts:
             main_counts     = raise_key_count(main_counts,main_activity);
             for sec_act in secondary_activities:
                 secondary_counts    = raise_key_count(secondary_counts,sec_act);
@@ -109,6 +144,12 @@ def statistics_per_user(uuid):
     uuid_stats                      = {};
     uuid_stats['instance_count']    = instance_count;
     uuid_stats['labeled_count']     = labeled_count;
+    uuid_stats['main_label_count']  = main_label_count;
+    uuid_stats['sec_1or2_count']    = sec_1or2_count;
+    uuid_stats['sec_more_than2_count']  = sec_more_than2_count;
+    uuid_stats['mood_count']        = mood_count;
+
+    
     uuid_stats['main_counts']       = main_counts;
     uuid_stats['secondary_counts']  = secondary_counts;
     uuid_stats['mood_counts']       = mood_counts;
@@ -117,12 +158,38 @@ def statistics_per_user(uuid):
     uuid_stats['secondary_entropy'] = calc_entropy(secondary_counts);
     uuid_stats['mood_entropy']      = calc_entropy(mood_counts);
 
-    pdb.set_trace();
     return uuid_stats;
 
 
 def reward_for_participation(user_stats):
-    return;
+    main_c      = user_stats['main_label_count'];
+    sec12       = user_stats['sec_1or2_count'];
+    sec_over2   = user_stats['sec_more_than2_count'];
+    mood_c      = user_stats['mood_count'];
+
+    main_rate   = 0.0025;
+    sec12_rate  = 0.005;
+    sec_ex_rate = 0.0075;
+    mood_rate   = 0.0025;
+
+    main_cost   = main_rate * main_c;
+    sec12_cost  = sec12_rate * sec12;
+    sec_ex_cost = sec_ex_rate * sec_over2;
+    mood_cost   = mood_rate * mood_c;
+    
+    total_cost  = main_cost + sec12_cost + sec_ex_cost + mood_cost;
+
+    print("label:\t|\tcount:\t|\tcost ($):");
+    print("-"*20);
+    print("main\t|\t%d:\t|\t%f" % (main_c,main_cost));
+    print("sec<=2\t|\t%d\t|\t%f" % (sec12,sec12_cost));
+    print("sec>2\t|\t%d\t|\t%f" % (sec_over2,sec_ex_cost));
+    print("mood\t|\t%d\t|\t%f" % (mood_c,mood_cost));
+    print("-"*20);
+    print("total:\t|\t \t|\t%f" % (total_cost));
+    print("="*30);
+
+    return total_cost;
 
 def main():
 
@@ -141,7 +208,8 @@ def main():
         print "="*20;
         print "=== uuid: %s" % uuid;
         uuid_stats          = statistics_per_user(uuid);
-
+        reward_for_participation(uuid_stats);
+        
         pdb.set_trace();
         pass;
 

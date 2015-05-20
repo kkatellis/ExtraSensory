@@ -29,6 +29,8 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
 
 + (NSString *)getMFCCFilename;
 + (NSString *)getHFDataFilename;
++ (NSString *)getAudioPropertiesFilename;
++ (NSString *) getDataFileFullPathForFilename:(NSString *)filename;
 
 + (NSArray *) read: (NSString *)entityDescription;
 + (void) save;
@@ -40,9 +42,7 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
 + (void) writeSensorData: (NSDictionary *)data;
 + (void) createFeedbackFile:(NSNumber *)timestamp;
 + (void) clearFeedbackFile:(NSNumber *)timestamp;
-+ (void) clearHFDataFile;
-+ (void) clearLabelFile;
-+ (void) clearSoundFile;
++ (void) clearDataFiles;
 + (ES_User *) user;
 + (ES_Activity *) newActivity;
 + (void) deleteActivity: (ES_Activity *) activity;
@@ -53,14 +53,11 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
 + (ES_Activity *) getMostRecentActivity;
 + (ES_Activity *) getLatestCorrectedActivityWithinTheLatest:(NSNumber *)seconds;
 + (NSMutableDictionary *) getTodaysCounts;
-//+ (NSMutableDictionary *) getRecentCountsForSecondaryActivities:(NSArray *)secondaryActivities;
-//+ (NSMutableDictionary *) getRecentCountsForMoods:(NSArray *)moods;
 
 + (NSArray *) getRecentFrequentSecondaryActivitiesOutOf:(NSArray *)secondaryActivities;
 + (NSArray *) getRecentFrequentMoodsOutOf:(NSArray *)moods;
 
 + (void) writeSensorData:(NSDictionary *)data andActivity:(ES_Activity *)activity;
-+ (void) writeActivity: (ES_Activity *)activity;
 + (NSArray *) getActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;
 + (int) howManyUnlabeledActivitiesToday;
 + (NSArray *) getWhileDeletingOrphansActivitiesFrom:(NSNumber *)startTimestamp to:(NSNumber *)endTimestamp;

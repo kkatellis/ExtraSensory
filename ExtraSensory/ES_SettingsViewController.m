@@ -5,6 +5,7 @@
 //  Created by Bryan Grounds on 10/11/13.
 //  Copyright (c) 2013 Bryan Grounds. All rights reserved.
 //
+// this is the old version - see ES_SettingsTableViewController
 
 #import "ES_SettingsViewController.h"
 #import "ES_AppDelegate.h"
@@ -30,6 +31,10 @@
 
 @property (weak, nonatomic) IBOutlet UISwitch *homeSensingSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *homeSensingSwitchLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *hideHomeSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *hideHomeLabel;
+@property (weak, nonatomic) IBOutlet UITextField *latInput;
+@property (weak, nonatomic) IBOutlet UITextField *lonInput;
 
 
 
@@ -48,6 +53,13 @@
         _appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return _appDelegate;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self.lonInput setDelegate:self];
+    [self.latInput setDelegate:self];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -83,6 +95,18 @@
     // Home-sensing:
     self.homeSensingSwitch.on = [self.appDelegate.user.settings.homeSensingParticipant boolValue];
     [self updateHomeSensingSwitchLabel];
+    
+    // Home-hiding:
+    self.hideHomeSwitch.on = [self.appDelegate.user.settings.hideHome boolValue];
+    [self updateHideHomeSwitchLabel];
+    if ([self.appDelegate.user.settings.hideHome boolValue]) {
+        NSLog(@"Hiding Home");
+    } else {
+        NSLog(@"Not hiding home");
+    }
+    
+    self.latInput.placeholder = [self.appDelegate.user.settings.homeLat stringValue];
+    self.lonInput.placeholder = [self.appDelegate.user.settings.homeLon stringValue];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -101,17 +125,48 @@
         self.homeSensingSwitchLabel.text = @"OFF";
     }
 }
+- (void) updateHideHomeSwitchLabel
+{
+    if (self.hideHomeSwitch.on)
+    {
+        self.hideHomeLabel.text = @"ON";
+    }
+    else
+    {
+        self.hideHomeLabel.text = @"OFF";
+    }
+}
 
 - (IBAction)homeSensingSwitchChanged:(id)sender {
     self.appDelegate.user.settings.homeSensingParticipant = [NSNumber numberWithBool:self.homeSensingSwitch.on];
     [self updateHomeSensingSwitchLabel];
 }
-
+- (IBAction)hideHomeSwitchChanged:(id)sender {
+    self.appDelegate.user.settings.hideHome = [NSNumber numberWithBool:self.hideHomeSwitch.on];
+    [self updateHideHomeSwitchLabel];
+}
+- (IBAction)latEditingDidBegin:(id)sender {
+    NSLog(@"latEditingDidBegin");
+}
+- (IBAction)latEditingDidEnd:(id)sender {
+    self.appDelegate.user.settings.homeLat = @([self.latInput.text doubleValue]);
+    NSLog(@"lonEditingDidEnd: %@", self.appDelegate.user.settings.homeLat);
+}
+- (IBAction)lonEditingDidEnd:(id)sender {
+    self.appDelegate.user.settings.homeLon = @([self.lonInput.text doubleValue]);
+    NSLog(@"lonEditingDidEnd: %@", self.appDelegate.user.settings.homeLon);
+}
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
 - (void) updateCurrentStorageLabel
 {
     NSString *networkString = [NSString stringWithFormat:@"Currently storing %lu samples.",(unsigned long)self.appDelegate.networkStack.count];
     self.currentNetworkStackLabel.text = networkString;
 }
+
 
 - (void) setStorageNumSamplesAndCoveredTimeLabelsWithSamples:(NSNumber *)samples
 {
@@ -150,6 +205,8 @@
 {
     return self.appDelegate.scheduler;
 }
+
+
 
 - (IBAction)reminderSliderValueChanged:(id)sender {
     NSNumber *minutes = [NSNumber numberWithInteger:(int)self.reminderIntervalSlider.value];

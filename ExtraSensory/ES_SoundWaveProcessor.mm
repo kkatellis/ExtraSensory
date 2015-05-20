@@ -17,6 +17,14 @@
 #define HF_SOUND_FILE_PRE   @"HF_SOUNDWAVE_PRE"
 #define HF_SOUND_FILE_DUR   @"HF_SOUNDWAVE_DUR"
 
+#define SAMPLING_RATE       22050.0
+#define WINDOW_SIZE         2048
+#define HOP_SIZE            1024
+#define PREEMPH_COEF        0.97
+
+#define MAX_ABS_VAL_KEY     @"max_abs_value"
+#define NORMALIZER_KEY      @"normalization_multiplier"
+
 typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 
 @implementation ES_SoundWaveProcessor
@@ -151,24 +159,41 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
         }
     }
     soundFileURLDur = [NSURL fileURLWithPath:soundFilePath];
+    // Check audio file size:
+    NSNumber *wavFileSize = nil;
+    NSError *error = nil;
+    [soundFileURLDur getResourceValue:&wavFileSize forKey:NSURLFileSizeKey error:&error];
+    NSLog(@"[SoundWaveProcessor] Recorded sound file of size %@: %@",wavFileSize,soundFilePath);
+    
+    
     NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:[ES_DataBaseAccessor getMFCCFilename]]];
     NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
     [self callAudio:(CFURLRef)soundFileURLDur toMFCC:MFCCFileURLDur];
 }
+
 - (void) callAudio: (const CFURLRef&)audioURL toMFCC:(NSURL*)MFCCURL {
-    
-    std::cout << "compute_mfcc_features\n";
     
     AudioFileReaderRef someReader = AudioFileReaderRef(new WM::AudioFileReader(audioURL));
     
+    float max_abs_value = someReader->peak_abs_value();
+    float normalization_multiplier = 1 / max_abs_value;
+    [self writeAudioPropertiesFileWithMaxAbsVal:[NSNumber numberWithFloat:max_abs_value] andNormalizingMultiplier:[NSNumber numberWithFloat:normalization_multiplier]];
+
     FeatureTypeDTW::Features feats;
-    feats = get_mfcc_features(someReader);
+    WMAudioFilePreProcessInfo reader_info;
+    reader_info.threshold_start_time = 0;
+    reader_info.threshold_end_time = someReader->duration();
+    reader_info.normalization_factor = normalization_multiplier;
+    
+    std::cout << "Computing MFCC features..." << std::endl;
+    
+    feats = get_mfcc_features(someReader,WINDOW_SIZE,SAMPLING_RATE,HOP_SIZE,PREEMPH_COEF,&reader_info);
     std::cout << "mfcc_features: " << feats.size() << "x" << feats[0].size() << std::endl;
     
     NSMutableString* arrayString = [[NSMutableString alloc] init];
     for (int i = 0; i<feats.size(); ++i) {
         for (int j = 0; j<feats[i].size(); ++j) {
-            [arrayString appendString:[NSString stringWithFormat:@"%f ", feats[i].at(j)]];
+            [arrayString appendString:[NSString stringWithFormat:@"%f,", feats[i].at(j)]];
         }
         [arrayString appendString:@"\n"];
     }
@@ -177,6 +202,31 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     BOOL success = [arrayString writeToURL:MFCCURL atomically:YES encoding:NSUTF8StringEncoding error:&err];
     if (success){
         NSLog(@"MFCC successfully written\n");
+    }
+}
+
+- (void) writeAudioPropertiesFileWithMaxAbsVal:(NSNumber *)maxAbsVal andNormalizingMultiplier:(NSNumber *)normalizingMultiplier
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+    [dict setValue:maxAbsVal forKey:MAX_ABS_VAL_KEY];
+    [dict setValue:normalizingMultiplier forKey:NORMALIZER_KEY];
+    
+    NSLog(@"[soundWaveProcessor] Audio properties: %@",dict);
+    
+    if (![NSJSONSerialization isValidJSONObject:dict]) {
+        NSLog(@"[databaseAccessor] !!! Cannot write sound properties: not valid object for JSON. Data: %@",dict);
+        return;
+    }
+    NSError *error;
+    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+    
+    NSString *outFilePath = [ES_DataBaseAccessor getDataFileFullPathForFilename:[ES_DataBaseAccessor getAudioPropertiesFilename]];
+    
+    if ([jsonObject writeToFile:outFilePath atomically:YES]) {
+        NSLog(@"[soundWaveProcessor] Wrote audio properties file.");
+    }
+    else {
+        NSLog(@"[soundWaveProcessor] Failed writing audio properties file.");
     }
 }
 
