@@ -10,9 +10,9 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 #import "ES_Activity.h"
+#import "ES_WatchProcessor.h"
 
-
-@class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler, RaisedTabBarController;
+@class ES_SensorManager, ES_NetworkAccessor, ES_User, ES_Scheduler, RaisedTabBarController, ES_WatchProcessor;
 
 @interface ES_AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
@@ -31,6 +31,8 @@
 @property (strong, nonatomic) NSUUID *uuid;
 
 @property (strong, nonatomic) ES_SensorManager *sensorManager;
+
+@property (strong, nonatomic) ES_WatchProcessor *watchProcessor;
 
 @property (strong, nonatomic) ES_Scheduler *scheduler;
 
@@ -77,5 +79,6 @@
 - (void) setLabelsFromNowOnUntil:(NSDate *)validUntil toBeSameAsForActivity:(ES_Activity *)activity;
 - (ES_Activity *) getExampleActivityForPredeterminedLabels;
 - (void) clearPredeterminedLabelsAndTurnOnNaggingMechanism;
+- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved;
 
 @end

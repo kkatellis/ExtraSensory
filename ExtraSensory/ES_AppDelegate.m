@@ -18,7 +18,6 @@
 #import "ES_AlertViewWithUserInfo.h"
 #import "ES_FeedbackViewController.h"
 #import "RaisedTabBarController.h"
-#include <PebbleKit/PebbleKit.h>
 
 // Some constants:
 #define APP_NAME_TITLE_STR @"ExtraSensory"
@@ -45,10 +44,11 @@
 @property (nonatomic, strong) NSTimer *predeterminedLabelsExpirationTimer;
 
 @property (nonatomic,strong) NSMutableDictionary *uploadStrikeCounts;
-@property (nonatomic, strong) PBWatch *myWatch;
 
 @property (nonatomic, strong) NSMutableArray *networkFeedbackQueueTimestamps;
 @property (nonatomic, strong) NSMutableDictionary *networkFeedbackQueueTimestampToActivityMap;
+
+@property (nonatomic, strong) NSMutableDictionary *globalUserInfo;
 
 @end
 
@@ -75,6 +75,7 @@
 
 @synthesize countLySiStWaRuBiDr = _countLySiStWaRuBiDr;
 
+@synthesize watchProcessor = _watchProcessor;
 
 
 - (ES_User *)user
@@ -337,10 +338,6 @@
 
 
 // Getter
-
-
-
-
 - (ES_SensorManager *)sensorManager
 {
     if (!_sensorManager)
@@ -348,6 +345,15 @@
         _sensorManager = [ES_SensorManager new];
     }
     return _sensorManager;
+}
+
+-(ES_WatchProcessor *)watchProcessor
+{
+    if (!_watchProcessor)
+    {
+        _watchProcessor = [ES_WatchProcessor new];
+    }
+    return _watchProcessor;
 }
 
 - (ES_Scheduler *)scheduler
@@ -364,6 +370,8 @@
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {
     NSLog(@"[appDelegate] Application finished launching.");
+    [[self watchProcessor] launchWatchApp];
+    [[self watchProcessor] registerReceiveHandler];
     
     self.userSelectedDataCollectionOn = YES;
     
@@ -413,21 +421,6 @@
 }
 
 
-- (void)pebbleCentral:(PBPebbleCentral*)central watchDidConnect:(PBWatch*)watch isNew:(BOOL)isNew {
-    NSLog(@"Pebble connected: %@", [watch name]);
-    self.myWatch = watch;
-}
-
-- (void)pebbleCentral:(PBPebbleCentral*)central watchDidDisconnect:(PBWatch*)watch {
-    NSLog(@"Pebble disconnected: %@", [watch name]);
-    
-    if (self.myWatch == watch || [watch isEqual:self.myWatch]) {
-        self.myWatch = nil;
-    }
-}
-
-
-
 - (void) applicationDidBecomeActive:(UIApplication *)application
 {
     NSLog(@"[appDelegate] App did become active");
@@ -458,11 +451,8 @@
     NSLog(@"[appDelegate] Application is being terminated.");
     [ES_DataBaseAccessor save];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [self.watchProcessor closeWatchApp];
 }
-
-
-
-
 
 - (void) updateApplicationBadge
 {
@@ -635,6 +625,7 @@
     {
         [userInfo setValue:nil forKey:FOUND_VERIFIED_KEY];
     }
+    _globalUserInfo = userInfo;
     
     return userInfo;
 }
@@ -651,25 +642,8 @@
     UINavigationController *nav = (UINavigationController *)tbc.selectedViewController;
     [nav pushViewController:activeFeedback animated:NO];
 }
-//
-//-(void)recieveMessageFromWatch {
-//    
-//[self.myWatch appMessagesAddReceiveUpdateHandler:^BOOL(PBWatch *watch, NSDictionary *update) {
-//    NSLog(@"Received message: %@", update);
-//    // if update yes, call pushActivity
-//    NSString *temp = [update objectForKey:@42];
-//    if([temp  isEqual: @"YES"]) {
-//        [self pushActivityEventFeedbackViewWithUserInfo:userInfo userAlreadyApproved: YES];
-//    }
-//    // else do nothing
-//        
-//    
-//    // if update no, call pushActivity
-//    return YES;
-//}];
-//    
-//}
 
+// users says correct, send to this function
 - (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved
 {
     // Create an ES_ActivityEvent object to initially describe what was presumably done in the recent period of time:

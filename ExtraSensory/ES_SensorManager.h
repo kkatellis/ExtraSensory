@@ -14,6 +14,8 @@
 #import <CoreTelephony/CTCallCenter.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ES_SoundWaveProcessor.h"
+#include <PebbleKit/PebbleKit.h>
+#import "ES_WatchProcessor.h"
 
 
 
@@ -51,9 +53,6 @@
 - (BOOL) record;
 -(void) turnOffRecording;
 -(void) _prepStage:(NSString*) fileName;
-
-
-
 
 
 @end

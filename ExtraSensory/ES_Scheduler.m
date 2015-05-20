@@ -18,9 +18,10 @@
 #import "ES_SoundWaveProcessor.h"
 #import "ES_ActivitiesStrings.h"
 //#import "ES_UserActivityLabels.h"
+#import "ES_WatchProcessor.h"
 
 
-@interface ES_Scheduler() <PBPebbleCentralDelegate>
+@interface ES_Scheduler()
 
 @property (nonatomic, strong) ES_SensorManager *sensorManager;
 
@@ -233,28 +234,6 @@
     if (latestVerifiedActivity)
     {
         // Do any additional setup after loading the view, typically from a nib.
-        [PBPebbleCentral setDebugLogsEnabled:YES];
-        [[PBPebbleCentral defaultCentral] setDelegate:self];
-        
-        // set app id of current watch
-        uuid_t myAppUUIDbytes;
-        NSUUID *myAppUUID = [[NSUUID alloc] initWithUUIDString:@"668eb2d2-73dd-462d-b079-33f0f70ad3d0"];
-        [myAppUUID getUUIDBytes:myAppUUIDbytes];
-        
-        [[PBPebbleCentral defaultCentral] setAppUUID:[NSData dataWithBytes:myAppUUIDbytes length:16]];
-        
-        // connects to last connected watch
-        self.myWatch = [[PBPebbleCentral defaultCentral] lastConnectedWatch];
-        
-        [self.myWatch appMessagesLaunch:^(PBWatch *watch, NSError *error) {
-            if (!error) {
-                NSLog(@"Successfully launched app.");
-            }
-            else {
-                NSLog(@"Error launching app - Error: %@", error);
-            }
-        }
-         ];
         
         // Then ask user if they are still doing the same thing in the last x time:
         NSString *mainActivity = latestVerifiedActivity.userCorrection;
@@ -264,18 +243,6 @@
         NSTimeInterval timePassed = [now timeIntervalSinceDate:latestVerifiedDate];
         
         question = [NSString stringWithFormat:@"In the past %d minutes were you still %@?",(int)timePassed/60,mainActivity];
-        
-        // send question to watch, and then wait for reply
-        NSDictionary *update = @{ @(0):[NSNumber numberWithUint8:42],
-                                  @(1):question };
-        [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
-            if (!error) {
-                NSLog(@"Successfully sent message.");
-            }
-            else {
-                NSLog(@"Error sending message: %@", error);
-            }
-        }];
         
         NSArray *secondaryActivitiesStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[secondaryActivities allObjects]];
         NSArray *moodsStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[moods allObjects]];
@@ -296,10 +263,15 @@
     }
     else
     {
+        // question appears on the watch to
         // Then ask the user to provide feedback:
         question = @"Can you update what you're doing now?";
         userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:NO main:nil secondary:nil moods:nil latestVerifiedTime:nil];
     }
+    // send question to watch, and then wait for reply
+    NSDictionary *update = @{ @(2):question };
+    [[[self appDelegate] watchProcessor] nagUserWithQuestion:update];
+    [[[self appDelegate] watchProcessor] setUserInfo:userInfo];
     
     NSLog(@"[scheduler] Should ask question: [%@]",question);
     UILocalNotification *notification = [[UILocalNotification alloc] init];

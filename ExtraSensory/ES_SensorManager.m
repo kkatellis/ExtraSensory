@@ -33,6 +33,10 @@
 #define RAW_ACC_Z           @"raw_acc_z"
 #define RAW_ACC_TIME        @"raw_acc_timeref"
 
+#define RAW_WATCH_ACC_X     @"raw_watch_acc_x"
+#define RAW_WATCH_ACC_Y     @"raw_watch_acc_y"
+#define RAW_WATCH_ACC_Z     @"raw_watch_acc_z"
+
 #define RAW_GYR_X           @"raw_gyro_x"
 #define RAW_GYR_Y           @"raw_gyro_y"
 #define RAW_GYR_Z           @"raw_gyro_z"
@@ -99,7 +103,7 @@
 #define SCREEN_BRIGHT   @"screen_brightness"
 #define CAMERA          @"camera"
 
-@interface ES_SensorManager()
+@interface ES_SensorManager() //<PBPebbleCentralDelegate>
 
 @property NSTimer *timer;
 @property NSTimer *soundTimer;
@@ -108,6 +112,8 @@
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 
 @property (nonatomic, strong) NSMutableDictionary *hfData;
+
+//@property (nonatomic, strong) PBWatch *myWatch;
 
 //@property (nonatomic, strong) ES_ImageProcessor *cameraProcessor;
 
@@ -220,6 +226,11 @@
     return (int)(self.sampleDuration * self.sampleFrequency);
 }
 
+-(int) watchSamplesPerBatch
+{
+    return 500;
+}
+
 - (double) sampleDuration
 {
     if (!_sampleDuration)
@@ -293,6 +304,7 @@
     [self.motionManager stopDeviceMotionUpdates];
     [self.soundProcessor pauseDurRecording];
     //[self.cameraProcessor stopSession];
+    //[[self appDelegate] stopWatchCollection];
     [self.appDelegate markNotRecordingRightNow];
 }
 
@@ -311,7 +323,7 @@
     }
     else
     {
-        self.hfData = [NSMutableDictionary dictionaryWithCapacity:20];
+        self.hfData = [NSMutableDictionary dictionaryWithCapacity:30]; // was 20 before
     }
     [ES_DataBaseAccessor clearHFDataFile];
     [ES_DataBaseAccessor clearLabelFile];
@@ -341,6 +353,7 @@
     /// Notice: when used a new queue (or separate new queue for each sensor) there were bugs after finished sampling (red dot took time to disappear and network connection failed to get response)
     
     [self.soundProcessor startDurRecording];
+    [[[self appDelegate] watchProcessor] receiveDataFromWatch];
     // ADD WATCHRECORDING HERE
     
     if (self.motionManager.accelerometerAvailable)
@@ -404,16 +417,16 @@
 
     // Add low frequency (one time) measurements:
     [self addDeviceIndicatorsToDataBundle];
-    
-    
 }
 
 - (void) addToHighFrequencyDataNumericValue:(NSNumber *)value forField:(NSString *)field
 {
+
     if (![self.hfData valueForKey:field])
     {
         // Create this field for the first time, as an array:
         [self.hfData setValue:[NSMutableArray arrayWithCapacity:[self samplesPerBatch]] forKey:field];
+        
     }
     // Add the numeric value to the array:
     [[self.hfData valueForKey:field] addObject:value];
@@ -552,7 +565,8 @@
     curr_count = [self countField:RAW_ACC_X];
     if (curr_count % 100 == 0)
     {
-        NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],[self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+        NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu watch, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X], (unsigned long)[[[self appDelegate] watchProcessor].mutableWatchAccX count], [self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+        //NSLog(@"%@", [self.hfData description]);
     }
     if (curr_count >= [self samplesPerBatch])
     {
@@ -575,6 +589,9 @@
     
     [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:[location.timestamp timeIntervalSince1970]] forField:LOC_TIME];
 }
+
+
+
 
 - (void) addDeviceIndicatorsToDataBundle
 {
@@ -629,12 +646,18 @@
         return;
     }
     
-    NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
+    NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion, (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
+    
+    //[self.hfData]
+    if([self.appDelegate watchProcessor].mutableWatchAccX != nil)
+    {
+        [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccX forKey:RAW_WATCH_ACC_X];
+        [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccY forKey:RAW_WATCH_ACC_Y];
+        [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccZ forKey:RAW_WATCH_ACC_Z];
+    }
     
     // Add camera data:
     //[self.hfData setValue:[[self cameraProcessor] outputMeasurements] forKey:CAMERA];
-    // ADD WAIT FOR WATCH DATA
-    
     [self handleFinishedDataBundle];
 }
 
@@ -646,6 +669,7 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
+    [[[self appDelegate] watchProcessor] stopWatchCollection];
 //    [self.cameraProcessor stopSession];
 }
 

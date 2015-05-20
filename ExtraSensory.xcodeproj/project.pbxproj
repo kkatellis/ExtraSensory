@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
-		109D49B31ACB01C5000051B1 /* ES_WatchProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 109D49B21ACB01C5000051B1 /* ES_WatchProcessor.m */; };
 		109D49B51ACB1156000051B1 /* PebbleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109D49B41ACB1156000051B1 /* PebbleKit.framework */; };
 		109D49B71ACB1165000051B1 /* PebbleVendor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109D49B61ACB1165000051B1 /* PebbleVendor.framework */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */; };
@@ -17,6 +16,7 @@
 		10BDF9011A8ABEC5000C4C26 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF9001A8ABEC5000C4C26 /* CoreBluetooth.framework */; };
 		10BDF9031A8ABEDB000C4C26 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF9021A8ABEDB000C4C26 /* CFNetwork.framework */; };
 		10BDF9051A8ABEE7000C4C26 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF9041A8ABEE7000C4C26 /* MessageUI.framework */; };
+		10D8EF6C1AF1515000B8A56F /* ES_WatchProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 10D8EF6B1AF1515000B8A56F /* ES_WatchProcessor.m */; };
 		299617F31A78AE6F0082112D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 299617F21A78AE6E0082112D /* QuartzCore.framework */; };
 		4E1336571A630E9700683B84 /* ES_Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1336561A630E9700683B84 /* ES_Activity.m */; };
 		4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */; };
@@ -169,8 +169,6 @@
 /* Begin PBXFileReference section */
 		1025D75618CB15BA00D854BE /* ES_PieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_PieViewController.h; sourceTree = "<group>"; };
 		1025D75718CB15BA00D854BE /* ES_PieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_PieViewController.m; sourceTree = "<group>"; };
-		109D49B11ACB01C5000051B1 /* ES_WatchProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_WatchProcessor.h; sourceTree = "<group>"; };
-		109D49B21ACB01C5000051B1 /* ES_WatchProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_WatchProcessor.m; sourceTree = "<group>"; };
 		109D49B41ACB1156000051B1 /* PebbleKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PebbleKit.framework; path = "PebbleKit-iOS/PebbleKit.framework"; sourceTree = "<group>"; };
 		109D49B61ACB1165000051B1 /* PebbleVendor.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PebbleVendor.framework; path = "PebbleKit-iOS/PebbleVendor.framework"; sourceTree = "<group>"; };
 		10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_SoundWaveProcessor.h; sourceTree = "<group>"; };
@@ -180,6 +178,8 @@
 		10BDF9001A8ABEC5000C4C26 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		10BDF9021A8ABEDB000C4C26 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		10BDF9041A8ABEE7000C4C26 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		10D8EF6A1AF1515000B8A56F /* ES_WatchProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_WatchProcessor.h; sourceTree = "<group>"; };
+		10D8EF6B1AF1515000B8A56F /* ES_WatchProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_WatchProcessor.m; sourceTree = "<group>"; };
 		299617F21A78AE6E0082112D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4E1336551A630E9700683B84 /* ES_Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Activity.h; sourceTree = "<group>"; };
 		4E1336561A630E9700683B84 /* ES_Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Activity.m; sourceTree = "<group>"; };
@@ -760,12 +760,12 @@
 				93BC42BB17FB4C2900F06844 /* ES_Scheduler.m */,
 				933F7CC917F4C80B00B05C96 /* ES_SensorManager.h */,
 				933F7CCA17F4C80B00B05C96 /* ES_SensorManager.m */,
-				109D49B11ACB01C5000051B1 /* ES_WatchProcessor.h */,
-				109D49B21ACB01C5000051B1 /* ES_WatchProcessor.m */,
 				10AE6C5618A30AEB0095F330 /* ES_SoundWaveProcessor.h */,
 				10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */,
 				4E1336591A78125E00683B84 /* ES_ImageProcessor.h */,
 				4E13365A1A78125E00683B84 /* ES_ImageProcessor.m */,
+				10D8EF6A1AF1515000B8A56F /* ES_WatchProcessor.h */,
+				10D8EF6B1AF1515000B8A56F /* ES_WatchProcessor.m */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -883,7 +883,7 @@
 				ORGANIZATIONNAME = "Bryan Grounds";
 				TargetAttributes = {
 					9307CBB017F1A78A00D95E05 = {
-						DevelopmentTeam = AG7H7A9P2Q;
+						DevelopmentTeam = G956NUTNQ6;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1025,6 +1025,7 @@
 				4E13365B1A78125E00683B84 /* ES_ImageProcessor.m in Sources */,
 				707762E018CF7C9800ED0134 /* Reachability.m in Sources */,
 				9F59F66718A9A9C5002C94B9 /* ES_HistoryTableViewController.m in Sources */,
+				10D8EF6C1AF1515000B8A56F /* ES_WatchProcessor.m in Sources */,
 				93F679C417F978AF000638CB /* mztools.c in Sources */,
 				4E4047C51A23F19600C1D0DF /* ES_Label.m in Sources */,
 				93F679C717F978AF000638CB /* ZipArchive.mm in Sources */,
@@ -1059,7 +1060,6 @@
 				93F679C617F978AF000638CB /* zip.c in Sources */,
 				709F514119FEA72500F3386C /* MFCCProcessor.cpp in Sources */,
 				709F5AED19FEBFED00F3386C /* CAXException.cpp in Sources */,
-				109D49B31ACB01C5000051B1 /* ES_WatchProcessor.m in Sources */,
 				93AC71A7180878A000D58E77 /* ES_SettingsViewController.m in Sources */,
 				4E71BD4A19BDA53800BA648B /* ES_SelectionFromListViewController.m in Sources */,
 				93F659D717F6857B000638CB /* ES_DataBaseAccessor.m in Sources */,
@@ -1194,7 +1194,7 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "15180d76-2a3a-4340-b44e-e541fe0744d8";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1225,7 +1225,7 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "15180d76-2a3a-4340-b44e-e541fe0744d8";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
