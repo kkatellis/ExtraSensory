@@ -26,5 +26,6 @@
 -(void)nagUserWithQuestion: (NSDictionary*)question;
 -(void)setUserInfo: (NSMutableDictionary*) userInfo;
 -(void)registerReceiveHandler;
+-(BOOL)isConnectedToWatch;
 
 @end

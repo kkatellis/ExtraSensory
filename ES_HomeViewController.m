@@ -68,6 +68,9 @@
     [self updateCurrentFeedbackQueueLabel];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentFeedbackQueueLabel) name:@"FeedbackQueueSize" object:[self appDelegate]];
     
+    // Watch:
+    [self updateWatchIcon];
+    
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -75,6 +78,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [ES_DataBaseAccessor save];
     
+}
+
+- (void) updateWatchIcon
+{
+    if ([[self appDelegate] isConnectedToWatch]) {
+        NSLog(@"[homeView] Marking connected to watch");
+        [self.watchIcon setBackgroundColor:[UIColor redColor]];
+    }
+    else {
+        NSLog(@"[homeView] Marking not connected to watch");
+        [self.watchIcon setBackgroundColor:[UIColor blueColor]];
+    }
 }
 
 - (void) updateMostRecentActivity

@@ -83,4 +83,6 @@
 - (void) clearPredeterminedLabelsAndTurnOnNaggingMechanism;
 - (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved;
 
+- (BOOL) isConnectedToWatch;
+
 @end

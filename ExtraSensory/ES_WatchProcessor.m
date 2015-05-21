@@ -222,4 +222,12 @@ BOOL stopCalled = NO;
     }
 }
 
+- (BOOL) isConnectedToWatch {
+    if (!self.myWatch) {
+        return NO;
+    }
+    
+    return [self.myWatch isConnected];
+}
+
 @end

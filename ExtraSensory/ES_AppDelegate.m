@@ -802,6 +802,12 @@
     return self.exampleWithPredeterminedLabels;
 }
 
+
+- (BOOL) isConnectedToWatch
+{
+    return [[self watchProcessor] isConnectedToWatch];
+}
+
 #pragma mark -
 #pragma mark Core Data stack
 
