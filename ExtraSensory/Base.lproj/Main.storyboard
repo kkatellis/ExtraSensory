@@ -36,6 +36,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="watch.png" translatesAutoresizingMaskIntoConstraints="NO" id="Fbz-Ah-Qxx">
+                                <rect key="frame" x="272" y="64" width="20" height="60"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -45,6 +48,7 @@
                         <outlet property="mostRecentActivityImage" destination="RdZ-Fs-goq" id="3Ee-tQ-rBv"/>
                         <outlet property="mostRecentActivityLabel" destination="bga-qn-aaa" id="ev1-og-1JF"/>
                         <outlet property="networkStackSizeLabel" destination="ngK-Na-CGF" id="c99-2f-JKh"/>
+                        <outlet property="watchIcon" destination="Fbz-Ah-Qxx" id="Y2V-Fh-4M5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="alz-gN-hpr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -962,6 +966,7 @@
         <image name="house.png" width="128" height="128"/>
         <image name="indicator-housework.png" width="32" height="32"/>
         <image name="stats_pie_chart.png" width="36" height="36"/>
+        <image name="watch.png" width="64" height="192"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

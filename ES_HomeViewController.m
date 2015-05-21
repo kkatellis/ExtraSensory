@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *mostRecentActivityImage;
 @property (weak, nonatomic) IBOutlet UILabel *networkStackSizeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *feedbackQueueSizeLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *watchIcon;
 
 @property NSMutableArray *activityCountArray;
 
