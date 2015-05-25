@@ -206,6 +206,17 @@
 -(void) activeFeedback:(UIButton*)button
 {
     NSLog(@"[raisedTabBar] Active feedback button pressed.");
+    
+    ES_AppDelegate *appDelegate = (ES_AppDelegate *)UIApplication.sharedApplication.delegate;
+    if (![appDelegate isDataCollectionSupposedToBeOn]) {
+        NSLog(@"[rausedTabBar] Plus button pressed, but we shoulnd't collect data now");
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:@"App is not in 'data-collection' mode now. Can't do active feedback" delegate:self cancelButtonTitle:@"O.K." otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    
+    
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"ActiveFeedback" bundle:nil];
     ES_FeedbackViewController *feedbackController = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     feedbackController.feedbackType = ES_FeedbackTypeActive;
