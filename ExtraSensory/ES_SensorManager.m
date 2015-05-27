@@ -392,8 +392,9 @@
     /// Notice: when used a new queue (or separate new queue for each sensor) there were bugs after finished sampling (red dot took time to disappear and network connection failed to get response)
     
     [self.soundProcessor startDurRecording];
-    [[[self appDelegate] watchProcessor] receiveDataFromWatch];
-    // ADD WATCHRECORDING HERE
+    if([[[self appDelegate] watchProcessor] isConnectedToWatch]){
+        [[[self appDelegate] watchProcessor] receiveDataFromWatch];
+    }
     
     if (self.motionManager.accelerometerAvailable)
     {
@@ -604,7 +605,12 @@
     curr_count = [self countField:RAW_ACC_X];
     if (curr_count % 100 == 0)
     {
-        NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu watch, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X], (unsigned long)[[[self appDelegate] watchProcessor].mutableWatchAccX count], [self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+        if([[[self appDelegate] watchProcessor] isConnectedToWatch]) {
+            NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu watch, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],(unsigned long)[[[self appDelegate] watchProcessor].mutableWatchAccX count], [self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+        }
+        else {
+            NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],[self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+        }
         //NSLog(@"%@", [self.hfData description]);
     }
     if (curr_count >= [self samplesPerBatch])
@@ -722,7 +728,9 @@
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
-    [[[self appDelegate] watchProcessor] stopWatchCollection];
+    if([[[self appDelegate] watchProcessor] isConnectedToWatch]) {
+        [[[self appDelegate] watchProcessor] stopWatchCollection];
+    }
 //    [self.cameraProcessor stopSession];
 }
 

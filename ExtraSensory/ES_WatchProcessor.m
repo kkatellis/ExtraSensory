@@ -18,6 +18,8 @@
 #define SECONDARY_ACT_KEY       @"secondaryActivitiesStrings"
 #define MOODS_KEY               @"moodsStrings"
 #define LATEST_VERIFIED_KEY     @"latestVerifiedTimestamp"
+#define IOS_WATCHAPP_UUID @"668eb2d2-73dd-462d-b079-33f0f70ad3d0"
+#define RAW_WATCH_MAX_SAMPLES 500
 
 
 @interface ES_WatchProcessor() <PBPebbleCentralDelegate>
@@ -32,11 +34,7 @@
 
 @implementation ES_WatchProcessor
 
-//@synthesize mutableWatchAccX = _mutableWatchAccX;
-//@synthesize mutableWatchAccY = _mutableWatchAccY;
-//@synthesize mutableWatchAccZ = _mutableWatchAccZ;
-
-BOOL stopCalled = NO;
+BOOL _stopCalled = NO;
 
 - (ES_AppDelegate *) appDelegate
 {
@@ -63,7 +61,7 @@ BOOL stopCalled = NO;
     
     // set app id of current watch
     uuid_t myAppUUIDbytes;
-    NSUUID *myAppUUID = [[NSUUID alloc] initWithUUIDString:@"668eb2d2-73dd-462d-b079-33f0f70ad3d0"];
+    NSUUID *myAppUUID = [[NSUUID alloc] initWithUUIDString:IOS_WATCHAPP_UUID];
     [myAppUUID getUUIDBytes:myAppUUIDbytes];
     
     [[PBPebbleCentral defaultCentral] setAppUUID:[NSData dataWithBytes:myAppUUIDbytes length:16]];
@@ -103,8 +101,6 @@ BOOL stopCalled = NO;
     [self startWatchCollection];
 }
 
-/***THIS HAS TO BE THE PROBLEM!!!!!!!!!! (WRITE THIS DOWN RALPHIE AS A COMPLICATED BUG)***/
-// Thought that it might create multiple watch objects, but it actually registers multiple recieve handlers
 -(void)registerReceiveHandler
 {
     
@@ -129,9 +125,9 @@ BOOL stopCalled = NO;
                 return YES;
             }
         
-        if([self.mutableWatchAccX count] == 500)
+        if([self.mutableWatchAccX count] == RAW_WATCH_MAX_SAMPLES)
         {
-            if(stopCalled) {
+            if(_stopCalled) {
                 return NO;
             }
             [self stopWatchCollection];
@@ -178,10 +174,10 @@ BOOL stopCalled = NO;
 
 -(void)stopWatchCollection
 {
-    if (stopCalled){
+    if (_stopCalled){
         return;
     }
-    stopCalled = YES;
+    _stopCalled = YES;
     NSDictionary *update = @{ @(1):@"TURN OFF" };
     [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
         if (!error) {
@@ -191,12 +187,11 @@ BOOL stopCalled = NO;
             NSLog(@"[WP] Error sending message to stop accel collection: %@", error);
         }
     }];
-    
 }
 
 -(void)startWatchCollection
 {
-    stopCalled = NO;
+    _stopCalled = NO;
     NSDictionary *update = @{ @(1):@"TURN ON" };
     [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
         if (!error) {
@@ -206,7 +201,6 @@ BOOL stopCalled = NO;
             NSLog(@"[WP] Error sending message to start watch collection: %@", error);
         }
     }];
-    
 }
 
 - (void)pebbleCentral:(PBPebbleCentral*)central watchDidConnect:(PBWatch*)watch isNew:(BOOL)isNew {
