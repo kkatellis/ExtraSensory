@@ -23,7 +23,7 @@ g__raw_sensors              = ['raw_acc','raw_gyro','raw_magnet'];
 g__processed_sensors        = ['proc_acc','proc_gravity','proc_gyro',\
                                'proc_attitude','proc_magnet'];
 
-g__main_activities          = ['LYING_DOWN','SITTING','STANDING',\
+g__main_activities          = ['LYING_DOWN','SITTING','STANDING_IN_PLACE','STANDING_AND_MOVING',\
                                'WALKING','RUNNING','BICYCLING',"DON'T_KNOW"];
 
 g__secondary_activities     = [];
@@ -32,14 +32,17 @@ g__moods                    = [];
 g__sr                       = 40.;
 
 def get_features_from_measurements(instance_dir,timestamp,sensor):
-    measurements_file       = os.path.join(instance_dir,'m_%s' % sensor);
+    measurements_file       = os.path.join(instance_dir,'m_%s.dat' % sensor);
     if not os.path.exists(measurements_file):
         return None;
 
     # Load the measurements time-series:
     X                       = numpy.genfromtxt(measurements_file);
-
-    if sensor[:3] == 'raw':
+    
+    if (len(X.shape) <= 0):
+        return None;
+    
+    if sensor[:3] == 'raw' or sensor[:4] == 'proc':
         # Then the first column is for time reference:
         timerefs            = X[:,0];
         X                   = X[:,1:];
@@ -50,9 +53,12 @@ def get_features_from_measurements(instance_dir,timestamp,sensor):
         return features;
 
     if sensor == 'location':
+        if (len(X.shape) == 1):
+            X = numpy.reshape(X,(1,-1));
+            pass;
         features            = compute_features.get_location_features(X,timestamp);
         return features;
-        
+
     return None;
 
 def get_instance_features(uuid,timestamp_str,sensors):
@@ -134,7 +140,7 @@ def features_per_user(uuid,sensors):
 
         pass; # end for (ii,timestamp)...
 
-
+    print "done with %d instances for user" % len(user_instances);
     return (uuid_feats,main_vec,main_mat,secondary_mat,mood_mat);
 
 def main_activity_string2int(main_activity):
@@ -219,7 +225,8 @@ def main():
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;
-        (uuid_feats,main_vec,secondary_mat,mood_mat) = features_per_user(uuid,sensors);
+        
+        (uuid_feats,main_vec,main_mat,secondary_mat,mood_mat) = features_per_user(uuid,sensors);
 
         pdb.set_trace();
         pass;
