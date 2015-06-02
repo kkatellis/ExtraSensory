@@ -10,6 +10,7 @@ This is to be used offline, unrelated to the web service.
 Written by Yonatan Vaizman. October 2014.
 '''
 import os;
+import glob;
 import fnmatch;
 import subprocess;
 import json;
@@ -17,17 +18,13 @@ import zipfile;
 import numpy as np;
 import shutil;
 
+import pdb;
 
 ##g__output_superdir = '/Users/yonatan/Documents/data_collection/uuids';
 ##g__input_superdir = '/Library/WebServer/Documents/rmw/user_input';
 g__output_superdir = 'data/raw_data';
 g__input_superdir = 'data/raw_zipped_data';
 
-
-g__lf_fields = [\
-    'altitude','floor','horizontal_accuracy','vertical_accuracy',\
-    'wifi_status','app_state','device_orientation','proximity',\
-    'on_the_phone'];
 
 def collect_all_instances_of_uuid(uuid,skip_existing):
     input_uuid_dir = os.path.join(g__input_superdir,uuid);
@@ -36,7 +33,13 @@ def collect_all_instances_of_uuid(uuid,skip_existing):
 
     for timestamp in os.listdir(input_uuid_dir):
         print timestamp;
-        collect_single_instance(uuid,timestamp,skip_existing);
+        try:
+            collect_single_instance(uuid,timestamp,skip_existing);
+            pass;
+        except Exception as ex:
+            print "!!! Error for timestamp ", timestamp;
+            raise ex;
+            pass;
 
         pass; # end for filename...
 
@@ -82,6 +85,10 @@ def collect_single_instance(uuid,timestamp,skip_existing):
     hf_file = os.path.join(instance_out_dir,"HF_DUR_DATA.txt");
     if not os.path.exists(hf_file):
         print "-- no HF data file";
+        # Delete any unpacked files from the zip:
+        for unpacked_file in glob.glob(instance_out_dir + '/*'):
+            os.remove(unpacked_file);
+            pass;
         # Delete the newly created dir:
         os.rmdir(instance_out_dir);
         print "--- Removed dir: %s" % instance_out_dir;
@@ -111,49 +118,38 @@ def collect_single_instance(uuid,timestamp,skip_existing):
         pass; # end else (if exists feedback_file)
 
     # Read the measurements file and save the different modalities to files:
-    new_version = True;
-    if new_version:
-        (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,front_camera,back_camera) = read_datafile(hf_file);
+    (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,watch_acc,location_quick,proc_rotation) = read_datafile(hf_file);
 
-        np.savetxt(os.path.join(instance_out_dir,'m_raw_acc'),raw_acc);
-        np.savetxt(os.path.join(instance_out_dir,'m_raw_magnet'),raw_magnet);
-        np.savetxt(os.path.join(instance_out_dir,'m_raw_gyro'),raw_gyro);
+    np.savetxt(os.path.join(instance_out_dir,'m_raw_acc.dat'),raw_acc);
+    np.savetxt(os.path.join(instance_out_dir,'m_raw_magnet.dat'),raw_magnet);
+    np.savetxt(os.path.join(instance_out_dir,'m_raw_gyro.dat'),raw_gyro);
 
-        np.savetxt(os.path.join(instance_out_dir,'m_proc_timeref'),proc_timeref);
+    np.savetxt(os.path.join(instance_out_dir,'m_proc_timeref.dat'),proc_timeref);
 
-        np.savetxt(os.path.join(instance_out_dir,'m_proc_acc'),proc_acc);
-        np.savetxt(os.path.join(instance_out_dir,'m_proc_magnet'),proc_magnet);
-        np.savetxt(os.path.join(instance_out_dir,'m_proc_gyro'),proc_gyro);
-        np.savetxt(os.path.join(instance_out_dir,'m_proc_gravity'),proc_gravity);
-        np.savetxt(os.path.join(instance_out_dir,'m_proc_attitude'),proc_attitude);
-
-        np.savetxt(os.path.join(instance_out_dir,'m_location'),location);
-
-        save_json_file(os.path.join(instance_out_dir,'m_front_camera'),front_camera);
-        save_json_file(os.path.join(instance_out_dir,'m_back_camera'),back_camera);
-        pass;
-    else:
-        (acc,magnet,gyro,location,lf_data) = read_datafile_json_list(hf_file);
-
-        # Save measurement data to modality-separate files:
-        np.savetxt(os.path.join(instance_out_dir,'acc'),acc);
-        np.savetxt(os.path.join(instance_out_dir,'magnet'),magnet);
-        np.savetxt(os.path.join(instance_out_dir,'gyro'),gyro);
-        np.savetxt(os.path.join(instance_out_dir,'location'),location);
-        pass;
-
-    save_json_file(os.path.join(instance_out_dir,'m_lf_measurements.dat'),lf_data);
+    np.savetxt(os.path.join(instance_out_dir,'m_proc_acc.dat'),proc_acc);
+    np.savetxt(os.path.join(instance_out_dir,'m_proc_magnet.dat'),proc_magnet);
+    np.savetxt(os.path.join(instance_out_dir,'m_proc_gyro.dat'),proc_gyro);
+    np.savetxt(os.path.join(instance_out_dir,'m_proc_gravity.dat'),proc_gravity);
+    np.savetxt(os.path.join(instance_out_dir,'m_proc_attitude.dat'),proc_attitude);
+    np.savetxt(os.path.join(instance_out_dir,'m_rotation.dat'),proc_rotation);
+    
+    np.savetxt(os.path.join(instance_out_dir,'m_location.dat'),location);
+    np.savetxt(os.path.join(instance_out_dir,'m_watch_acc.dat'),watch_acc);
+    
+    lf_out_file = os.path.join(instance_out_dir,'m_lf_measurements.json');
+    fid = open(lf_out_file,'wb');
+    json.dump(lf_data,fid);
+    fid.close();
     if len(lf_data) > 0:
         print "++ Created low-frequency measures file";
         pass;
 
-    return True;
-
-def save_json_file(out_file,json_data):
-    fid = open(out_file,'wb');
-    json.dump(json_data,fid);
+    location_quick_out_file = os.path.join(instance_out_dir,'m_location_quick_features.json');
+    fid = open(location_quick_out_file,'wb');
+    json.dump(location_quick,fid);
     fid.close();
-    return;
+
+    return True;
 
 def analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp):
     fid = file(active_label_file,'rb');
@@ -183,9 +179,36 @@ def analyze_active_labels_file(active_label_file,instance_out_dir,uuid,timestamp
 def join_data_fields_to_array(jdict,field_names):
 
     try:
+        nf = len(field_names);
+        field_dims = [];
+        for (fi,name) in enumerate(field_names):
+            if name in jdict:
+                field_dims.append(len(jdict[name]));
+                pass;
+            else:
+                field_dims.append(-1);
+                pass;
+            pass;
+
+        data_dim = max(field_dims);
+        if data_dim < 0:
+            # (If all fields are missing)
+            raise Exception;
+
+        # Prepare a row of nan for missing fields:
+        nan_row = [];
+        for ii in range(data_dim):
+            nan_row.append(np.nan);
+            pass;
+        
         list_of_rows = [];
         for name in field_names:
-            list_of_rows.append(jdict[name]);
+            if name in jdict:
+                list_of_rows.append(jdict[name]);
+                pass;
+            else:
+                list_of_rows.append(nan_row);
+                pass;
             pass;
         arr = np.array(list_of_rows).T;
         pass;
@@ -205,73 +228,44 @@ def read_datafile(hf_file):
     raw_gyro = join_data_fields_to_array(jdict,['raw_gyro_timeref','raw_gyro_x','raw_gyro_y','raw_gyro_z']);
     raw_magnet = join_data_fields_to_array(jdict,['raw_magnet_timeref','raw_magnet_x','raw_magnet_y','raw_magnet_z']);
 
-    proc_acc = join_data_fields_to_array(jdict,['processed_user_acc_x','processed_user_acc_y','processed_user_acc_z']);
-    proc_magnet = join_data_fields_to_array(jdict,['processed_magnet_x','processed_magnet_y','processed_magnet_z']);
-    proc_gyro = join_data_fields_to_array(jdict,['processed_gyro_x','processed_gyro_y','processed_gyro_z']);
+    proc_acc_time_field = 'processed_user_acc_timeref' if 'processed_user_acc_timeref' in jdict else 'processed_timeref';
+    proc_acc = join_data_fields_to_array(jdict,[proc_acc_time_field,'processed_user_acc_x','processed_user_acc_y','processed_user_acc_z']);
+    proc_magnet_time_field = 'processed_magnet_timeref' if 'processed_magnet_timeref' in jdict else 'processed_timeref';
+    proc_magnet = join_data_fields_to_array(jdict,[proc_magnet_time_field,'processed_magnet_x','processed_magnet_y','processed_magnet_z']);
+    proc_gyro_time_field = 'processed_gyro_timeref' if 'processed_gyro_timeref' in jdict else 'processed_timeref';
+    proc_gyro = join_data_fields_to_array(jdict,[proc_gyro_time_field,'processed_gyro_x','processed_gyro_y','processed_gyro_z']);
 
-    proc_gravity = join_data_fields_to_array(jdict,['processed_gravity_x','processed_gravity_y','processed_gravity_z']);
-    proc_attitude = join_data_fields_to_array(jdict,['processed_roll','processed_pitch','processed_yaw']);
+    proc_gravity_time_field = 'processed_gravity_timeref' if 'processed_gravity_timeref' in jdict else 'processed_timeref';
+    proc_gravity = join_data_fields_to_array(jdict,[proc_gravity_time_field,'processed_gravity_x','processed_gravity_y','processed_gravity_z']);
+    # Iphone attitude:
+    proc_attitude = join_data_fields_to_array(jdict,['processed_timeref','processed_roll','processed_pitch','processed_yaw']);
+    # Android attitude:
+    proc_rotation = join_data_fields_to_array(jdict,['processed_rotation_vector_timeref','processed_rotation_vector_x','processed_rotation_vector_y','processed_rotation_vector_z','processed_rotation_vector_cosine','processed_rotation_vector_accuracy']);
 
     proc_timeref = join_data_fields_to_array(jdict,['processed_timeref']);
 
-    location = join_data_fields_to_array(jdict,['location_timestamp','location_latitude','location_longitude',\
+    loc_time_field = 'location_timeref' if 'location_timeref' in jdict else 'location_timestamp';
+    location = join_data_fields_to_array(jdict,[loc_time_field,'location_latitude','location_longitude',\
                                               'location_altitude','location_speed',\
                                               'location_horizontal_accuracy','location_vertical_accuracy']);
+
+    watch_acc = join_data_fields_to_array(jdict,['raw_watch_acc_x','raw_watch_acc_y','raw_watch_acc_z']);
     
-    lf_data = jdict['low_frequency'];
-    front_camera = jdict['front_camera'] if 'front_camera' in jdict else None;
-    back_camera = jdict['back_camera'] if 'back_camera' in jdict else None;
-
-    return (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,front_camera,back_camera);
-
-def read_datafile_json_list(hf_file):
-    # open the file for reading
-    fid = open(hf_file, "r");
-    jlist = json.load(fid);
-    fid.close();
-
-    # load data into arrays:
-    acc = np.zeros((len(jlist),3));
-    magnet = np.zeros((len(jlist),3));
-    gyro = np.zeros((len(jlist),3));
-    gps = np.zeros((len(jlist),3));
-    
-    lf_data = {};
-
-    #loop through json and write data:
-    for j in range(len(jlist)):
-        # Read the fields expected in every sample:
-        acc[j,0] = jlist[j]['acc_x'];
-        acc[j,1] = jlist[j]['acc_y'];
-        acc[j,2] = jlist[j]['acc_z'];
-        magnet[j,0] = jlist[j]['magnet_x'];
-        magnet[j,1] = jlist[j]['magnet_y'];
-        magnet[j,2] = jlist[j]['magnet_z'];
-        gyro[j,0] = jlist[j]['gyro_x'];
-        gyro[j,1] = jlist[j]['gyro_y'];
-        gyro[j,2] = jlist[j]['gyro_z'];
-        gps[j,0] = jlist[j]['lat'];
-        gps[j,1] = jlist[j]['long'];
-        gps[j,2] = jlist[j]['speed'];
-
-        # Read the fields expected only in part of the samples:
-        for field_name in g__lf_fields:
-            lf_field = 'lf_%s' % field_name;
-            
-            if lf_field in jlist[j]:
-                # Make sure this field is in the output dictionary:
-                if lf_field not in lf_data:
-                    lf_data[lf_field] = [];
-                    pass;
-
-                # Add the new found value:
-                lf_val = jlist[j][lf_field];
-                lf_data[lf_field].append(lf_val);
-                pass; # end if lf_filed...
-            pass; # end for field_name...
+    if 'low_frequency' in jdict:
+        lf_data = jdict['low_frequency'];
         pass;
-        
-    return (acc,magnet,gyro,gps,lf_data);
+    else:
+        lf_data = {};
+        pass;
+
+    if 'location_quick_features' in jdict:
+        location_quick = jdict['location_quick_features'];
+        pass;
+    else:
+        location_quick = {};
+        pass;
+    
+    return (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,watch_acc,location_quick,proc_rotation);
 
 
 def main():
@@ -289,7 +283,7 @@ def main():
         pass;
     fid.close();
 
-    skip_existing = True;
+    skip_existing = False;
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;

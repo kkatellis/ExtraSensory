@@ -269,9 +269,11 @@
         userInfo = [self.appDelegate constructUserInfoForNaggingWithCheckTime:nowTimestamp foundVerified:NO main:nil secondary:nil moods:nil latestVerifiedTime:nil];
     }
     // send question to watch, and then wait for reply
-    NSDictionary *update = @{ @(2):question };
-    [[[self appDelegate] watchProcessor] nagUserWithQuestion:update];
-    [[[self appDelegate] watchProcessor] setUserInfo:userInfo];
+    if ([[[self appDelegate] watchProcessor] isConnectedToWatch]) {
+        NSDictionary *update = @{ @(2):question };
+        [[[self appDelegate] watchProcessor] nagUserWithQuestion:update];
+        [[[self appDelegate] watchProcessor] setUserInfo:userInfo];
+    }
     
     NSLog(@"[scheduler] Should ask question: [%@]",question);
     UILocalNotification *notification = [[UILocalNotification alloc] init];

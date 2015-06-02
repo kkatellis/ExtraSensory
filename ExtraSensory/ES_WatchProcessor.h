@@ -18,10 +18,8 @@
 @property (nonatomic, strong) NSMutableArray *mutableWatchAccZ;
 
 -(void)receiveDataFromWatch;
-
 -(void)launchWatchApp;
 -(void)closeWatchApp;
--(void)startWatchCollection;
 -(void)stopWatchCollection;
 -(void)nagUserWithQuestion: (NSDictionary*)question;
 -(void)setUserInfo: (NSMutableDictionary*) userInfo;
