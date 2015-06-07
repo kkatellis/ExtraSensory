@@ -9,6 +9,7 @@ This is to be used offline, unrelated to the web service.
 --------------------------------------------------------------------------
 Written by Yonatan Vaizman. October 2014.
 '''
+import traceback;
 import os;
 import glob;
 import fnmatch;
@@ -38,7 +39,8 @@ def collect_all_instances_of_uuid(uuid,skip_existing):
             pass;
         except Exception as ex:
             print "!!! Error for timestamp ", timestamp;
-            raise ex;
+            traceback.print_exc();
+#            raise ex;
             pass;
 
         pass; # end for filename...
@@ -283,7 +285,7 @@ def main():
         pass;
     fid.close();
 
-    skip_existing = False;
+    skip_existing = True;
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;
