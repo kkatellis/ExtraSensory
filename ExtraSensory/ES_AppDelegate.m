@@ -556,7 +556,7 @@
         // Check if there was found a verified activity in the recent period of time:
         if ([userInfo valueForKey:FOUND_VERIFIED_KEY])
         {
-            [self pushActivityEventFeedbackViewWithUserInfo:userInfo userAlreadyApproved:userApproved];
+            [self pushActivityEventFeedbackViewWithUserInfo:userInfo userAlreadyApproved:userApproved approvalFromWatch:NO];
         }
         else
         {
@@ -651,7 +651,7 @@
 }
 
 // users says correct, send to this function
-- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved
+- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved approvalFromWatch:(BOOL)fromWatch
 {
     // Create an ES_ActivityEvent object to initially describe what was presumably done in the recent period of time:
     NSNumber *startTimestamp = [userInfo valueForKey:LATEST_VERIFIED_KEY];
@@ -668,7 +668,7 @@
     if (userApproved)
     {
         ES_FeedbackViewController *controller = [[ES_FeedbackViewController alloc] init];
-        controller.labelSource = ES_LabelSourceNotificationAnswerCorrect;
+        controller.labelSource = fromWatch ? ES_LabelSourceNotificationAnswerCorrectFromWatch : ES_LabelSourceNotificationAnswerCorrect;
         [controller submitFeedbackForActivityEvent:activityEvent];
         return;
     }

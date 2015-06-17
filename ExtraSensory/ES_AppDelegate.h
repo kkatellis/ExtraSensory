@@ -81,7 +81,7 @@
 - (void) setLabelsFromNowOnUntil:(NSDate *)validUntil toBeSameAsForActivity:(ES_Activity *)activity;
 - (ES_Activity *) getExampleActivityForPredeterminedLabels;
 - (void) clearPredeterminedLabelsAndTurnOnNaggingMechanism;
-- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved;
+- (void) pushActivityEventFeedbackViewWithUserInfo:(NSDictionary *)userInfo userAlreadyApproved:(BOOL)userApproved approvalFromWatch:(BOOL)fromWatch;
 
 - (BOOL) isConnectedToWatch;
 

@@ -134,10 +134,11 @@
         case ES_LabelSourceNotificationBlank: return @"notification_blank";break;
         case ES_LabelSourceNotificationAnswerCorrect: return @"notification_answer_correct";break;
         case ES_LabelSourceNotificationAnsewrNotExactly: return @"notification_answer_not_exactly";break;
+        case ES_LabelSourceNotificationAnswerCorrectFromWatch: return @"notification_answer_correct_from_watch";break;
             
         default:
-            NSLog(@"[network] !!! Found unfamiliar label-source value: %d",labelSource);
-            return [NSString stringWithFormat:@"unfamiliar_value_%d",labelSource];
+            NSLog(@"[network] !!! Found unfamiliar label-source value: %ld",(long)labelSource);
+            return [NSString stringWithFormat:@"unfamiliar_value_%ld",(long)labelSource];
             break;
     }
 }

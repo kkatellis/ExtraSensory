@@ -18,7 +18,8 @@ typedef NS_ENUM(NSInteger, ES_LabelSource)
     ES_LabelSourceHistory,
     ES_LabelSourceNotificationBlank,
     ES_LabelSourceNotificationAnswerCorrect,
-    ES_LabelSourceNotificationAnsewrNotExactly
+    ES_LabelSourceNotificationAnsewrNotExactly,
+    ES_LabelSourceNotificationAnswerCorrectFromWatch
 };
 
 @class ES_Sample, ES_SettingsModel, ES_User, ES_Activity, ES_SensorSample, ES_UserActivityLabel, ES_Label, ES_SecondaryActivity, ES_Mood;

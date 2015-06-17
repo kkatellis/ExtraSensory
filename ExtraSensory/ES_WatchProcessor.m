@@ -56,27 +56,30 @@ BOOL _stopCalled = NO;
 
 -(void)launchWatchApp
 {
-    [PBPebbleCentral setDebugLogsEnabled:YES];
-    [[PBPebbleCentral defaultCentral] setDelegate:self];
+    if (!self.myWatch) {
+        [PBPebbleCentral setDebugLogsEnabled:YES];
+        [[PBPebbleCentral defaultCentral] setDelegate:self];
     
-    // set app id of current watch
-    uuid_t myAppUUIDbytes;
-    NSUUID *myAppUUID = [[NSUUID alloc] initWithUUIDString:IOS_WATCHAPP_UUID];
-    [myAppUUID getUUIDBytes:myAppUUIDbytes];
+        // set app id of current watch
+        uuid_t myAppUUIDbytes;
+        NSUUID *myAppUUID = [[NSUUID alloc] initWithUUIDString:IOS_WATCHAPP_UUID];
+        [myAppUUID getUUIDBytes:myAppUUIDbytes];
     
-    [[PBPebbleCentral defaultCentral] setAppUUID:[NSData dataWithBytes:myAppUUIDbytes length:16]];
+        [[PBPebbleCentral defaultCentral] setAppUUID:[NSData dataWithBytes:myAppUUIDbytes length:16]];
     
-    // connects to last connected watch
-    self.myWatch = [[PBPebbleCentral defaultCentral] lastConnectedWatch];
+        // connects to last connected watch
+        self.myWatch = [[PBPebbleCentral defaultCentral] lastConnectedWatch];
+    }
     
     [self.myWatch appMessagesLaunch:^(PBWatch *watch, NSError *error) {
         if (!error) {
             NSLog(@"[WATCHPROCESSOR] Successfully launched app.");
         }
+        
         else {
             NSLog(@"[WATCHPROCESSOR] Error launching app - Error: %@", error);
         }
-    }
+        }
      ];
     
 }
@@ -116,7 +119,8 @@ BOOL _stopCalled = NO;
                 answer = [NSString stringWithFormat:@"%@", [update objectForKey:WATCH_MESSAGE_KEY]];
                 
                 if ([answer isEqualToString:YES_ANSWER] && [_userInfo valueForKey:FOUND_VERIFIED_KEY]) {
-                [[self appDelegate] pushActivityEventFeedbackViewWithUserInfo:_userInfo userAlreadyApproved:YES];
+                
+                [[self appDelegate] pushActivityEventFeedbackViewWithUserInfo:_userInfo userAlreadyApproved:YES approvalFromWatch:YES];
                     [_userInfo removeAllObjects];
                 return YES;
                 }
