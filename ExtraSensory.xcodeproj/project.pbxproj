@@ -41,6 +41,8 @@
 		4EC132611A89C4C2003300B5 /* ExtraSensoryIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EC132601A89C4C2003300B5 /* ExtraSensoryIcon@2x.png */; };
 		4EE9AC801A2D2BBF004CB8C2 /* home_sensing_labels_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4EE9AC7F1A2D2BBF004CB8C2 /* home_sensing_labels_list.txt */; };
 		4EE9AC831A2D4A0E004CB8C2 /* ES_Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */; };
+		4EF564B41B31E0ED001E0A40 /* watch_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EF564B31B31E0ED001E0A40 /* watch_off.png */; };
+		4EF564B61B31E0FA001E0A40 /* watch_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EF564B51B31E0FA001E0A40 /* watch_on.png */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
 		4EFADB3119F08BD800262568 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFADB3019F08BD500262568 /* CoreTelephony.framework */; };
 		7015789019FF0585003CCA95 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7015788F19FF0585003CCA95 /* libz.1.2.5.dylib */; };
@@ -217,6 +219,8 @@
 		4EE9AC7F1A2D2BBF004CB8C2 /* home_sensing_labels_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = home_sensing_labels_list.txt; sourceTree = "<group>"; };
 		4EE9AC811A2D4A0E004CB8C2 /* ES_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_Settings.h; sourceTree = "<group>"; };
 		4EE9AC821A2D4A0E004CB8C2 /* ES_Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_Settings.m; sourceTree = "<group>"; };
+		4EF564B31B31E0ED001E0A40 /* watch_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = watch_off.png; sourceTree = "<group>"; };
+		4EF564B51B31E0FA001E0A40 /* watch_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = watch_on.png; sourceTree = "<group>"; };
 		4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		4EFADB3019F08BD500262568 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -498,6 +502,8 @@
 		70B8A8E618F87D230076A4F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4EF564B51B31E0FA001E0A40 /* watch_on.png */,
+				4EF564B31B31E0ED001E0A40 /* watch_off.png */,
 				4E1DEA4C1B0E8D73003E3343 /* watch.png */,
 				4E1DEA4A1AF035B5003E3343 /* calab-macserver.ucsd.edu.der */,
 				4EC132601A89C4C2003300B5 /* ExtraSensoryIcon@2x.png */,
@@ -961,6 +967,7 @@
 				70B8A93518F87D230076A4F5 /* house.png in Resources */,
 				708D5FB3197C3778003FE7D3 /* Standing.png in Resources */,
 				70B8A95618F87D230076A4F5 /* success.png in Resources */,
+				4EF564B61B31E0FA001E0A40 /* watch_on.png in Resources */,
 				70B8A95818F87D230076A4F5 /* black-linenold.png in Resources */,
 				70B8A95218F87D230076A4F5 /* album-art-small.png in Resources */,
 				70B8A94418F87D230076A4F5 /* indicator-talking.png in Resources */,
@@ -995,6 +1002,7 @@
 				70B8A95318F87D230076A4F5 /* album-art.png in Resources */,
 				70B8A94E18F87D230076A4F5 /* talking.png in Resources */,
 				70B8A93D18F87D230076A4F5 /* indicator-housework@2x.png in Resources */,
+				4EF564B41B31E0ED001E0A40 /* watch_off.png in Resources */,
 				70B8A94118F87D230076A4F5 /* indicator-running@2x.png in Resources */,
 				70B8A96718F87D230076A4F5 /* nav-menu-icon.png in Resources */,
 				70B8A93118F87D230076A4F5 /* biking.png in Resources */,
