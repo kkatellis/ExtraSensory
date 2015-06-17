@@ -83,6 +83,8 @@ BOOL _stopCalled = NO;
 
 -(void)nagUserWithQuestion: (NSDictionary*)question
 {
+    // first make sure the watch-app is open:
+    [self launchWatchApp];
     [self.myWatch appMessagesPushUpdate:question onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
         if (!error) {
             NSLog(@"[WP] Successfully sent question to watch.");
@@ -191,6 +193,9 @@ BOOL _stopCalled = NO;
 
 -(void)startWatchCollection
 {
+    // First, make sure hte watch-app is open:
+    [self launchWatchApp];
+    
     _stopCalled = NO;
     NSDictionary *update = @{ @(1):@"TURN ON" };
     [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {

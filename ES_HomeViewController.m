@@ -84,11 +84,11 @@
 {
     if ([[self appDelegate] isConnectedToWatch]) {
         NSLog(@"[homeView] Marking connected to watch");
-        [self.watchIcon setBackgroundColor:[UIColor redColor]];
+        [self.watchIcon setImage:[UIImage imageNamed:@"watch_on.png"]];
     }
     else {
         NSLog(@"[homeView] Marking not connected to watch");
-        [self.watchIcon setBackgroundColor:[UIColor blueColor]];
+        [self.watchIcon setImage:[UIImage imageNamed:@"watch_off.png"]];
     }
 }
 
