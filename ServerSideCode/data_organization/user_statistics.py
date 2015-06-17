@@ -112,7 +112,7 @@ def statistics_per_user(uuid):
                 main_label_count    = main_label_count + 1;
                 pass;
             else:
-                print "detected don't remember label: ", main_activity;
+#                print "detected don't remember label: ", main_activity;
                 pass;
 
             if len(secondary_activities) > 0:

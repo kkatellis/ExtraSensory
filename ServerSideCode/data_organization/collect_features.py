@@ -22,6 +22,14 @@ g__sensors_with_3axes       = ['raw_acc','raw_gyro','raw_magnet',\
 g__raw_sensors              = ['raw_acc','raw_gyro','raw_magnet'];
 g__processed_sensors        = ['proc_acc','proc_gravity','proc_gyro',\
                                'proc_attitude','proc_magnet'];
+g__pseudo_sensors           = ['lf_measurements','location_quick_features','audio_properties'];
+
+g__location_quick_features  = ['std_lat','std_long','lat_change','long_change',\
+                               'mean_abs_lat_deriv','mean_abs_long_deriv'];
+g__low_freq_measurements    = ['light','pressure','proximity_cm','proximity',\
+                               'relative_humidity','wifi_status','app_state',\
+                               'on_the_phone','battery_level','screen_brightness'];
+g__audio_properties         = ['max_abs_value','normalization_multiplier'];
 
 g__main_activities          = ['LYING_DOWN','SITTING','STANDING_IN_PLACE','STANDING_AND_MOVING',\
                                'WALKING','RUNNING','BICYCLING',"DON'T_KNOW"];
@@ -31,7 +39,42 @@ g__moods                    = [];
 
 g__sr                       = 40.;
 
+def get_pseudo_sensor_features(instance_dir,sensor):
+    input_file = os.path.join(instance_dir,'m_%s.json' % sensor);
+    if not os.path.exists(input_file):
+        return None;
+
+    fid = file(input_file,'rb');
+    input_data = json.load(fid);
+    fid.close();
+
+    if sensor == 'lf_measurements':
+        expected_features = g__low_freq_measurements;
+        pass;
+    elif sensor == 'location_quick_features':
+        expected_features = g__location_quick_features;
+        pass;
+    elif sensor == 'audio_properties':
+        expected_features = g__audio_properties;
+        pass;
+    else:
+        return None;
+
+    dim = len(expected_features);
+    features = numpy.nan*numpy.ones(dim);
+    for (fi,feature_name) in enumerate(expected_features):
+        if feature_name in input_data:
+            features[fi]    = input_data[feature_name];
+            pass;
+        pass;
+
+    return features;
+
+    
 def get_features_from_measurements(instance_dir,timestamp,sensor):
+    if sensor in g__pseudo_sensors:
+        return get_pseudo_sensor_features(instance_dir,sensor);
+    
     measurements_file       = os.path.join(instance_dir,'m_%s.dat' % sensor);
     if not os.path.exists(measurements_file):
         return None;
@@ -82,12 +125,19 @@ def initialize_feature_matrices(num_instances,sensors):
     features                = {};
     for sensor in sensors:
         if sensor in g__sensors_with_3axes:
-            features[sensor]    = numpy.nan * numpy.ones((num_instances,41));
-            continue;
-        if sensor == 'location':
-            features[sensor]    = numpy.nan * numpy.ones((num_instances,11));
+            dim     = 41;
+        elif sensor == 'location':
+            dim     = 11;
+        elif sensor == 'lf_measurements':
+            dim     = len(g__low_freq_measurements);
+        elif sensor == 'location_quick_features':
+            dim     = len(g__location_quick_features);
+        elif sensor == 'audio_properties':
+            dim     = len(g__audio_properties);
+        else:
             continue;
         
+        features[sensor]    = numpy.nan * numpy.ones((num_instances,dim));
         pass;
 
     return features;
@@ -210,7 +260,8 @@ def main():
     
     sensors                 = list(g__sensors_with_3axes);
     sensors.append('location');
-    
+    sensors.extend(g__pseudo_sensors);
+
     uuids                   = [];
     fid                     = file('real_uuids.list','rb');
     for line in fid:
@@ -222,14 +273,16 @@ def main():
         pass;
     fid.close();
 
+    feats_per_uuid = {};
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;
         
         (uuid_feats,main_vec,main_mat,secondary_mat,mood_mat) = features_per_user(uuid,sensors);
-
-        pdb.set_trace();
+        feats_per_uuid[uuid] = uuid_feats;
         pass;
+
+    pdb.set_trace();
 
     return;
 
