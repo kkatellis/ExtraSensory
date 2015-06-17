@@ -1222,7 +1222,7 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2cea5251-7402-4623-8b8b-a35456181bb5";
+				PROVISIONING_PROFILE = "5634b8fd-8522-4f48-a1f8-6f301c2336f5";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1253,7 +1253,7 @@
 				New_Setting1 = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2cea5251-7402-4623-8b8b-a35456181bb5";
+				PROVISIONING_PROFILE = "5634b8fd-8522-4f48-a1f8-6f301c2336f5";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
