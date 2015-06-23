@@ -15,7 +15,10 @@ import user_statistics;
 import pdb;
 
 
-g__data_superdir            = 'data/raw_data';
+fid                         = file('params.json','rb');
+g__params                   = json.load(fid);
+fid.close();
+g__data_superdir            = g__params['data_superdir'];
 g__sensors_with_3axes       = ['raw_acc','raw_gyro','raw_magnet',\
                                'proc_acc','proc_gravity','proc_gyro',\
                                'proc_attitude','proc_magnet'];
@@ -38,6 +41,15 @@ g__secondary_activities     = [];
 g__moods                    = [];
 
 g__sr                       = 40.;
+
+def get_all_sensor_names():
+    sensors                 = list(g__sensors_with_3axes);
+    sensors.append('location');
+    sensors.extend(g__pseudo_sensors);
+    sensors.extend(g__location_quick_features);
+
+    return sensors;
+    
 
 def get_pseudo_sensor_features(instance_dir,sensor):
     input_file = os.path.join(instance_dir,'m_%s.json' % sensor);
@@ -92,7 +104,10 @@ def get_features_from_measurements(instance_dir,timestamp,sensor):
         pass;
 
     if sensor in g__sensors_with_3axes:
-        features            = compute_features.get_3d_series_features(X,g__sr);
+        # Estimate the average sampling rate:
+        dur                 = timerefs[-1] - timerefs[0];
+        sr                  = float(X.shape[0]) / dur;
+        features            = compute_features.get_3d_series_features(X,sr);
         return features;
 
     if sensor == 'location':
@@ -103,6 +118,9 @@ def get_features_from_measurements(instance_dir,timestamp,sensor):
         return features;
 
     return None;
+
+def get_uuid_data_dir(uuid):
+    return os.path.join(g__data_superdir,uuid);
 
 def get_instance_features(uuid,timestamp_str,sensors):
     uuid_dir                = os.path.join(g__data_superdir,uuid);
@@ -121,13 +139,34 @@ def get_instance_features(uuid,timestamp_str,sensors):
 
     return features;
 
+def get_instance_labels_in_binary(instance_dir,main_labels,secondary_labels):
+    (main_activity,\
+     secondary_activities,\
+     moods) = user_statistics.get_instance_labels(instance_dir);
+    if (main_activity == None or type(secondary_activities) != list):
+        return (None,None);
+
+    main_labels_bin         = get_binary_labels([main_activity],main_labels);
+    secondary_labels_bin    = get_binary_labels(secondary_activities,secondary_labels);
+
+    return (main_labels_bin,secondary_labels_bin);
+
+def get_binary_labels(applied_labels,label_names):
+    n_classes       = len(label_names);
+    bin_vec         = numpy.zeros(n_classes,dtype=bool);
+    for (li,label) in enumerate(label_names):
+        bin_vec[li] = (label in applied_labels);
+        pass;
+
+    return bin_vec;
+
 def initialize_feature_matrices(num_instances,sensors):
     features                = {};
     for sensor in sensors:
         if sensor in g__sensors_with_3axes:
-            dim     = 41;
+            dim     = compute_features.dimension_of_3d_series_features();
         elif sensor == 'location':
-            dim     = 11;
+            dim     = compute_features.dimension_of_location_features();
         elif sensor == 'lf_measurements':
             dim     = len(g__low_freq_measurements);
         elif sensor == 'location_quick_features':
@@ -141,6 +180,50 @@ def initialize_feature_matrices(num_instances,sensors):
         pass;
 
     return features;
+
+
+def collect_features_and_labels(uuids):
+    sensors                 = get_all_sensor_names();
+    main_label_names        = get_main_labels();
+    sec_label_names         = get_secondary_labels();
+    label_names             = main_label_names[:];
+    label_names.extend(sec_label_names);
+    n_classes               = len(label_names);
+
+    # Prepare the structures for instances' features and labels:
+    instances_features  = [];
+    instances_labels    = numpy.zeros((0,n_classes),dtype=bool);
+
+    # Go over the instances to collect the training data:
+    for uuid in uuids:
+        print '#' * 20;
+        print 'train uuid: %s' % uuid;
+        uuid_dir        = get_uuid_data_dir(uuid);
+        for subdir in os.listdir(uuid_dir):
+            instance_dir    = os.path.join(uuid_dir,subdir);
+            if not os.path.isdir(instance_dir):
+                continue;
+
+            # Get labels:
+            (main_labels_bin,sec_labels_bin)    = get_instance_labels_in_binary(\
+                instance_dir,main_label_names,sec_label_names);
+            if (type(main_labels_bin) == type(None) or type(sec_labels_bin) == type(None)):
+                continue;
+            bin_vec         = numpy.concatenate((main_labels_bin,sec_labels_bin));
+            bin_vec         = numpy.reshape(bin_vec,(1,-1));
+
+            # Get features:
+            instance_feats  = get_instance_features(\
+                uuid,subdir,sensors);
+
+            # Append this instance to train set:
+            instances_features.append(instance_feats);
+            instances_labels    = numpy.concatenate((instances_labels,bin_vec),axis=0);
+            pass; # end for subdir...
+        
+        pass; # end for uuid...
+
+    return (instances_features,instances_labels,label_names);
 
 def features_per_user(uuid,sensors):
     uuid_dir = os.path.join(g__data_superdir,uuid);
@@ -167,7 +250,7 @@ def features_per_user(uuid,sensors):
             feat_vec        = instance_feats[sensor];
             if feat_vec == None or len(feat_vec) <= 0:
                 continue;
-            
+
             uuid_feats[sensor][ii]  = feat_vec;
             pass; # end for sensor...
 
@@ -224,6 +307,23 @@ def moods_strings2binary(moods):
         pass;
 
     return bin_vec;
+
+def get_main_labels():
+    return g__main_activities;
+
+def get_secondary_labels():
+    if (len(g__secondary_activities) <= 0):
+        read_secondary_labels();
+        pass;
+
+    return g__secondary_activities;
+
+def get_mood_labels():
+    if (len(g__moods) <= 0):
+        read_mood_labels();
+        pass;
+
+    return g__moods;
 
 def read_secondary_labels():
     global g__secondary_activities;

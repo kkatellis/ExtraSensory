@@ -13,8 +13,28 @@ import numpy;
 import pdb;
 
 
-g__data_superdir            = 'data/raw_data';
+fid                         = file('params.json','rb');
+g__params                   = json.load(fid);
+fid.close();
+g__data_superdir            = g__params['data_superdir'];
 g__dont_remember            = "DON'T_REMEMBER";
+
+def read_subjects_uuids():
+    uuids = [];
+    fid = file('real_uuids.list','rb');
+    for line in fid:
+        line    = line.strip();
+        parts   = line.split('#');
+        uuid    = parts[0];
+        uuid    = uuid.strip();
+        if (len(uuid) <= 0):
+            continue;
+
+        uuids.append(uuid);
+        pass;
+    fid.close();
+
+    return uuids;
 
 def get_instance_labels(instance_dir):
     feedback_file           = os.path.join(instance_dir,'feedback');
@@ -193,16 +213,7 @@ def reward_for_participation(user_stats):
 
 def main():
 
-    uuids                   = [];
-    fid                     = file('real_uuids.list','rb');
-    for line in fid:
-        line                = line.strip();
-        if line.startswith('#'):
-            continue;
-
-        uuids.append(line);
-        pass;
-    fid.close();
+    uuids                   = read_subjects_uuids();
 
     for uuid in uuids:
         print "="*20;

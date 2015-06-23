@@ -19,52 +19,79 @@ import pdb;
 import pylab;pylab.ion();
 
 
+def dimension_of_3d_series_features():
+    return 34;
+
+def dimension_of_location_features():
+    return 11;
 
 def get_3d_series_features(X,sr):
-    # First rotate the observation vectors around the origin,
-    # according to their principal components:
-    unrotated       = numpy.copy(X);
-    (X,pca_mat,lam) = rotate_by_PCA(X);
-    pc1             = pca_mat[:,0].tolist();
-    norm_lam        = lam / numpy.sum(lam);
+    (T,d)           = X.shape;
+
+    feats           = numpy.nan*numpy.ones(dimension_of_3d_series_features());
 
     # Magnitude:
-    mag         = numpy.sum(X**2,axis=1)**0.5;
+    mag             = numpy.sum(X**2,axis=1)**0.5;
+    feats[:13]      = get_1d_statistics(mag);
+
+    # Correlations and PCA:
+    (C,pca_mat,lam) = get_correlation_mat_and_pca(X);
+    norm_lam        = lam / numpy.sum(lam); # normalized to sum to 1
+    feats[13]       = C[0,1]; # E(xy)
+    feats[14]       = C[1,2]; # E(xz)
+    feats[15]       = C[1,2]; # E(yz)
+    feats[16:19]    = pca_mat[:,0]; # PC1
+    feats[19]       = norm_lam[0]; # First (normalized) eigenvalue
+    feats[20]       = norm_lam[1]; # Second (normalized) eigenvalue
+
+    # Angular statistics:
+    feats[21:27]    = get_angular_statistics(X);
+
+    # Autocorrelation:
+    lags_in_sec     = [0.5,1,2];
+    feats[27:30]    = get_autocorrelation_coeff(mag,lags_in_sec,sr);
     
     # Detect dominant frequencies:
-    dft_dom_freq_feat = get_dominant_freq_by_dft(X,sr);
+    mag_mat         = numpy.reshape(mag,(T,1));
+    (dom_freq,dom_period,dom_power,spec_ent)    = get_dominant_freq_by_dft(\
+        mag_mat,sr);
+    feats[30]       = dom_freq[0];
+    feats[31]       = dom_period[0];
+    feats[32]       = dom_power[0];
+    feats[33]       = spec_ent[0];
 
-    # Statistics:
-    pc1_stats   = get_1d_statistics(X[:,0]);
-    mag_stats   = get_1d_statistics(mag);
-    cross_stats = get_cross_dim_statistics(X);
-    cross_raw   = get_cross_dim_statistics(unrotated);
+##    # Statistics:
+##    pc1_stats   = get_1d_statistics(X[:,0]);
+##    mag_stats   = get_1d_statistics(mag);
+##    cross_stats = get_cross_dim_statistics(X);
+##    cross_raw   = get_cross_dim_statistics(unrotated);
+##
+##    # Organize features:
+##    feats = [];
+##    feats.extend(pc1);
+##    feats.extend([norm_lam[0],norm_lam[1]]);
+##    feats.extend(dft_dom_freq_feat);
+##    feats.extend(pc1_stats);
+##    feats.extend(mag_stats);
+##    feats.extend(cross_stats);
+##    feats.extend(cross_raw);
 
-    # Organize features:
-    feats = [];
-    feats.extend(pc1);
-    feats.extend([norm_lam[0],norm_lam[1]]);
-    feats.extend(dft_dom_freq_feat);
-    feats.extend(pc1_stats);
-    feats.extend(mag_stats);
-    feats.extend(cross_stats);
-    feats.extend(cross_raw);
-
-    return feats;
+    return feats.tolist();
 
 '''
 Input:
 X: (T x d) d dimensional time series.
 
 Output:
+ang_stats: (6-ndarray)
 '''
-def get_cross_dim_statistics(X):
+def get_angular_statistics(X):
     
     roll    = numpy.arctan2(X[:,1],X[:,2]);
     pitch   = numpy.arctan2(X[:,0],X[:,2]);
     yaw     = numpy.arctan2(X[:,0],X[:,1]);
 
-    stats   = [\
+    ang_stats   = [\
         numpy.mean(roll),\
         numpy.mean(pitch),\
         numpy.mean(yaw),\
@@ -73,7 +100,7 @@ def get_cross_dim_statistics(X):
         numpy.std(yaw)\
         ];
 
-    return stats;
+    return ang_stats;
 
 
 '''
@@ -81,26 +108,55 @@ Input:
 x: (T x 1) 1 dimensional time series.
 
 Output:
+stats: (13-ndarray)
 '''
 def get_1d_statistics(x):
-    mom3    = scipy.stats.moment(x,moment=3);
-    absx    = abs(x);
-    if sum(absx)>0:
-        ent = scipy.stats.entropy(absx);
+    stats       = numpy.zeros(13);
+
+    stats[0]    = numpy.mean(x);
+    stats[1]    = numpy.std(x);
+    stats[2]    = numpy.median(x);
+    stats[3]    = numpy.nanmin(x);
+    stats[4]    = numpy.nanmax(x);
+    stats[5]    = scipy.stats.scoreatpercentile(x,25);
+    stats[6]    = scipy.stats.scoreatpercentile(x,75);
+    
+    mom3        = scipy.stats.moment(x,moment=3);
+    stats[7]    = numpy.sign(mom3)*(abs(mom3)**(1./3.));
+    stats[8]    = scipy.stats.moment(x,moment=4)**(1./4.);
+    stats[9]    = scipy.stats.skew(x);
+    stats[10]   = scipy.stats.kurtosis(x);
+    # Entropy of the values of the array:
+    if (sum(abs(x)) != 0):
+        bin_counts  = numpy.histogram(x,bins=20)[0];
+        stats[11]   = scipy.stats.entropy(bin_counts);
+        # "Entropy" over time, to distinguish sudden burst events from more stationary events:
+        stats[12]   = scipy.stats.entropy(numpy.abs(x));
         pass;
-    else:
-        ent = 0.;
-        pass;
-    stats   = [\
-        numpy.mean(x),\
-        numpy.std(x),\
-        numpy.sign(mom3)*(abs(mom3)**(1./3.)),\
-        scipy.stats.moment(x,moment=4)**(1./4.),\
-        ent,\
-        numpy.median(x),\
-        ];
 
     return stats;
+
+'''
+Input:
+x: (T-ndarray). Scalar time-series
+lags_in_sec: list of l desired time-lags (in seconds)
+sr: scalar. The sampling rate of the time series (Hz).
+
+Output:
+coeffs: (l-ndarray). For each lag, the autocorrelation coefficient.
+'''
+def get_autocorrelation_coeff(x,lags_in_sec,sr):
+    ac_coeffs   = numpy.correlate(x,x,mode='full');
+    l           = len(lags_in_sec);
+    lags_f      = numpy.around(numpy.array(lags_in_sec)*float(sr));
+    lags        = lags_f.astype(int);
+    coeffs      = numpy.zeros(l);
+    for li in range(l):
+        coeffs[li]   = ac_coeffs[lags[li]];
+        pass;
+
+    return coeffs;
+    
 
 '''
 Input:
@@ -125,6 +181,7 @@ Output:
 dom_freqs:   d-array. Dominant frequency (same units as sr) in each dimension.
 dom_periods: d-array. Inverse of the frequencies.
 dom_power:   d-array. Normalized power of the dominant frequencies.
+spec_ent:    d-array. Spectral entropy for each dimension.
 '''
 def get_dominant_freq_by_dft(X,sr):
     (T,d) = X.shape;
@@ -158,24 +215,18 @@ def get_dominant_freq_by_dft(X,sr):
         spec_ent[jj]    = scipy.stats.entropy(nPS[:,jj]);
         pass;
 
-    dom_freq_feat = [];
-    dom_freq_feat.extend(dom_freqs);
-    dom_freq_feat.extend(dom_periods);
-    dom_freq_feat.extend(dom_power);
-    dom_freq_feat.extend(spec_ent);
-
-    return dom_freq_feat;
+    return (dom_freqs,dom_periods,dom_power,spec_ent);
 
 '''
 Input:
 X: (T x d) matrix. T observations of d dimensions.
 
 Output:
-Y: (T x d) matrix. The rotated observation vectors.
+C: (d x d) matrix. The correlation matrix.
 pca_mat: (d x d) matrix. The columns are the eigenvectors.
 lam: d-array. The eigenvalues (from high to low).
 '''
-def rotate_by_PCA(X):
+def get_correlation_mat_and_pca(X):
     (T,d)   = X.shape;
 
     # First, in case X is constant, return degenerate pca:
@@ -194,6 +245,20 @@ def rotate_by_PCA(X):
     order   = [pair[0] for pair in sorted_ind_lam_pairs];
     lam     = w[order];
     pca_mat = v[:,order];
+
+    return (C,pca_mat,lam);
+
+'''
+Input:
+X: (T x d) matrix. T observations of d dimensions.
+
+Output:
+Y: (T x d) matrix. The rotated observation vectors.
+pca_mat: (d x d) matrix. The columns are the eigenvectors.
+lam: d-array. The eigenvalues (from high to low).
+'''
+def rotate_by_PCA(X):
+    (C,pca_mat,lam)     = get_correlation_mat_and_pca(X);
     Y       = numpy.dot(X,pca_mat);
 
     return (Y,pca_mat,lam);
@@ -221,10 +286,10 @@ def get_location_features(X,start_timestamp):
     # Check if there is actual location data:
     if len(X.shape) <= 0:
         return None;
-    
-    # First filter out too-old location-updates (from the cache):
-    valid_inds      = numpy.where(X[:,LOC_TIME] >= (start_timestamp-0.5))[0];
-    X               = X[valid_inds,:];
+
+##    # First filter out too-old location-updates (from the cache):
+##    valid_inds      = numpy.where(X[:,LOC_TIME] >= (start_timestamp-0.5))[0];
+##    X               = X[valid_inds,:];
 
     # Horizontal location:
     valid_hor_inds  = numpy.where(X[:,LOC_HOR]>0.)[0];
