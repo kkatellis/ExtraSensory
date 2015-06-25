@@ -108,15 +108,19 @@ BOOL _stopCalled = NO;
     [self startWatchCollection];
 }
 
-- (void) registerReceiveHandlerIfOneDoesntExist
+- (void) registerReceiveHandler
 {
-    if (!self.receiveUpdateHandler) {
-        [self registerReceiveHandler];
+    if (self.receiveUpdateHandler) {
+        NSLog(@"[WP] Unregistring old handler, before registring new handler");
+        [self.myWatch appMessagesRemoveUpdateHandler:self.receiveUpdateHandler];
     }
+    
+    [self registerReceiveHandlerAssumingAlreadyUnregistered];
 }
 
--(void)registerReceiveHandler
+-(void)registerReceiveHandlerAssumingAlreadyUnregistered
 {
+    NSLog(@"[WP] Registring new receive-update handler");
     self.receiveUpdateHandler = [self.myWatch appMessagesAddReceiveUpdateHandler:^BOOL(PBWatch *watch, NSDictionary *update) {
 //        NSLog(@"[WATCHPROCESSOR] Received message: %@", update);
         
@@ -224,7 +228,9 @@ BOOL _stopCalled = NO;
     NSLog(@"[WP] Pebble connected: %@", [watch name]);
     self.myWatch = watch;
     [self launchWatchApp];
-    [self registerReceiveHandlerIfOneDoesntExist];
+    [self registerReceiveHandler];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"WatchConnection" object:self];
 }
 
 - (void)pebbleCentral:(PBPebbleCentral*)central watchDidDisconnect:(PBWatch*)watch {
@@ -233,6 +239,8 @@ BOOL _stopCalled = NO;
     if (self.myWatch == watch || [watch isEqual:self.myWatch]) {
         self.myWatch = nil;
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"WatchConnection" object:self];
 }
 
 - (BOOL) isConnectedToWatch {

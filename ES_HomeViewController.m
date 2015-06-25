@@ -70,6 +70,7 @@
     
     // Watch:
     [self updateWatchIcon];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateWatchIcon) name:@"WatchConnection" object:[[self appDelegate] watchProcessor]];
     
 }
 
