@@ -73,11 +73,11 @@ BOOL _stopCalled = NO;
     
     [self.myWatch appMessagesLaunch:^(PBWatch *watch, NSError *error) {
         if (!error) {
-            NSLog(@"[WATCHPROCESSOR] Successfully launched app.");
+            NSLog(@"[WP] Successfully launched app.");
         }
         
         else {
-            NSLog(@"[WATCHPROCESSOR] Error launching app - Error: %@", error);
+            NSLog(@"[WP] Error launching app - Error: %@", error);
         }
         }
      ];
@@ -87,13 +87,13 @@ BOOL _stopCalled = NO;
 -(void)nagUserWithQuestion: (NSDictionary*)question
 {
     // first make sure the watch-app is open:
-    [self launchWatchApp];
+//    [self launchWatchApp];
     [self.myWatch appMessagesPushUpdate:question onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
         if (!error) {
-            NSLog(@"[WP] Successfully sent question to watch.");
+            NSLog(@"[WP] Successfully sent question to watch: %@",update);
         }
         else {
-            NSLog(@"[WP] Error sending question to watch: %@", error);
+            NSLog(@"[WP] Error sending question to watch: %@. update: %@", error,update);
         }
  }];
 }
@@ -187,10 +187,10 @@ BOOL _stopCalled = NO;
     NSDictionary *update = @{ @(1):@"TURN OFF" };
     [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
         if (!error) {
-            NSLog(@"[WP] Successfully sent message to watch to stop accel collection.");
+            NSLog(@"[WP] Successfully sent message to watch to stop accel collection: %@",update);
         }
         else {
-            NSLog(@"[WP] Error sending message to stop accel collection: %@", error);
+            NSLog(@"[WP] Error sending message to stop accel collection: %@. update: %@", error,update);
         }
     }];
 }
@@ -198,16 +198,16 @@ BOOL _stopCalled = NO;
 -(void)startWatchCollection
 {
     // First, make sure hte watch-app is open:
-    [self launchWatchApp];
+//    [self launchWatchApp];
     
     _stopCalled = NO;
     NSDictionary *update = @{ @(1):@"TURN ON" };
     [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
         if (!error) {
-            NSLog(@"[WP]Successfully sent message to watch to start watch collection");
+            NSLog(@"[WP]Successfully sent message to watch to start watch collection: %@",update);
         }
         else {
-            NSLog(@"[WP] Error sending message to start watch collection: %@", error);
+            NSLog(@"[WP] Error sending message to start watch collection: %@. update: %@", error,update);
         }
     }];
 }
