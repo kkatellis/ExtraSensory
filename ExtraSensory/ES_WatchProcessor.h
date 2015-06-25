@@ -23,7 +23,7 @@
 -(void)stopWatchCollection;
 -(void)nagUserWithQuestion: (NSDictionary*)question;
 -(void)setUserInfo: (NSMutableDictionary*) userInfo;
--(void)registerReceiveHandler;
+-(void)registerReceiveHandlerIfOneDoesntExist;
 -(BOOL)isConnectedToWatch;
 
 @end

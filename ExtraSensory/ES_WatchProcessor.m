@@ -27,12 +27,14 @@
 @property (nonatomic, strong) PBWatch *myWatch;
 
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
+@property (nonatomic, strong) NSObject *receiveUpdateHandler;
 @property (nonatomic, strong) ES_SensorManager *sensorManager;
 @property (nonatomic, strong) NSMutableDictionary *userInfo;
 
 @end
 
 @implementation ES_WatchProcessor
+
 
 BOOL _stopCalled = NO;
 
@@ -106,10 +108,16 @@ BOOL _stopCalled = NO;
     [self startWatchCollection];
 }
 
+- (void) registerReceiveHandlerIfOneDoesntExist
+{
+    if (!self.receiveUpdateHandler) {
+        [self registerReceiveHandler];
+    }
+}
+
 -(void)registerReceiveHandler
 {
-    
-    [self.myWatch appMessagesAddReceiveUpdateHandler:^BOOL(PBWatch *watch, NSDictionary *update) {
+    self.receiveUpdateHandler = [self.myWatch appMessagesAddReceiveUpdateHandler:^BOOL(PBWatch *watch, NSDictionary *update) {
 //        NSLog(@"[WATCHPROCESSOR] Received message: %@", update);
         
         // code to handle activity update events
@@ -216,7 +224,7 @@ BOOL _stopCalled = NO;
     NSLog(@"[WP] Pebble connected: %@", [watch name]);
     self.myWatch = watch;
     [self launchWatchApp];
-    [self registerReceiveHandler];
+    [self registerReceiveHandlerIfOneDoesntExist];
 }
 
 - (void)pebbleCentral:(PBPebbleCentral*)central watchDidDisconnect:(PBWatch*)watch {

@@ -375,7 +375,7 @@
 {
     NSLog(@"[appDelegate] Application finished launching.");
     [[self watchProcessor] launchWatchApp];
-    [[self watchProcessor] registerReceiveHandler];
+    [[self watchProcessor] registerReceiveHandlerIfOneDoesntExist];
     
     self.userSelectedDataCollectionOn = YES;
     
