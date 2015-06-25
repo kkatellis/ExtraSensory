@@ -215,6 +215,8 @@ BOOL _stopCalled = NO;
 - (void)pebbleCentral:(PBPebbleCentral*)central watchDidConnect:(PBWatch*)watch isNew:(BOOL)isNew {
     NSLog(@"[WP] Pebble connected: %@", [watch name]);
     self.myWatch = watch;
+    [self launchWatchApp];
+    [self registerReceiveHandler];
 }
 
 - (void)pebbleCentral:(PBPebbleCentral*)central watchDidDisconnect:(PBWatch*)watch {
