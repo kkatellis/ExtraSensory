@@ -18,7 +18,8 @@
 #define SECONDARY_ACT_KEY       @"secondaryActivitiesStrings"
 #define MOODS_KEY               @"moodsStrings"
 #define LATEST_VERIFIED_KEY     @"latestVerifiedTimestamp"
-#define IOS_WATCHAPP_UUID @"668eb2d2-73dd-462d-b079-33f0f70ad3d0"
+//#define IOS_WATCHAPP_UUID @"668eb2d2-73dd-462d-b079-33f0f70ad3d0"
+#define IOS_WATCHAPP_UUID @"7dee2ab7-366e-4f02-aea0-265d66518fb6"
 #define RAW_WATCH_MAX_SAMPLES 500
 
 
