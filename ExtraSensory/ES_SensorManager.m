@@ -394,7 +394,17 @@
     NSOperationQueue *queue = [NSOperationQueue mainQueue];
     /// Notice: when used a new queue (or separate new queue for each sensor) there were bugs after finished sampling (red dot took time to disappear and network connection failed to get response)
     
-    [self.soundProcessor startDurRecording];
+    if (![self.soundProcessor startDurRecording]) {
+        NSLog(@"[sensorManager] !!! We failed starting audio recording. Lets try recreate the Sound Processor");
+        _soundProcessor = [[ES_SoundWaveProcessor alloc] init];
+        BOOL secondSuccess = [self.soundProcessor startDurRecording];
+        if (secondSuccess) {
+            NSLog(@"[sensorManager] == reconstructing the sound processor helped overcome the failure");
+        }
+        else {
+            NSLog(@"[sensorManager] !!! Reconstructing the sound processor didn't help. still can't start audio recording");
+        }
+    }
     if([[[self appDelegate] watchProcessor] isConnectedToWatch]){
         [[[self appDelegate] watchProcessor] receiveDataFromWatch];
     }

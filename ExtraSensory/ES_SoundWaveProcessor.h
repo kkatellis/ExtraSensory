@@ -29,7 +29,7 @@
 - (void) startPreRecording;
 - (void) pausePreRecording;
 
-- (void) startDurRecording;
+- (BOOL) startDurRecording;
 - (void) pauseDurRecording;
 - (void) processMFCC;
 

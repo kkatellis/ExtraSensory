@@ -133,11 +133,15 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     [hfRecorderPre stop];
 }
 
-- (void) startDurRecording {
+- (BOOL) startDurRecording {
     NSLog(@"[SoundWaveProcessor] recordingForDuration %f",self.sampleDuration);
     if( ![hfRecorderDur isRecording] ) {
-        [hfRecorderDur recordForDuration:self.sampleDuration];
+        BOOL success = [hfRecorderDur recordForDuration:self.sampleDuration];
+        NSLog(@"[SoundWaveProcessor] Did we succeed to start recording audio: %@",success?@"success":@"fail");
+        return success;
     }
+    NSLog(@"[SoundWaveProcessor] it was in the middle of a recording");
+    return YES;
 }
 
 - (void) pauseDurRecording {

@@ -106,6 +106,8 @@ BOOL _stopCalled = NO;
     [self.mutableWatchAccX removeAllObjects];
     [self.mutableWatchAccY removeAllObjects];
     [self.mutableWatchAccZ removeAllObjects];
+    [self.compassTimestamps removeAllObjects];
+    [self.compassHeadings removeAllObjects];
     [self startWatchCollection];
 }
 
@@ -123,26 +125,23 @@ BOOL _stopCalled = NO;
 {
     NSLog(@"[WP] Registring new receive-update handler");
     self.receiveUpdateHandler = [self.myWatch appMessagesAddReceiveUpdateHandler:^BOOL(PBWatch *watch, NSDictionary *update) {
-//        NSLog(@"[WATCHPROCESSOR] Received message: %@", update);
-        
         // code to handle activity update events
         NSString *answer;
-            if([update count] == 1)
-            {
-                answer = [NSString stringWithFormat:@"%@", [update objectForKey:WATCH_MESSAGE_KEY]];
-                
-                if ([answer isEqualToString:YES_ANSWER] && [_userInfo valueForKey:FOUND_VERIFIED_KEY]) {
+        if([update count] == 1) {
+            answer = [NSString stringWithFormat:@"%@", [update objectForKey:WATCH_MESSAGE_KEY]];
+            
+            if ([answer isEqualToString:YES_ANSWER] && [_userInfo valueForKey:FOUND_VERIFIED_KEY]) {
                 
                 [[self appDelegate] pushActivityEventFeedbackViewWithUserInfo:_userInfo userAlreadyApproved:YES approvalFromWatch:YES];
-                    [_userInfo removeAllObjects];
-                return YES;
-                }
-                else if([answer isEqualToString:NO_ANSWER]) {
-                    [_userInfo removeAllObjects];
-                    return YES;
-                }
+                [_userInfo removeAllObjects];
                 return YES;
             }
+            else if([answer isEqualToString:NO_ANSWER]) {
+                [_userInfo removeAllObjects];
+                return YES;
+            }
+            return YES;
+        }
         
         if([self.mutableWatchAccX count] == RAW_WATCH_MAX_SAMPLES)
         {
@@ -154,21 +153,36 @@ BOOL _stopCalled = NO;
         }
         if (!(self.mutableWatchAccX))
         {
+            NSLog(@"===== initializing acc arrays");
             self.mutableWatchAccX = [[NSMutableArray alloc] init];
             self.mutableWatchAccY = [[NSMutableArray alloc] init];
             self.mutableWatchAccZ = [[NSMutableArray alloc] init];
         }
-        //NSLog(@"[WP] Recieved another watch accelerometer update");
+        if (!(self.compassTimestamps)) {
+            NSLog(@"===== initializing compass arrays");
+            self.compassTimestamps = [[NSMutableArray alloc] init];
+            self.compassHeadings = [[NSMutableArray alloc] init];
+        }
+        NSLog(@"[WP] Recieved another watch accelerometer/compass update: %@",update);
         for (id key in [[update allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
             NSString *temp = [NSString stringWithFormat:@"%@", [update objectForKey:key]];
             
             NSArray *xyz = [temp componentsSeparatedByString:@","];
-            NSNumber  *aNum0 = [NSNumber numberWithInteger: [xyz[0] integerValue]];
-            NSNumber  *aNum1 = [NSNumber numberWithInteger: [xyz[1] integerValue]];
-            NSNumber  *aNum2 = [NSNumber numberWithInteger: [xyz[2] integerValue]];
-            [self.mutableWatchAccX addObject:aNum0];
-            [self.mutableWatchAccY addObject:aNum1];
-            [self.mutableWatchAccZ addObject:aNum2];
+            if ([xyz count] == 3) {
+                // Then this is an update of accelerometer measurements:
+                NSNumber  *aNum0 = [NSNumber numberWithInteger: [xyz[0] integerValue]];
+                NSNumber  *aNum1 = [NSNumber numberWithInteger: [xyz[1] integerValue]];
+                NSNumber  *aNum2 = [NSNumber numberWithInteger: [xyz[2] integerValue]];
+                [self.mutableWatchAccX addObject:aNum0];
+                [self.mutableWatchAccY addObject:aNum1];
+                [self.mutableWatchAccZ addObject:aNum2];
+            }
+            else {
+                // Then we have an update of compass heading:
+                NSLog(@"[WP] got compass update, time: %@ and value %@ degrees",key,temp);
+                [self.compassTimestamps addObject:key];
+                [self.compassHeadings addObject:[NSNumber numberWithInteger:[temp integerValue]]];
+            }
         }
         return YES;
     }];

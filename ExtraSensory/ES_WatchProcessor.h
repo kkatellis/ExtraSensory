@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSMutableArray *mutableWatchAccX;
 @property (nonatomic, strong) NSMutableArray *mutableWatchAccY;
 @property (nonatomic, strong) NSMutableArray *mutableWatchAccZ;
+@property (nonatomic, strong) NSMutableArray *compassTimestamps;
+@property (nonatomic, strong) NSMutableArray *compassHeadings;
 
 -(void)receiveDataFromWatch;
 -(void)launchWatchApp;
