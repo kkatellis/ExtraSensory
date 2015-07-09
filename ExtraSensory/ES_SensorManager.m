@@ -315,6 +315,9 @@
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
     [self.soundProcessor pauseDurRecording];
+    if([[[self appDelegate] watchProcessor] isConnectedToWatch]) {
+        [[[self appDelegate] watchProcessor] stopWatchCollection];
+    }
     //[self.cameraProcessor stopSession];
     //[[self appDelegate] stopWatchCollection];
     [self.appDelegate markNotRecordingRightNow];
