@@ -92,7 +92,6 @@
 #define LOC_LAT_DERIV       @"mean_abs_lat_deriv"
 #define LOC_LONG_DERIV      @"mean_abs_long_deriv"
 
-
 #define LOW_FREQ            @"low_frequency"
 
 //############
@@ -836,6 +835,16 @@
                                  (sumAbsLatDeriv/(count-1)) : 0];
     NSNumber *meanAbsLongDeriv = [NSNumber numberWithDouble:count > 1 ?
                                   (sumAbsLongDeriv/(count-1)) : 0];
+    // Damage control: in case we still have Inf values put a "invalid" value of -1:
+    if ([meanAbsLatDeriv doubleValue] >= INFINITY) {
+        NSLog(@"[sensorManager] meanAbsLatDeriv is found infinity (%@). setting it to -1.",meanAbsLatDeriv);
+        meanAbsLatDeriv = [NSNumber numberWithDouble:-1.];
+    }
+    if ([meanAbsLongDeriv doubleValue] >= INFINITY) {
+        NSLog(@"[sensorManager] meanAbsLongDeriv is found infinity (%@). setting it to -1.",meanAbsLongDeriv);
+        meanAbsLongDeriv = [NSNumber numberWithDouble:-1.];
+    }
+    
     NSNumber *latStd = [NSNumber numberWithDouble:sqrt(varLat)];
     NSNumber *longStd = [NSNumber numberWithDouble:sqrt(varLong)];
     NSNumber *latChange = [NSNumber numberWithDouble:[[latitudes objectAtIndex:count-1] doubleValue] - [[latitudes objectAtIndex:0] doubleValue]];

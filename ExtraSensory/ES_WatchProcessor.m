@@ -163,7 +163,7 @@ BOOL _stopCalled = NO;
             self.compassTimestamps = [[NSMutableArray alloc] init];
             self.compassHeadings = [[NSMutableArray alloc] init];
         }
-        NSLog(@"[WP] Recieved another watch accelerometer/compass update: %@",update);
+//        NSLog(@"[WP] Recieved another watch accelerometer/compass update: %@",update);
         for (id key in [[update allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
             NSString *temp = [NSString stringWithFormat:@"%@", [update objectForKey:key]];
             
