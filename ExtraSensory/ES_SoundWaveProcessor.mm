@@ -153,9 +153,9 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
         NSLog(@"waiting 100 ms");
         [NSThread sleepForTimeInterval:.1];
         i++;
-        if (i > 20){
-            //don't wait more than 2 seconds
-            NSLog(@"[SoundWaveProcessor] Waited too long (2 sec) and still no wav file. So giving up on MFCC this time :-( .");
+        if (i > 100){
+            //don't wait more than 10 seconds
+            NSLog(@"[SoundWaveProcessor] Waited too long (10 sec) and still no wav file. So giving up on MFCC this time :-( .");
             return;
         }
     }
