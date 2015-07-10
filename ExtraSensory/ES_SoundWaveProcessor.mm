@@ -135,6 +135,10 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 }
 
 - (BOOL) startDurRecording {
+    // We need to deactivate the audio session:
+    BOOL activate_success = [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    NSLog(@"[SoundWaveProcessor] Tried to activate audio session. %@",activate_success?@"success":@"fail");
+
     NSLog(@"[SoundWaveProcessor] recordingForDuration %f",self.sampleDuration);
     if( ![hfRecorderDur isRecording] ) {
         BOOL success = [hfRecorderDur recordForDuration:self.sampleDuration];
@@ -170,7 +174,9 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     NSError *error = nil;
     [soundFileURLDur getResourceValue:&wavFileSize forKey:NSURLFileSizeKey error:&error];
     NSLog(@"[SoundWaveProcessor] Recorded sound file of size %@: %@",wavFileSize,soundFilePath);
-    
+    // This is a good time to deactivate the audio session:
+    BOOL deactivate_success = [[AVAudioSession sharedInstance] setActive:NO error:nil];
+    NSLog(@"[SoundWaveProcessor] Tried to deactivate audio session. %@",deactivate_success?@"success":@"fail");
     
     NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:[ES_DataBaseAccessor getMFCCFilename]]];
     NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
