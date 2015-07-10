@@ -68,7 +68,8 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     
     if (self) {
         //--// Initializing an audio session & start our session
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
         
         //soundFileURLPre = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_PRE]];
@@ -157,9 +158,9 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
         NSLog(@"waiting 100 ms");
         [NSThread sleepForTimeInterval:.1];
         i++;
-        if (i > 100){
+        if (i > 40){
             //don't wait more than 10 seconds
-            NSLog(@"[SoundWaveProcessor] Waited too long (10 sec) and still no wav file. So giving up on MFCC this time :-( .");
+            NSLog(@"[SoundWaveProcessor] Waited too long (4 sec) and still no wav file. So giving up on MFCC this time :-( .");
             return;
         }
     }
