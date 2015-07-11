@@ -140,13 +140,13 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     NSLog(@"[SoundWaveProcessor] Tried to activate audio session. %@",activate_success?@"success":@"fail");
 
     NSLog(@"[SoundWaveProcessor] recordingForDuration %f",self.sampleDuration);
-    if( ![hfRecorderDur isRecording] ) {
-        BOOL success = [hfRecorderDur recordForDuration:self.sampleDuration];
-        NSLog(@"[SoundWaveProcessor] Did we succeed to start recording audio: %@",success?@"success":@"fail");
-        return success;
+    if( [hfRecorderDur isRecording] ) {
+        NSLog(@"[SoundWaveProcessor] it was in the middle of a recording. Lets stop it.");
+        [hfRecorderDur stop];
     }
-    NSLog(@"[SoundWaveProcessor] it was in the middle of a recording");
-    return YES;
+    BOOL success = [hfRecorderDur recordForDuration:self.sampleDuration];
+    NSLog(@"[SoundWaveProcessor] Did we succeed to start recording audio: %@",success?@"success":@"fail");
+    return success;
 }
 
 - (void) pauseDurRecording {
@@ -175,6 +175,10 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     [soundFileURLDur getResourceValue:&wavFileSize forKey:NSURLFileSizeKey error:&error];
     NSLog(@"[SoundWaveProcessor] Recorded sound file of size %@: %@",wavFileSize,soundFilePath);
     // This is a good time to deactivate the audio session:
+    if ([hfRecorderDur isRecording]) {
+        NSLog(@"[SoundWaveProcessor] Wav file is ready but recorder is still recording. stopping it...");
+        [hfRecorderDur stop];
+    }
     BOOL deactivate_success = [[AVAudioSession sharedInstance] setActive:NO error:nil];
     NSLog(@"[SoundWaveProcessor] Tried to deactivate audio session. %@",deactivate_success?@"success":@"fail");
     
