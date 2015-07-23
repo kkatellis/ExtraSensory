@@ -12,6 +12,22 @@
 #import "ES_Settings.h"
 #import "ES_NetworkAccessor.h"
 
+#define MAIN_SECTION 0
+#define HOME_SECTION 1
+#define LOCATION_BUBBLE_SECTION 2
+#define UUID_SECTION 3
+
+#define DATA_COLLECTION_ROW 0
+#define INTERVAL_ROW 1
+#define SECURE_ROW 2
+#define CELLULAR_ROW 3
+
+#define DATA_COLLECTION_TAG 0
+#define HOME_SENSING_TAG 1
+#define LOCATION_BUBBLE_TAG 2
+#define HTTPS_TAG 3
+#define CELLULAR_TAG 4
+
 @interface ES_SettingsTableViewController ()
 @property BOOL showHomeLatLon;
 @property (strong, nonatomic) ES_AppDelegate* appDelegate;
@@ -64,17 +80,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (section == 0) {
-        return 3;
-    } else if (section == 1) {
+    if (section == MAIN_SECTION) {
+        return 4;
+    } else if (section == HOME_SECTION) {
         return 1;
-    } else if (section == 2) {
+    } else if (section == LOCATION_BUBBLE_SECTION) {
         if (self.showHomeLatLon) {
             return 3;
         } else {
             return 1;
         }
-    } else if (section == 3) {
+    } else if (section == UUID_SECTION) {
         return 1;
     } else {
         return 0;
@@ -85,42 +101,51 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell;
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
+    if (indexPath.section == MAIN_SECTION) {
+        if (indexPath.row == DATA_COLLECTION_ROW) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"settingsCell" forIndexPath:  indexPath];
             cell.textLabel.text = @"Data Collection";
             UISwitch *toggleSwitch = [[UISwitch alloc] init];
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
             toggleSwitch.on = self.appDelegate.userSelectedDataCollectionOn;
-            toggleSwitch.tag = 0;
+            toggleSwitch.tag = DATA_COLLECTION_TAG;
             [toggleSwitch addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventValueChanged];
-        } else if (indexPath.row == 1) {
+        } else if (indexPath.row == INTERVAL_ROW) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"disclosureCell" forIndexPath:  indexPath];
             cell.textLabel.text = @"Reminder Interval";
             NSNumber *reminderIntervalMins = [NSNumber numberWithInteger:([self.appDelegate.user.settings.timeBetweenUserNags integerValue])/60];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ min", reminderIntervalMins];
-        } else if (indexPath.row == 2) {
+        } else if (indexPath.row == SECURE_ROW) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"settingsCell" forIndexPath:  indexPath];
             cell.textLabel.text = @"Secure Communication";
             UISwitch *toggleSwitch = [[UISwitch alloc] init];
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
             toggleSwitch.on = self.appDelegate.networkAccessor.useHTTPS;
-            toggleSwitch.tag = 3;
+            toggleSwitch.tag = HTTPS_TAG;
             [toggleSwitch addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventValueChanged];
+        } else if (indexPath.row == CELLULAR_ROW) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"settingsCell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Allow cellular communication";
+            UISwitch *allowSwitch = [[UISwitch alloc] init];
+            cell.accessoryView = [[UIView alloc] initWithFrame:allowSwitch.frame];
+            [cell.accessoryView addSubview:allowSwitch];
+            allowSwitch.on = [self.appDelegate.user.settings.allowCellular boolValue];
+            allowSwitch.tag = CELLULAR_TAG;
+            [allowSwitch addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventValueChanged];
         }
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == HOME_SECTION) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"settingsCell" forIndexPath: indexPath];
         cell.textLabel.text = @"Home Sensing";
         UISwitch *toggleSwitch = [[UISwitch alloc] init];
         cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
         [cell.accessoryView addSubview:toggleSwitch];
         toggleSwitch.on = [self.appDelegate.user.settings.homeSensingParticipant boolValue];
-        toggleSwitch.tag = 1;
+        toggleSwitch.tag = HOME_SENSING_TAG;
         [toggleSwitch addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventValueChanged];
 
-    } else if (indexPath.section == 2) {
+    } else if (indexPath.section == LOCATION_BUBBLE_SECTION) {
         if (indexPath.row == 0) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"settingsCell" forIndexPath: indexPath];
             cell.textLabel.text = @"Hide Home Location";
@@ -128,7 +153,7 @@
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
             toggleSwitch.on = [self.appDelegate.user.settings.hideHome boolValue];
-            toggleSwitch.tag = 2;
+            toggleSwitch.tag = LOCATION_BUBBLE_TAG;
             [toggleSwitch addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventValueChanged];
         } else {
             cell = [tableView dequeueReusableCellWithIdentifier:@"settingsCell" forIndexPath: indexPath];
@@ -160,7 +185,7 @@
             }
             
         }
-    } else if (indexPath.section == 3) {
+    } else if (indexPath.section == UUID_SECTION) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"redCell" forIndexPath: indexPath];
         cell.textLabel.text = self.appDelegate.user.uuid;
     }
@@ -184,19 +209,21 @@
 
 - (void)updateSwitchAtIndexPath:(UISwitch *)aswitch{
     NSLog(@"updateSwitch");
-    if (aswitch.tag == 0) {
+    if (aswitch.tag == DATA_COLLECTION_TAG) {
         // data collection switch
         [self turnOnOffDataCollection:aswitch.on];
-    } else if (aswitch.tag == 1) {
+    } else if (aswitch.tag == HOME_SENSING_TAG) {
         // home sensing switch
         self.appDelegate.user.settings.homeSensingParticipant = [NSNumber numberWithBool:aswitch.on];
-    } else if (aswitch.tag == 2) {
+    } else if (aswitch.tag == LOCATION_BUBBLE_TAG) {
         // home hiding switch
         self.appDelegate.user.settings.hideHome = [NSNumber numberWithBool:aswitch.on];
         self.showHomeLatLon = aswitch.on;
         [self.tableView reloadData];
-    } else if (aswitch.tag == 3) {
+    } else if (aswitch.tag == HTTPS_TAG) {
         self.appDelegate.networkAccessor.useHTTPS = aswitch.on;
+    } else if (aswitch.tag == CELLULAR_TAG) {
+        self.appDelegate.user.settings.allowCellular = [NSNumber numberWithBool:aswitch.on];
     }
 }
 

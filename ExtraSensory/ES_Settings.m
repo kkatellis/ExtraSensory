@@ -1,9 +1,9 @@
 //
 //  ES_Settings.m
-//  ExtraSensory
+//  
 //
-//  Created by yonatan vaizman on 12/1/14.
-//  Copyright (c) 2014 Bryan Grounds. All rights reserved.
+//  Created by yonatan vaizman on 7/22/15.
+//
 //
 
 #import "ES_Settings.h"
@@ -12,16 +12,17 @@
 
 @implementation ES_Settings
 
+@dynamic hideHome;
+@dynamic homeLat;
+@dynamic homeLon;
+@dynamic homeSensingParticipant;
 @dynamic maxZipFilesStored;
 @dynamic recentTimePeriod;
 @dynamic sampleDuration;
 @dynamic sampleRate;
 @dynamic timeBetweenSampling;
 @dynamic timeBetweenUserNags;
-@dynamic homeSensingParticipant;
-@dynamic hideHome;
-@dynamic homeLat;
-@dynamic homeLon;
+@dynamic allowCellular;
 @dynamic user;
 
 @end

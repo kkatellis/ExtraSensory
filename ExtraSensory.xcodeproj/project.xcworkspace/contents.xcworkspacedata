@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../ExtraSensory/ES_Settings.h">
+   </FileRef>
+   <FileRef
+      location = "group:../ExtraSensory/ES_Settings.m">
+   </FileRef>
+   <FileRef
       location = "self:ExtraSensory.xcodeproj">
    </FileRef>
 </Workspace>
