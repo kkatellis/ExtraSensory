@@ -111,6 +111,22 @@ BOOL _sendingMessage = NO;
     [self registerReceiveHandlerAssumingAlreadyUnregistered];
 }
 
+- (void) initializeAccelerationArrays
+{
+    NSLog(@"===== initializing acc arrays");
+    self.watchAccTimestamps = [[NSMutableArray alloc] init];
+    self.mutableWatchAccX = [[NSMutableArray alloc] init];
+    self.mutableWatchAccY = [[NSMutableArray alloc] init];
+    self.mutableWatchAccZ = [[NSMutableArray alloc] init];
+}
+
+-(void) initializeCompassArrays
+{
+    NSLog(@"===== initializing compass arrays");
+    self.compassTimestamps = [[NSMutableArray alloc] init];
+    self.compassHeadings = [[NSMutableArray alloc] init];
+}
+
 -(void)registerReceiveHandlerAssumingAlreadyUnregistered
 {
     NSLog(@"[WP] Registring new receive-update handler");
@@ -144,16 +160,10 @@ BOOL _sendingMessage = NO;
         }
         if (!(self.mutableWatchAccX))
         {
-            NSLog(@"===== initializing acc arrays");
-            self.watchAccTimestamps = [[NSMutableArray alloc] init];
-            self.mutableWatchAccX = [[NSMutableArray alloc] init];
-            self.mutableWatchAccY = [[NSMutableArray alloc] init];
-            self.mutableWatchAccZ = [[NSMutableArray alloc] init];
+            [self initializeAccelerationArrays];
         }
         if (!(self.compassTimestamps)) {
-            NSLog(@"===== initializing compass arrays");
-            self.compassTimestamps = [[NSMutableArray alloc] init];
-            self.compassHeadings = [[NSMutableArray alloc] init];
+            [self initializeAccelerationArrays];
         }
        // NSLog(@"[WP] Recieved another watch accelerometer/compass update: %@",update);
         for (id key in [[update allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
@@ -220,6 +230,9 @@ BOOL _sendingMessage = NO;
 
 -(void)startWatchCollection
 {
+    // First clear the data arrays:
+    [self initializeAccelerationArrays];
+    [self initializeCompassArrays];
     _stopCalled = NO;
     NSDictionary *update = @{ @(1):@"TURN ON" };
     [self addMessageToOutQueue:update];
