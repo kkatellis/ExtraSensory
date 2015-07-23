@@ -37,6 +37,9 @@
 #define RAW_WATCH_ACC_Y     @"raw_watch_acc_y"
 #define RAW_WATCH_ACC_Z     @"raw_watch_acc_z"
 
+#define WATCH_COMPASS_TIMESTAMP @"watch_compass_timestamp"
+#define WATCH_COMPASS_HEADING   @"watch_compass_heading"
+
 #define RAW_GYR_X           @"raw_gyro_x"
 #define RAW_GYR_Y           @"raw_gyro_y"
 #define RAW_GYR_Z           @"raw_gyro_z"
@@ -725,6 +728,11 @@
         [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccX forKey:RAW_WATCH_ACC_X];
         [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccY forKey:RAW_WATCH_ACC_Y];
         [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccZ forKey:RAW_WATCH_ACC_Z];
+    }
+    if([self.appDelegate watchProcessor].mutableWatchAccX != nil)
+    {
+        [self.hfData setObject:[self.appDelegate watchProcessor].compassTimestamps forKey:WATCH_COMPASS_TIMESTAMP];
+        [self.hfData setObject:[self.appDelegate watchProcessor].compassHeadings forKey:WATCH_COMPASS_HEADING];
     }
     
     // Add camera data:

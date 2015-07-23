@@ -178,10 +178,11 @@ BOOL _stopCalled = NO;
                 [self.mutableWatchAccZ addObject:aNum2];
             }
             else {
+                NSArray *th = [temp componentsSeparatedByString:@":"];
                 // Then we have an update of compass heading:
-                NSLog(@"[WP] got compass update, time: %@ and value %@ degrees",key,temp);
-                [self.compassTimestamps addObject:key];
-                [self.compassHeadings addObject:[NSNumber numberWithInteger:[temp integerValue]]];
+                NSLog(@"[WP] got compass update, time: %@ and value %@ degrees",th[0],th[1]);
+                [self.compassTimestamps addObject:[NSNumber numberWithInteger:[th[0] integerValue]]];
+                [self.compassHeadings addObject:[NSNumber numberWithInteger:[th[1] integerValue]]];
             }
         }
         return YES;
