@@ -13,6 +13,7 @@
 #import "ES_Activity.h"
 #import "ES_ActivityStatistic.h"
 #import "ES_ActivitiesStrings.h"
+#import "ES_Settings.h"
 
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
 #define HOSTNAME        @"137.110.112.50"
@@ -89,6 +90,28 @@
     return _predictions;
 }
 
+- (BOOL) canWeUseNetworkNow
+{
+    if (![[self appDelegate].user.settings.allowCellular boolValue]) {
+        // Then we are only allowed to use WiFi:
+        return [self isThereWiFiConnectivity];
+    }
+    
+    // Then we are allowed to use either WiFi or cellular:
+    return [self isThereConnectivityOfAnyKind];
+}
+
+- (BOOL) isThereConnectivityOfAnyKind
+{
+    Reachability *anyReachibility = [Reachability reachabilityForInternetConnection];
+    return [anyReachibility currentReachabilityStatus] != NotReachable;
+}
+
+- (BOOL) isThereWiFiConnectivity
+{
+    return [self reachabilityStatus] == ReachableViaWiFi;
+}
+
 - (NetworkStatus) reachabilityStatus
 {
     return [wifiReachable currentReachabilityStatus];
@@ -145,7 +168,7 @@
 
 - (void) sendNextFeedbackFromQueue
 {
-    if(! [self reachabilityStatus] == ReachableViaWiFi) {
+    if(! [self canWeUseNetworkNow]) {
         NSLog(@"[networkAccessor] No WiFi. Not sending feedback.");
         return;
     }
@@ -243,7 +266,7 @@
     
     
     NSLog( @"[networkAccessor] Attempting to upload %@", file );
-    if( [self reachabilityStatus] == ReachableViaWiFi )
+    if( [self canWeUseNetworkNow] )
     {
     
         NSData *data = [NSData dataWithContentsOfFile: fullPath];
