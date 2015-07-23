@@ -35,7 +35,7 @@ g__low_freq_measurements    = ['light','pressure','proximity_cm','proximity',\
 g__audio_properties         = ['max_abs_value','normalization_multiplier'];
 
 g__main_activities          = ['LYING_DOWN','SITTING','STANDING_IN_PLACE','STANDING_AND_MOVING',\
-                               'WALKING','RUNNING','BICYCLING',"DON'T_KNOW"];
+                               'WALKING','RUNNING','BICYCLING',"DON'T_REMEMBER"];
 
 g__secondary_activities     = [];
 g__moods                    = [];
@@ -52,14 +52,6 @@ def get_all_sensor_names():
     
 
 def get_pseudo_sensor_features(instance_dir,sensor):
-    input_file = os.path.join(instance_dir,'m_%s.json' % sensor);
-    if not os.path.exists(input_file):
-        return None;
-
-    fid = file(input_file,'rb');
-    input_data = json.load(fid);
-    fid.close();
-
     if sensor == 'lf_measurements':
         expected_features = g__low_freq_measurements;
         pass;
@@ -72,8 +64,17 @@ def get_pseudo_sensor_features(instance_dir,sensor):
     else:
         return None;
 
-    dim = len(expected_features);
-    features = numpy.nan*numpy.ones(dim);
+    dim         = get_feature_dimension_for_sensor_type(sensor);
+    features    = numpy.nan*numpy.ones(dim);
+
+    input_file  = os.path.join(instance_dir,'m_%s.json' % sensor);
+    if not os.path.exists(input_file):
+        return features;
+
+    fid         = file(input_file,'rb');
+    input_data  = json.load(fid);
+    fid.close();
+
     for (fi,feature_name) in enumerate(expected_features):
         if feature_name in input_data:
             features[fi]    = input_data[feature_name];
@@ -88,14 +89,15 @@ def get_features_from_measurements(instance_dir,timestamp,sensor):
         return get_pseudo_sensor_features(instance_dir,sensor);
     
     measurements_file       = os.path.join(instance_dir,'m_%s.dat' % sensor);
+    default_features        = numpy.nan*numpy.ones(get_feature_dimension_for_sensor_type(sensor));
     if not os.path.exists(measurements_file):
-        return None;
+        return default_features;
 
     # Load the measurements time-series:
     X                       = numpy.genfromtxt(measurements_file);
-    
+
     if (len(X.shape) <= 0):
-        return None;
+        return default_features;
     
     if sensor[:3] == 'raw' or sensor[:4] == 'proc':
         # Then the first column is for time reference:
@@ -117,7 +119,7 @@ def get_features_from_measurements(instance_dir,timestamp,sensor):
         features            = compute_features.get_location_features(X,timestamp);
         return features;
 
-    return None;
+    return default_features;
 
 def get_uuid_data_dir(uuid):
     return os.path.join(g__data_superdir,uuid);
@@ -160,20 +162,36 @@ def get_binary_labels(applied_labels,label_names):
 
     return bin_vec;
 
+def get_feature_dimension_for_sensor_type(sensor):
+    if sensor in g__sensors_with_3axes:
+        dim     = compute_features.dimension_of_3d_series_features();
+    elif sensor == 'location':
+        dim     = compute_features.dimension_of_location_features();
+    elif sensor == 'lf_measurements':
+        dim     = len(g__low_freq_measurements);
+    elif sensor == 'location_quick_features':
+        dim     = len(g__location_quick_features);
+    elif sensor == 'audio_properties':
+        dim     = len(g__audio_properties);
+    else:
+        dim     = 0;
+        pass;
+
+    return dim;
+
+def get_feature_dimension_for_aggregate_of_sensors(sensors):
+    total_dim   = 0;
+    for sensor in sensors:
+        total_dim   += get_feature_dimension_for_sensor_type(sensor);
+        pass;
+
+    return total_dim;
+    
 def initialize_feature_matrices(num_instances,sensors):
     features                = {};
     for sensor in sensors:
-        if sensor in g__sensors_with_3axes:
-            dim     = compute_features.dimension_of_3d_series_features();
-        elif sensor == 'location':
-            dim     = compute_features.dimension_of_location_features();
-        elif sensor == 'lf_measurements':
-            dim     = len(g__low_freq_measurements);
-        elif sensor == 'location_quick_features':
-            dim     = len(g__location_quick_features);
-        elif sensor == 'audio_properties':
-            dim     = len(g__audio_properties);
-        else:
+        dim     = get_feature_dimension_for_sensor_type(sensor);
+        if dim <= 0:
             continue;
         
         features[sensor]    = numpy.nan * numpy.ones((num_instances,dim));
@@ -196,8 +214,7 @@ def collect_features_and_labels(uuids):
 
     # Go over the instances to collect the training data:
     for uuid in uuids:
-        print '#' * 20;
-        print 'train uuid: %s' % uuid;
+        print '### uuid: %s' % uuid;
         uuid_dir        = get_uuid_data_dir(uuid);
         for subdir in os.listdir(uuid_dir):
             instance_dir    = os.path.join(uuid_dir,subdir);

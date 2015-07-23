@@ -11,6 +11,7 @@ import os.path;
 import json;
 import numpy;
 import pdb;
+import pickle;
 
 
 fid                         = file('params.json','rb');
@@ -214,16 +215,57 @@ def reward_for_participation(user_stats):
 def main():
 
     uuids                   = read_subjects_uuids();
+    main_labels_set         = set();
+    sec_labels_set          = set();
+
+    stats_per_uuid          = {};
 
     for uuid in uuids:
         print "="*20;
         print "=== uuid: %s" % uuid;
         uuid_stats          = statistics_per_user(uuid);
+        stats_per_uuid[uuid]= uuid_stats;
         reward_for_participation(uuid_stats);
-        
-        pdb.set_trace();
+
+        # Update label sets:
+        main_labels_set     = main_labels_set.union(set(uuid_stats['main_counts'].keys()));
+        sec_labels_set      = sec_labels_set.union(set(uuid_stats['secondary_counts'].keys()));
         pass;
 
+    main_labels             = sorted(main_labels_set);
+    sec_labels              = sorted(sec_labels_set);
+    labels                  = list(main_labels);
+    labels.extend(sec_labels);
+
+    examples_per_uuid       = numpy.zeros(len(uuids),dtype=int);
+    labeled_per_uuid        = numpy.zeros(len(uuids),dtype=int);
+    uuid_label_counts       = numpy.zeros((len(uuids),len(labels)),dtype=int);
+    for (ui,uuid) in enumerate(uuids):
+        examples_per_uuid[ui]   = stats_per_uuid[uuid]['instance_count'];
+        labeled_per_uuid[ui]    = stats_per_uuid[uuid]['labeled_count'];
+        
+        for main_label in stats_per_uuid[uuid]['main_counts'].keys():
+            ind                 = labels.index(main_label);
+            uuid_label_counts[ui,ind]   = stats_per_uuid[uuid]['main_counts'][main_label];
+            pass;
+
+        for sec_label in stats_per_uuid[uuid]['secondary_counts'].keys():
+            ind                 = labels.index(sec_label);
+            uuid_label_counts[ui,ind]   = stats_per_uuid[uuid]['secondary_counts'][sec_label];
+            pass;
+        pass;
+
+    user_statistics         = {\
+        'uuids':uuids,\
+        'labels':labels,\
+        'examples_per_uuid':examples_per_uuid,\
+        'labeled_per_uuid':labeled_per_uuid,\
+        'uuid_label_counts':uuid_label_counts};
+
+    fid = file('user_statistics.pickle','wb');
+    pickle.dump(user_statistics,fid);
+    fid.close();
+    
     return;
 
 if __name__ == "__main__":
