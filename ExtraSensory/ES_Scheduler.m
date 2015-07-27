@@ -248,13 +248,13 @@
         NSArray *moodsStrings = [ES_ActivitiesStrings createStringArrayFromLabelObjectsAraay:[moods allObjects]];
         if (secondaryActivities && [secondaryActivities count]>0)
         {
-            NSString *secondaryString = [secondaryActivitiesStrings componentsJoinedByString:@","];
+            NSString *secondaryString = [secondaryActivitiesStrings componentsJoinedByString:@", "];
             question = [NSString stringWithFormat:@"%@ (%@)",question,secondaryString];
         }
         
         if (moods && [moods count] > 0)
         {
-            NSString *moodsString = [moodsStrings componentsJoinedByString:@","];
+            NSString *moodsString = [moodsStrings componentsJoinedByString:@", "];
             question = [NSString stringWithFormat:@"%@ and feeling %@",question,moodsString];
         }
         question = [NSString stringWithFormat:@"%@?",question];

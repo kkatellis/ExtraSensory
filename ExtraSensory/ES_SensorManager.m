@@ -621,10 +621,10 @@
     if (curr_count % 100 == 0)
     {
         if([[[self appDelegate] watchProcessor] isConnectedToWatch]) {
-            NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu watch, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],(unsigned long)[[[self appDelegate] watchProcessor].mutableWatchAccX count], [self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+         //   NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu watch, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],(unsigned long)[[[self appDelegate] watchProcessor].mutableWatchAccX count], [self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
         }
         else {
-            NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],[self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
+           // NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion (%f).",curr_count,[self countField:RAW_GYR_X],[self countField:RAW_MAG_X],[self countField:PROC_GRAV_X],[[NSDate date] timeIntervalSince1970]);
         }
         //NSLog(@"%@", [self.hfData description]);
     }
@@ -646,7 +646,7 @@
         [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LAT];
         [self addToHighFrequencyDataNumericValue:[NSNumber numberWithDouble:-1000] forField:LOC_LONG];
     } else {
-        NSLog(@"[sensorManager] Sending location coordinates");
+        //NSLog(@"[sensorManager] Sending location coordinates");
         [self addToHighFrequencyDataNumericValue:latitude forField:LOC_LAT];
         [self addToHighFrequencyDataNumericValue:longitude forField:LOC_LONG];
     }
@@ -720,11 +720,12 @@
         return;
     }
     
-    NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion, (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
+   // NSLog(@"[sensorManager] Collected: %lu acc, %lu gyro, %lu magnet, %lu motion, (%@).",accCount,gyrCount,magCount,motionCount,[NSDate date]);
     
     //[self.hfData]
     if([self.appDelegate watchProcessor].mutableWatchAccX != nil)
     {
+       // NSLog(@"[sensorManager] mutableWatchAccX:%@",[self.appDelegate watchProcessor].mutableWatchAccX);
         [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccX forKey:RAW_WATCH_ACC_X];
         [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccY forKey:RAW_WATCH_ACC_Y];
         [self.hfData setObject:[self.appDelegate watchProcessor].mutableWatchAccZ forKey:RAW_WATCH_ACC_Z];
@@ -836,8 +837,8 @@
     double meanLong = sumLong / count;
     double meanSqLat = sumSqLat / count;
     double meanSqLong = sumSqLong / count;
-    double varLat = meanSqLat - (meanLat*meanLat);
-    double varLong = meanSqLong - (meanLong*meanLong);
+    NSNumber *latStd = [NSNumber numberWithDouble: sqrt(meanSqLat - (meanLat*meanLat)) ];
+    NSNumber *longStd = [NSNumber numberWithDouble: sqrt(meanSqLong - (meanLong*meanLong)) ];
     
     NSNumber *meanAbsLatDeriv = [NSNumber numberWithDouble:count > 1 ?
                                  (sumAbsLatDeriv/(count-1)) : 0];
@@ -852,9 +853,15 @@
         NSLog(@"[sensorManager] meanAbsLongDeriv is found infinity (%@). setting it to -1.",meanAbsLongDeriv);
         meanAbsLongDeriv = [NSNumber numberWithDouble:-1.];
     }
+    if (isnan([latStd doubleValue])) {
+        NSLog(@"[sensorManager] latStd is nan (%@). setting it to -1.", latStd);
+        latStd = [NSNumber numberWithDouble:-1.];
+    }
+    if (isnan([longStd doubleValue])) {
+        NSLog(@"[sensorManager] longStd is nan (%@). setting it to -1.", longStd);
+        longStd = [NSNumber numberWithDouble:-1.];
+    }
     
-    NSNumber *latStd = [NSNumber numberWithDouble:sqrt(varLat)];
-    NSNumber *longStd = [NSNumber numberWithDouble:sqrt(varLong)];
     NSNumber *latChange = [NSNumber numberWithDouble:[[latitudes objectAtIndex:count-1] doubleValue] - [[latitudes objectAtIndex:0] doubleValue]];
     NSNumber *longChange = [NSNumber numberWithDouble:[[longitudes objectAtIndex:count-1] doubleValue] - [[longitudes objectAtIndex:0] doubleValue]];
     

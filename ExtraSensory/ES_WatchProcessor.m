@@ -26,18 +26,19 @@
 @interface ES_WatchProcessor() <PBPebbleCentralDelegate>
 
 @property (nonatomic, strong) PBWatch *myWatch;
-
 @property (nonatomic, strong)  ES_AppDelegate *appDelegate;
 @property (nonatomic, strong) NSObject *receiveUpdateHandler;
 @property (nonatomic, strong) ES_SensorManager *sensorManager;
 @property (nonatomic, strong) NSMutableDictionary *userInfo;
+@property (nonatomic, strong) NSMutableArray *messageQueue;
 
 @end
 
 @implementation ES_WatchProcessor
 
-
+@synthesize messageQueue = _messageQueue;
 BOOL _stopCalled = NO;
+BOOL _sendingMessage = NO;
 
 - (ES_AppDelegate *) appDelegate
 {
@@ -84,21 +85,8 @@ BOOL _stopCalled = NO;
         }
         }
      ];
+    [self initializeMessageQueue];
     
-}
-
--(void)nagUserWithQuestion: (NSDictionary*)question
-{
-    // first make sure the watch-app is open:
-//    [self launchWatchApp];
-    [self.myWatch appMessagesPushUpdate:question onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
-        if (!error) {
-            NSLog(@"[WP] Successfully sent question to watch: %@",update);
-        }
-        else {
-            NSLog(@"[WP] Error sending question to watch: %@. update: %@", error,update);
-        }
- }];
 }
 
 -(void)receiveDataFromWatch
@@ -163,28 +151,33 @@ BOOL _stopCalled = NO;
             self.compassTimestamps = [[NSMutableArray alloc] init];
             self.compassHeadings = [[NSMutableArray alloc] init];
         }
-//        NSLog(@"[WP] Recieved another watch accelerometer/compass update: %@",update);
+       // NSLog(@"[WP] Recieved another watch accelerometer/compass update: %@",update);
         for (id key in [[update allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
             NSString *temp = [NSString stringWithFormat:@"%@", [update objectForKey:key]];
-            
             NSArray *xyz = [temp componentsSeparatedByString:@","];
             if ([xyz count] == 3) {
                 // Then this is an update of accelerometer measurements:
-                NSNumber  *aNum0 = [NSNumber numberWithInteger: [xyz[0] integerValue]];
-                NSNumber  *aNum1 = [NSNumber numberWithInteger: [xyz[1] integerValue]];
-                NSNumber  *aNum2 = [NSNumber numberWithInteger: [xyz[2] integerValue]];
+                NSNumber *aNum0 = [NSNumber numberWithDouble: [xyz[0] doubleValue]];
+                NSNumber *aNum1 = [NSNumber numberWithDouble: [xyz[1] doubleValue]];
+                NSNumber *aNum2 = [NSNumber numberWithDouble: [xyz[2] doubleValue]];
                 [self.mutableWatchAccX addObject:aNum0];
                 [self.mutableWatchAccY addObject:aNum1];
                 [self.mutableWatchAccZ addObject:aNum2];
+                
             }
             else {
                 NSArray *th = [temp componentsSeparatedByString:@":"];
+                if ([th count] == 2) {
                 // Then we have an update of compass heading:
-                NSLog(@"[WP] got compass update, time: %@ and value %@ degrees",th[0],th[1]);
+                //NSLog(@"[WP] got compass update, time: %@ and value %@ degrees",th[0],th[1]);
                 [self.compassTimestamps addObject:[NSNumber numberWithInteger:[th[0] integerValue]]];
                 [self.compassHeadings addObject:[NSNumber numberWithInteger:[th[1] integerValue]]];
+                }
             }
         }
+        //for (int i = 0; i < [self.mutableWatchAccX count]; i++){
+         //   NSLog(@"[WP] mutableWatchAccX %@",self.mutableWatchAccX);
+        //}
         return YES;
     }];
 }
@@ -213,31 +206,71 @@ BOOL _stopCalled = NO;
     }
     _stopCalled = YES;
     NSDictionary *update = @{ @(1):@"TURN OFF" };
-    [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
-        if (!error) {
-            NSLog(@"[WP] Successfully sent message to watch to stop accel collection: %@",update);
-        }
-        else {
-            NSLog(@"[WP] Error sending message to stop accel collection: %@. update: %@", error,update);
-        }
-    }];
+    [self addMessageToOutQueue:update];
 }
 
 -(void)startWatchCollection
 {
-    // First, make sure hte watch-app is open:
-//    [self launchWatchApp];
-    
     _stopCalled = NO;
     NSDictionary *update = @{ @(1):@"TURN ON" };
-    [self.myWatch appMessagesPushUpdate:update onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
+    [self addMessageToOutQueue:update];
+}
+
+-(void)nagUserWithQuestion: (NSDictionary*)question
+{
+    [self addMessageToOutQueue:question];
+}
+
+-(void)addMessageToOutQueue:(NSDictionary*)message
+{
+  //  NSLog(@"[WP] adding message to queue:%@", message);
+    [self.messageQueue addObject:message];
+    if (!_sendingMessage) {
+        [self sendMessageFromOutQueue];
+    } else {
+  //      NSLog(@"[WP] already sending messages");
+    }
+}
+
+- (void)sendMessageFromOutQueue
+{
+    if ([self.messageQueue count] > 0) {
+        _sendingMessage = YES;
+        // send first message in queue
+      //  NSLog(@"[WP] queue count:%lu", (unsigned long)[self.messageQueue count]);
+      //  NSLog(@"[WP] sending first message in queue:%@", [self.messageQueue objectAtIndex:0]);
+        [self sendMessage:[self.messageQueue objectAtIndex:0]];
+        [self.messageQueue removeObjectAtIndex:0];
+    }
+ //   NSLog(@"[WP] queue empty:%lu", (unsigned long)[self.messageQueue count]);
+    
+}
+
+- (void)sendMessage:(NSDictionary*)message
+{
+    [self.myWatch appMessagesPushUpdate:message onSent:^(PBWatch *watch, NSDictionary *update, NSError *error) {
         if (!error) {
-            NSLog(@"[WP]Successfully sent message to watch to start watch collection: %@",update);
+            NSLog(@"[WP] Successfully sent message to watch: %@", update);
+            _sendingMessage = NO;
+            [self sendMessageFromOutQueue];
         }
         else {
-            NSLog(@"[WP] Error sending message to start watch collection: %@. update: %@", error,update);
+            NSLog(@"[WP] Error sending message to watch: %@. update: %@", error, update);
+            _sendingMessage = NO;
+            [self sendMessageFromOutQueue];
         }
     }];
+}
+
+- (void) initializeMessageQueue
+{
+    if (self.messageQueue)
+    {
+        [self.messageQueue removeAllObjects];
+    } else {
+        self.messageQueue = [NSMutableArray arrayWithCapacity:2];
+    }
+    NSLog(@"[WP] initialized message queue: %@", self.messageQueue);
 }
 
 - (void)pebbleCentral:(PBPebbleCentral*)central watchDidConnect:(PBWatch*)watch isNew:(BOOL)isNew {
@@ -245,6 +278,7 @@ BOOL _stopCalled = NO;
     self.myWatch = watch;
     [self launchWatchApp];
     [self registerReceiveHandler];
+    [self initializeMessageQueue];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"WatchConnection" object:self];
 }

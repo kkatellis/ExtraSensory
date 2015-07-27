@@ -139,13 +139,13 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     BOOL activate_success = [[AVAudioSession sharedInstance] setActive:YES error:nil];
     NSLog(@"[SoundWaveProcessor] Tried to activate audio session. %@",activate_success?@"success":@"fail");
 
-    NSLog(@"[SoundWaveProcessor] recordingForDuration %f",self.sampleDuration);
+  //  NSLog(@"[SoundWaveProcessor] recordingForDuration %f",self.sampleDuration);
     if( [hfRecorderDur isRecording] ) {
-        NSLog(@"[SoundWaveProcessor] it was in the middle of a recording. Lets stop it.");
+      //  NSLog(@"[SoundWaveProcessor] it was in the middle of a recording. Lets stop it.");
         [hfRecorderDur stop];
     }
     BOOL success = [hfRecorderDur recordForDuration:self.sampleDuration];
-    NSLog(@"[SoundWaveProcessor] Did we succeed to start recording audio: %@",success?@"success":@"fail");
+  //  NSLog(@"[SoundWaveProcessor] Did we succeed to start recording audio: %@",success?@"success":@"fail");
     return success;
 }
 
@@ -155,11 +155,11 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 
 - (void) processMFCC {
     NSLog(@"%@",[[NSBundle mainBundle] bundlePath]);
-    NSLog(@"[ES_SoundWaveProcessor] processMFCC");
+  //  NSLog(@"[ES_SoundWaveProcessor] processMFCC");
     NSString* soundFilePath = [[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_DUR];
     int i = 0;
     while (![[NSFileManager defaultManager] fileExistsAtPath:soundFilePath]){
-        NSLog(@"waiting 100 ms");
+    //    NSLog(@"waiting 100 ms");
         [NSThread sleepForTimeInterval:.1];
         i++;
         if (i > 40){
@@ -176,14 +176,14 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     NSLog(@"[SoundWaveProcessor] Recorded sound file of size %@: %@",wavFileSize,soundFilePath);
     // This is a good time to deactivate the audio session:
     if ([hfRecorderDur isRecording]) {
-        NSLog(@"[SoundWaveProcessor] Wav file is ready but recorder is still recording. stopping it...");
+      //  NSLog(@"[SoundWaveProcessor] Wav file is ready but recorder is still recording. stopping it...");
         [hfRecorderDur stop];
     }
     BOOL deactivate_success = [[AVAudioSession sharedInstance] setActive:NO error:nil];
-    NSLog(@"[SoundWaveProcessor] Tried to deactivate audio session. %@",deactivate_success?@"success":@"fail");
+   // NSLog(@"[SoundWaveProcessor] Tried to deactivate audio session. %@",deactivate_success?@"success":@"fail");
     
     NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:[ES_DataBaseAccessor getMFCCFilename]]];
-    NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
+  //  NSLog( @"[SoundWaveProcessor] %@", MFCCFileURLDur );
     [self callAudio:(CFURLRef)soundFileURLDur toMFCC:MFCCFileURLDur];
 }
 
@@ -201,10 +201,10 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     reader_info.threshold_end_time = someReader->duration();
     reader_info.normalization_factor = normalization_multiplier;
     
-    std::cout << "Computing MFCC features..." << std::endl;
+ //   std::cout << "Computing MFCC features..." << std::endl;
     
     feats = get_mfcc_features(someReader,WINDOW_SIZE,SAMPLING_RATE,HOP_SIZE,PREEMPH_COEF,&reader_info);
-    std::cout << "mfcc_features: " << feats.size() << "x" << feats[0].size() << std::endl;
+  //  std::cout << "mfcc_features: " << feats.size() << "x" << feats[0].size() << std::endl;
     
     NSMutableString* arrayString = [[NSMutableString alloc] init];
     for (int i = 0; i<feats.size(); ++i) {
@@ -227,7 +227,7 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     [dict setValue:maxAbsVal forKey:MAX_ABS_VAL_KEY];
     [dict setValue:normalizingMultiplier forKey:NORMALIZER_KEY];
     
-    NSLog(@"[soundWaveProcessor] Audio properties: %@",dict);
+  //  NSLog(@"[soundWaveProcessor] Audio properties: %@",dict);
     
     if (![NSJSONSerialization isValidJSONObject:dict]) {
         NSLog(@"[databaseAccessor] !!! Cannot write sound properties: not valid object for JSON. Data: %@",dict);
