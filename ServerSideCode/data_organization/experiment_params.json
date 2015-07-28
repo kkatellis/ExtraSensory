@@ -2,5 +2,6 @@
 "model_type":"logit",
 "sensor_set":"all_sensors",
 "missing_value_policy":"zero_imputation",
-"output_file":"cv_logitAllSensorsZeroImputation.pickle"
+"output_file":"cv_logitAllSensorsZeroImputation.pickle",
+"standardize_features":true
 }

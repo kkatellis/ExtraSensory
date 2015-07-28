@@ -16,7 +16,6 @@ import scipy.spatial.distance;
 import shutil;
 import datetime;
 import pdb;
-import pylab;pylab.ion();
 
 
 def dimension_of_3d_series_features():
@@ -37,9 +36,9 @@ def get_3d_series_features(X,sr):
     # Correlations and PCA:
     (C,pca_mat,lam) = get_correlation_mat_and_pca(X);
     norm_lam        = lam / numpy.sum(lam); # normalized to sum to 1
-    feats[13]       = C[0,1]; # E(xy)
-    feats[14]       = C[1,2]; # E(xz)
-    feats[15]       = C[1,2]; # E(yz)
+    feats[13]       = power_compression(C[0,1],0.5); # E(xy) (sqrt compressed)
+    feats[14]       = power_compression(C[1,2],0.5); # E(xz) (sqrt compressed)
+    feats[15]       = power_compression(C[1,2],0.5); # E(yz) (sqrt compressed)
     feats[16:19]    = pca_mat[:,0]; # PC1
     feats[19]       = norm_lam[0]; # First (normalized) eigenvalue
     feats[20]       = norm_lam[1]; # Second (normalized) eigenvalue
@@ -114,7 +113,8 @@ def get_1d_statistics(x):
     stats       = numpy.zeros(13);
 
     stats[0]    = numpy.mean(x);
-    stats[1]    = numpy.std(x);
+    x_std       = numpy.std(x);
+    stats[1]    = x_std;
     stats[2]    = numpy.median(x);
     stats[3]    = numpy.nanmin(x);
     stats[4]    = numpy.nanmax(x);
@@ -124,17 +124,48 @@ def get_1d_statistics(x):
     mom3        = scipy.stats.moment(x,moment=3);
     stats[7]    = numpy.sign(mom3)*(abs(mom3)**(1./3.));
     stats[8]    = scipy.stats.moment(x,moment=4)**(1./4.);
-    stats[9]    = scipy.stats.skew(x);
-    stats[10]   = scipy.stats.kurtosis(x);
+    if (x_std > 0):
+        stats[9]    = scipy.stats.skew(x);
+        stats[10]   = scipy.stats.kurtosis(x);
+        pass;
     # Entropy of the values of the array:
     if (sum(abs(x)) != 0):
         bin_counts  = numpy.histogram(x,bins=20)[0];
-        stats[11]   = scipy.stats.entropy(bin_counts);
+        stats[11]   = entropy(bin_counts);
         # "Entropy" over time, to distinguish sudden burst events from more stationary events:
-        stats[12]   = scipy.stats.entropy(numpy.abs(x));
+        stats[12]   = entropy(numpy.abs(x));
         pass;
 
     return stats;
+
+def entropy(counts):
+    if numpy.any(numpy.isnan(counts)):
+        return None;
+    
+    if numpy.any(counts < 0):
+        return None;
+
+    if numpy.sum(counts) <= 0:
+        return 0.;
+
+    counts      = counts.astype(float);
+
+    pos_counts  = counts[numpy.where(counts > 0)[0]];
+    probs       = pos_counts / numpy.sum(pos_counts);
+    logprobs    = numpy.log(probs);
+    plogp       = probs * logprobs;
+
+    entropy     = -numpy.sum(plogp);
+    return entropy;
+
+def log_compression(x,bias):
+    return numpy.log(bias + x);    
+
+def power_compression(x,power):
+    val_sign    = numpy.sign(x);
+    val_abs     = numpy.abs(x);
+    val_comp    = val_sign * (val_abs**power);
+    return val_comp;
 
 '''
 Input:
@@ -143,7 +174,7 @@ lags_in_sec: list of l desired time-lags (in seconds)
 sr: scalar. The sampling rate of the time series (Hz).
 
 Output:
-coeffs: (l-ndarray). For each lag, the autocorrelation coefficient.
+coeffs: (l-ndarray). For each lag, the (sqrt compressed) autocorrelation coefficient.
 '''
 def get_autocorrelation_coeff(x,lags_in_sec,sr):
     ac_coeffs   = numpy.correlate(x,x,mode='full');
@@ -152,7 +183,7 @@ def get_autocorrelation_coeff(x,lags_in_sec,sr):
     lags        = lags_f.astype(int);
     coeffs      = numpy.zeros(l);
     for li in range(l):
-        coeffs[li]   = ac_coeffs[lags[li]];
+        coeffs[li]   = power_compression(ac_coeffs[lags[li]],0.5);
         pass;
 
     return coeffs;
@@ -292,12 +323,12 @@ def get_location_features(X,start_timestamp):
 ##    X               = X[valid_inds,:];
 
     # Horizontal location:
-    valid_hor_inds  = numpy.where(X[:,LOC_HOR]>0.)[0];
+    valid_hor_inds  = get_inds_of_positive_values(X[:,LOC_HOR]);
     if len(valid_hor_inds) <= 0:
         best_hor_acc    = numpy.nan;
         std_lat         = numpy.nan;
         std_long        = numpy.nan;
-        diameter        = numpy.nan;
+        comp_diameter   = numpy.nan;
         X_hor           = X[valid_hor_inds,:];
         pass;
     else:
@@ -313,10 +344,12 @@ def get_location_features(X,start_timestamp):
 
         diameter        = find_largest_geographic_distance(\
             X_hor[:,LOC_LAT],X_hor[:,LOC_LONG]);
+        comp_diameter   = log_compression(diameter,1.);
         pass;
+    
 
     # Speed:
-    sp_valid_inds   = numpy.where(X_hor[:,LOC_SPEED]>=0.)[0];
+    sp_valid_inds   = get_inds_of_positive_values(X_hor[:,LOC_SPEED]);
     if len(sp_valid_inds) <= 0:
         min_speed       = numpy.nan;
         max_speed       = numpy.nan;
@@ -333,7 +366,7 @@ def get_location_features(X,start_timestamp):
         pass;
 
     # Altitude:
-    valid_ver_inds  = numpy.where(X[:,LOC_VER]>0.)[0];
+    valid_ver_inds  = get_inds_of_positive_values(X[:,LOC_VER]);
     if len(valid_ver_inds) <= 0:
         best_ver_acc    = numpy.nan;
         std_alt         = numpy.nan;
@@ -354,8 +387,8 @@ def get_location_features(X,start_timestamp):
         pass;
 
     location_feat   = [];
-    location_feat.append(best_hor_acc);
-    location_feat.append(best_ver_acc);
+    location_feat.append(numpy.clip(best_hor_acc,0.,400.));
+    location_feat.append(numpy.clip(best_ver_acc,0.,400.));
     location_feat.append(std_lat);
     location_feat.append(std_long);
     location_feat.append(std_alt);
@@ -364,9 +397,14 @@ def get_location_features(X,start_timestamp):
     location_feat.append(std_speed);
     location_feat.append(min_speed);
     location_feat.append(max_speed);
-    location_feat.append(diameter);
+    location_feat.append(comp_diameter);
     
     return location_feat;
+
+def get_inds_of_positive_values(vec):
+    no_nans     = numpy.where(numpy.isnan(vec),-1,vec);
+    pos_inds    = numpy.where(no_nans > 0.)[0];
+    return pos_inds;
 
 def get_statistic_with_relative_durations(timestamps,values):
     if len(values) == 1:
