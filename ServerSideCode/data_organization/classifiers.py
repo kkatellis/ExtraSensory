@@ -7,12 +7,25 @@ Written by Yonatan Vaizman. June 2015.
 
 import numpy;
 import sklearn.linear_model;
+import traceback;
+import multiprocessing;
+import time;
 
 import pdb;
 
 def classify(instance_features,classifier):
+    # Prepare a feature vector (assuming this isn't an ensemble classifier):
+    x           = construct_feature_vector(instance_features,classifier['model_params']);
+    if classifier['model_params']['standardize_features']:
+        # Standardize the vector:
+        x       = standardize_features(x,classifier['mean_vec'],classifier['std_vec']);
+        pass;
+    
     if classifier['model_params']['model_type'] == 'logit':
-        (bin_vec,prob_vec)  = classify_logit(instance_features,classifier);
+        (bin_vec,prob_vec)  = classify__logit(x,classifier);
+        pass;
+    elif classifier['model_params']['model_type'] == 'multilayer_logit':
+        (bin_vec,prob_vec)  = classify__multilayer_logit(x,classifier);
         pass;
     else:
         (bin_vec,prob_vec)  = (None,None);
@@ -22,10 +35,33 @@ def classify(instance_features,classifier):
 
 def train_classifier(instances_features,instances_labels,label_names,model_params):
     if 'model_type' not in model_params:
-        classifier  = None;
+        return None;
+
+    n_samples   = len(instances_features);
+    n_samples2  = instances_labels.shape[0];
+    if (n_samples2 != n_samples):
+        raise Exception('Cant train classifier. Got %d instances but %d labels' % (n_samples,n_sampmles2));
+    
+    # Construct the training sampels features:
+    dim         = get_feature_dim(model_params);
+    X           = numpy.zeros((n_samples,dim));
+    for ii in range(n_samples):     
+        X[ii,:] = construct_feature_vector(instances_features[ii],model_params);
         pass;
-    elif model_params['model_type'] == 'logit':
-        classifier  = train_classifier_logit(instances_features,instances_labels,label_names,model_params);
+
+    classifier  = {'model_params':model_params,'label_names':label_names};
+    if model_params['standardize_features']:
+        # Standardize (and save the standardization parameters):
+        (X,mean_vec,std_vec)    = estimate_standardization(X);
+        classifier['mean_vec']  = mean_vec;
+        classifier['std_vec']   = std_vec;
+        pass;
+
+    if model_params['model_type'] == 'logit':
+        classifier  = train_classifier__logit(X,instances_labels,label_names,classifier);
+        pass;
+    elif model_params['model_type'] == 'multilayer_logit':
+        classifier  = train_classifier__multilayer_logit(X,instances_labels,label_names,classifier);
         pass;
     else:
         classifier  = None;
@@ -136,9 +172,20 @@ def soft_classification_success_rates(y_gt,y_prob):
     
 
 ###########################################
-### Specific classifiers:
+### Helping functions:
 #########################
 
+'''
+Get only the valid examples from a collection of examples,
+meaning only the examples that don't have NaN in them.
+
+Input:
+feats: (n_examples x dim) The feature vectors of n_examples examples
+
+Output:
+valid_inds: list of indices of valid examples.
+valid_examples: (n_valid x dim) The feature vectors of the valid examples.
+'''
 def get_valid_examples(feats):
     n_examples          = feats.shape[0];
     invalid             = numpy.where(numpy.isnan(feats));
@@ -149,6 +196,22 @@ def get_valid_examples(feats):
 
     return (valid_inds,valid_examples);
 
+'''
+Apply some policy to handle missing values in a feature vector.
+
+Input:
+feature_vector: din-array of features. Values of NaN, inf or -inf are regarded as missing values.
+policy: string. One of:
+    'zero_imputation': replace every missing value with value of zero.
+    'missing_indicators': replace every missing value with value of zero,
+    and augment to the feature vector an indicator vector of the same dimension din,
+    where each indicator has 1 if the corresponding feature is missing and 0 otherwise.
+
+Output:
+feature_vector: dout-array of features.
+    The feature vector, after being handled with the selected policy,
+    possibly now having a different dimension than the input feature vector.
+'''
 def apply_missing_values_policy(feature_vector,policy):
     is_missing          = numpy.logical_or(numpy.isnan(feature_vector),numpy.isinf(feature_vector));
     if policy == 'zero_imputation':
@@ -157,6 +220,7 @@ def apply_missing_values_policy(feature_vector,policy):
     elif policy == 'missing_indicators':
         feature_vector[is_missing]  = 0;
         feature_vector              = numpy.concatenate((feature_vector,is_missing.astype(feature_vector.dtype)));
+        feature_vector              = numpy.reshape(feature_vector,(1,-1));
         pass;
     else:
         # Leave the feature vector as it is
@@ -164,8 +228,53 @@ def apply_missing_values_policy(feature_vector,policy):
 
     return feature_vector;
 
-### Logistic regression (logit):
-def construct_feature_vector_logit(instance_features,model_params):
+def get_feature_dim(model_params):
+    dim         = model_params['feature_dimension'];
+    if model_params['missing_value_policy'] == 'missing_indicators':
+        dim     *= 2;
+        pass;
+
+    return dim;
+
+'''
+Standardize the features by z-scoring.
+
+Input:
+X: (n x d) array of n feature vectors of dimension d.
+mean_vec: d-array of pre-trained estimation of mean vector.
+std_vec: d-array of pre-trained estimation of standard deviations.
+
+Output:
+Z: (n x d) array of the standardized features.
+'''
+def standardize_features(X,mean_vec,std_vec):
+    # Avoid dividing by zero:
+    epsilon         = 0.0000001;
+    dividers_vec    = numpy.where(std_vec <= epsilon,1.,std_vec);
+
+    Z               = (X-mean_vec) / dividers_vec;
+    return Z;
+
+'''
+Estimate the standardization parameters (vector of means and vector of standard deviations),
+and standardize the estimation features themselves.
+
+Input:
+X: (n x d) array of n feature vectors of dimension d.
+
+Output:
+Z: (n x d) array of the standardized feature vectors.
+mean_vec: d-array of estimated mean values.
+std_vec: d-array of estimated standard deviations.
+'''
+def estimate_standardization(X):
+    mean_vec        = numpy.mean(X,axis=0);
+    std_vec         = numpy.std(X,axis=0);
+    Z               = standardize_features(X,mean_vec,std_vec);
+
+    return (Z,mean_vec,std_vec);
+
+def construct_feature_vector(instance_features,model_params):
     # Construct a single feature vector for this instance:
     x           = numpy.zeros(0);
     for sensor in model_params['sensors']:
@@ -174,20 +283,16 @@ def construct_feature_vector_logit(instance_features,model_params):
     x           = numpy.reshape(x,(1,-1));
 
     x           = apply_missing_values_policy(x,model_params['missing_value_policy']);
-
-##    acc_vec     = instance_features['raw_acc'];
-##    gyr_vec     = instance_features['proc_gyro'];
-##    mag_vec     = instance_features['proc_magnet'];
-##    locq_vec    = instance_features['location_quick_features'];
-##
-##    x           = numpy.concatenate((acc_vec,gyr_vec,mag_vec,locq_vec));
-##    x           = numpy.reshape(x,(1,-1));
     
     return x;
-    
-def classify_logit(instance_features,classifier):
-    x           = construct_feature_vector_logit(instance_features,classifier['model_params']);
-    
+
+
+###########################################
+### Specific classifiers:
+#########################
+
+### Logistic regression (logit):    
+def classify__logit(x,classifier):
     # Use the pre-trained models to predict:
     n_classes   = len(classifier['label_models']);
     prob_vec    = numpy.zeros(n_classes);
@@ -205,67 +310,95 @@ def classify_logit(instance_features,classifier):
     
     return (bin_vec,prob_vec);
 
-def train_classifier_logit(instances_features,instances_labels,label_names,model_params):
-    n_samples   = len(instances_features);
-    (n_samples2,n_classes)  = instances_labels.shape;
-    if (n_samples2 != n_samples):
-        raise Exception('Cant train classifier. Got %d instances but %d labels' % (n_samples,n_sampmles2));
-    
-    # Construct the training sampels features:
-    dim         = model_params['feature_dimension'];
-    X           = numpy.zeros((n_samples,dim));
-    for ii in range(n_samples):
-        
-        X[ii,:] = construct_feature_vector_logit(instances_features[ii],model_params);
-        pass;
-    # Get rid of invalid examples:
-    (valid_inds,X)      = get_valid_examples(X);
-    instances_labels    = instances_labels[valid_inds,:];
-    n_samples           = X.shape[0];
-    
+def train_classifier__logit(X,instances_labels,label_names,classifier):
+    n_classes           = len(label_names);
     # Go over the labels classes and for each construct a binary classifier:
-    label_models        = [];
-    n_pos_per_label     = [];
-    n_neg_per_label     = [];
-    min_examples        = 2;
+    in_Q                = multiprocessing.Queue();
+    out_Q               = multiprocessing.Queue();
+    label_models        = [None for ci in range(n_classes)];
+    n_pos_per_label     = numpy.zeros(n_classes);
+    n_neg_per_label     = numpy.zeros(n_classes);
+    # Fill the process queue with tasks:
     for ci in range(n_classes):
-        y       = instances_labels[:,ci];
-        # Do we have enough training material for this label:
-        npos            = numpy.sum(y);
-        nneg            = numpy.sum(numpy.logical_not(y));
-        if (npos >= min_examples and nneg >= min_examples):
-            # First do a grid search to select value for parameter C:
-            (c_max,score_max)   = grid_search_logit(X,y);
-            print "== internal cross validation selected C=%f (cv score: %f)" % (c_max,score_max);
+        y       = instances_labels[:,ci].astype(int);
+        in_Q.put((ci,label_names[ci],y));
+        pass;
 
-            # Now train with the selected C and the entire train set:
-            single_model        = sklearn.linear_model.LogisticRegression(\
-                class_weight='auto',fit_intercept=True,C=c_max);
-            single_model.fit(X,y);
-    
-            print "+++ Trained model for label %d: %s (%d pos. %d neg)" \
-                  % (ci,label_names[ci],npos,nneg);
+    # Create the subprocesses:
+    n_cores             = 16;
+    for core_i in range(n_cores):
+        P               = multiprocessing.Process(\
+            target=feed_single_label_task_to_process__logit,\
+            args=(in_Q,out_Q,X));
+        P.start();
+        pass;
+
+    # Wait while the tasks are being performed:
+    while not out_Q.empty() or not in_Q.empty():
+        if not out_Q.empty():
+            # Get the results of a task:
+            (class_i,label_name,single_model,npos,nneg) = out_Q.get(True);
+            label_models[class_i]       = single_model;
+            n_pos_per_label[class_i]    = npos;
+            n_neg_per_label[class_i]    = nneg;
             pass;
         else:
-            single_model    = None;
-            npos            = 0;
-            nneg            = 0;
+            time.sleep(1);
             pass;
-        
-        label_models.append(single_model);
-        n_pos_per_label.append(npos);
-        n_neg_per_label.append(nneg);
         pass;
 
-    classifier  = {'model_params':model_params,\
-                   'label_names':label_names,\
-                   'label_models':label_models,\
-                   'n_pos_per_label':n_pos_per_label,\
-                   'n_neg_per_label':n_neg_per_label};
+        classifier['label_models']      = label_models;
+        classifier['n_pos_per_label']   = n_pos_per_label;
+        classifier['n_neg_per_label']   = n_neg_per_label;
     
     return classifier;
 
-def grid_search_logit(X,y):
+def feed_single_label_task_to_process__logit(in_Q,out_Q,X):
+    while not in_Q.empty():
+#        print "in_Q still has %d tasks to draw" % in_Q.qsize();
+        try:
+            (class_i,label_name,y)  = in_Q.get(True,1);
+            (single_model,npos,nneg) = train_single_logit_model(\
+                class_i,label_name,X,y);
+            out_Q.put((class_i,label_name,single_model,npos,nneg));
+            pass;
+        except:
+            print "!!! Caught exception trying to train model for label %d: %s" % (class_i,label_name);
+            traceback.print_exc();
+        pass;
+
+    out_Q.close();
+    return;
+
+def train_single_logit_model(class_i,label_name,X,y):
+    min_examples        = 2;
+    # Do we have enough training material for this label:
+    npos            = numpy.sum(y);
+    nneg            = numpy.sum(numpy.logical_not(y));
+    if (npos >= min_examples and nneg >= min_examples):
+        # First do a grid search to select value for parameter C:
+        (c_max,score_max)   = grid_search__logit(X,y);
+#        print "== internal cross validation selected C=%f (cv score: %f)" % (c_max,score_max);
+
+        # Now train with the selected C and the entire train set:
+        single_model        = sklearn.linear_model.LogisticRegression(\
+            solver='lbfgs',\
+            class_weight='auto',fit_intercept=True,C=c_max);
+        single_model.fit(X,y);
+
+        print "+++ Trained model for label %d: %s (%d pos. %d neg. C=%f. CV score=%f)" \
+              % (class_i,label_name,npos,nneg,c_max,score_max);
+        pass;
+    else:
+        single_model    = None;
+        npos            = 0;
+        nneg            = 0;
+        pass;
+
+    return (single_model,npos,nneg);
+
+
+def grid_search__logit(X,y):
     test_portion    = 0.3;
     c_values        = [1e-3,1e-2,1e-1,1e0,1e1,1e2];
     (train_inds,test_inds)  = semirandomly_partition_examples(y,test_portion);
@@ -284,6 +417,7 @@ def grid_search_logit(X,y):
     c_max           = 1.;
     for c_val in c_values:
         model       = sklearn.linear_model.LogisticRegression(\
+            solver='lbfgs',\
             class_weight='auto',fit_intercept=True,C=c_val);
         model.fit(X_train,y_train);
         y_hat       = model.predict(X_test);
@@ -298,6 +432,80 @@ def grid_search_logit(X,y):
     return (c_max,score_max);
 
 
+### Multi-layer logistic regression (multi-logit):    
+def classify__multilayer_logit(x,classifier):
+    n_layers            = len(classifier['layer_classifiers']);
+    layer_input         = x;
+
+    for (layer_i,layer_classifier) in enumerate(classifier['layer_classifiers']):
+        (layer_out_bin,layer_out_prob)  = classify__logit(layer_input,layer_classifier);
+        if layer_i < (n_layers-1):
+            # Prepare the input for the next layer:
+            if 'layer_input_policy' not in classifier['model_params']:
+                classifier['model_params']['layer_input_policy']    = 'no_augment';
+                pass;
+      
+            if classifier['model_params']['layer_input_policy'] == 'augment_previous_input':
+                layer_input             = numpy.concatenate((layer_input,layer_out_prob));
+                pass;
+            elif classifier['model_params']['layer_input_policy'] == 'augment_lower_input':
+                layer_input             = numpy.concatenate((x,layer_out_prob));
+                pass;
+            elif classifier['model_params']['layer_input_policy'] == 'no_augment':
+                layer_input             = layer_out_prob;
+                pass;
+            else:
+                raise ValueError("Got unsupported value for model parameter 'layer_input_policy': %s" % classifier['model_params']['layer_input_policy']);
+            
+            pass; # end if there's next layer
+        pass; # end for layer_i...
+
+    return (layer_out_bin,layer_out_prob);
+
+def train_classifier__multilayer_logit(X,instances_labels,label_names,classifier):
+    n_layers            = classifier['model_params']['n_layers'];
+    n_instances         = X.shape[0];
+    n_labels            = len(label_names);
+    layer_inputs        = X;
+
+    layer_classifiers   = [None for layer_i in range(n_layers)];
+    for layer_i in range(n_layers):
+        # Train the current layer classifier:
+        print "="*20;
+        print "==== Training layer %d of the classifier" % layer_i;
+        layer_classifier                = {'model_params':classifier['model_params']};
+        layer_classifier                = train_classifier__logit(layer_inputs,instances_labels,label_names,layer_classifier);
+        layer_classifiers[layer_i]      = layer_classifier;
+        
+        if layer_i < (n_layers-1):
+            # Prepare the input for the next layer:
+            layer_outputs               = numpy.zeros((n_instances,n_labels));
+            for ii in range(n_instances):
+                (out_bin,out_prob)      = classify__logit(layer_inputs[ii,:],layer_classifier);
+                layer_outputs[ii,:]     = out_prob;
+                pass;
+            
+            if 'layer_input_policy' not in classifier['model_params']:
+                classifier['model_params']['layer_input_policy']    = 'no_augment';
+                pass;
+      
+            if classifier['model_params']['layer_input_policy'] == 'augment_previous_input':
+                layer_inputs            = numpy.concatenate((layer_inputs,layer_outputs));
+                pass;
+            elif classifier['model_params']['layer_input_policy'] == 'augment_lower_input':
+                layer_inputs            = numpy.concatenate((X,layer_outputs));
+                pass;
+            elif classifier['model_params']['layer_input_policy'] == 'no_augment':
+                layer_inputs            = layer_outputs;
+                pass;
+            else:
+                raise ValueError("Got unsupported value for model parameter 'layer_input_policy': %s" % classifier['model_params']['layer_input_policy']);
+            
+            pass; # end if there's next layer
+        pass; # end for layer_i...
+
+    classifier['layer_classifiers']     = layer_classifiers;
+    return classifier;
 
 def main():
 

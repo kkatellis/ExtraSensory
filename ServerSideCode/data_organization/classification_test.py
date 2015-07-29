@@ -106,18 +106,22 @@ def main():
         fid             = file(inparam_file,'rb');
         inparams        = json.load(fid);
         fid.close();
+        model_params    = inparams;
+
         if inparams['sensor_set'] == 'all_sensors':
             sensors     = collect_features.get_all_sensor_names();
             pass;
         else:
             sensors     = None;######### NEed to handle this case
             pass;
+        model_params.pop('sensor_set');
         dim             = collect_features.get_feature_dimension_for_aggregate_of_sensors(sensors);
-        model_params    = {'model_type':inparams['model_type'],\
-                           'sensors':sensors,\
-                           'feature_dimension':dim,\
-                           'missing_value_policy':inparams['missing_value_policy']};
+
+        model_params['sensors']             = sensors;
+        model_params['feature_dimension']   = dim;
+
         output_file     = inparams['output_file'];
+        model_params.pop('output_file');
         pass;
     else:
         all_sensors     = collect_features.get_all_sensor_names();
@@ -125,10 +129,11 @@ def main():
         model_params    = {'model_type':'logit',\
                            'sensors':all_sensors,\
                            'feature_dimension':dim,\
-                           'missing_value_policy':'zero_imputation'};
+                           'missing_value_policy':'zero_imputation',\
+                           'standardize_features':True};
         output_file     = 'cv_results.pickle';
         pass;
-        
+
     uuids   = user_statistics.read_subjects_uuids();
 
     scores_per_fold     = leave_one_out_cross_validation(uuids,model_params);

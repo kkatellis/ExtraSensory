@@ -33,6 +33,7 @@ g__low_freq_measurements    = ['light','pressure','proximity_cm','proximity',\
                                'relative_humidity','wifi_status','app_state',\
                                'on_the_phone','battery_level','screen_brightness'];
 g__audio_properties         = ['max_abs_value','normalization_multiplier'];
+g__feats_needing_log_comp   = ['max_abs_value','light'];
 
 g__main_activities          = ['LYING_DOWN','SITTING','STANDING_IN_PLACE','STANDING_AND_MOVING',\
                                'WALKING','RUNNING','BICYCLING',"DON'T_REMEMBER"];
@@ -46,7 +47,6 @@ def get_all_sensor_names():
     sensors                 = list(g__sensors_with_3axes);
     sensors.append('location');
     sensors.extend(g__pseudo_sensors);
-    sensors.extend(g__location_quick_features);
 
     return sensors;
     
@@ -77,12 +77,16 @@ def get_pseudo_sensor_features(instance_dir,sensor):
 
     for (fi,feature_name) in enumerate(expected_features):
         if feature_name in input_data:
-            features[fi]    = input_data[feature_name];
+            value           = input_data[feature_name];
+            if feature_name in g__feats_needing_log_comp:
+                epsilon     = 0.00001;
+                value       = compute_features.log_compression(value,epsilon);
+                pass;
+            features[fi]    = value;
             pass;
         pass;
 
     return features;
-
     
 def get_features_from_measurements(instance_dir,timestamp,sensor):
     if sensor in g__pseudo_sensors:
