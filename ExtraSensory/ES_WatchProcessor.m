@@ -21,6 +21,7 @@
 //#define IOS_WATCHAPP_UUID @"668eb2d2-73dd-462d-b079-33f0f70ad3d0"
 #define IOS_WATCHAPP_UUID @"7dee2ab7-366e-4f02-aea0-265d66518fb6"
 #define RAW_WATCH_MAX_SAMPLES 500
+#define WATCH_SAMPLING_PERIOD 40
 
 
 @interface ES_WatchProcessor() <PBPebbleCentralDelegate>
@@ -91,6 +92,7 @@ BOOL _sendingMessage = NO;
 
 -(void)receiveDataFromWatch
 {
+    [self.watchAccTimestamps removeAllObjects];
     [self.mutableWatchAccX removeAllObjects];
     [self.mutableWatchAccY removeAllObjects];
     [self.mutableWatchAccZ removeAllObjects];
@@ -115,6 +117,7 @@ BOOL _sendingMessage = NO;
     self.receiveUpdateHandler = [self.myWatch appMessagesAddReceiveUpdateHandler:^BOOL(PBWatch *watch, NSDictionary *update) {
         // code to handle activity update events
         NSString *answer;
+        NSInteger timereference = 0;
         if([update count] == 1) {
             answer = [NSString stringWithFormat:@"%@", [update objectForKey:WATCH_MESSAGE_KEY]];
             
@@ -142,6 +145,7 @@ BOOL _sendingMessage = NO;
         if (!(self.mutableWatchAccX))
         {
             NSLog(@"===== initializing acc arrays");
+            self.watchAccTimestamps = [[NSMutableArray alloc] init];
             self.mutableWatchAccX = [[NSMutableArray alloc] init];
             self.mutableWatchAccY = [[NSMutableArray alloc] init];
             self.mutableWatchAccZ = [[NSMutableArray alloc] init];
@@ -155,29 +159,34 @@ BOOL _sendingMessage = NO;
         for (id key in [[update allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
             NSString *temp = [NSString stringWithFormat:@"%@", [update objectForKey:key]];
             NSArray *xyz = [temp componentsSeparatedByString:@","];
+            //NSLog(@"watch message: %@:%@", key, temp);
             if ([xyz count] == 3) {
                 // Then this is an update of accelerometer measurements:
-                NSNumber *aNum0 = [NSNumber numberWithDouble: [xyz[0] doubleValue]];
-                NSNumber *aNum1 = [NSNumber numberWithDouble: [xyz[1] doubleValue]];
-                NSNumber *aNum2 = [NSNumber numberWithDouble: [xyz[2] doubleValue]];
+                NSNumber *timeRef = [NSNumber numberWithInteger: timereference + WATCH_SAMPLING_PERIOD * ([key integerValue] - 1)];
+                NSNumber *aNum0 = [NSNumber numberWithInteger: [xyz[0] integerValue]];
+                NSNumber *aNum1 = [NSNumber numberWithInteger: [xyz[1] integerValue]];
+                NSNumber *aNum2 = [NSNumber numberWithInteger: [xyz[2] integerValue]];
+                [self.watchAccTimestamps addObject:timeRef];
                 [self.mutableWatchAccX addObject:aNum0];
                 [self.mutableWatchAccY addObject:aNum1];
                 [self.mutableWatchAccZ addObject:aNum2];
                 
-            }
-            else {
+            } else {
                 NSArray *th = [temp componentsSeparatedByString:@":"];
                 if ([th count] == 2) {
-                // Then we have an update of compass heading:
-                //NSLog(@"[WP] got compass update, time: %@ and value %@ degrees",th[0],th[1]);
-                [self.compassTimestamps addObject:[NSNumber numberWithInteger:[th[0] integerValue]]];
-                [self.compassHeadings addObject:[NSNumber numberWithInteger:[th[1] integerValue]]];
+                    // Then we have an update of compass heading:
+                    // NSLog(@"[WP] got compass update, time: %@ and value %@ degrees", key, xyz);
+                    [self.compassTimestamps addObject:[NSNumber numberWithInteger:[th[0] integerValue]]];
+                    [self.compassHeadings addObject:[NSNumber numberWithInteger:[th[1] integerValue]]];
+                } else if ([key integerValue] == 0) {
+                    // Then we have a timestamp
+                    timereference = [temp integerValue];
+                    //[self.watchAccTimestamps addObject:[NSNumber numberWithInteger:[temp integerValue]]];
+                } else {
+                    NSLog(@"Don't know what this message is: %@", temp);
                 }
             }
         }
-        //for (int i = 0; i < [self.mutableWatchAccX count]; i++){
-         //   NSLog(@"[WP] mutableWatchAccX %@",self.mutableWatchAccX);
-        //}
         return YES;
     }];
 }

@@ -13,6 +13,7 @@
 
 @interface ES_WatchProcessor : NSObject
 
+@property (nonatomic, strong) NSMutableArray *watchAccTimestamps;
 @property (nonatomic, strong) NSMutableArray *mutableWatchAccX;
 @property (nonatomic, strong) NSMutableArray *mutableWatchAccY;
 @property (nonatomic, strong) NSMutableArray *mutableWatchAccZ;

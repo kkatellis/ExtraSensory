@@ -670,6 +670,10 @@
         ES_FeedbackViewController *controller = [[ES_FeedbackViewController alloc] init];
         controller.labelSource = fromWatch ? ES_LabelSourceNotificationAnswerCorrectFromWatch : ES_LabelSourceNotificationAnswerCorrect;
         [controller submitFeedbackForActivityEvent:activityEvent];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        [self dismissLatestAlert];
+        [self updateApplicationBadge];
         return;
     }
     
