@@ -24,11 +24,11 @@ import user_statistics;
 
 import pdb;
 
-fid                 = file('params.json','rb');
-g__params           = json.load(fid);
+fid                 = file('env_params.json','rb');
+g__env_params       = json.load(fid);
 fid.close();
-g__output_superdir  = g__params['data_superdir'];
-g__input_superdir   = g__params['zip_superdir'];
+g__output_superdir  = g__env_params['data_superdir'];
+g__input_superdir   = g__env_params['zip_superdir'];
 
 
 def collect_all_instances_of_uuid(uuid,skip_existing):

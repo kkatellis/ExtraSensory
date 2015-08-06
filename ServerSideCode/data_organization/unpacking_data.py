@@ -29,7 +29,10 @@ def unpack_data_instance(input_zip_file,instance_out_dir):
         return False;
 
     # Read the measurements file and save the different modalities to files:
-    (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,watch_acc,location_quick,proc_rotation) = read_datafile(hf_file);
+    (raw_acc,raw_magnet,raw_gyro,\
+     proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,\
+     location,lf_data,watch_acc,watch_compass,\
+     location_quick,proc_rotation) = read_datafile(hf_file);
 
     np.savetxt(os.path.join(instance_out_dir,'m_raw_acc.dat'),raw_acc);
     np.savetxt(os.path.join(instance_out_dir,'m_raw_magnet.dat'),raw_magnet);
@@ -46,6 +49,7 @@ def unpack_data_instance(input_zip_file,instance_out_dir):
     
     np.savetxt(os.path.join(instance_out_dir,'m_location.dat'),location);
     np.savetxt(os.path.join(instance_out_dir,'m_watch_acc.dat'),watch_acc);
+    np.savetxt(os.path.join(instance_out_dir,'m_watch_compass.dat'),watch_compass);
     
     lf_out_file = os.path.join(instance_out_dir,'m_lf_measurements.json');
     fid = open(lf_out_file,'wb');
@@ -136,7 +140,15 @@ def read_datafile(hf_file):
                                               'location_altitude','location_speed',\
                                               'location_horizontal_accuracy','location_vertical_accuracy']);
 
-    watch_acc = join_data_fields_to_array(jdict,['raw_watch_acc_x','raw_watch_acc_y','raw_watch_acc_z']);
+    # Data from watch:
+    if 'watch_acc_timeref' in jdict:
+        watch_acc = join_data_fields_to_array(jdict,['watch_acc_timeref','raw_watch_acc_x','raw_watch_acc_y','raw_watch_acc_z']);
+        pass;
+    else:
+        watch_acc = join_data_fields_to_array(jdict,['raw_watch_acc_x','raw_watch_acc_y','raw_watch_acc_z']);
+        pass;
+
+    watch_compass = join_data_fields_to_array(jdict,['watch_compass_timeref','watch_compass_heading']);
     
     if 'low_frequency' in jdict:
         lf_data = jdict['low_frequency'];
@@ -152,7 +164,7 @@ def read_datafile(hf_file):
         location_quick = {};
         pass;
     
-    return (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,watch_acc,location_quick,proc_rotation);
+    return (raw_acc,raw_magnet,raw_gyro,proc_timeref,proc_acc,proc_magnet,proc_gyro,proc_gravity,proc_attitude,location,lf_data,watch_acc,watch_compass,location_quick,proc_rotation);
 
 
 

@@ -14,10 +14,10 @@ import pdb;
 import pickle;
 
 
-fid                         = file('params.json','rb');
-g__params                   = json.load(fid);
+fid                         = file('env_params.json','rb');
+g__env_params               = json.load(fid);
 fid.close();
-g__data_superdir            = g__params['data_superdir'];
+g__data_superdir            = g__env_params['data_superdir'];
 g__dont_remember            = "DON'T_REMEMBER";
 
 def read_subjects_uuids():
@@ -37,6 +37,15 @@ def read_subjects_uuids():
 
     return uuids;
 
+def standardize_label(label):
+    label   = label.upper();
+    label   = label.replace(' ','_');
+    label   = label.replace("'",'_');
+    label   = label.replace('(','_');
+    label   = label.replace(')','_');
+
+    return label;
+
 def get_instance_labels(instance_dir):
     feedback_file           = os.path.join(instance_dir,'feedback');
     if not os.path.exists(feedback_file):
@@ -54,12 +63,13 @@ def get_instance_labels(instance_dir):
         pass;
 
     main_activity           = feedback['corrected_activity'];
+    main_activity           = standardize_label(main_activity);
     
     secondary_activities    = [];
     if 'secondary_activities' in feedback:
         for act in feedback['secondary_activities']:
             if len(act) > 0:
-                secondary_activities.append(act);
+                secondary_activities.append(standardize_label(act));
                 pass; # end if len(act)....
             pass; # end for act...
         pass; # end if secondary in feedback...
@@ -68,7 +78,7 @@ def get_instance_labels(instance_dir):
     if 'moods' in feedback:
         for mood in feedback['moods']:
             if len(mood) > 0:
-                moods.append(mood);
+                moods.append(standardize_label(mood));
                 pass; # end if len(mood)...
             pass; # end for mood
         pass; # end if moods in feedback...
@@ -129,7 +139,7 @@ def statistics_per_user(uuid):
             
             # update general counts:
             labeled_count   = labeled_count + 1;
-            if main_activity != g__dont_remember:
+            if main_activity != standardize_label(g__dont_remember):
                 main_label_count    = main_label_count + 1;
                 pass;
             else:

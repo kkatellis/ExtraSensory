@@ -11,14 +11,15 @@ import numpy;
 
 import compute_features;
 import user_statistics;
+import audio_representation;
 
 import pdb;
 
 
-fid                         = file('params.json','rb');
-g__params                   = json.load(fid);
+fid                         = file('env_params.json','rb');
+g__env_params               = json.load(fid);
 fid.close();
-g__data_superdir            = g__params['data_superdir'];
+g__data_superdir            = g__env_params['data_superdir'];
 g__sensors_with_3axes       = ['raw_acc','raw_gyro','raw_magnet',\
                                'proc_acc','proc_gravity','proc_gyro',\
                                'proc_attitude','proc_magnet'];
@@ -36,7 +37,7 @@ g__audio_properties         = ['max_abs_value','normalization_multiplier'];
 g__feats_needing_log_comp   = ['max_abs_value','light'];
 
 g__main_activities          = ['LYING_DOWN','SITTING','STANDING_IN_PLACE','STANDING_AND_MOVING',\
-                               'WALKING','RUNNING','BICYCLING',"DON'T_REMEMBER"];
+                               'WALKING','RUNNING','BICYCLING'];#,"DON'T_REMEMBER"];
 
 g__secondary_activities     = [];
 g__moods                    = [];
@@ -46,6 +47,7 @@ g__sr                       = 40.;
 def get_all_sensor_names():
     sensors                 = list(g__sensors_with_3axes);
     sensors.append('location');
+    sensors.append('audio');
     sensors.extend(g__pseudo_sensors);
 
     return sensors;
@@ -87,11 +89,15 @@ def get_pseudo_sensor_features(instance_dir,sensor):
         pass;
 
     return features;
-    
-def get_features_from_measurements(instance_dir,timestamp,sensor):
+
+def get_features_from_measurements(instance_dir,timestamp,sensor,audio_encoder):
     if sensor in g__pseudo_sensors:
         return get_pseudo_sensor_features(instance_dir,sensor);
-    
+
+    if sensor == 'audio':
+        return audio_representation.get_instance_audio_representation(instance_dir,audio_encoder);
+
+
     measurements_file       = os.path.join(instance_dir,'m_%s.dat' % sensor);
     default_features        = numpy.nan*numpy.ones(get_feature_dimension_for_sensor_type(sensor));
     if not os.path.exists(measurements_file):
@@ -121,14 +127,14 @@ def get_features_from_measurements(instance_dir,timestamp,sensor):
             X = numpy.reshape(X,(1,-1));
             pass;
         features            = compute_features.get_location_features(X,timestamp);
-        return features;
+        return features;        
 
     return default_features;
 
 def get_uuid_data_dir(uuid):
     return os.path.join(g__data_superdir,uuid);
 
-def get_instance_features(uuid,timestamp_str,sensors):
+def get_instance_features(uuid,timestamp_str,sensors,audio_encoder):
     uuid_dir                = os.path.join(g__data_superdir,uuid);
     instance_dir            = os.path.join(uuid_dir,timestamp_str);
 
@@ -140,7 +146,7 @@ def get_instance_features(uuid,timestamp_str,sensors):
 
     for sensor in sensors:
         features[sensor]    = get_features_from_measurements(\
-            instance_dir,timestamp,sensor);
+            instance_dir,timestamp,sensor,audio_encoder);
         pass; # end for sensor...
 
     return features;
@@ -204,7 +210,7 @@ def initialize_feature_matrices(num_instances,sensors):
     return features;
 
 
-def collect_features_and_labels(uuids):
+def collect_features_and_labels(uuids,audio_encoder):
     sensors                 = get_all_sensor_names();
     main_label_names        = get_main_labels();
     sec_label_names         = get_secondary_labels();
@@ -235,7 +241,7 @@ def collect_features_and_labels(uuids):
 
             # Get features:
             instance_feats  = get_instance_features(\
-                uuid,subdir,sensors);
+                uuid,subdir,sensors,audio_encoder);
 
             # Append this instance to train set:
             instances_features.append(instance_feats);
@@ -291,7 +297,7 @@ def features_per_user(uuid,sensors):
         if moods != None:
             mood_mat[ii]        = moods_strings2binary(moods);
             pass;
-
+        pdb.set_trace();
         pass; # end for (ii,timestamp)...
 
     print "done with %d instances for user" % len(user_instances);
@@ -369,10 +375,7 @@ def read_mood_labels():
     return g__moods;
 
 def standardize_label(label):
-    label   = label.upper();
-    label   = label.replace(' ','_');
-
-    return label;
+    return user_statistics.standardize_label(label);
 
 def main():
 

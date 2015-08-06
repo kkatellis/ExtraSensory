@@ -5,7 +5,10 @@ classifiers.py
 Written by Yonatan Vaizman. June 2015.
 '''
 
+import os;
+import os.path;
 import numpy;
+import pickle;
 import sklearn.linear_model;
 import traceback;
 import multiprocessing;
@@ -312,6 +315,8 @@ def classify__logit(x,classifier):
 
 def train_classifier__logit(X,instances_labels,label_names,classifier):
     n_classes           = len(label_names);
+    train_dir           = classifier['model_params']['train_dir'];
+    
     # Go over the labels classes and for each construct a binary classifier:
     in_Q                = multiprocessing.Queue();
     out_Q               = multiprocessing.Queue();
@@ -321,7 +326,7 @@ def train_classifier__logit(X,instances_labels,label_names,classifier):
     # Fill the process queue with tasks:
     for ci in range(n_classes):
         y       = instances_labels[:,ci].astype(int);
-        in_Q.put((ci,label_names[ci],y));
+        in_Q.put((ci,label_names[ci],y,train_dir));
         pass;
 
     # Create the subprocesses:
@@ -334,41 +339,76 @@ def train_classifier__logit(X,instances_labels,label_names,classifier):
         pass;
 
     # Wait while the tasks are being performed:
-    while not out_Q.empty() or not in_Q.empty():
+    label_inds_left     = set(range(n_classes));
+    while len(label_inds_left) > 0: #not out_Q.empty() or not in_Q.empty():
         if not out_Q.empty():
             # Get the results of a task:
             (class_i,label_name,single_model,npos,nneg) = out_Q.get(True);
             label_models[class_i]       = single_model;
             n_pos_per_label[class_i]    = npos;
             n_neg_per_label[class_i]    = nneg;
+            label_inds_left.remove(class_i);
             pass;
         else:
+            #print "--- left: %d, in_Q: %d, out_Q: %d" % (len(label_inds_left),in_Q.qsize(),out_Q.qsize());
             time.sleep(1);
-            pass;
-        pass;
+            pass; # end else
+        
+        pass; # end while not...
+    
 
-        classifier['label_models']      = label_models;
-        classifier['n_pos_per_label']   = n_pos_per_label;
-        classifier['n_neg_per_label']   = n_neg_per_label;
+    classifier['label_models']      = label_models;
+    classifier['n_pos_per_label']   = n_pos_per_label;
+    classifier['n_neg_per_label']   = n_neg_per_label;
     
     return classifier;
 
 def feed_single_label_task_to_process__logit(in_Q,out_Q,X):
     while not in_Q.empty():
-#        print "in_Q still has %d tasks to draw" % in_Q.qsize();
+ #       print "in_Q still has %d tasks to draw" % in_Q.qsize();
         try:
-            (class_i,label_name,y)  = in_Q.get(True,1);
-            (single_model,npos,nneg) = train_single_logit_model(\
-                class_i,label_name,X,y);
+            (class_i,label_name,y,train_dir)    = in_Q.get(True,1);
+            model_file                          = get_single_logit_model_file(train_dir,label_name);
+            # Was this model already trained?
+            if os.path.exists(model_file):
+                fid                             = file(model_file,'rb');
+                model_data                      = pickle.load(fid);
+                fid.close();
+                single_model                    = model_data['single_model'];
+                npos                            = model_data['npos'];
+                nneg                            = model_data['nneg'];
+                print "*** Loading already trained model for %s" % label_name;
+                pass;
+            else:
+                (single_model,npos,nneg)        = train_single_logit_model(\
+                    class_i,label_name,X,y);
+                if single_model != None:
+                    model_data                      = {\
+                        'single_model':single_model,\
+                        'npos':npos,\
+                        'nneg':nneg};
+                    fid                             = file(model_file,'wb');
+                    pickle.dump(model_data,fid);
+                    fid.close();
+                    pass; # end if single_model != None
+                pass; # end else
+
+#            print ">>> putting into out queue %d:%s" % (class_i,label_name);
             out_Q.put((class_i,label_name,single_model,npos,nneg));
-            pass;
+            pass; # end try...
         except:
             print "!!! Caught exception trying to train model for label %d: %s" % (class_i,label_name);
             traceback.print_exc();
-        pass;
+            pass; # end except
+
+#        print ">>> done with iteration of %d:%s" % (class_i,label_name);
+        pass; # end while not...
 
     out_Q.close();
     return;
+
+def get_single_logit_model_file(train_dir,label_name):
+    return os.path.join(train_dir,"%s.pickle" % label_name);
 
 def train_single_logit_model(class_i,label_name,X,y):
     min_examples        = 2;
@@ -446,10 +486,10 @@ def classify__multilayer_logit(x,classifier):
                 pass;
       
             if classifier['model_params']['layer_input_policy'] == 'augment_previous_input':
-                layer_input             = numpy.concatenate((layer_input,layer_out_prob));
+                layer_input             = numpy.concatenate((layer_input,numpy.reshape(layer_out_prob,(1,-1))),axis=1);
                 pass;
             elif classifier['model_params']['layer_input_policy'] == 'augment_lower_input':
-                layer_input             = numpy.concatenate((x,layer_out_prob));
+                layer_input             = numpy.concatenate((x,numpy.reshape(layer_out_prob,(1,-1))),axis=1);
                 pass;
             elif classifier['model_params']['layer_input_policy'] == 'no_augment':
                 layer_input             = layer_out_prob;
@@ -473,7 +513,13 @@ def train_classifier__multilayer_logit(X,instances_labels,label_names,classifier
         # Train the current layer classifier:
         print "="*20;
         print "==== Training layer %d of the classifier" % layer_i;
-        layer_classifier                = {'model_params':classifier['model_params']};
+        layer_classifier                = {'model_params':pickle.loads(pickle.dumps(classifier['model_params']))};
+        # Make subdir for the layer classifier training:
+        layer_train_dir                 = os.path.join(classifier['model_params']['train_dir'],'layer_%d' % layer_i);
+        if not os.path.exists(layer_train_dir):
+            os.mkdir(layer_train_dir);
+            pass;
+        layer_classifier['model_params']['train_dir']   = layer_train_dir;
         layer_classifier                = train_classifier__logit(layer_inputs,instances_labels,label_names,layer_classifier);
         layer_classifiers[layer_i]      = layer_classifier;
         
@@ -490,10 +536,10 @@ def train_classifier__multilayer_logit(X,instances_labels,label_names,classifier
                 pass;
       
             if classifier['model_params']['layer_input_policy'] == 'augment_previous_input':
-                layer_inputs            = numpy.concatenate((layer_inputs,layer_outputs));
+                layer_inputs            = numpy.concatenate((layer_inputs,layer_outputs),axis=1);
                 pass;
             elif classifier['model_params']['layer_input_policy'] == 'augment_lower_input':
-                layer_inputs            = numpy.concatenate((X,layer_outputs));
+                layer_inputs            = numpy.concatenate((X,layer_outputs),axis=1);
                 pass;
             elif classifier['model_params']['layer_input_policy'] == 'no_augment':
                 layer_inputs            = layer_outputs;

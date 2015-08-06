@@ -1,0 +1,5 @@
+{
+"zip_superdir":"data/raw_zipped_data",
+"data_superdir":"data/raw_data",
+"experiment_superdir":"experiments"
+}
