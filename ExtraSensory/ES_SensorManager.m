@@ -318,6 +318,7 @@
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopDeviceMotionUpdates];
     [self.soundProcessor pauseDurRecording];
+    [[AVAudioSession sharedInstance] setActive:NO error:nil];
     if([[[self appDelegate] watchProcessor] isConnectedToWatch]) {
         [[[self appDelegate] watchProcessor] stopWatchCollection];
     }

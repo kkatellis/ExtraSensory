@@ -69,7 +69,7 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
     if (self) {
         //--// Initializing an audio session & start our session
 //        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers|AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
         
         //soundFileURLPre = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:HF_SOUND_FILE_PRE]];
@@ -135,9 +135,9 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
 }
 
 - (BOOL) startDurRecording {
-    // We need to deactivate the audio session:
-    BOOL activate_success = [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    NSLog(@"[SoundWaveProcessor] Tried to activate audio session. %@",activate_success?@"success":@"fail");
+    // We need to activate the audio session:
+    //BOOL activate_success = [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    //NSLog(@"[SoundWaveProcessor] Tried to activate audio session. %@",activate_success?@"success":@"fail");
 
   //  NSLog(@"[SoundWaveProcessor] recordingForDuration %f",self.sampleDuration);
     if( [hfRecorderDur isRecording] ) {
@@ -145,7 +145,7 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
         [hfRecorderDur stop];
     }
     BOOL success = [hfRecorderDur recordForDuration:self.sampleDuration];
-  //  NSLog(@"[SoundWaveProcessor] Did we succeed to start recording audio: %@",success?@"success":@"fail");
+    NSLog(@"[SoundWaveProcessor] Did we succeed to start recording audio: %@",success?@"success":@"fail");
     return success;
 }
 
@@ -179,7 +179,7 @@ typedef boost::shared_ptr<WM::AudioFileReader> AudioFileReaderRef;
       //  NSLog(@"[SoundWaveProcessor] Wav file is ready but recorder is still recording. stopping it...");
         [hfRecorderDur stop];
     }
-    BOOL deactivate_success = [[AVAudioSession sharedInstance] setActive:NO error:nil];
+    //BOOL deactivate_success = [[AVAudioSession sharedInstance] setActive:NO error:nil];
    // NSLog(@"[SoundWaveProcessor] Tried to deactivate audio session. %@",deactivate_success?@"success":@"fail");
     
     NSURL* MFCCFileURLDur = [NSURL fileURLWithPath:[[self.dataPath path] stringByAppendingPathComponent:[ES_DataBaseAccessor getMFCCFilename]]];
