@@ -36,22 +36,27 @@ def train_phase(train_uuids,model_params):
         pass; # end if exists classifier_file...
     else:
         # Prepare audio encoder:
-        audio_params    = model_params['audio_params'];
-        audio_enc_file  = os.path.join(train_dir,'audio_encoder.pickle');
-        if os.path.exists(audio_enc_file):
-            fid             = file(audio_enc_file,'rb');
-            audio_encoder   = pickle.load(fid);
-            fid.close();
-            print "<< Loaded ready audio encoder file: %s" % audio_enc_file;
-            pass; # end if exists audio_enc_file...
+        if 'audio' not in model_params['sensors']:
+            audio_encoder   = None;
+            pass;
         else:
-            audio_encoder   = audio_representation.train_audio_encoder(sorted(train_uuids),audio_params);
-            fid             = file(audio_enc_file,'wb');
-            pickle.dump(audio_encoder,fid);
-            fid.close();
-            print ">> Saved audio encoder file: %s" % audio_enc_file;
-            pass; # end else (not exists audio_enc_file)
-        
+            audio_params    = model_params['audio_params'];
+            audio_enc_file  = os.path.join(train_dir,'audio_encoder.pickle');
+            if os.path.exists(audio_enc_file):
+                fid             = file(audio_enc_file,'rb');
+                audio_encoder   = pickle.load(fid);
+                fid.close();
+                print "<< Loaded ready audio encoder file: %s" % audio_enc_file;
+                pass; # end if exists audio_enc_file...
+            else:
+                audio_encoder   = audio_representation.train_audio_encoder(sorted(train_uuids),audio_params);
+                fid             = file(audio_enc_file,'wb');
+                pickle.dump(audio_encoder,fid);
+                fid.close();
+                print ">> Saved audio encoder file: %s" % audio_enc_file;
+                pass; # end else (not exists audio_enc_file)
+            pass; # end else (if 'audio' is in sensors)
+
         # Collect the train set:
         train_set_file  = os.path.join(train_dir,'train_set.pickle');
         if os.path.exists(train_set_file):
@@ -67,7 +72,7 @@ def train_phase(train_uuids,model_params):
             print "== Collecting train examples...";
             (instances_features,\
              instances_labels,\
-             label_names)   = collect_features.collect_features_and_labels(train_uuids,audio_encoder);
+             label_names)   = collect_features.collect_features_and_labels(train_uuids,model_params['sensors'],audio_encoder);
             train_set       = {\
                 'instances_features':instances_features,\
                 'instances_labels':instances_labels,\
@@ -79,9 +84,9 @@ def train_phase(train_uuids,model_params):
             pass; # end else (not exists train_set_file)
 
         print "Train set: %d instances" % len(instances_features);
-    
         # Train the classifier:
-        print "== Training classifier of type: %s..." % model_params;
+        print "== Training classifier of type: %s" % model_params;
+        print "."*10;
         classifier  = classifiers.train_classifier(\
             instances_features,instances_labels,\
             label_names,model_params);
@@ -113,7 +118,7 @@ def test_phase(test_uuids,classifier):
         print "== Collecting test examples...";
         (instances_features,\
          instances_labels_gt,\
-         label_names)   = collect_features.collect_features_and_labels(test_uuids,classifier['audio_encoder']);
+         label_names)   = collect_features.collect_features_and_labels(test_uuids,classifier['model_params']['sensors'],classifier['audio_encoder']);
         test_set        = {\
             'instances_features':instances_features,\
             'instances_labels':instances_labels_gt,\
@@ -212,13 +217,17 @@ def main():
         if inparams['sensor_set'] == 'all_sensors':
             sensors     = collect_features.get_all_sensor_names();
             pass;
+        elif inparams['sensor_set'] == 'all_sensors_except_audio':
+            sensors     = collect_features.get_all_sensor_names();
+            sensors.remove('audio_properties');
+            sensors.remove('audio');
         else:
             sensors     = None;######### NEed to handle this case
             pass;
         model_params.pop('sensor_set');
 
         enc_params      = {'tau':4};
-        audio_params    = {'k':20,'minibatch_size':100,'init_batch_size':100,'n_minibatches':10,'encoder_params':enc_params};
+        audio_params    = {'k':20,'minibatch_size':300,'init_batch_size':500,'n_minibatches':40,'encoder_params':enc_params};
         model_params['audio_params']    = audio_params;
         dim             = collect_features.get_feature_dimension_for_aggregate_of_sensors(sensors,audio_params['k']);
 

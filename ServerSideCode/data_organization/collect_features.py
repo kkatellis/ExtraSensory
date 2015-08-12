@@ -23,8 +23,7 @@ fid.close();
 g__data_superdir            = g__env_params['data_superdir'];
 g__sensors_with_3axes       = ['raw_acc','raw_gyro','raw_magnet',\
                                'proc_acc','proc_gravity','proc_gyro',\
-                               'proc_attitude','proc_magnet',\
-                               'watch_acc'];
+                               'proc_attitude','proc_magnet'];
 g__raw_sensors              = ['raw_acc','raw_gyro','raw_magnet'];
 g__processed_sensors        = ['proc_acc','proc_gravity','proc_gyro',\
                                'proc_attitude','proc_magnet'];
@@ -61,13 +60,16 @@ def get_all_sensor_names():
 
     return sensors;
     
-
-def get_discrete_measurements(instance_dir):
+def get_dim_of_discrete_measurements():
     dim         = 0;
     for key in g__discrete_measurements.keys():
         dim     += len(g__discrete_measurements[key]);
         pass;
 
+    return dim;
+
+def get_discrete_measurements(instance_dir):
+    dim         = get_dim_of_discrete_measurements();
     feats       = numpy.zeros(dim);
     input_file  = os.path.join(instance_dir,'m_lf_measurements.json');
     if not os.path.exists(input_file):
@@ -176,7 +178,10 @@ def get_features_from_measurements(instance_dir,timestamp,sensor,audio_encoder):
             pass;
         else:
             timerefs        = 0.040 * range(X.shape[0]); # (Assuming constant sampling rate of 25Hz)
-        pass;
+            pass;
+
+        features            = compute_features.get_watch_acc_features(timerefs,X);
+        return features;
 
     if sensor in g__sensors_with_3axes:
         # Estimate the average sampling rate:
@@ -275,6 +280,8 @@ def get_feature_dimension_for_sensor_type(sensor,audio_rep_dim=0):
         dim     = compute_features.dimension_of_location_features();
     elif sensor == 'lf_measurements':
         dim     = len(g__low_freq_measurements);
+    elif sensor == 'discrete_measurements':
+        dim     = get_dim_of_discrete_measurements();
     elif sensor == 'location_quick_features':
         dim     = len(g__location_quick_features);
     elif sensor == 'audio_properties':
@@ -282,7 +289,7 @@ def get_feature_dimension_for_sensor_type(sensor,audio_rep_dim=0):
     elif sensor == 'audio':
         dim     = audio_rep_dim;
     elif sensor == 'watch_compass':
-        dim     = 0;######################TODO
+        dim     = compute_features.dimension_of_watch_compass_features();
     else:
         dim     = 0;
         pass;
@@ -310,8 +317,7 @@ def initialize_feature_matrices(num_instances,sensors):
     return features;
 
 
-def collect_features_and_labels(uuids,audio_encoder):
-    sensors                 = get_all_sensor_names();
+def collect_features_and_labels(uuids,sensors,audio_encoder):
     main_label_names        = get_main_labels();
     sec_label_names         = get_secondary_labels();
     label_names             = main_label_names[:];
@@ -431,7 +437,6 @@ def features_per_user(uuid,sensors):
         if moods != None:
             mood_mat[ii]        = moods_strings2binary(moods);
             pass;
-        pdb.set_trace();
         pass; # end for (ii,timestamp)...
 
     print "done with %d instances for user" % len(user_instances);

@@ -21,6 +21,9 @@ g__data_superdir    = g__env_params['data_superdir'];
 
 
 def get_dimension_of_audio_representation(audio_encoder):
+    if audio_encoder == None:
+        return 0;
+    
     return audio_encoder['codebook'].shape[0];
 
 def get_instance_audio_representation(instance_dir,audio_encoder):

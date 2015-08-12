@@ -51,7 +51,7 @@ def get_3d_series_features(X,sr):
 
     # Autocorrelation:
     lags_in_sec     = [0.5,1,2];
-    feats[27:30]    = get_autocorrelation_coeff(mag,lags_in_sec,sr);
+    feats[27:30]    = get_autocorrelation_coeff(mag,lags_in_sec,sr,True);
     
     # Detect dominant frequencies:
     mag_mat         = numpy.reshape(mag,(T,1));
@@ -61,22 +61,6 @@ def get_3d_series_features(X,sr):
     feats[31]       = dom_period[0];
     feats[32]       = dom_power[0];
     feats[33]       = spec_ent[0];
-
-##    # Statistics:
-##    pc1_stats   = get_1d_statistics(X[:,0]);
-##    mag_stats   = get_1d_statistics(mag);
-##    cross_stats = get_cross_dim_statistics(X);
-##    cross_raw   = get_cross_dim_statistics(unrotated);
-##
-##    # Organize features:
-##    feats = [];
-##    feats.extend(pc1);
-##    feats.extend([norm_lam[0],norm_lam[1]]);
-##    feats.extend(dft_dom_freq_feat);
-##    feats.extend(pc1_stats);
-##    feats.extend(mag_stats);
-##    feats.extend(cross_stats);
-##    feats.extend(cross_raw);
 
     return feats.tolist();
 
@@ -175,18 +159,35 @@ Input:
 x: (T-ndarray). Scalar time-series
 lags_in_sec: list of l desired time-lags (in seconds)
 sr: scalar. The sampling rate of the time series (Hz).
+subtract_mean: boolean. Should we subtract the DC of the signal before computing autocorrelation? (this will result in autocovariance)
 
 Output:
-coeffs: (l-ndarray). For each lag, the (sqrt compressed) autocorrelation coefficient.
+coeffs: (l-ndarray). For each lag, the autocorrelation coefficient
+        (normalized, relative to AC(lag=0)).
 '''
-def get_autocorrelation_coeff(x,lags_in_sec,sr):
+def get_autocorrelation_coeff(x,lags_in_sec,sr,subtract_mean):
+    if subtract_mean:
+        x       = x - numpy.mean(x);
+        pass;
+    
     ac_coeffs   = numpy.correlate(x,x,mode='full');
+    # Get rid of the negative-lag redundant values:
+    ac_coeffs   = ac_coeffs[ac_coeffs.size/2:];
+    ac0         = ac_coeffs[0];
+    # Normalize to have ac(0)=1:
+    if (ac0 > 0):
+        ac_coeffs   = ac_coeffs / ac0;
+        pass;
+    
     l           = len(lags_in_sec);
     lags_f      = numpy.around(numpy.array(lags_in_sec)*float(sr));
     lags        = lags_f.astype(int);
     coeffs      = numpy.zeros(l);
     for li in range(l):
-        coeffs[li]   = power_compression(ac_coeffs[lags[li]],0.5);
+        lag     = lags[li];
+        if lag > ac_coeffs.size:
+            continue;
+        coeffs[li]   = ac_coeffs[lag];
         pass;
 
     return coeffs;
@@ -460,18 +461,32 @@ def distance_between_geographic_points(r_lat1,r_long1,r_lat2,r_long2):
 
     return arc_length;
 
+def get_watch_acc_features(timerefs,X):
+    # Get rid of leftover entries in the beginning of the sequence:
+    valid_inds      = numpy.where(timerefs<=timerefs[-1])[0];
+    if len(valid_inds) < timerefs.size:
+        timerefs    = timerefs[valid_inds];
+        X           = X[valid_inds,:];
+        pass;
+
+    dur             = timerefs[-1] - timerefs[0];
+    sr              = float(X.shape[0]) / dur;
+    features        = get_3d_series_features(X,sr);
+    return features;
+ 
+
 def get_compass_features(timerefs_unsorted,headings_unsorted):
     dim             = dimension_of_watch_compass_features();
     features        = numpy.nan*numpy.ones(dim);
 
-    # First sort the samples according to time:
+    # Sort the samples according to time:
     order           = [pair[0] for pair in sorted(enumerate(timerefs_unsorted),key=lambda x:x[1])];
     timerefs        = timerefs_unsorted[order];
     headings        = headings_unsorted[order];
 
     # Now fill any long gaps, assuming linear interpolation:
-    pdb.set_trace();
     mingap          = min(timerefs[1:]-timerefs[:-1]);
+    mingap          = max([mingap,0.005]);
     num             = int((timerefs[-1]-timerefs[0]) / mingap);
     times           = numpy.linspace(timerefs[0],timerefs[-1],num=num);
     raw_degs        = numpy.interp(times,timerefs,headings);

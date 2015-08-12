@@ -1,0 +1,9 @@
+{
+"model_type":"multilayer_logit",
+"n_layers":2,
+"layer_input_policy":"no_augment",
+"sensor_set":"all_sensors_except_audio",
+"missing_value_policy":"zero_imputation",
+"experiment_name":"multilayer2logitNoAudio",
+"standardize_features":true
+}

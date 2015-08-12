@@ -1,0 +1,7 @@
+{
+"model_type":"logit",
+"sensor_set":"all_sensors_except_audio",
+"missing_value_policy":"zero_imputation",
+"experiment_name":"logitNoAudio",
+"standardize_features":true
+}
