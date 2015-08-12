@@ -10,6 +10,8 @@ import random;
 import json;
 import numpy;
 import sklearn.cluster;
+import pickle;
+import warnings;
 import pdb;
 
 fid                 = file('env_params.json','rb');
@@ -42,6 +44,9 @@ def get_instance_audio_representation(instance_dir,audio_encoder):
 
     # Root compression (PPK transformation):
     rep_vec             = codeword_hist**0.5;
+    # Make this a 1-d array:
+    rep_vec             = numpy.squeeze(rep_vec);
+
     return rep_vec;
 
 
@@ -55,6 +60,7 @@ train_uuids: list of strings. The UUIDs of the train users to be used to train t
 audio_params: dict. Parameters to specify the encoder type and training mechanism. Including:
     audio_params['k']: scalar. The desired dimension of the encoding representation (number of centroids for VQ).
     audio_params['minibatch_size']: scalar. How many instances to include in each minibatch of the online learning algorithm.
+    audio_params['encoder_params']: dict. Containing all the parameters you wish to include in the resulted encoder.
     
 
 Output:
@@ -92,6 +98,11 @@ def train_audio_encoder(train_uuids,audio_params):
         pass; # end for mini...
 
     encoder                     = {'codebook':codebook};
+    copied_params               = pickle.loads(pickle.dumps(audio_params['encoder_params']));
+    for key in copied_params.keys():
+        encoder[key]            = copied_params[key];
+        pass;
+    
     return encoder;
 
 '''
@@ -197,13 +208,18 @@ pre_norm: (T x 39) array. Unnormalized features.
 def get_instance_audio_features(instance_dir):
     raw_d                       = 13;
     out_d                       = raw_d*3;
+    empty_features              = numpy.zeros((0,out_d));
     mfcc_file                   = os.path.join(instance_dir,'sound.mfcc');
     if not os.path.exists(mfcc_file):
-        return numpy.zeros((0,out_d));
+        return (empty_features,empty_features);
 
-    mfcc                        = numpy.genfromtxt(mfcc_file,delimiter=',');
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore");
+        mfcc                        = numpy.genfromtxt(mfcc_file,delimiter=',');
+        pass;
+    
     if len(mfcc.shape) != 2:
-        return numpy.zeros((0,out_d));
+        return (empty_features,empty_features);
 
     (T,d)                       = mfcc.shape;
     if d == 14:
@@ -211,11 +227,14 @@ def get_instance_audio_features(instance_dir):
         d                       = mfcc.shape[1];
         pass;
     if d != 13:
-        return numpy.zeros((0,out_d));
+        return (empty_features,empty_features);
 
     if T < 3:
-        return numpy.zeros((0,out_d));
+        return (empty_features,empty_features);
 
+    if numpy.any(numpy.isnan(mfcc)) or numpy.any(numpy.isinf(mfcc)):
+        return (empty_features,empty_features);
+    
     # Get windows of 3 frames:
     pre_norm                    = numpy.concatenate((mfcc[:-2,:],mfcc[1:-1,:],mfcc[2:,:]),axis=1);
     # Normalize each feature vector to have unit L2-norm:

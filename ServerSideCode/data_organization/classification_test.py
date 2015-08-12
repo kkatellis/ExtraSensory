@@ -36,6 +36,7 @@ def train_phase(train_uuids,model_params):
         pass; # end if exists classifier_file...
     else:
         # Prepare audio encoder:
+        audio_params    = model_params['audio_params'];
         audio_enc_file  = os.path.join(train_dir,'audio_encoder.pickle');
         if os.path.exists(audio_enc_file):
             fid             = file(audio_enc_file,'rb');
@@ -44,7 +45,6 @@ def train_phase(train_uuids,model_params):
             print "<< Loaded ready audio encoder file: %s" % audio_enc_file;
             pass; # end if exists audio_enc_file...
         else:
-            audio_params    = {'k':20,'minibatch_size':100,'init_batch_size':100,'n_minibatches':10};
             audio_encoder   = audio_representation.train_audio_encoder(sorted(train_uuids),audio_params);
             fid             = file(audio_enc_file,'wb');
             pickle.dump(audio_encoder,fid);
@@ -216,7 +216,11 @@ def main():
             sensors     = None;######### NEed to handle this case
             pass;
         model_params.pop('sensor_set');
-        dim             = collect_features.get_feature_dimension_for_aggregate_of_sensors(sensors);
+
+        enc_params      = {'tau':4};
+        audio_params    = {'k':20,'minibatch_size':100,'init_batch_size':100,'n_minibatches':10,'encoder_params':enc_params};
+        model_params['audio_params']    = audio_params;
+        dim             = collect_features.get_feature_dimension_for_aggregate_of_sensors(sensors,audio_params['k']);
 
         model_params['sensors']             = sensors;
         model_params['feature_dimension']   = dim;

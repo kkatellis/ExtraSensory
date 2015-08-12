@@ -24,6 +24,9 @@ def dimension_of_3d_series_features():
 def dimension_of_location_features():
     return 11;
 
+def dimension_of_watch_compass_features():
+    return 9;
+
 def get_3d_series_features(X,sr):
     (T,d)           = X.shape;
 
@@ -456,6 +459,69 @@ def distance_between_geographic_points(r_lat1,r_long1,r_lat2,r_long2):
     arc_length      = EARTH_RADIUS * arc_angle;
 
     return arc_length;
+
+def get_compass_features(timerefs_unsorted,headings_unsorted):
+    dim             = dimension_of_watch_compass_features();
+    features        = numpy.nan*numpy.ones(dim);
+
+    # First sort the samples according to time:
+    order           = [pair[0] for pair in sorted(enumerate(timerefs_unsorted),key=lambda x:x[1])];
+    timerefs        = timerefs_unsorted[order];
+    headings        = headings_unsorted[order];
+
+    # Now fill any long gaps, assuming linear interpolation:
+    pdb.set_trace();
+    mingap          = min(timerefs[1:]-timerefs[:-1]);
+    num             = int((timerefs[-1]-timerefs[0]) / mingap);
+    times           = numpy.linspace(timerefs[0],timerefs[-1],num=num);
+    raw_degs        = numpy.interp(times,timerefs,headings);
+
+    # Convert angle values (by +/-360 deg) to create smooth function:
+    degs            = numpy.copy(raw_degs);
+    for ii in range(1,degs.size):
+        options     = numpy.array([-360,0,360]) + degs[ii];
+        diffs       = numpy.abs(options - degs[ii-1]);
+        ind         = numpy.argmin(diffs);
+        degs[ii]    = options[ind];
+        pass;
+
+    # Compute features:
+    simple_mean     = numpy.mean(headings);
+    simple_std      = numpy.std(headings);
+    counts          = numpy.histogram(headings,bins=10,range=(0,360))[0];
+    hist_ent        = entropy(counts);
+    max_rel_count   = float(max(counts)) / sum(counts);
+    local_stds      = [];
+    start           = 0;
+    while start < degs.size:
+        stop        = start + 20;
+        stop        = numpy.min([stop,degs.size]);
+        frame       = degs[start:stop];
+        local_stds.append(numpy.std(frame));
+        start       += 10;
+        pass;
+    mean_local_std  = numpy.mean(local_stds);
+
+    # DFT features:
+    duration        = times[-1]-times[0];
+    duration_sec    = duration;
+    sr              = float(degs.size) / duration_sec;
+    deg_mat         = numpy.reshape(degs,(degs.size,1));
+    (dom_freq,dom_period,dom_power,spec_ent)    = get_dominant_freq_by_dft(\
+        deg_mat,sr);
+
+    
+    features[0]     = simple_mean;
+    features[1]     = simple_std;
+    features[2]     = hist_ent;
+    features[3]     = max_rel_count;
+    features[4]     = mean_local_std;
+    features[5]     = dom_freq[0];
+    features[6]     = dom_period[0];
+    features[7]     = dom_power[0];
+    features[8]     = spec_ent[0];
+    
+    return features;
 
 def main():
     uuid_dir        = 'uuids/EAF71BC5-5744-47E0-A883-CBE0F77BF6B9';

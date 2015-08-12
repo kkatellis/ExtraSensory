@@ -48,7 +48,7 @@ def train_classifier(instances_features,instances_labels,label_names,model_param
     # Construct the training sampels features:
     dim         = get_feature_dim(model_params);
     X           = numpy.zeros((n_samples,dim));
-    for ii in range(n_samples):     
+    for ii in range(n_samples):
         X[ii,:] = construct_feature_vector(instances_features[ii],model_params);
         pass;
 

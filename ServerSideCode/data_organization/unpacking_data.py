@@ -149,7 +149,7 @@ def read_datafile(hf_file):
         pass;
 
     watch_compass = join_data_fields_to_array(jdict,['watch_compass_timeref','watch_compass_heading']);
-    
+
     if 'low_frequency' in jdict:
         lf_data = jdict['low_frequency'];
         pass;

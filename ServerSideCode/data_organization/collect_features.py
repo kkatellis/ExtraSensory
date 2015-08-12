@@ -8,6 +8,7 @@ import os;
 import os.path;
 import json;
 import numpy;
+import warnings;
 
 import compute_features;
 import user_statistics;
@@ -22,17 +23,24 @@ fid.close();
 g__data_superdir            = g__env_params['data_superdir'];
 g__sensors_with_3axes       = ['raw_acc','raw_gyro','raw_magnet',\
                                'proc_acc','proc_gravity','proc_gyro',\
-                               'proc_attitude','proc_magnet'];
+                               'proc_attitude','proc_magnet',\
+                               'watch_acc'];
 g__raw_sensors              = ['raw_acc','raw_gyro','raw_magnet'];
 g__processed_sensors        = ['proc_acc','proc_gravity','proc_gyro',\
                                'proc_attitude','proc_magnet'];
-g__pseudo_sensors           = ['lf_measurements','location_quick_features','audio_properties'];
+g__pseudo_sensors           = ['lf_measurements','location_quick_features','audio_properties','discrete_measurements'];
 
 g__location_quick_features  = ['std_lat','std_long','lat_change','long_change',\
                                'mean_abs_lat_deriv','mean_abs_long_deriv'];
 g__low_freq_measurements    = ['light','pressure','proximity_cm','proximity',\
-                               'relative_humidity','wifi_status','app_state',\
-                               'on_the_phone','battery_level','screen_brightness'];
+                               'relative_humidity',\
+                               'on_the_phone','battery_level','screen_brightness',\
+                               'temperature_ambient'];
+g__discrete_measurements    = {'wifi_status':[0,1,2],\
+                               'app_state':[0,1,2],\
+                               'battery_state':[0,1,2,3,'unknown','not_charging','discharging','charging','full'],\
+                               'battery_plugged':['ac','usb','wireless'],\
+                               'ringer_mode':['normal','silent_no_vibrate','silent_with_vibrate']};
 g__audio_properties         = ['max_abs_value','normalization_multiplier'];
 g__feats_needing_log_comp   = ['max_abs_value','light'];
 
@@ -48,12 +56,45 @@ def get_all_sensor_names():
     sensors                 = list(g__sensors_with_3axes);
     sensors.append('location');
     sensors.append('audio');
+    sensors.append('watch_compass');
     sensors.extend(g__pseudo_sensors);
 
     return sensors;
     
 
+def get_discrete_measurements(instance_dir):
+    dim         = 0;
+    for key in g__discrete_measurements.keys():
+        dim     += len(g__discrete_measurements[key]);
+        pass;
+
+    feats       = numpy.zeros(dim);
+    input_file  = os.path.join(instance_dir,'m_lf_measurements.json');
+    if not os.path.exists(input_file):
+        return feats;
+
+    fid         = file(input_file,'rb');
+    lf_meas     = json.load(fid);
+    fid.close();
+
+    offset      = 0;
+    for key in sorted(g__discrete_measurements.keys()):
+        values  = g__discrete_measurements[key];
+        if key in lf_meas:
+            value   = lf_meas[key];
+            if value in values:
+                ind = offset + values.index(value);
+                feats[ind]  = 1;
+            pass;
+        offset  += len(values);
+        pass;
+
+    return feats;
+    
 def get_pseudo_sensor_features(instance_dir,sensor):
+    if sensor == 'discrete_measurements':
+        return get_discrete_measurements(instance_dir);
+    
     if sensor == 'lf_measurements':
         expected_features = g__low_freq_measurements;
         pass;
@@ -104,15 +145,37 @@ def get_features_from_measurements(instance_dir,timestamp,sensor,audio_encoder):
         return default_features;
 
     # Load the measurements time-series:
-    X                       = numpy.genfromtxt(measurements_file);
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore");
+        X                       = numpy.genfromtxt(measurements_file);
+        pass;
+
+    
 
     if (len(X.shape) <= 0):
+        return default_features;
+
+    if (X.size <= 0):
         return default_features;
     
     if sensor[:3] == 'raw' or sensor[:4] == 'proc':
         # Then the first column is for time reference:
         timerefs            = X[:,0];
         X                   = X[:,1:];
+        pass;
+
+    if sensor == 'watch_compass':
+        timerefs            = X[:,0]/1000.;
+        X                   = X[:,1];
+        pass;
+    
+    if sensor == 'watch_acc':
+        if X.shape[1] == 4:
+            timerefs        = X[:,0]/1000.;
+            X               = X[:,1:];
+            pass;
+        else:
+            timerefs        = 0.040 * range(X.shape[0]); # (Assuming constant sampling rate of 25Hz)
         pass;
 
     if sensor in g__sensors_with_3axes:
@@ -127,9 +190,42 @@ def get_features_from_measurements(instance_dir,timestamp,sensor,audio_encoder):
             X = numpy.reshape(X,(1,-1));
             pass;
         features            = compute_features.get_location_features(X,timestamp);
-        return features;        
+        return features;
+
+    if sensor == 'watch_compass':
+        features            = compute_features.get_compass_features(timerefs,X);
+        return features;
 
     return default_features;
+
+def check_presence_of_measurements(instance_dir,sensor):
+    if sensor in g__pseudo_sensors:
+        feat    = get_pseudo_sensor_features(instance_dir,sensor);
+        return not numpy.all(numpy.isnan(feat));
+
+    if sensor == 'audio':
+        mfcc_file   = os.path.join(instance_dir,'sound.mfcc');
+        if not os.path.exists(mfcc_file):
+            return False;
+        try:
+            mfcc    = numpy.genfromtxt(mfcc_file,delimiter=',');
+            return mfcc.size > 39;
+            pass;
+        except:
+            return False;
+
+    measurements_file       = os.path.join(instance_dir,'m_%s.dat' % sensor);
+    if not os.path.exists(measurements_file):
+        return False;
+
+    # Load the measurements time-series:
+    X                       = numpy.genfromtxt(measurements_file);
+
+    if (len(X.shape) <= 0):
+        return False;
+    
+    return True;
+
 
 def get_uuid_data_dir(uuid):
     return os.path.join(g__data_superdir,uuid);
@@ -172,7 +268,7 @@ def get_binary_labels(applied_labels,label_names):
 
     return bin_vec;
 
-def get_feature_dimension_for_sensor_type(sensor):
+def get_feature_dimension_for_sensor_type(sensor,audio_rep_dim=0):
     if sensor in g__sensors_with_3axes:
         dim     = compute_features.dimension_of_3d_series_features();
     elif sensor == 'location':
@@ -183,16 +279,20 @@ def get_feature_dimension_for_sensor_type(sensor):
         dim     = len(g__location_quick_features);
     elif sensor == 'audio_properties':
         dim     = len(g__audio_properties);
+    elif sensor == 'audio':
+        dim     = audio_rep_dim;
+    elif sensor == 'watch_compass':
+        dim     = 0;######################TODO
     else:
         dim     = 0;
         pass;
 
     return dim;
 
-def get_feature_dimension_for_aggregate_of_sensors(sensors):
+def get_feature_dimension_for_aggregate_of_sensors(sensors,audio_rep_dim=0):
     total_dim   = 0;
     for sensor in sensors:
-        total_dim   += get_feature_dimension_for_sensor_type(sensor);
+        total_dim   += get_feature_dimension_for_sensor_type(sensor,audio_rep_dim);
         pass;
 
     return total_dim;
@@ -224,8 +324,12 @@ def collect_features_and_labels(uuids,audio_encoder):
 
     # Go over the instances to collect the training data:
     for uuid in uuids:
-        print '### uuid: %s' % uuid;
         uuid_dir        = get_uuid_data_dir(uuid);
+        if not os.path.exists(uuid_dir):
+            print '--- Missing uuid: %s' % uuid;
+            continue;
+        
+        print '### uuid: %s' % uuid;
         for subdir in os.listdir(uuid_dir):
             instance_dir    = os.path.join(uuid_dir,subdir);
             if not os.path.isdir(instance_dir):
@@ -251,6 +355,36 @@ def collect_features_and_labels(uuids,audio_encoder):
         pass; # end for uuid...
 
     return (instances_features,instances_labels,label_names);
+
+def user_sensor_counts(uuids):
+    sensors         = get_all_sensor_names();
+    n_uuids         = len(uuids);
+    n_sensors       = len(sensors);
+    counts          = numpy.zeros((n_uuids,n_sensors),dtype=int);
+    for (ui,uuid) in enumerate(uuids):
+        uuid_dir        = get_uuid_data_dir(uuid);
+        if not os.path.exists(uuid_dir):
+            print '--- Missing uuid: %s' % uuid;
+            continue;
+        
+        print '### uuid: %s' % uuid;
+        for subdir in os.listdir(uuid_dir):
+            instance_dir    = os.path.join(uuid_dir,subdir);
+            if not os.path.isdir(instance_dir):
+                continue;
+
+            for (si,sensor) in enumerate(sensors):
+                if check_presence_of_measurements(instance_dir,sensor):
+                    counts[ui,si]   += 1;
+                    pass;
+                pass; # end for sensor...
+
+            pass; # end for subdir...
+        
+        pass; # end for (ui,uuid)...
+
+    return (counts,sensors);
+
 
 def features_per_user(uuid,sensors):
     uuid_dir = os.path.join(g__data_superdir,uuid);
@@ -379,13 +513,6 @@ def standardize_label(label):
 
 def main():
 
-    read_secondary_labels();
-    read_mood_labels();
-    
-    sensors                 = list(g__sensors_with_3axes);
-    sensors.append('location');
-    sensors.extend(g__pseudo_sensors);
-
     uuids                   = [];
     fid                     = file('real_uuids.list','rb');
     for line in fid:
@@ -396,6 +523,17 @@ def main():
         uuids.append(line);
         pass;
     fid.close();
+
+
+    (counts,sensors)        = user_sensor_counts(uuids);
+    pdb.set_trace();
+
+    read_secondary_labels();
+    read_mood_labels();
+    
+    sensors                 = list(g__sensors_with_3axes);
+    sensors.append('location');
+    sensors.extend(g__pseudo_sensors);
 
     feats_per_uuid = {};
     for uuid in uuids:
