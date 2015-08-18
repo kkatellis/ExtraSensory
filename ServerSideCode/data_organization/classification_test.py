@@ -63,32 +63,33 @@ def train_phase(train_uuids,model_params):
             fid         = file(train_set_file,'rb');
             train_set   = pickle.load(fid);
             fid.close();
-            instances_features  = train_set['instances_features'];
+            X                   = train_set['X'];
             instances_labels    = train_set['instances_labels'];
             label_names         = train_set['label_names'];
             print "<< Loaded train examples from saved file %s" % train_set_file;
             pass; # end if exists train_set_file
         else:
             print "== Collecting train examples...";
-            (instances_features,\
+            (X,\
              instances_labels,\
-             label_names)   = collect_features.collect_features_and_labels(train_uuids,model_params['sensors'],audio_encoder);
+             label_names)   = collect_features.collect_features_and_labels(train_uuids,model_params,audio_encoder);
             train_set       = {\
-                'instances_features':instances_features,\
+                'X':X,\
                 'instances_labels':instances_labels,\
-                'label_names':label_names};
+                'label_names':label_names,\
+                'model_params':model_params};
             fid             = file(train_set_file,'wb');
             pickle.dump(train_set,fid);
             fid.close();
             print ">> Saved train set file: %s" % train_set_file;
             pass; # end else (not exists train_set_file)
 
-        print "Train set: %d instances" % len(instances_features);
+        print "Train set: %d instances" % X.shape[0];
         # Train the classifier:
-        print "== Training classifier of type: %s" % model_params;
+        print "== Training classifier of type: %s" % model_params['model_type'];
         print "."*10;
         classifier  = classifiers.train_classifier(\
-            instances_features,instances_labels,\
+            X,instances_labels,\
             label_names,model_params);
         # Add the audio encoder to the classifier:
         classifier['audio_encoder'] = pickle.loads(pickle.dumps(audio_encoder));
@@ -109,20 +110,21 @@ def test_phase(test_uuids,classifier):
         fid         = file(test_set_file,'rb');
         test_set    = pickle.load(fid);
         fid.close();
-        instances_features  = test_set['instances_features'];
+        X                   = test_set['X'];
         instances_labels_gt = test_set['instances_labels'];
         label_names         = test_set['label_names'];
         print "<< Loaded test examples from saved file %s" % test_set_file;
         pass; # end if esitst test_set_file
     else:
         print "== Collecting test examples...";
-        (instances_features,\
+        (X,\
          instances_labels_gt,\
-         label_names)   = collect_features.collect_features_and_labels(test_uuids,classifier['model_params']['sensors'],classifier['audio_encoder']);
+         label_names)   = collect_features.collect_features_and_labels(test_uuids,classifier['model_params'],classifier['audio_encoder']);
         test_set        = {\
-            'instances_features':instances_features,\
+            'X':X,\
             'instances_labels':instances_labels_gt,\
-            'label_names':label_names};
+            'label_names':label_names,\
+            'model_params':classifier['model_params']};
         fid             = file(test_set_file,'wb');
         pickle.dump(test_set,fid);
         fid.close();
@@ -140,32 +142,14 @@ def test_phase(test_uuids,classifier):
     # Go over the instances and machine-classify them:
     for ii in range(n_samples):
         (bin_vec,prob_vec)              = classifiers.classify(\
-            instances_features[ii],classifier);
+            X[ii,:],classifier);
         instances_labels_machine[ii,:]  = bin_vec;
         instances_label_probs[ii,:]     = prob_vec;
         pass;
 
     # Evaluate classification performance:
-    scores      = get_classification_scores(instances_labels_gt,instances_labels_machine,instances_label_probs,label_names);
+    scores      = classifiers.get_classification_scores(instances_labels_gt,instances_labels_machine,instances_label_probs,label_names);
     return scores;
-
-def get_classification_scores(instances_labels_gt,instances_labels_machine,instances_label_probs,label_names):
-    scores      = {'n_samples':instances_labels_gt.shape[0],\
-                   'label_names':label_names};
-    
-    (tpr_per_label,tnr_per_label,accuracy_per_label)    = classifiers.binary_classification_success_rates(\
-        instances_labels_gt,instances_labels_machine);
-    scores['tpr_per_label']         = tpr_per_label;
-    scores['tnr_per_label']         = tnr_per_label;
-    scores['accuracy_per_label']    = accuracy_per_label;
-
-    (soft_tpr,soft_tnr,soft_accuracy)   = classifiers.soft_classification_success_rates(\
-        instances_labels_gt,instances_label_probs);
-    scores['soft_tpr_per_label']    = soft_tpr;
-    scores['soft_tnr_per_label']    = soft_tnr;
-    scores['soft_accuracy_per_label']   = soft_accuracy;
-    return scores;
-
 
 
 def leave_one_out_cross_validation(uuids,model_params):
@@ -229,10 +213,11 @@ def main():
         enc_params      = {'tau':4};
         audio_params    = {'k':20,'minibatch_size':300,'init_batch_size':500,'n_minibatches':40,'encoder_params':enc_params};
         model_params['audio_params']    = audio_params;
-        dim             = collect_features.get_feature_dimension_for_aggregate_of_sensors(sensors,audio_params['k']);
+        (total_dim,feat2sensor_map)     = collect_features.get_feature_dimension_for_aggregate_of_sensors(sensors,audio_params['k']);
 
         model_params['sensors']             = sensors;
-        model_params['feature_dimension']   = dim;
+        model_params['feature_dimension']   = total_dim;
+        model_params['feat2sensor_map']     = feat2sensor_map;
 
         pass;
     else:

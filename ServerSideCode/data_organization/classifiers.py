@@ -16,9 +16,8 @@ import time;
 
 import pdb;
 
-def classify(instance_features,classifier):
-    # Prepare a feature vector (assuming this isn't an ensemble classifier):
-    x           = construct_feature_vector(instance_features,classifier['model_params']);
+def classify(x,classifier):
+    x           = apply_missing_values_policy(x,classifier['model_params']['missing_value_policy']);
     if classifier['model_params']['standardize_features']:
         # Standardize the vector:
         x       = standardize_features(x,classifier['mean_vec'],classifier['std_vec']);
@@ -36,29 +35,31 @@ def classify(instance_features,classifier):
     
     return (bin_vec,prob_vec);
 
-def train_classifier(instances_features,instances_labels,label_names,model_params):
+def train_classifier(X,instances_labels,label_names,model_params):
     if 'model_type' not in model_params:
         return None;
 
-    n_samples   = len(instances_features);
+    n_samples   = X.shape[0];
     n_samples2  = instances_labels.shape[0];
     if (n_samples2 != n_samples):
         raise Exception('Cant train classifier. Got %d instances but %d labels' % (n_samples,n_sampmles2));
-    
-    # Construct the training sampels features:
-    dim         = get_feature_dim(model_params);
-    X           = numpy.zeros((n_samples,dim));
-    for ii in range(n_samples):
-        X[ii,:] = construct_feature_vector(instances_features[ii],model_params);
-        pass;
+
+    X           = apply_missing_values_policy(X,model_params['missing_value_policy']);
 
     classifier  = {'model_params':model_params,'label_names':label_names};
     if model_params['standardize_features']:
         # Standardize (and save the standardization parameters):
+        X_old                   = numpy.copy(X);
         (X,mean_vec,std_vec)    = estimate_standardization(X);
         classifier['mean_vec']  = mean_vec;
         classifier['std_vec']   = std_vec;
         pass;
+
+    train_data  = {'X_old':X_old,'X':X,'model_params':model_params};
+    train_file  = os.path.join(model_params['train_dir'],'treated_train_data.pickle');
+    fid         = file(train_file,'wb');
+    pickle.dump(train_data,fid);
+    fid.close();
 
     if model_params['model_type'] == 'logit':
         classifier  = train_classifier__logit(X,instances_labels,label_names,classifier);
@@ -173,6 +174,186 @@ def soft_classification_success_rates(y_gt,y_prob):
     soft_accuracy   = numpy.mean(prob_for_pos + prob_for_neg, axis=0);
     return (soft_tpr,soft_tnr,soft_accuracy);
     
+'''
+Calculate label-ranking score for multiple instances.
+
+Input:
+Y_gt: (n_samples x n_labels) 2d array of binary values. The ground truth for each instance (each row):
+    for each label is it relevant or not.
+rank_mat (n_samples x n_labels) integer matrix. For each instance (row) the order of the ranked labels:
+    e.g. rank_mat[2,0]=13 means that for instance 2, label 13 was ranked first (highest probability).
+
+Output:
+mp5: Preceision at top 5 ranked labels (mean over n_samples instances).
+mr5: Recall at top 5 ranked labels (mean over n_samples instances).
+mf5: F-score for p5 and r5 (mean over n_samples instances).
+map: Average precision: average of precision values at all cutoffs where there's a true positive (mean over n_samples instances).
+'''
+def label_ranking_measures(Y_gt,rank_mat):
+    n_samples           = Y_gt.shape[0];
+    p5s                 = numpy.nan*numpy.ones(n_samples);
+    r5s                 = numpy.nan*numpy.ones(n_samples);
+    f5s                 = numpy.nan*numpy.ones(n_samples);
+    aps                 = numpy.nan*numpy.ones(n_samples);
+
+    for ii in range(n_samples):
+        (p5,r5,f5,ap)   = label_ranking_measures_single_instance(Y_gt[ii,:],rank_mat[ii,:]);
+        p5s[ii]         = p5;
+        r5s[ii]         = r5;
+        f5s[ii]         = f5;
+        aps[ii]         = ap;
+        pass;
+
+    mp5                 = numpy.nanmean(p5s);
+    mr5                 = numpy.nanmean(r5s);
+    mf5                 = numpy.nanmean(f5s);
+    map                 = numpy.nanmean(ap);
+    
+    return (mp5,mr5,mf5,map);
+
+'''
+Calculate label-ranking score for a single instance.
+
+Input:
+y_gt: (n_labels) 1d array of binary values. The ground truth for the instance:
+    for each label is it relevant or not.
+y_prob: (n_labels) 1d array of real values. The probability/affinity values produced by the classifier/regressor for each label.
+
+Output:
+p5: Preceision at top 5 ranked labels.
+r5: Recall at top 5 ranked labels.
+f5: F-score for p5 and r5.
+ap: Average precision: average of precision values at all cutoffs where there's a true positive.
+'''
+def label_ranking_measures_single_instance(y_gt,rank_vec):
+    n_labels            = y_gt.size;
+    n_relevant          = numpy.sum(y_gt);
+
+    # Order the ground truth labels according to the machine's provided ranking:    
+    ranked_gt           = y_gt[rank_vec];
+
+    # Evaluate the precision at every position in the ranking:
+    true_positives      = numpy.cumsum(ranked_gt).astype(float);
+    positives           = numpy.array(range(n_labels)) + 1.;
+    precisions          = true_positives / positives;
+    recalls             = true_positives / n_relevant;
+    
+    # Evaluate binary classification, in which we take the top 5 ranked labels:
+    p5                  = precisions[4];
+    r5                  = recalls[4];
+    f5                  = (2.*p5*r5)/(p5+r5);
+
+    # Now evaluate average precision:
+    prec_when_relevant  = precisions * ranked_gt;
+    ap                  = numpy.mean(prec_when_relevant);
+
+    return (p5,r5,f5,ap);
+
+
+'''
+Rank the labels of each instance according to some affinity/probability measure.
+
+Input:
+Y_prob: (n_samples x n_labels) real matrix. The probability/affinity values for each instance-label pair.
+
+Output:
+rank_mat (n_samples x n_labels) integer matrix. For each instance (row) the order of the ranked labels:
+    e.g. rank_mat[2,0]=13 means that for instance 2, label 13 was ranked first (highest probability).
+'''
+def rank_labels_for_each_instance(Y_prob):
+    (n_samples,n_labels)= Y_prob.shape;
+    rank_mat            = numpy.zeros((n_samples,n_labels),dtype=int);    
+
+    for ii in range(n_samples):
+        pairs           = enumerate(Y_prob[ii,:]);
+        sorted_pairs    = sorted(pairs,key=lambda x: x[1],reverse=True);
+        ind_rank        = [pair[0] for pair in sorted_pairs];
+        rank_mat[ii,:]  = ind_rank;
+        pass;
+
+    return rank_mat;
+
+'''
+Create binary labels from per-instance label-ranking by selecting only the top labels for each instance.
+
+Input:
+rank_mat (n_samples x n_labels) integer matrix. For each instance (row) the order of the ranked labels:
+    e.g. rank_mat[2,0]=13 means that for instance 2, label 13 was ranked first (highest probability).
+how_many: positive integer. How many labels to annotate for each instance.
+
+Output:
+Y_top_bin: (n_samples x n_labels) binary. The selected labels for each instance marked with 1.
+'''
+def select_top_labels_per_instance(rank_mat,how_many):
+    (n_samples,n_labels)= rank_mat.shape;
+    Y_top_bin           = numpy.zeros((n_samples,n_labels),dtype=bool);
+
+    for ii in range(n_samples):
+        top                 = rank_mat[ii,:how_many];
+        Y_top_bin[ii,top]   = 1;
+        pass;
+
+    return Y_top_bin;
+
+'''
+Ger performace scores for the quality of classification.
+
+Input:
+Y_gt: (n_samples x n_labels) binary. The ground truth labels.
+Y_bin: (n_samples x n_labels) binary. The machine given binary labels.
+Y_prob: (n_samples x n_labels) real. The machine given probability/affinity values.
+label_names: list of n_labels strings. The names of the labels.
+'''
+def get_classification_scores(Y_gt,Y_bin,Y_prob,label_names):
+    scores                              = get_classification_scores_helper(Y_gt,Y_bin,Y_prob);
+    scores['n_samples']                 = Y_gt.shape[0];
+    scores['label_names']               = label_names;
+
+    n_samples                           = Y_gt.shape[0];
+    ind_order                           = numpy.array(range(n_samples));
+    numpy.random.shuffle(ind_order);
+    Y_scrambled_gt                      = Y_gt[ind_order,:];
+    random_chance_scores                = get_classification_scores_helper(Y_scrambled_gt,Y_bin,Y_prob);
+    scores['random_chance']             = random_chance_scores;
+
+    return scores;
+
+'''
+Ger performace scores for the quality of classification.
+
+Input:
+Y_gt: (n_samples x n_labels) binary. The ground truth labels.
+Y_bin: (n_samples x n_labels) binary. The machine given binary labels.
+Y_prob: (n_samples x n_labels) real. The machine given probability/affinity values.
+'''
+def get_classification_scores_helper(Y_gt,Y_bin,Y_prob):
+    scores                              = {};
+    # Analyze performance with the given machine binary labels:
+    (naive_tprs,naive_tnrs,naive_accs)    = binary_classification_success_rates(\
+        Y_gt,Y_bin);
+    scores['naive_tprs']                = naive_tprs;
+    scores['naive_tnrs']                = naive_tnrs;
+    scores['naive_accs']                = naive_accs;
+
+    rank_mat                            = rank_labels_for_each_instance(Y_prob);
+    Y_top5_bin                          = select_top_labels_per_instance(rank_mat,5);
+
+    # Analyze performance with the policy of selecting top-5 labels for each instance:
+    (top5_tprs,top5_tnrs,top5_accs)    = binary_classification_success_rates(\
+        Y_gt,Y_top5_bin);
+    scores['top5_tprs']                 = top5_tprs;
+    scores['top5_tnrs']                 = top5_tnrs;
+    scores['top5_accs']                 = top5_accs;
+
+    # Analyze the (averaged over instances) ranking-quality of labels for each instance:
+    (mp5,mr5,mf5,map)                   = label_ranking_measures(Y_gt,rank_mat);
+    scores['mp5']                       = mp5;
+    scores['mr5']                       = mr5;
+    scores['mf5']                       = mf5;
+    scores['map']                       = map;
+    
+    return scores;
+
 
 ###########################################
 ### Helping functions:
@@ -200,10 +381,10 @@ def get_valid_examples(feats):
     return (valid_inds,valid_examples);
 
 '''
-Apply some policy to handle missing values in a feature vector.
+Apply some policy to handle missing values in each feature vector.
 
 Input:
-feature_vector: din-array of features. Values of NaN, inf or -inf are regarded as missing values.
+X: (N x din) matrix of N feature vectors. Values of NaN, inf or -inf are regarded as missing values.
 policy: string. One of:
     'zero_imputation': replace every missing value with value of zero.
     'missing_indicators': replace every missing value with value of zero,
@@ -211,25 +392,26 @@ policy: string. One of:
     where each indicator has 1 if the corresponding feature is missing and 0 otherwise.
 
 Output:
-feature_vector: dout-array of features.
-    The feature vector, after being handled with the selected policy,
+X: (N x dout) matrix of feature vectors.
+    The feature vectors, after being handled with the selected policy,
     possibly now having a different dimension than the input feature vector.
 '''
-def apply_missing_values_policy(feature_vector,policy):
-    is_missing          = numpy.logical_or(numpy.isnan(feature_vector),numpy.isinf(feature_vector));
+def apply_missing_values_policy(X,policy):
+    is_missing          = numpy.logical_or(numpy.isnan(X),numpy.isinf(X));
     if policy == 'zero_imputation':
-        feature_vector[is_missing]  = 0;
+        X[is_missing]   = 0;
         pass;
     elif policy == 'missing_indicators':
-        feature_vector[is_missing]  = 0;
-        feature_vector              = numpy.concatenate((feature_vector,is_missing.astype(feature_vector.dtype)));
-        feature_vector              = numpy.reshape(feature_vector,(1,-1));
+        X[is_missing]   = 0;
+        X               = numpy.concatenate((X,is_missing.astype(X.dtype)),axis=-1);
+##        feature_vector              = numpy.concatenate((feature_vector,is_missing.astype(feature_vector.dtype)));
+##        feature_vector              = numpy.reshape(feature_vector,(1,-1));
         pass;
     else:
         # Leave the feature vector as it is
         pass;
 
-    return feature_vector;
+    return X;
 
 def get_feature_dim(model_params):
     dim         = model_params['feature_dimension'];
@@ -276,6 +458,14 @@ def estimate_standardization(X):
     Z               = standardize_features(X,mean_vec,std_vec);
 
     return (Z,mean_vec,std_vec);
+
+def get_feature_sensor_map(dummy_instance_features,sensors):
+    sensor_ind      = numpy.zeros(0);
+    for (si,sensor) in enumerate(sensors):
+        feat        = dummy_instance_features[sensor];
+        sensor_ind  = numpy.concatenate((sensor_ind,si*numpy.ones(len(feat),dtype=int)));
+        pass;
+    return sensor_ind;
 
 def construct_feature_vector(instance_features,model_params):
     # Construct a single feature vector for this instance:

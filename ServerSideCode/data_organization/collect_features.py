@@ -55,9 +55,11 @@ def get_all_sensor_names():
     sensors                 = list(g__sensors_with_3axes);
     sensors.append('location');
     sensors.append('audio');
+    sensors.append('watch_acc');
     sensors.append('watch_compass');
     sensors.extend(g__pseudo_sensors);
-
+    sensors = sorted(sensors);
+    
     return sensors;
     
 def get_dim_of_discrete_measurements():
@@ -177,7 +179,7 @@ def get_features_from_measurements(instance_dir,timestamp,sensor,audio_encoder):
             X               = X[:,1:];
             pass;
         else:
-            timerefs        = 0.040 * range(X.shape[0]); # (Assuming constant sampling rate of 25Hz)
+            timerefs        = 0.040 * numpy.array(range(X.shape[0])); # (Assuming constant sampling rate of 25Hz)
             pass;
 
         features            = compute_features.get_watch_acc_features(timerefs,X);
@@ -235,7 +237,7 @@ def check_presence_of_measurements(instance_dir,sensor):
 def get_uuid_data_dir(uuid):
     return os.path.join(g__data_superdir,uuid);
 
-def get_instance_features(uuid,timestamp_str,sensors,audio_encoder):
+def get_instance_features(uuid,timestamp_str,sensors,feat2sensor_map,audio_encoder):
     uuid_dir                = os.path.join(g__data_superdir,uuid);
     instance_dir            = os.path.join(uuid_dir,timestamp_str);
 
@@ -245,12 +247,15 @@ def get_instance_features(uuid,timestamp_str,sensors,audio_encoder):
     timestamp               = float(timestamp_str);
     features                = {'timestamp':timestamp};
 
-    for sensor in sensors:
-        features[sensor]    = get_features_from_measurements(\
+    feature_vec             = numpy.nan*numpy.ones((1,len(feat2sensor_map)));
+    for (si,sensor) in enumerate(sensors):
+#        print "%s:%s" % (timestamp_str,sensor);
+        vec                 = get_features_from_measurements(\
             instance_dir,timestamp,sensor,audio_encoder);
+        feature_vec[0,feat2sensor_map==si]  = vec;
         pass; # end for sensor...
 
-    return features;
+    return feature_vec;
 
 def get_instance_labels_in_binary(instance_dir,main_labels,secondary_labels):
     (main_activity,\
@@ -288,6 +293,8 @@ def get_feature_dimension_for_sensor_type(sensor,audio_rep_dim=0):
         dim     = len(g__audio_properties);
     elif sensor == 'audio':
         dim     = audio_rep_dim;
+    elif sensor == 'watch_acc':
+        dim     = compute_features.dimension_of_3d_series_features();
     elif sensor == 'watch_compass':
         dim     = compute_features.dimension_of_watch_compass_features();
     else:
@@ -297,12 +304,16 @@ def get_feature_dimension_for_sensor_type(sensor,audio_rep_dim=0):
     return dim;
 
 def get_feature_dimension_for_aggregate_of_sensors(sensors,audio_rep_dim=0):
-    total_dim   = 0;
-    for sensor in sensors:
-        total_dim   += get_feature_dimension_for_sensor_type(sensor,audio_rep_dim);
+    ind_vecs    = [];
+    for (si,sensor) in enumerate(sensors):
+        dim         = get_feature_dimension_for_sensor_type(sensor,audio_rep_dim);
+        ind_vecs.append(si*numpy.ones(dim,dtype=int));
         pass;
 
-    return total_dim;
+    feat2sensor_map = numpy.concatenate(tuple(ind_vecs));
+    total_dim       = feat2sensor_map.size;
+
+    return (total_dim,feat2sensor_map);
     
 def initialize_feature_matrices(num_instances,sensors):
     features                = {};
@@ -317,7 +328,10 @@ def initialize_feature_matrices(num_instances,sensors):
     return features;
 
 
-def collect_features_and_labels(uuids,sensors,audio_encoder):
+def collect_features_and_labels(uuids,model_params,audio_encoder):
+    sensors                 = model_params['sensors'];
+    feat2sensor_map         = model_params['feat2sensor_map'];
+    
     main_label_names        = get_main_labels();
     sec_label_names         = get_secondary_labels();
     label_names             = main_label_names[:];
@@ -350,17 +364,19 @@ def collect_features_and_labels(uuids,sensors,audio_encoder):
             bin_vec         = numpy.reshape(bin_vec,(1,-1));
 
             # Get features:
-            instance_feats  = get_instance_features(\
-                uuid,subdir,sensors,audio_encoder);
+            feature_vec  = get_instance_features(\
+                uuid,subdir,sensors,feat2sensor_map,audio_encoder);
 
             # Append this instance to train set:
-            instances_features.append(instance_feats);
+            instances_features.append(feature_vec);
             instances_labels    = numpy.concatenate((instances_labels,bin_vec),axis=0);
             pass; # end for subdir...
         
         pass; # end for uuid...
 
-    return (instances_features,instances_labels,label_names);
+    # Turn the feature vector collection to a large matrix:
+    X       = numpy.concatenate(tuple(instances_features),axis=0);
+    return (X,instances_labels,label_names);
 
 def user_sensor_counts(uuids):
     sensors         = get_all_sensor_names();
@@ -392,55 +408,55 @@ def user_sensor_counts(uuids):
     return (counts,sensors);
 
 
-def features_per_user(uuid,sensors):
-    uuid_dir = os.path.join(g__data_superdir,uuid);
-    user_instances          = os.listdir(uuid_dir);
-    n_instances             = len(user_instances);
-    
-    uuid_feats              = initialize_feature_matrices(\
-        n_instances,sensors);
-    main_vec                = -numpy.ones(n_instances);
-    main_mat                = numpy.zeros((n_instances,len(g__main_activities)),dtype=bool);
-    secondary_mat           = numpy.zeros((n_instances,len(g__secondary_activities)),dtype=bool);
-    mood_mat                = numpy.zeros((n_instances,len(g__moods)),dtype=bool);
-    
-    for (ii,timestamp_str) in enumerate(user_instances):
-        if not ii%20:
-            print "%d) %s" % (ii,timestamp_str);
-            pass;
-        instance_dir = os.path.join(uuid_dir,timestamp_str);
-        if not os.path.isdir(instance_dir):
-            continue;
-
-        instance_feats      = get_instance_features(uuid,timestamp_str,sensors);
-        for sensor in sensors:
-            feat_vec        = instance_feats[sensor];
-            if feat_vec == None or len(feat_vec) <= 0:
-                continue;
-
-            uuid_feats[sensor][ii]  = feat_vec;
-            pass; # end for sensor...
-
-        # Read the labels:
-        (main_activity,\
-         secondary_activities,\
-         moods) = user_statistics.get_instance_labels(instance_dir);
-        main_ind            = main_activity_string2int(main_activity);
-        main_vec[ii]        = main_ind;
-        if main_ind >= 0:
-            main_mat[ii,main_ind]   = True;
-            pass;
-
-        if secondary_activities != None:
-            secondary_mat[ii]   = secondary_activities_strings2binary(secondary_activities);
-            pass;
-        if moods != None:
-            mood_mat[ii]        = moods_strings2binary(moods);
-            pass;
-        pass; # end for (ii,timestamp)...
-
-    print "done with %d instances for user" % len(user_instances);
-    return (uuid_feats,main_vec,main_mat,secondary_mat,mood_mat);
+##def features_per_user(uuid,sensors):
+##    uuid_dir = os.path.join(g__data_superdir,uuid);
+##    user_instances          = os.listdir(uuid_dir);
+##    n_instances             = len(user_instances);
+##    
+##    uuid_feats              = initialize_feature_matrices(\
+##        n_instances,sensors);
+##    main_vec                = -numpy.ones(n_instances);
+##    main_mat                = numpy.zeros((n_instances,len(g__main_activities)),dtype=bool);
+##    secondary_mat           = numpy.zeros((n_instances,len(g__secondary_activities)),dtype=bool);
+##    mood_mat                = numpy.zeros((n_instances,len(g__moods)),dtype=bool);
+##    
+##    for (ii,timestamp_str) in enumerate(user_instances):
+##        if not ii%20:
+##            print "%d) %s" % (ii,timestamp_str);
+##            pass;
+##        instance_dir = os.path.join(uuid_dir,timestamp_str);
+##        if not os.path.isdir(instance_dir):
+##            continue;
+##
+##        instance_feats      = get_instance_features(uuid,timestamp_str,sensors);
+##        for sensor in sensors:
+##            feat_vec        = instance_feats[sensor];
+##            if feat_vec == None or len(feat_vec) <= 0:
+##                continue;
+##
+##            uuid_feats[sensor][ii]  = feat_vec;
+##            pass; # end for sensor...
+##
+##        # Read the labels:
+##        (main_activity,\
+##         secondary_activities,\
+##         moods) = user_statistics.get_instance_labels(instance_dir);
+##        main_ind            = main_activity_string2int(main_activity);
+##        main_vec[ii]        = main_ind;
+##        if main_ind >= 0:
+##            main_mat[ii,main_ind]   = True;
+##            pass;
+##
+##        if secondary_activities != None:
+##            secondary_mat[ii]   = secondary_activities_strings2binary(secondary_activities);
+##            pass;
+##        if moods != None:
+##            mood_mat[ii]        = moods_strings2binary(moods);
+##            pass;
+##        pass; # end for (ii,timestamp)...
+##
+##    print "done with %d instances for user" % len(user_instances);
+##    return (uuid_feats,main_vec,main_mat,secondary_mat,mood_mat);
 
 def main_activity_string2int(main_activity):
     if main_activity not in g__main_activities:
