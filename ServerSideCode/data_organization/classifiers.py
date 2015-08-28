@@ -17,11 +17,12 @@ import time;
 import pdb;
 
 def classify(x,classifier):
-    x           = apply_missing_values_policy(x,classifier['model_params']['missing_value_policy']);
     if classifier['model_params']['standardize_features']:
         # Standardize the vector:
         x       = standardize_features(x,classifier['mean_vec'],classifier['std_vec']);
         pass;
+
+    x           = apply_missing_values_policy(x,classifier['model_params']['missing_value_policy']);
     
     if classifier['model_params']['model_type'] == 'logit':
         (bin_vec,prob_vec)  = classify__logit(x,classifier);
@@ -44,8 +45,6 @@ def train_classifier(X,instances_labels,label_names,model_params):
     if (n_samples2 != n_samples):
         raise Exception('Cant train classifier. Got %d instances but %d labels' % (n_samples,n_sampmles2));
 
-    X           = apply_missing_values_policy(X,model_params['missing_value_policy']);
-
     classifier  = {'model_params':model_params,'label_names':label_names};
     if model_params['standardize_features']:
         # Standardize (and save the standardization parameters):
@@ -54,6 +53,8 @@ def train_classifier(X,instances_labels,label_names,model_params):
         classifier['mean_vec']  = mean_vec;
         classifier['std_vec']   = std_vec;
         pass;
+
+    X           = apply_missing_values_policy(X,model_params['missing_value_policy']);
 
     train_data  = {'X_old':X_old,'X':X,'model_params':model_params};
     train_file  = os.path.join(model_params['train_dir'],'treated_train_data.pickle');
@@ -453,8 +454,8 @@ mean_vec: d-array of estimated mean values.
 std_vec: d-array of estimated standard deviations.
 '''
 def estimate_standardization(X):
-    mean_vec        = numpy.mean(X,axis=0);
-    std_vec         = numpy.std(X,axis=0);
+    mean_vec        = numpy.nanmean(X,axis=0);
+    std_vec         = numpy.nanstd(X,axis=0);
     Z               = standardize_features(X,mean_vec,std_vec);
 
     return (Z,mean_vec,std_vec);
@@ -671,15 +672,22 @@ def classify__multilayer_logit(x,classifier):
         (layer_out_bin,layer_out_prob)  = classify__logit(layer_input,layer_classifier);
         if layer_i < (n_layers-1):
             # Prepare the input for the next layer:
+
+            if classifier['model_params']['standardize_features']:
+                # Standardize the latest layer's output:
+                output_old              = numpy.copy(layer_out_prob);
+                layer_out_prob          = standardize_features(layer_out_prob,layer_classifier['output_mean_vec'],layer_classifier['output_std_vec']);
+                pass;
+
             if 'layer_input_policy' not in classifier['model_params']:
                 classifier['model_params']['layer_input_policy']    = 'no_augment';
                 pass;
       
             if classifier['model_params']['layer_input_policy'] == 'augment_previous_input':
-                layer_input             = numpy.concatenate((layer_input,numpy.reshape(layer_out_prob,(1,-1))),axis=1);
+                layer_input             = numpy.concatenate((numpy.reshape(layer_input,(1,-1)),numpy.reshape(layer_out_prob,(1,-1))),axis=1);
                 pass;
             elif classifier['model_params']['layer_input_policy'] == 'augment_lower_input':
-                layer_input             = numpy.concatenate((x,numpy.reshape(layer_out_prob,(1,-1))),axis=1);
+                layer_input             = numpy.concatenate((numpy.reshape(x,(1,-1)),numpy.reshape(layer_out_prob,(1,-1))),axis=1);
                 pass;
             elif classifier['model_params']['layer_input_policy'] == 'no_augment':
                 layer_input             = layer_out_prob;
@@ -715,12 +723,21 @@ def train_classifier__multilayer_logit(X,instances_labels,label_names,classifier
         
         if layer_i < (n_layers-1):
             # Prepare the input for the next layer:
+
             layer_outputs               = numpy.zeros((n_instances,n_labels));
             for ii in range(n_instances):
                 (out_bin,out_prob)      = classify__logit(layer_inputs[ii,:],layer_classifier);
                 layer_outputs[ii,:]     = out_prob;
                 pass;
             
+            if classifier['model_params']['standardize_features']:
+                # Standardize (and save the standardization parameters):
+                outputs_old             = numpy.copy(layer_outputs);
+                (layer_outputs,mv,sv)   = estimate_standardization(layer_outputs);
+                layer_classifiers[layer_i]['output_mean_vec']       = mv;
+                layer_classifiers[layer_i]['output_std_vec']        = sv;
+                pass;
+
             if 'layer_input_policy' not in classifier['model_params']:
                 classifier['model_params']['layer_input_policy']    = 'no_augment';
                 pass;

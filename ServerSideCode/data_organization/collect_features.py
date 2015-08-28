@@ -31,6 +31,8 @@ g__pseudo_sensors           = ['lf_measurements','location_quick_features','audi
 
 g__location_quick_features  = ['std_lat','std_long','lat_change','long_change',\
                                'mean_abs_lat_deriv','mean_abs_long_deriv'];
+g__lqf_positive_degrees     = ['std_lat','std_long',\
+                               'mean_abs_lat_deriv','mean_abs_long_deriv'];
 g__low_freq_measurements    = ['light','pressure','proximity_cm','proximity',\
                                'relative_humidity',\
                                'on_the_phone','battery_level','screen_brightness',\
@@ -41,7 +43,7 @@ g__discrete_measurements    = {'wifi_status':[0,1,2],\
                                'battery_plugged':['ac','usb','wireless'],\
                                'ringer_mode':['normal','silent_no_vibrate','silent_with_vibrate']};
 g__audio_properties         = ['max_abs_value','normalization_multiplier'];
-g__feats_needing_log_comp   = ['max_abs_value','light'];
+g__feats_needing_log_comp   = ['max_abs_value','normalization_multiplier','light'];
 
 g__main_activities          = ['LYING_DOWN','SITTING','STANDING_IN_PLACE','STANDING_AND_MOVING',\
                                'WALKING','RUNNING','BICYCLING'];#,"DON'T_REMEMBER"];
@@ -129,6 +131,21 @@ def get_pseudo_sensor_features(instance_dir,sensor):
                 epsilon     = 0.00001;
                 value       = compute_features.log_compression(value,epsilon);
                 pass;
+
+            if feature_name in g__location_quick_features:
+                # Detect and adjust invalid values of location degrees:
+                if abs(value) > 0.5:
+                    # Deviations of more than half a degree are infeasible
+                    value   = numpy.nan;
+                    pass;
+                
+            if feature_name in g__lqf_positive_degrees:
+                # These values must be non negative
+                if value < 0.:
+                    value   = numpy.nan;
+                    pass;
+                pass;
+
             features[fi]    = value;
             pass;
         pass;
@@ -215,7 +232,11 @@ def check_presence_of_measurements(instance_dir,sensor):
         if not os.path.exists(mfcc_file):
             return False;
         try:
-            mfcc    = numpy.genfromtxt(mfcc_file,delimiter=',');
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore");
+                mfcc    = numpy.genfromtxt(mfcc_file,delimiter=',');
+                pass;
+            
             return mfcc.size > 39;
             pass;
         except:
@@ -226,7 +247,10 @@ def check_presence_of_measurements(instance_dir,sensor):
         return False;
 
     # Load the measurements time-series:
-    X                       = numpy.genfromtxt(measurements_file);
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore");
+        X                       = numpy.genfromtxt(measurements_file);
+        pass;
 
     if (len(X.shape) <= 0):
         return False;
@@ -396,6 +420,7 @@ def user_sensor_counts(uuids):
                 continue;
 
             for (si,sensor) in enumerate(sensors):
+#                print "%s:%s" % (instance_dir,sensor);
                 if check_presence_of_measurements(instance_dir,sensor):
                     counts[ui,si]   += 1;
                     pass;

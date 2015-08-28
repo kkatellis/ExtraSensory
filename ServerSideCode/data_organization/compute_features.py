@@ -243,11 +243,28 @@ def get_dominant_freq_by_dft(X,sr):
         extvals = nPS[extrema,jj];
         ind     = numpy.argmax(extvals); # index among the local peaks
         ind     = extrema[ind]; # index among all the DFT components
+
+        domf    = freqs[ind];
+        dompe   = 1./domf;
+        dompo   = nPS[ind,jj];
+        spent   = scipy.stats.entropy(nPS[:,jj]);
+        # Do some sanity check for the values:
+        if (domf < (1./60.)) or (domf > 50.):
+            domf        = numpy.nan;
+            pass;
+
+        if (dompe < 0.02) or (dompe > 60):
+            dompe       = numpy.nan;
+            pass;
+
+        if (dompo <= 0.):
+            dompo       = numpy.nan;
+            pass;
         
-        dom_freqs[jj]   = freqs[ind];
-        dom_periods[jj] = 1/dom_freqs[jj];
-        dom_power[jj]   = nPS[ind,jj];
-        spec_ent[jj]    = scipy.stats.entropy(nPS[:,jj]);
+        dom_freqs[jj]   = numpy.log(domf);
+        dom_periods[jj] = numpy.log(dompe);
+        dom_power[jj]   = numpy.log(dompo);
+        spec_ent[jj]    = spent;
         pass;
 
     return (dom_freqs,dom_periods,dom_power,spec_ent);
@@ -390,9 +407,28 @@ def get_location_features(X,start_timestamp):
         alt_range       = max_altitude - min_altitude;
         pass;
 
-    location_feat   = [];
-    location_feat.append(numpy.clip(best_hor_acc,0.,400.));
-    location_feat.append(numpy.clip(best_ver_acc,0.,400.));
+    # Fix invalid (un reasonable) values, and add transformations:
+    if best_hor_acc < 0. or best_hor_acc > 400.:
+        best_hor_acc    = numpy.nan;
+        pass;
+    if best_ver_acc < 0. or best_ver_acc > 400.:
+        best_ver_acc    = numpy.nan;
+        pass;
+    if std_lat < 0. or std_lat < 1.:
+        # Not reasonable to shift more than 1 degree
+        std_lat         = numpy.nan;
+        pass;
+    if std_long < 0. or std_long < 1.:
+        # Not reasonable to shift more than 1 degree
+        std_long        = numpy.nan;
+        pass;
+    # Transform the std values:
+    std_lat             = numpy.log(std_lat);
+    std_long            = numpy.log(std_long);
+    
+    location_feat       = [];
+    location_feat.append(best_hor_acc);
+    location_feat.append(best_ver_acc);
     location_feat.append(std_lat);
     location_feat.append(std_long);
     location_feat.append(std_alt);
