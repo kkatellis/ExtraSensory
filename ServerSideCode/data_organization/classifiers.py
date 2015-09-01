@@ -36,7 +36,7 @@ def classify(x,classifier):
     
     return (bin_vec,prob_vec);
 
-def train_classifier(X,instances_labels,label_names,model_params):
+def train_classifier(X,instances_labels,label_names,model_params,extra_data=None):
     if 'model_type' not in model_params:
         return None;
 

@@ -352,7 +352,7 @@ def initialize_feature_matrices(num_instances,sensors):
     return features;
 
 
-def collect_features_and_labels(uuids,model_params,audio_encoder):
+def collect_features_and_labels(uuids,model_params,audio_encoder,get_unlabeled_examples):
     sensors                 = model_params['sensors'];
     feat2sensor_map         = model_params['feat2sensor_map'];
     
@@ -365,6 +365,7 @@ def collect_features_and_labels(uuids,model_params,audio_encoder):
     # Prepare the structures for instances' features and labels:
     instances_features  = [];
     instances_labels    = numpy.zeros((0,n_classes),dtype=bool);
+    unlabeled_features  = [];
 
     # Go over the instances to collect the training data:
     for uuid in uuids:
@@ -382,25 +383,39 @@ def collect_features_and_labels(uuids,model_params,audio_encoder):
             # Get labels:
             (main_labels_bin,sec_labels_bin)    = get_instance_labels_in_binary(\
                 instance_dir,main_label_names,sec_label_names);
-            if (type(main_labels_bin) == type(None) or type(sec_labels_bin) == type(None)):
+            unlabeled               = (type(main_labels_bin) == type(None) or type(sec_labels_bin) == type(None));
+            if unlabeled and not get_unlabeled_examples:
                 continue;
-            bin_vec         = numpy.concatenate((main_labels_bin,sec_labels_bin));
-            bin_vec         = numpy.reshape(bin_vec,(1,-1));
 
             # Get features:
-            feature_vec  = get_instance_features(\
+            feature_vec             = get_instance_features(\
                 uuid,subdir,sensors,feat2sensor_map,audio_encoder);
 
             # Append this instance to train set:
-            instances_features.append(feature_vec);
-            instances_labels    = numpy.concatenate((instances_labels,bin_vec),axis=0);
+            if unlabeled:
+                unlabeled_features.append(feature_vec);
+                pass;
+            else:
+                bin_vec             = numpy.concatenate((main_labels_bin,sec_labels_bin));
+                bin_vec             = numpy.reshape(bin_vec,(1,-1));
+                instances_features.append(feature_vec);
+                instances_labels    = numpy.concatenate((instances_labels,bin_vec),axis=0);
+                pass; # end else (if yes-labeled)
+            
             pass; # end for subdir...
         
         pass; # end for uuid...
 
     # Turn the feature vector collection to a large matrix:
-    X       = numpy.concatenate(tuple(instances_features),axis=0);
-    return (X,instances_labels,label_names);
+    X                       = numpy.concatenate(tuple(instances_features),axis=0);
+    if get_unlabeled_examples and (len(unlabeled_features)>0):
+        X_unlabeled         = numpy.concatenate(tuple(unlabeled_features),axis=0);
+        pass;
+    else:
+        X_unlabeled         = None;
+        pass;
+    
+    return (X,instances_labels,label_names,X_unlabeled);
 
 def user_sensor_counts(uuids):
     sensors         = get_all_sensor_names();

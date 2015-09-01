@@ -58,26 +58,31 @@ def train_phase(train_uuids,model_params):
             pass; # end else (if 'audio' is in sensors)
 
         # Collect the train set:
-        train_set_file  = os.path.join(train_dir,'train_set.pickle');
+        train_set_file          = os.path.join(train_dir,'train_set.pickle');
         if os.path.exists(train_set_file):
-            fid         = file(train_set_file,'rb');
-            train_set   = pickle.load(fid);
+            fid                 = file(train_set_file,'rb');
+            train_set           = pickle.load(fid);
             fid.close();
             X                   = train_set['X'];
             instances_labels    = train_set['instances_labels'];
             label_names         = train_set['label_names'];
+            X_unlabeled         = train_set['X_unlabeled'];
             print "<< Loaded train examples from saved file %s" % train_set_file;
             pass; # end if exists train_set_file
         else:
             print "== Collecting train examples...";
             (X,\
              instances_labels,\
-             label_names)   = collect_features.collect_features_and_labels(train_uuids,model_params,audio_encoder);
-            train_set       = {\
+             label_names,\
+             X_unlabeled)       = collect_features.collect_features_and_labels(\
+                 train_uuids,model_params,audio_encoder,get_unlabeled_examples=model_params['use_unlabeled_examples']);
+            
+            train_set           = {\
                 'X':X,\
                 'instances_labels':instances_labels,\
                 'label_names':label_names,\
-                'model_params':model_params};
+                'model_params':model_params,\
+                'X_unlabeled':X_unlabeled};
             fid             = file(train_set_file,'wb');
             pickle.dump(train_set,fid);
             fid.close();
@@ -88,9 +93,17 @@ def train_phase(train_uuids,model_params):
         # Train the classifier:
         print "== Training classifier of type: %s" % model_params['model_type'];
         print "."*10;
-        classifier  = classifiers.train_classifier(\
+        if model_params['use_unlabeled_examples']:
+            extra_data      = {'X_unlabeled':X_unlabeled};
+            pass;
+        else:
+            extra_data      = None;
+            pass;
+        
+        classifier          = classifiers.train_classifier(\
             X,instances_labels,\
-            label_names,model_params);
+            label_names,model_params,\
+            extra_data);
         # Add the audio encoder to the classifier:
         classifier['audio_encoder'] = pickle.loads(pickle.dumps(audio_encoder));
         fid             = file(classifier_file,'wb');
@@ -104,27 +117,31 @@ def train_phase(train_uuids,model_params):
 def test_phase(test_uuids,classifier):
     print "="*20;
     # Collect the test set:
-    train_dir       = classifier['model_params']['train_dir'];
-    test_set_file   = os.path.join(train_dir,'test_set.pickle');
+    train_dir               = classifier['model_params']['train_dir'];
+    test_set_file           = os.path.join(train_dir,'test_set.pickle');
     if os.path.exists(test_set_file):
-        fid         = file(test_set_file,'rb');
-        test_set    = pickle.load(fid);
+        fid                 = file(test_set_file,'rb');
+        test_set            = pickle.load(fid);
         fid.close();
         X                   = test_set['X'];
         instances_labels_gt = test_set['instances_labels'];
         label_names         = test_set['label_names'];
+        X_unlabeled         = test_set['X_unlabeled'];
         print "<< Loaded test examples from saved file %s" % test_set_file;
         pass; # end if esitst test_set_file
     else:
         print "== Collecting test examples...";
         (X,\
          instances_labels_gt,\
-         label_names)   = collect_features.collect_features_and_labels(test_uuids,classifier['model_params'],classifier['audio_encoder']);
-        test_set        = {\
+         label_names,\
+         X_unlabeled)       = collect_features.collect_features_and_labels(\
+             test_uuids,classifier['model_params'],classifier['audio_encoder'],get_unlabeled_examples=False);
+        test_set            = {\
             'X':X,\
             'instances_labels':instances_labels_gt,\
             'label_names':label_names,\
-            'model_params':classifier['model_params']};
+            'model_params':classifier['model_params'],\
+            'X_unlabeled':X_unlabeled};
         fid             = file(test_set_file,'wb');
         pickle.dump(test_set,fid);
         fid.close();
