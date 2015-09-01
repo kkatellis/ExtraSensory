@@ -152,17 +152,110 @@ def test_phase(test_uuids,classifier):
     return scores;
 
 
+def construct_cross_validation_folds(uuids,n_folds):
+    cv_folds        = [];
+    sorted_uuids    = sorted(uuids);
+    n_uuids         = len(uuids);
+    uuids_per_fold  = int(n_uuids / n_folds);
+    for foldi in range(n_folds):
+        start       = foldi*uuids_per_fold;
+        if foldi == n_folds-1:
+            stop    = n_uuids;
+            pass;
+        else:
+            stop    = (foldi+1)*uuids_per_fold;
+            pass;
+
+        test_uuids  = sorted_uuids[start:stop];
+        train_uuids = sorted(set(sorted_uuids).difference(set(test_uuids)));
+        cv_folds.append({'test_uuids':test_uuids,'train_uuids':train_uuids});
+
+        pass;
+
+    return cv_folds;
+
 def leave_one_out_cross_validation(uuids,model_params):
+    cv_folds        = construct_cross_validation_folds(uuids,len(uuids));
+    return cross_validation(cv_folds,model_params);
 
+def summarize_folds_scores(scores_per_fold):
+    n_labels        = len(scores_per_fold[0]['label_names']);
+    scores          = summarize_folds_scores_helper(scores_per_fold,n_labels);
+    # Add summary of random chance scores:
+    random_per_fold = [];
+    for fold_scores in scores_per_fold:
+        random_per_fold.append(fold_scores['random_chance']);
+        pass;
+    scores['random_chance'] = summarize_folds_scores_helper(random_per_fold,n_labels);
+    return scores;
+
+def summarize_folds_scores_helper(scores_per_fold,n_labels):
+    n_folds         = len(scores_per_fold);
+    mp5_vals        = numpy.nan*numpy.ones(n_folds);
+    mr5_vals        = numpy.nan*numpy.ones(n_folds);
+    mf5_vals        = numpy.nan*numpy.ones(n_folds);
+    map_vals        = numpy.nan*numpy.ones(n_folds);
+    naive_tprs      = numpy.nan*numpy.ones((n_folds,n_labels));
+    naive_tnrs      = numpy.nan*numpy.ones((n_folds,n_labels));
+    top5_tprs       = numpy.nan*numpy.ones((n_folds,n_labels));
+    top5_tnrs       = numpy.nan*numpy.ones((n_folds,n_labels));
+
+    for (foldi,fold_scores) in enumerate(scores_per_fold):
+        mp5_vals[foldi]     = fold_scores['mp5'];
+        mr5_vals[foldi]     = fold_scores['mr5'];
+        mf5_vals[foldi]     = fold_scores['mf5'];
+        map_vals[foldi]     = fold_scores['map'];
+        naive_tprs[foldi,:] = fold_scores['naive_tprs'];
+        naive_tnrs[foldi,:] = fold_scores['naive_tnrs'];
+        top5_tprs[foldi,:]  = fold_scores['top5_tprs'];
+        top5_tnrs[foldi,:]  = fold_scores['top5_tnrs'];
+        pass;
+
+    folds_scores                = {};
+    folds_scores['mp5_vals']    = mp5_vals;
+    folds_scores['mr5_vals']    = mr5_vals;
+    folds_scores['mf5_vals']    = mf5_vals;
+    folds_scores['map_vals']    = map_vals;
+    folds_scores['naive_tprs']  = naive_tprs;
+    folds_scores['naive_tnrs']  = naive_tnrs;
+    naive_trs                   = (naive_tprs+naive_tnrs)/2.;
+    folds_scores['naive_trs']   = naive_trs;
+    folds_scores['top5_tprs']   = top5_tprs;
+    folds_scores['top5_tnrs']   = top5_tnrs;
+    top5_trs                    = (top5_tprs+top5_tnrs)/2.;
+    folds_scores['top5_trs']    = top5_trs;
+
+    avr_scores                  = {};
+    avr_scores['mp5']           = numpy.mean(mp5_vals);
+    avr_scores['mr5']           = numpy.mean(mr5_vals);
+    avr_scores['mf5']           = numpy.mean(mf5_vals);
+    avr_scores['map']           = numpy.mean(map_vals);
+    avr_scores['naive_tprs']    = numpy.mean(naive_tprs,axis=0);
+    avr_scores['naive_tnrs']    = numpy.mean(naive_tnrs,axis=0);
+    avr_scores['naive_trs']     = numpy.mean(naive_trs,axis=0);
+    avr_scores['top5_tprs']     = numpy.mean(top5_tprs,axis=0);
+    avr_scores['top5_tnrs']     = numpy.mean(top5_tnrs,axis=0);
+    avr_scores['top5_trs']      = numpy.mean(top5_trs,axis=0);
+
+    scores                      = {\
+        'scores_per_fold':scores_per_fold,\
+        'folds_scores':folds_scores,\
+        'avr_scores':avr_scores};
+    return scores;
+
+def cross_validation(cv_folds,model_params):
     scores_per_fold = [];
-    for (ui,test_uuid) in enumerate(uuids):
+    for (foldi,fold) in enumerate(cv_folds):
+        test_uuids  = fold['test_uuids'];
+        train_uuids = fold['train_uuids'];
         print "#"*30;
-        print "### CV fold %d: test uuid is %s" % (ui,test_uuid);
-        test_uuids  = [test_uuid];
-        train_uuids = set(uuids).difference(test_uuids);
-
+        print "### CV fold %d. Test uuids are:" % foldi;
+        for uuid in test_uuids:
+            print "### %s" % uuid;
+            pass;
+        
         # Create dir for this fold:
-        fold_dir    = os.path.join(model_params['experiment_dir'],"fold_%d" % ui);
+        fold_dir    = os.path.join(model_params['experiment_dir'],"fold_%d" % foldi);
         if not os.path.exists(fold_dir):
             os.mkdir(fold_dir);
             pass;
@@ -173,12 +266,12 @@ def leave_one_out_cross_validation(uuids,model_params):
         fold_scores['classifier']   = classifier;
         scores_per_fold.append(fold_scores);
 
-        if ui >= 1:
-            break;
-        
         pass;
 
-    return scores_per_fold;
+    scores              = summarize_folds_scores(scores_per_fold);
+    scores['cv_folds']  = cv_folds;
+    
+    return scores;
 
 def main():
 
@@ -222,21 +315,14 @@ def main():
         pass;
     else:
         raise Error("missing experiment parameters file");
-##        all_sensors     = collect_features.get_all_sensor_names();
-##        dim             = collect_features.get_feature_dimension_for_aggregate_of_sensors(all_sensors);
-##        model_params    = {'model_type':'logit',\
-##                           'sensors':all_sensors,\
-##                           'feature_dimension':dim,\
-##                           'missing_value_policy':'zero_imputation',\
-##                           'standardize_features':True};
-##        output_file     = 'cv_results.pickle';
         pass;
 
-    uuids   = user_statistics.read_subjects_uuids();
+    uuids               = user_statistics.read_subjects_uuids();
+    cv_folds            = construct_cross_validation_folds(uuids,2);
 
-    scores_per_fold     = leave_one_out_cross_validation(uuids,model_params);
+    scores              = cross_validation(cv_folds,model_params);
     fid = file(output_file,'wb');
-    pickle.dump(scores_per_fold,fid);
+    pickle.dump(scores,fid);
     fid.close();
     pdb.set_trace();
     return;
