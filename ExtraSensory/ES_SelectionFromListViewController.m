@@ -93,7 +93,7 @@
         if (self.frequentChoices)
         {
             // Make the first section be dedicated to the frequently used labels:
-            [self addSectionWithArrayOfItemStrings:self.frequentChoices name:@"frequent" andHeader:@"Frequently used"];
+            [self addSectionWithArrayOfItemStrings:self.frequentChoices name:@"Frequent" andHeader:@"Frequently used"];
             
             // Add another dummy section to create a space between two index items:
             [self addDummySection];
