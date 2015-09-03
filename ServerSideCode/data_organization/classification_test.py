@@ -89,7 +89,8 @@ def train_phase(train_uuids,model_params):
             print ">> Saved train set file: %s" % train_set_file;
             pass; # end else (not exists train_set_file)
 
-        print "Train set: %d instances" % X.shape[0];
+        print "Train set: %d labeled instances, %d unlabeled instances" % (X.shape[0],X_unlabeled.shape[0]);
+        
         # Train the classifier:
         print "== Training classifier of type: %s" % model_params['model_type'];
         print "."*10;

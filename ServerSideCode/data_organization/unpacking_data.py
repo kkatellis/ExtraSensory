@@ -64,6 +64,9 @@ def unpack_data_instance(input_zip_file,instance_out_dir):
     json.dump(location_quick,fid);
     fid.close();
 
+    # Delete the HF data file from the output directory:
+    os.remove(hf_file);
+
     return True;
 
 

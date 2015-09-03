@@ -9,6 +9,7 @@ import os.path;
 import json;
 import numpy;
 import warnings;
+import pickle;
 
 import compute_features;
 import user_statistics;
@@ -412,7 +413,7 @@ def collect_features_and_labels(uuids,model_params,audio_encoder,get_unlabeled_e
         X_unlabeled         = numpy.concatenate(tuple(unlabeled_features),axis=0);
         pass;
     else:
-        X_unlabeled         = None;
+        X_unlabeled         = numpy.zeros((0,X.shape[1]));
         pass;
     
     return (X,instances_labels,label_names,X_unlabeled);
@@ -442,6 +443,13 @@ def user_sensor_counts(uuids):
                 pass; # end for sensor...
 
             pass; # end for subdir...
+
+        user_counts = {'uuid':uuid,'sensors':sensors,'counts':counts[ui,:]};
+        user_file = 'sensor_counts_%s.pickle' % uuid;
+        fid = file(user_file,'wb');
+        pickle.dump(user_counts,fid);
+        fid.close();
+        print ">> saved file: %s" % user_file;
         
         pass; # end for (ui,uuid)...
 
@@ -587,6 +595,10 @@ def main():
 
 
     (counts,sensors)        = user_sensor_counts(uuids);
+    counts_data = {'uuids':uuids,'counts':counts,'sensors':sensors};
+    fid = file('sensor_data.pickle','wb');
+    pickle.dump(counts_data,fid);
+    fid.close();
     pdb.set_trace();
 
     read_secondary_labels();
