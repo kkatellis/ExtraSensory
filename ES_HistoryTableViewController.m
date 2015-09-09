@@ -101,14 +101,14 @@
 
 - (void) refreshTableClearMarkZone:(BOOL)clearMarkZone
 {
-    if (self.eventToShowMinuteByMinute)
-    {
-        [self recalculateEventsFromGivenActivityEvent];
-    }
-    else
-    {
+    //if (self.eventToShowMinuteByMinute)
+    //{
+    //    [self recalculateEventsFromGivenActivityEvent];
+    //}
+    //else
+    //{
         [self recalculateEventsFromDatabase];
-    }
+    //}
     
     if (clearMarkZone)
     {
@@ -117,20 +117,20 @@
     [self.tableView reloadData];
     
     // The prev/next buttons:
-    if (self.eventToShowMinuteByMinute)
-    {
-        // Then we're showing minutes of a single activityEvent. No need to allow moving to prev/next day. Instead need to add a "done" button:
-        self.nextButton.enabled = NO;
-        [self.nextButton setHidden:YES];
-        [self.prevButton setTitle:@"Done" forState:UIControlStateNormal];
-    }
-    else
-    {
+    //if (self.eventToShowMinuteByMinute)
+    //{
+    //    // Then we're showing minutes of a single activityEvent. No need to allow moving to prev/next day. Instead need to add a "done" button:
+   //     self.nextButton.enabled = NO;
+    //    [self.nextButton setHidden:YES];
+    //    [self.prevButton setTitle:@"Done" forState:UIControlStateNormal];
+   // }
+   // else
+   // {
         BOOL presentedDayIsToday = [self isTodaySameDayAsDate:self.timeInDayOfFocus];
         self.nextButton.enabled = !presentedDayIsToday;
         [self.nextButton setHidden:NO];
         [self.prevButton setTitle:@"previous day" forState:UIControlStateNormal];
-    }
+    //}
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -160,6 +160,7 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.eventToShowMinuteByMinute = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -172,19 +173,21 @@
 - (IBAction)prevButtonTouchedDown:(id)sender {
     // Then go to previous day:
     self.timeInDayOfFocus = [self.timeInDayOfFocus dateByAddingTimeInterval:-SECONDS_IN_24HRS];
+    self.eventToShowMinuteByMinute = nil;
     [self refreshTableClearMarkZone:YES];
     
-    if (self.eventToShowMinuteByMinute)
-    {
+    //if (self.eventToShowMinuteByMinute)
+    //{
         // Then we are presenting a minute-by-minute breakdown, and the "prev" button is actually "done":
         
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    //    [self.navigationController popViewControllerAnimated:YES];
+    //}
 }
 
 - (IBAction)nextButtonTouchedDown:(id)sender {
     // Then go to next day:
     self.timeInDayOfFocus = [self.timeInDayOfFocus dateByAddingTimeInterval:SECONDS_IN_24HRS];
+    self.eventToShowMinuteByMinute = nil;
     [self refreshTableClearMarkZone:YES];
 }
 
@@ -251,14 +254,20 @@
 //    return !(activity2.mood);
 }
 
-+ (BOOL)shouldActivity:(ES_Activity *)newActivity beMergedToEventStartingWithActivity:(ES_Activity *)startActivity RightAfterActivity:(ES_Activity *)endActivity
+- (BOOL)shouldActivity:(ES_Activity *)newActivity beMergedToEventStartingWithActivity:(ES_Activity *)startActivity RightAfterActivity:(ES_Activity *)endActivity
 {
+    if (self.eventToShowMinuteByMinute) {
+        if (([newActivity.timestamp doubleValue] >= [self.eventToShowMinuteByMinute.startTimestamp doubleValue]) & ([newActivity.timestamp doubleValue] <= [self.eventToShowMinuteByMinute.endTimestamp doubleValue]))
+        {
+            return NO;
+        }
+    }
     if (!endActivity)
     {
         return NO;
     }
     
-    if (![self isActivity:newActivity similarToActivity:startActivity])
+    if (![[self class] isActivity:newActivity similarToActivity:startActivity])
     {
         // Then they are not similar at all
         return NO;
@@ -303,6 +312,7 @@
 
 - (void)recalculateEventsFromGivenActivityEvent
 {
+    // older version, unused
     // Empty the event history:
     [self.eventHistory removeAllObjects];
     
@@ -339,7 +349,7 @@
         ES_Activity *currentActivity = (ES_Activity *)activityObject;
 
         
-        if (![[self class] shouldActivity:currentActivity beMergedToEventStartingWithActivity:startOfActivity RightAfterActivity:endOfActivity])
+        if (![self shouldActivity:currentActivity beMergedToEventStartingWithActivity:startOfActivity RightAfterActivity:endOfActivity])
         {
             // Then we've reached a new activity.
             if (startOfActivity)
@@ -387,14 +397,14 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *title;
-    if (self.eventToShowMinuteByMinute)
-    {
-        title = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.eventToShowMinuteByMinute.startTimestamp endTimestamp:self.eventToShowMinuteByMinute.endTimestamp];
-    }
-    else
-    {
+    //if (self.eventToShowMinuteByMinute)
+    //{
+    //    title = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.eventToShowMinuteByMinute.startTimestamp endTimestamp:self.eventToShowMinuteByMinute.endTimestamp];
+    //}
+    //else
+    //{
         title = [self getDayStringForDate:[self timeInDayOfFocus]];
-    }
+    //}
     return title;
 }
 
@@ -413,6 +423,23 @@
     NSString *endStr = [formatter stringFromDate:endDate];
     
     NSString *title = [NSString stringWithFormat:@"%@ %@-%@",dayStr,startStr,endStr];
+    
+    return title;
+}
+
++ (NSString *) getEventTitleUsingStartTimestamp:(NSNumber *)startTime
+{
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[startTime floatValue]];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    formatter.dateFormat = @"EEEE MMM-dd";
+    NSString *dayStr = [formatter stringFromDate:startDate];
+    
+    formatter.dateFormat = @"HH:mm";
+    NSString *startStr = [formatter stringFromDate:startDate];
+    
+    NSString *title = [NSString stringWithFormat:@"%@ %@", dayStr, startStr];
     
     return title;
 }
@@ -534,6 +561,11 @@
         UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGestureFromRecognizer:)];
         [recognizer setDirection:UISwipeGestureRecognizerDirectionRight];
         [cell addGestureRecognizer:recognizer];
+        
+        // Add a swipe gesture recognizer:
+        UISwipeGestureRecognizer *leftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleLeftSwipeGestureFromRecognizer:)];
+        [leftRecognizer setDirection:UISwipeGestureRecognizerDirectionLeft];
+        [cell addGestureRecognizer:leftRecognizer];
     }
     
     return cell;
@@ -564,6 +596,7 @@
 
 - (void) handleSwipeGestureFromRecognizer:(UISwipeGestureRecognizer *)recognizer
 {
+    NSLog(@"Right swipe!");
     ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)recognizer.view;
     NSNumber *cellTime = cell.activityEvent.startTimestamp;
     
@@ -595,6 +628,18 @@
     [self refreshTableWithoutChangingMarkZone];
     return;
 }
+
+- (void) handleLeftSwipeGestureFromRecognizer:(UISwipeGestureRecognizer *)recognizer
+{
+    NSLog(@"Left swipe!");
+    ES_ActivityEventTableCell *cell = (ES_ActivityEventTableCell *)recognizer.view;
+    
+    self.eventToShowMinuteByMinute = cell.activityEvent;
+    NSLog(@"eventToShowMinuteByMinute: %@", self.eventToShowMinuteByMinute.serverPrediction);
+    NSLog(@"...");
+    [self refreshTableClearMarkZone:YES];
+}
+
 
 - (void) changeVisualMarkingForCell:(ES_ActivityEventTableCell *)cell indexPath:(NSIndexPath *)indexPath mark:(BOOL)mark
 {
@@ -745,21 +790,21 @@
     UIViewController *newView = [storyboard instantiateViewControllerWithIdentifier:@"Feedback"];
     ES_FeedbackViewController *feedback = (ES_FeedbackViewController *)newView;
     
-    if (self.eventToShowMinuteByMinute)
-    {
+    //if (self.eventToShowMinuteByMinute)
+    //{
         // Then the feedback is for an atomic (single minute) activity:
-        ES_Activity *atomicActivity = [activityEvent.minuteActivities firstObject]; // There should be only one object there
+    //    ES_Activity *atomicActivity = [activityEvent.minuteActivities firstObject]; // There should be only one object there
         
-        feedback.preexistingActivity = atomicActivity;
-        feedback.feedbackType = ES_FeedbackTypeAtomicActivity;
-    }
-    else
-    {
+     //   feedback.preexistingActivity = atomicActivity;
+     //   feedback.feedbackType = ES_FeedbackTypeAtomicActivity;
+    ///}
+    //else
+    //{
         // Then the feedback is for a "long" activity event:
         feedback.activityEvent = activityEvent;
         feedback.feedbackType = ES_FeedbackTypeActivityEvent;
         feedback.labelSource = ES_LabelSourceHistory;
-    }
+    //}
     
     //[feedback setHidesBottomBarWhenPushed:YES];
     

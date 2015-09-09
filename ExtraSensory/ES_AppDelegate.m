@@ -605,6 +605,7 @@
     
 }
 
+
 - (void) dismissLatestAlert
 {
     if (self.latestAlert)
@@ -612,6 +613,8 @@
         NSLog(@"[appDelegate] dismissing alert.");
         [self.latestAlert dismissWithClickedButtonIndex:self.latestAlert.cancelButtonIndex animated:NO];
         self.latestAlert = nil;
+    } else {
+        NSLog(@"[appDelegate] no latest alert.");
     }
 }
 

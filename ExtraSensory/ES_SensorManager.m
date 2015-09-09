@@ -329,14 +329,8 @@
 
 - (BOOL) inBubble:(CLLocation *)location
 {
-    if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorized) {
-        NSLog(@"authorized");
-    };
-    NSLog(@"current location: (%f, %f)", location.coordinate.latitude, location.coordinate.longitude);
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[self.user.settings.homeLat doubleValue] longitude:[self.user.settings.homeLon doubleValue]];
-    NSLog(@"home location: (%f, %f)", locB.coordinate.latitude, locB.coordinate.longitude);
     CLLocationDistance distance = [location distanceFromLocation:locB];
-    NSLog(@"%f away from home location", distance);
     if (distance < 500){
         NSLog(@"in bubble!");
         return TRUE;

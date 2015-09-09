@@ -45,6 +45,7 @@
 		4EF564B61B31E0FA001E0A40 /* watch_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EF564B51B31E0FA001E0A40 /* watch_on.png */; };
 		4EFADB2F19DE1DD200262568 /* ES_FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */; };
 		4EFADB3119F08BD800262568 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFADB3019F08BD500262568 /* CoreTelephony.framework */; };
+		700DA4D01BA0E4A000A95E7A /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 700DA4CF1BA0E4A000A95E7A /* Launch Screen.xib */; };
 		7015789019FF0585003CCA95 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7015788F19FF0585003CCA95 /* libz.1.2.5.dylib */; };
 		701DEDD41A2FC578006F411E /* MelFilterBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701DEDD01A2FC578006F411E /* MelFilterBank.cpp */; };
 		701DEDD51A2FC578006F411E /* TriangleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701DEDD21A2FC578006F411E /* TriangleFilter.cpp */; };
@@ -224,6 +225,7 @@
 		4EFADB2D19DE1DD200262568 /* ES_FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES_FeedbackViewController.h; sourceTree = "<group>"; };
 		4EFADB2E19DE1DD200262568 /* ES_FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES_FeedbackViewController.m; sourceTree = "<group>"; };
 		4EFADB3019F08BD500262568 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		700DA4CF1BA0E4A000A95E7A /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		7015788F19FF0585003CCA95 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		701DEDD01A2FC578006F411E /* MelFilterBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MelFilterBank.cpp; sourceTree = "<group>"; };
 		701DEDD11A2FC578006F411E /* MelFilterBank.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MelFilterBank.hpp; sourceTree = "<group>"; };
@@ -689,6 +691,7 @@
 		9307CBA817F1A78A00D95E05 = {
 			isa = PBXGroup;
 			children = (
+				700DA4CF1BA0E4A000A95E7A /* Launch Screen.xib */,
 				709F5ADB19FEBFEC00F3386C /* CAPublicUtility */,
 				9307CBBA17F1A78A00D95E05 /* ExtraSensory */,
 				9307CBB317F1A78A00D95E05 /* Frameworks */,
@@ -1003,6 +1006,7 @@
 				70B8A94E18F87D230076A4F5 /* talking.png in Resources */,
 				70B8A93D18F87D230076A4F5 /* indicator-housework@2x.png in Resources */,
 				4EF564B41B31E0ED001E0A40 /* watch_off.png in Resources */,
+				700DA4D01BA0E4A000A95E7A /* Launch Screen.xib in Resources */,
 				70B8A94118F87D230076A4F5 /* indicator-running@2x.png in Resources */,
 				70B8A96718F87D230076A4F5 /* nav-menu-icon.png in Resources */,
 				70B8A93118F87D230076A4F5 /* biking.png in Resources */,

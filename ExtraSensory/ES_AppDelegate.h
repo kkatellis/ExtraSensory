@@ -70,6 +70,7 @@
 - (void) pushOnNetworkStack: (NSString *) file;
 - (void) logNetworkStackAndZipFiles;
 - (void) updateApplicationBadge;
+- (void) dismissLatestAlert;
 
 - (NSInteger) getFeedbackQueueSize;
 - (void) addToFeedbackQueueActivity:(ES_Activity *)activity;

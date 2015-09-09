@@ -276,6 +276,10 @@
     }
     
     NSLog(@"[scheduler] Should ask question: [%@]",question);
+    //[self.appDelegate dismissLatestAlert];
+    //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    //[[self appDelegate] updateApplicationBadge];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     // Set the timer for next time, before sending immediate notification:
     [self setTimerForNaggingCheckup];

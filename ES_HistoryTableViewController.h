@@ -16,4 +16,5 @@
 
 + (BOOL)isActivity:(ES_Activity *)activity1 similarToActivity:(ES_Activity *)activity2; // to be used in other classes
 + (NSString *) getEventTitleUsingStartTimestamp:(NSNumber *)startTime endTimestamp:(NSNumber *)endTime;
++ (NSString *) getEventTitleUsingStartTimestamp:(NSNumber *)startTime;
 @end

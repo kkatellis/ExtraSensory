@@ -193,15 +193,16 @@
                     cell.detailTextLabel.text = [self stringForValidForMinutes:self.validForNumberOfMinutes];
                     break;
                 case ES_FeedbackTypeActivityEvent:
+                    cell.detailTextLabel.text = @" ";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
                     if ([self.activityEvent.minuteActivities count] <= 1) {
-                        cell.detailTextLabel.text = @" ";
-                        cell.accessoryType = UITableViewCellAccessoryNone;
+                        cell.textLabel.text = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.activityEvent.startTimestamp];
                     }
                     else
                     {
-                        cell.detailTextLabel.text = @"Minute by minute labels";
+//                        cell.detailTextLabel.text = @"Minute by minute labels";
+                        cell.textLabel.text = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.activityEvent.startTimestamp endTimestamp:self.activityEvent.endTimestamp];
                     }
-                    cell.textLabel.text = [ES_HistoryTableViewController getEventTitleUsingStartTimestamp:self.activityEvent.startTimestamp endTimestamp:self.activityEvent.endTimestamp];
                     break;
                 case ES_FeedbackTypeAtomicActivity:
                     [self setAsEmptyCell:cell];
@@ -240,28 +241,29 @@
 {
     if (indexPath.section == ACCESSORY_SEC)
     {
-        switch (self.feedbackType) {
-            case ES_FeedbackTypeActive:
-                return indexPath;
-                break;
-            
-            case ES_FeedbackTypeActivityEvent:
-                if ([self.activityEvent.minuteActivities count] <= 1)
-                {
-                    // Then this activity event has only 1 minute. No need for minute-minute breakdown:
-                    return nil;
-                }
-                return indexPath;
-                break;
-            
-            case ES_FeedbackTypeAtomicActivity:
-                return nil;
-                break;
-            
-            default:
-                return nil;
-                break;
-        }
+        return nil;
+//        switch (self.feedbackType) {
+//            case ES_FeedbackTypeActive:
+//                return indexPath;
+//                break;
+//            
+//            case ES_FeedbackTypeActivityEvent:
+//                if ([self.activityEvent.minuteActivities count] <= 1)
+//                {
+//                    // Then this activity event has only 1 minute. No need for minute-minute breakdown:
+//                    return nil;
+//                }
+//                return indexPath;
+//                break;
+//            
+//            case ES_FeedbackTypeAtomicActivity:
+//                return nil;
+//                break;
+//            
+//            default:
+//                return nil;
+//                break;
+//        }
     }
     else
     {
@@ -289,7 +291,7 @@
                     break;
                     
                 case ES_FeedbackTypeActivityEvent:
-                    [self openActivityEventMinuteHistory];
+                    //[self openActivityEventMinuteHistory];
                     break;
                     
                 case ES_FeedbackTypeAtomicActivity:
@@ -324,6 +326,7 @@
 
 - (void) openActivityEventMinuteHistory
 {
+    // older version, unused
     // First, mark that we're going to the minute-by-minute breakdown:
     self.presentingMinuteByMinuteHistory = YES;
     
