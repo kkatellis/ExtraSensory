@@ -14,6 +14,8 @@ import traceback;
 import multiprocessing;
 import time;
 
+import feature_codebooks;
+
 import pdb;
 
 def classify(x,classifier):
@@ -30,22 +32,30 @@ def classify(x,classifier):
     elif classifier['model_params']['model_type'] == 'multilayer_logit':
         (bin_vec,prob_vec)  = classify__multilayer_logit(x,classifier);
         pass;
+    elif classifier['model_params']['model_type'] == 'multilayer_mixed':
+        (bin_vec,prob_vec)  = classify__multilayer_mixed(x,classifier);
     else:
         (bin_vec,prob_vec)  = (None,None);
         pass;
     
     return (bin_vec,prob_vec);
 
-def train_classifier(X,instances_labels,label_names,model_params):
+def train_classifier(X,instances_labels,label_names,model_params,extra_data=None):
     if 'model_type' not in model_params:
         return None;
 
-    n_samples   = X.shape[0];
+    n_labeled   = X.shape[0];
     n_samples2  = instances_labels.shape[0];
-    if (n_samples2 != n_samples):
-        raise Exception('Cant train classifier. Got %d instances but %d labels' % (n_samples,n_sampmles2));
+    if (n_samples2 != n_labeled):
+        raise Exception('Cant train classifier. Got %d feature vectors but %d label vectors' % (n_labeled,n_sampmles2));
 
     classifier  = {'model_params':model_params,'label_names':label_names};
+
+    if model_params['use_unlabeled_examples']:
+        # Concatenate the examples, first the labeled ones, then the unlabeled ones:
+        X       = numpy.concatenate((X,extra_data['X_unlabeled']),axis=0);
+        pass;
+
     if model_params['standardize_features']:
         # Standardize (and save the standardization parameters):
         X_old                   = numpy.copy(X);
@@ -56,7 +66,7 @@ def train_classifier(X,instances_labels,label_names,model_params):
 
     X           = apply_missing_values_policy(X,model_params['missing_value_policy']);
 
-    train_data  = {'X_old':X_old,'X':X,'model_params':model_params};
+    train_data  = {'X_old':X_old,'X':X,'model_params':model_params,'n_labeled':n_labeled};
     train_file  = os.path.join(model_params['train_dir'],'treated_train_data.pickle');
     fid         = file(train_file,'wb');
     pickle.dump(train_data,fid);
@@ -68,6 +78,8 @@ def train_classifier(X,instances_labels,label_names,model_params):
     elif model_params['model_type'] == 'multilayer_logit':
         classifier  = train_classifier__multilayer_logit(X,instances_labels,label_names,classifier);
         pass;
+    elif model_params['model_type'] == 'multilayer_mixed':
+        classifier  = train_classifier__multilayer_mixed(X,instances_labels,label_names,classifier);
     else:
         classifier  = None;
         pass;
@@ -760,9 +772,183 @@ def train_classifier__multilayer_logit(X,instances_labels,label_names,classifier
     classifier['layer_classifiers']     = layer_classifiers;
     return classifier;
 
+
+### Multi-layer mixed:
+def classify__codebook(X,layer_classifier):
+    if len(X.shape) == 1:
+        X               = numpy.reshape(X,(1,-1));
+        pass;
+    # We expect X to be (n_instances x d) and the trained codebook to be (k x d)
+
+    # First normalize each feature vector:
+    X                   = feature_codebooks.normalize_feature_vectors(X);
+
+    # Compute dot products (since codewords and feature vectors are normalized, this is equivalent to cosine similarity):
+    dot_prods           = numpy.dot(X,layer_classifier['codebook'].T);
+
+    # Now add the non-linearity stage:
+    activations         = nonlinearity(dot_prods,layer_classifier['model_params']);
+    
+    return activations;
+
+def nonlinearity(X,params):
+    if params['nonlinearity_type'] == 'shrinkage':
+        shrinked        = numpy.abs(X) - params['theta'];
+        shrinked[shrinked < 0.] = 0.;
+        return numpy.sign(X)*shrinked;
+
+    if params['nonlinearity_type'] == 'tanh':
+        return numpy.tanh(params['theta']*X);
+
+    return None;
+
+def train_classifier__codebook(X,layer_classifier):
+    k                   = layer_classifier['model_params']['k'];
+    N                   = X.shape[0];
+    order               = numpy.array(range(N));
+    numpy.random.shuffle(order);
+
+    minibatch_size      = max([10*k,N/10]);
+    initbatch_size      = 2*minibatch_size;
+
+    order_inds          = numpy.mod(numpy.array(range(initbatch_size),dtype=int),N);
+    pos                 = order_inds[-1]+1;
+    init_batch_feats    = X[order[order_inds],:];
+    print "Training codebook layer (k=%d). Initial k-means..." % k;
+    codebook            = feature_codebooks.initialize_k_means_codebook(init_batch_feats,k);
+
+    for ii in range(10):
+        print "Training codebook layer. k-means minibatch %d (%d examples)..." % (ii,minibatch_size);
+        order_inds      = numpy.mod(numpy.array(range(pos,pos+minibatch_size),dtype=int),N);
+        pos             = order_inds[-1]+1;
+        minibatch_feats = X[order[order_inds],:];
+        codebook        = feature_codebooks.k_means_iteration(codebook,minibatch_feats);
+        pass;
+
+    layer_classifier['codebook']    = codebook;
+    return layer_classifier;
+
+def classify__multilayer_mixed(x,classifier):
+    n_layers            = len(classifier['layer_classifiers']);
+    layer_input         = x;
+
+    for (layer_i,layer_classifier) in enumerate(classifier['layer_classifiers']):
+        # Process the current layer input using the curren layer classifier:
+        if layer_classifier['model_params']['model_type'] == 'logit':
+            (layer_out_bin,layer_out_prob)  = classify__logit(layer_input,layer_classifier);
+            pass;
+        elif layer_classifier['model_params']['model_type'] == 'codebook':
+            layer_out_bin                   = None;
+            layer_out_prob                  = classify__codebook(layer_input,layer_classifier);
+            pass;
+
+        if layer_i < (n_layers-1):
+            # Prepare the input for the next layer:
+
+            if layer_classifier['model_params']['standardize_features']:
+                # Standardize the latest layer's output:
+                output_old              = numpy.copy(layer_out_prob);
+                layer_out_prob          = standardize_features(layer_out_prob,layer_classifier['output_mean_vec'],layer_classifier['output_std_vec']);
+                pass;
+
+            if 'layer_input_policy' not in classifier['model_params']:
+                layer_classifier['model_params']['layer_input_policy']    = 'no_augment';
+                pass;
+      
+            if layer_classifier['model_params']['layer_input_policy'] == 'augment_previous_input':
+                layer_input             = numpy.concatenate((numpy.reshape(layer_input,(1,-1)),numpy.reshape(layer_out_prob,(1,-1))),axis=1);
+                pass;
+            elif layer_classifier['model_params']['layer_input_policy'] == 'augment_lower_input':
+                layer_input             = numpy.concatenate((numpy.reshape(x,(1,-1)),numpy.reshape(layer_out_prob,(1,-1))),axis=1);
+                pass;
+            elif layer_classifier['model_params']['layer_input_policy'] == 'no_augment':
+                layer_input             = layer_out_prob;
+                pass;
+            else:
+                raise ValueError("Got unsupported value for model parameter 'layer_input_policy': %s" % classifier['model_params']['layer_input_policy']);
+            
+            pass; # end if there's next layer
+        pass; # end for layer_i...
+
+    return (layer_out_bin,layer_out_prob);
+
+def train_classifier__multilayer_mixed(X,instances_labels,label_names,classifier):
+    n_layers            = len(classifier['model_params']['layers_params']);
+    n_labeled           = instances_labels.shape[0];
+    n_labels            = len(label_names);
+    layer_inputs        = X; # This should include n_labeled labeled examples and additional unlabeled examples
+    n_instances         = layer_inputs.shape[0];
+    
+    layer_classifiers   = [None for layer_i in range(n_layers)];
+    for layer_i in range(n_layers):
+        # Train the current layer classifier:
+        model_params    = pickle.loads(pickle.dumps(classifier['model_params']['layers_params'][layer_i]));
+        model_params['standardize_features']    = classifier['model_params']['standardize_features'];
+        
+        print "="*20;
+        print "==== Training layer %d of the classifier - %s" % (layer_i,model_params['model_type']);
+        layer_classifier                = {'model_params':model_params};
+        # Make subdir for the layer classifier training:
+        layer_train_dir                 = os.path.join(classifier['model_params']['train_dir'],'layer_%d' % layer_i);
+        if not os.path.exists(layer_train_dir):
+            os.mkdir(layer_train_dir);
+            pass;
+        layer_classifier['model_params']['train_dir']   = layer_train_dir;
+        if layer_classifier['model_params']['model_type'] == 'logit':
+            layer_classifier            = train_classifier__logit(layer_inputs[:n_labeled,:],instances_labels,label_names,layer_classifier);
+            pass;
+        elif layer_classifier['model_params']['model_type'] == 'codebook':
+            layer_classifier            = train_classifier__codebook(layer_inputs,layer_classifier);
+            pass;
+        layer_classifiers[layer_i]      = layer_classifier;
+        
+        if layer_i < (n_layers-1):
+            # Prepare the input for the next layer:
+
+            if layer_classifier['model_params']['model_type'] == 'logit':
+                layer_outputs               = numpy.zeros((n_instances,n_labels));
+                for ii in range(n_instances):                
+                    (out_bin,out_prob)      = classify__logit(layer_inputs[ii,:],layer_classifier);
+                    layer_outputs[ii,:]     = out_prob;
+                    pass;
+                pass; # end if logit
+            elif layer_classifier['model_params']['model_type'] == 'codebook':
+                layer_outputs               = classify__codebook(layer_inputs,layer_classifier);
+                pass;
+            
+            if layer_classifier['model_params']['standardize_features']:
+                # Standardize (and save the standardization parameters):
+                outputs_old             = numpy.copy(layer_outputs);
+                (layer_outputs,mv,sv)   = estimate_standardization(layer_outputs);
+                layer_classifiers[layer_i]['output_mean_vec']       = mv;
+                layer_classifiers[layer_i]['output_std_vec']        = sv;
+                pass;
+
+            if 'layer_input_policy' not in layer_classifier['model_params']:
+                layer_classifier['model_params']['layer_input_policy']    = 'no_augment';
+                pass;
+      
+            if layer_classifier['model_params']['layer_input_policy'] == 'augment_previous_input':
+                layer_inputs            = numpy.concatenate((layer_inputs,layer_outputs),axis=1);
+                pass;
+            elif layer_classifier['model_params']['layer_input_policy'] == 'augment_lower_input':
+                layer_inputs            = numpy.concatenate((X,layer_outputs),axis=1);
+                pass;
+            elif layer_classifier['model_params']['layer_input_policy'] == 'no_augment':
+                layer_inputs            = layer_outputs;
+                pass;
+            else:
+                raise ValueError("Got unsupported value for model parameter 'layer_input_policy': %s" % classifier['model_params']['layer_input_policy']);
+            
+            pass; # end if there's next layer
+        pass; # end for layer_i...
+
+    classifier['layer_classifiers']     = layer_classifiers;
+    return classifier;
+
+
+
 def main():
-
-
     return;
 
 if __name__ == "__main__":

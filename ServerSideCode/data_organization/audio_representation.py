@@ -14,6 +14,8 @@ import pickle;
 import warnings;
 import pdb;
 
+import feature_codebooks;
+
 fid                 = file('env_params.json','rb');
 g__env_params       = json.load(fid);
 fid.close();
@@ -34,7 +36,7 @@ def get_instance_audio_representation(instance_dir,audio_encoder):
     # Quantize each feature vector using the codebook:
     codebook            = audio_encoder['codebook'];
     tau                 = audio_encoder['tau'];
-    code_mat            = vector_quantization(feats,codebook,tau);
+    code_mat            = feature_codebooks.vector_quantization(feats,codebook,tau);
 
     # Perform pooling:
     if len(code_mat) <= 1:
@@ -87,17 +89,12 @@ def train_audio_encoder(train_uuids,audio_params):
     print "=== Initial k-means...";
     position                    = 0;
     (init_batch_feats,position) = sample_next_minibatch(train_uuids,uuid_inds,timestamps,inds,position,init_batch_size);
-    init_kmeans                 = sklearn.cluster.KMeans(n_clusters=k);
-    init_kmeans.fit(init_batch_feats);
-    codebook                    = normalize_feature_vectors(init_kmeans.cluster_centers_);
+    codebook                    = feature_codebooks.initialize_k_means_codebook(init_batch_feats,k);
 
     for mini in range(n_minibatches):
         print "=== Online k-means. Minibatch %d" % mini;
         (minibatch_feats,position)  = sample_next_minibatch(train_uuids,uuid_inds,timestamps,inds,position,minibatch_size);
-        # Quantize each feature vector to the closest codeword:
-        code_mat                    = vector_quantization(minibatch_feats,codebook,1);
-        # Update the codebook using the codes:
-        codebook                    = update_codebook(codebook,minibatch_feats,code_mat);
+        codebook                    = feature_codebooks.k_means_iteration(codebook,minibatch_feats);
         pass; # end for mini...
 
     encoder                     = {'codebook':codebook};
@@ -108,58 +105,6 @@ def train_audio_encoder(train_uuids,audio_params):
     
     return encoder;
 
-'''
-Update the current codebook, based on VQ-1 coding of a minibatch.
-For each codeword, gather the features that were quantized to it,
-calculate their mean, normalize to unit L2-norm, and that is the new codeword.
-If a codeword had no vectors quantized to it, leave it as it is.
-
-Input:
-codebook: (k x d). k codewords. The current codebook.
-minibatch_feats: (N x d). N feature vectors that were quantized to the codebook.
-code_mat: (N x k) binary. For each example out of N vectors the identity of codeword(s) it was quantized to.
-
-Output:
-codebook: (k x d). 
-'''
-def update_codebook(codebook,minibatch_feats,code_mat):
-    for ci in range(codebook.shape[0]):
-        inds                = numpy.where(code_mat[:,ci])[0];
-        if (len(inds) > 0):
-            cluster         = minibatch_feats[inds,:];
-            codebook[ci,:]  = numpy.mean(cluster,axis=0);
-            pass; # end if...
-        pass; # end for ci...
-
-    # Normalize all codewords:
-    codebook                = normalize_feature_vectors(codebook);
-    return codebook;
-
-'''
-Quantize each feature vector in features to the tau closest codewords from the codebook.
-
-Input:
-features: (N x d). N feature vectors of dimension d. Assuming each feature vector has unit L2-norm.
-codebook: (k x d). k codewords (centroids) of dimension d. Assuming each codeword has unit L2-norm.
-tau: scalar. How many codewords to quantize to.
-
-Output:
-code_mat: (N x k). binary matrix. Each feature vector's code vector, with 1 in the positions of the centroids it was quantized to.
-'''
-def vector_quantization(features,codebook,tau):
-    dot_prods                   = numpy.dot(features,codebook.T);
-    N                           = features.shape[0];
-    k                           = codebook.shape[0];
-
-    code_mat                    = numpy.zeros((N,k));
-    for ii in range(N):
-        dots                    = dot_prods[ii,:];
-        closest_to_farthest     = [pair[0] for pair in sorted(enumerate(dots),key=lambda x: x[1],reverse=True)];
-        quant                   = closest_to_farthest[:tau];
-        code_mat[ii,quant]      = 1;
-        pass;
-
-    return code_mat;
 
 def sample_next_minibatch(train_uuids,uuid_inds,timestamps,inds,position,how_many):
     n_instances                 = len(inds);
