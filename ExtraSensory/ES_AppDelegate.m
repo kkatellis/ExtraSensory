@@ -386,7 +386,9 @@
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined)
     {
         NSLog(@"[appDelegate] Prompting user for location authorization.");
-        [self.locationManager requestAlwaysAuthorization];
+        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [self.locationManager requestAlwaysAuthorization];
+        }
     }
     else if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways) {
         NSLog(@"[appDelegate] Alerting user that location is disabled and asking to enable it.");
