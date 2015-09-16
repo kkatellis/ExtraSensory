@@ -1,5 +1,5 @@
 {
-"zip_superdir":"data/raw_zipped_data",
-"data_superdir":"data/raw_data",
+"zip_superdir":"/Users/KatEllis/ExtraSensoryData/Zipped",
+"data_superdir":"/Users/KatEllis/ExtraSensoryData/Unzipped",
 "experiment_superdir":"experiments"
 }

@@ -241,29 +241,14 @@
 {
     if (indexPath.section == ACCESSORY_SEC)
     {
-        return nil;
-//        switch (self.feedbackType) {
-//            case ES_FeedbackTypeActive:
-//                return indexPath;
-//                break;
-//            
-//            case ES_FeedbackTypeActivityEvent:
-//                if ([self.activityEvent.minuteActivities count] <= 1)
-//                {
-//                    // Then this activity event has only 1 minute. No need for minute-minute breakdown:
-//                    return nil;
-//                }
-//                return indexPath;
-//                break;
-//            
-//            case ES_FeedbackTypeAtomicActivity:
-//                return nil;
-//                break;
-//            
-//            default:
-//                return nil;
-//                break;
-//        }
+        switch (self.feedbackType) {
+           case ES_FeedbackTypeActive:
+                return indexPath;
+                break;
+            default:
+                return nil;
+                break;
+        }
     }
     else
     {
@@ -287,6 +272,7 @@
         case ACCESSORY_SEC:
             switch (self.feedbackType) {
                 case ES_FeedbackTypeActive:
+                    NSLog(@"FeedbackTypeActive\n");
                     [self openSelectNumMinutesValidFor];
                     break;
                     
