@@ -165,6 +165,12 @@ def test_phase(test_uuids,classifier):
         instances_label_probs[ii,:]     = prob_vec;
         pass;
 
+    test_classification_file            = os.path.join(train_dir,'test_classification.pickle');
+    fid                                 = file(test_classification_file,'wb');
+    classification_data                 = {'X':X,'Y_bin':instances_labels_machine,'Y_prob':instances_label_probs,'Y_gt':instances_labels_gt};
+    pickle.dump(classification_data,fid);
+    fid.close();
+    print "+++ Saved classification file: %s" % test_classification_file;
     # Evaluate classification performance:
     scores      = classifiers.get_classification_scores(instances_labels_gt,instances_labels_machine,instances_label_probs,label_names);
     return scores;
@@ -329,6 +335,7 @@ def main():
         model_params['sensors']             = sensors;
         model_params['feature_dimension']   = total_dim;
         model_params['feat2sensor_map']     = feat2sensor_map;
+        model_params['sensorgroup2feat_map']= collect_features.get_sensorgroup2feat_map(sensors,feat2sensor_map);
 
         pass;
     else:

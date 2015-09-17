@@ -8,6 +8,7 @@ Written by Yonatan Vaizman. June 2015.
 import os;
 import os.path;
 import numpy;
+import numpy.random;
 import pickle;
 import sklearn.linear_model;
 import traceback;
@@ -51,6 +52,16 @@ def train_classifier(X,instances_labels,label_names,model_params,extra_data=None
 
     classifier  = {'model_params':model_params,'label_names':label_names};
 
+    if 'create_extra_examples' in model_params and model_params['create_extra_examples']:
+        # Create more examples taken from the original examples, only with several sensors missing:
+        (X,instances_labels)    = add_extra_examples(X,instances_labels,model_params);
+        n_labeled_original      = n_labeled;
+        n_labeled               = X.shape[0];
+        pass;
+    else:
+        n_labeled_original      = n_labeled;
+        pass;
+
     if model_params['use_unlabeled_examples']:
         # Concatenate the examples, first the labeled ones, then the unlabeled ones:
         X       = numpy.concatenate((X,extra_data['X_unlabeled']),axis=0);
@@ -66,7 +77,7 @@ def train_classifier(X,instances_labels,label_names,model_params,extra_data=None
 
     X           = apply_missing_values_policy(X,model_params['missing_value_policy']);
 
-    train_data  = {'X_old':X_old,'X':X,'model_params':model_params,'n_labeled':n_labeled};
+    train_data  = {'X_old':X_old,'X':X,'model_params':model_params,'n_labeled':n_labeled,'n_labeled_original':n_labeled_original};
     train_file  = os.path.join(model_params['train_dir'],'treated_train_data.pickle');
     fid         = file(train_file,'wb');
     pickle.dump(train_data,fid);
@@ -394,6 +405,52 @@ def get_valid_examples(feats):
     return (valid_inds,valid_examples);
 
 '''
+Create more examples and add them to the data set.
+The added examples will be taken from randomly chosen existing samples,
+where some of the sensor groups were removed (as if these sensors were not available).
+'''
+def add_extra_examples(X,Y,model_params):
+    n_orig              = X.shape[0];
+    X_new               = numpy.copy(X);
+    Y_new               = numpy.copy(Y);
+
+    n_single            = numpy.min([n_orig,10000]);
+    n_pair              = numpy.min([n_orig,6000]);
+
+    sensor_group_names  = sorted(model_params['sensorgroup2feat_map'].keys());
+    for (sg1,sensor_group1) in enumerate(sensor_group_names):
+        dims1           = model_params['sensorgroup2feat_map'][sensor_group1];
+        example_inds    = numpy.random.choice(n_orig,n_single);
+        X_added         = numpy.copy(X[example_inds,:]);
+        # Simulate missing data for the sensor group:
+        X_added[:,dims1]= numpy.nan;
+        Y_added         = numpy.copy(Y[example_inds,:]);
+
+        # Add the synthesized examples:
+        X_new           = numpy.concatenate((X_new,X_added),axis=0);
+        Y_new           = numpy.concatenate((Y_new,Y_added),axis=0);
+
+        for sg2 in range(sg1+1,len(sensor_group_names)):
+            sensor_group2   = sensor_group_names[sg2];
+            dims2           = model_params['sensorgroup2feat_map'][sensor_group2];
+            example_inds    = numpy.random.choice(n_orig,n_pair);
+            X_added         = numpy.copy(X[example_inds,:]);
+            # Simulate missing data for 2 sensor groups:
+            X_added[:,dims1]= numpy.nan;
+            X_added[:,dims2]= numpy.nan;
+            Y_added         = numpy.copy(Y[example_inds,:]);
+
+            # Add the synthesized examples:
+            X_new           = numpy.concatenate((X_new,X_added),axis=0);
+            Y_new           = numpy.concatenate((Y_new,Y_added),axis=0);
+            pass; # end for sg2....
+        
+        pass; # end for sensor_group1...
+
+    print "Added extra synthesized examples. Now have %d labeled examples" % X_new.shape[0];
+    return (X_new,Y_new);
+
+'''
 Apply some policy to handle missing values in each feature vector.
 
 Input:
@@ -614,7 +671,7 @@ def get_single_logit_model_file(train_dir,label_name):
     return os.path.join(train_dir,"%s.pickle" % label_name);
 
 def train_single_logit_model(class_i,label_name,X,y):
-    min_examples        = 2;
+    min_examples        = 100;
     # Do we have enough training material for this label:
     npos            = numpy.sum(y);
     nneg            = numpy.sum(numpy.logical_not(y));
@@ -845,11 +902,11 @@ def classify__multilayer_mixed(x,classifier):
         if layer_i < (n_layers-1):
             # Prepare the input for the next layer:
 
-            if layer_classifier['model_params']['standardize_features']:
-                # Standardize the latest layer's output:
-                output_old              = numpy.copy(layer_out_prob);
-                layer_out_prob          = standardize_features(layer_out_prob,layer_classifier['output_mean_vec'],layer_classifier['output_std_vec']);
-                pass;
+##            if layer_classifier['model_params']['standardize_features']:
+##                # Standardize the latest layer's output:
+##                output_old              = numpy.copy(layer_out_prob);
+##                layer_out_prob          = standardize_features(layer_out_prob,layer_classifier['output_mean_vec'],layer_classifier['output_std_vec']);
+##                pass;
 
             if 'layer_input_policy' not in classifier['model_params']:
                 layer_classifier['model_params']['layer_input_policy']    = 'no_augment';
@@ -916,13 +973,13 @@ def train_classifier__multilayer_mixed(X,instances_labels,label_names,classifier
                 layer_outputs               = classify__codebook(layer_inputs,layer_classifier);
                 pass;
             
-            if layer_classifier['model_params']['standardize_features']:
-                # Standardize (and save the standardization parameters):
-                outputs_old             = numpy.copy(layer_outputs);
-                (layer_outputs,mv,sv)   = estimate_standardization(layer_outputs);
-                layer_classifiers[layer_i]['output_mean_vec']       = mv;
-                layer_classifiers[layer_i]['output_std_vec']        = sv;
-                pass;
+##            if layer_classifier['model_params']['standardize_features']:
+##                # Standardize (and save the standardization parameters):
+##                outputs_old             = numpy.copy(layer_outputs);
+##                (layer_outputs,mv,sv)   = estimate_standardization(layer_outputs);
+##                layer_classifiers[layer_i]['output_mean_vec']       = mv;
+##                layer_classifiers[layer_i]['output_std_vec']        = sv;
+##                pass;
 
             if 'layer_input_policy' not in layer_classifier['model_params']:
                 layer_classifier['model_params']['layer_input_policy']    = 'no_augment';

@@ -3,5 +3,7 @@
 "sensor_set":"all_sensors",
 "missing_value_policy":"zero_imputation",
 "experiment_name":"logit",
-"standardize_features":true
+"standardize_features":true,
+"use_unlabeled_examples":false,
+"create_extra_examples":false
 }

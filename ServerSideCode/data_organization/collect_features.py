@@ -54,6 +54,39 @@ g__moods                    = [];
 
 g__sr                       = 40.;
 
+def get_sensor_groups():
+    sensor_groups           = {\
+        'acc':['raw_acc','proc_acc','proc_gravity','proc_attitude'],\
+        'gyro':['raw_gyro','proc_gyro','proc_attitude'],\
+        'magnet':['raw_magnet','proc_magnet'],\
+        'location':['location','location_quick_features'],\
+        'audio':['audio','audio_properties'],\
+        'watch':['watch_acc','watch_compass'],\
+        'low_freq':['lf_measurements'],\
+        'discrete':['discrete_measurements']\
+        };
+    return sensor_groups;
+
+def get_sensorgroup2feat_map(sensors,feat2sensor_map):
+    sensor_groups           = get_sensor_groups();
+    sensorgroup2feat_map    = {};
+    for group_name in sensor_groups.keys():
+        group_dims          = set([]);
+        for sensor in sensor_groups[group_name]:
+            if sensor not in sensors:
+                continue;
+            sensor_index    = sensors.index(sensor);
+            sensor_dims     = numpy.where(feat2sensor_map == sensor_index)[0];
+            group_dims      = group_dims.union(set(sensor_dims));
+            pass; # end for sensor...
+
+        if len(group_dims) > 0:
+            sensorgroup2feat_map[group_name]    = numpy.array(sorted(group_dims));
+            pass;
+        pass; # end for sensor_group...
+    
+    return sensorgroup2feat_map;
+
 def get_all_sensor_names():
     sensors                 = list(g__sensors_with_3axes);
     sensors.append('location');
@@ -430,13 +463,22 @@ def user_sensor_counts(uuids):
             continue;
         
         print '### uuid: %s' % uuid;
+        user_file = 'sensor_counts_%s.pickle' % uuid;
+        if os.path.exists(user_file):
+            fid = file(user_file,'rb');
+            user_counts = pickle.load(fid);
+            fid.close();
+            counts[ui,:] = user_counts['counts'];
+            print "<< loaded file: %s" % user_file;
+            continue;
+        
         for subdir in os.listdir(uuid_dir):
             instance_dir    = os.path.join(uuid_dir,subdir);
             if not os.path.isdir(instance_dir):
                 continue;
 
             for (si,sensor) in enumerate(sensors):
-#                print "%s:%s" % (instance_dir,sensor);
+                print "%s:%s" % (instance_dir,sensor);
                 if check_presence_of_measurements(instance_dir,sensor):
                     counts[ui,si]   += 1;
                     pass;
@@ -445,7 +487,7 @@ def user_sensor_counts(uuids):
             pass; # end for subdir...
 
         user_counts = {'uuid':uuid,'sensors':sensors,'counts':counts[ui,:]};
-        user_file = 'sensor_counts_%s.pickle' % uuid;
+        
         fid = file(user_file,'wb');
         pickle.dump(user_counts,fid);
         fid.close();

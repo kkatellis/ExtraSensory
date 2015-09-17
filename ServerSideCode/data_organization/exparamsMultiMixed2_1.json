@@ -1,0 +1,14 @@
+{
+"model_type":"multilayer_mixed",
+"layers_params":[
+		{"model_type":"codebook", "k":500, "nonlinearity_type":"shrinkage", "theta":0.2, "layer_input_policy":"no_augment"},
+		{"model_type":"codebook", "k":600, "nonlinearity_type":"shrinkage", "theta":0.4, "layer_input_policy":"no_augment"},
+		{"model_type":"logit"}
+		],
+"sensor_set":"all_sensors",
+"missing_value_policy":"zero_imputation",
+"experiment_name":"multimixed_2codebook_1logit",
+"standardize_features":true,
+"use_unlabeled_examples":true,
+"create_extra_examples":false
+}
