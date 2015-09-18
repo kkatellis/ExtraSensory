@@ -1,7 +1,0 @@
-{
-"model_type":"logit",
-"sensor_set":"all_sensors",
-"missing_value_policy":"zero_imputation",
-"experiment_name":"logitAllSensorsZeroImputation",
-"standardize_features":true
-}
