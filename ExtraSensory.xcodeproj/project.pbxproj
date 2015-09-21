@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1025D75818CB15BA00D854BE /* ES_PieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1025D75718CB15BA00D854BE /* ES_PieViewController.m */; };
-		109D49B51ACB1156000051B1 /* PebbleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109D49B41ACB1156000051B1 /* PebbleKit.framework */; };
+		109D49B51ACB1156000051B1 /* PebbleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109D49B41ACB1156000051B1 /* PebbleKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		109D49B71ACB1165000051B1 /* PebbleVendor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109D49B61ACB1165000051B1 /* PebbleVendor.framework */; };
 		10AE6C5818A30AEB0095F330 /* ES_SoundWaveProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 10AE6C5718A30AEB0095F330 /* ES_SoundWaveProcessor.mm */; };
 		10BDF8FD1A8ABE9E000C4C26 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10BDF8FC1A8ABE9E000C4C26 /* ExternalAccessory.framework */; };
@@ -1221,11 +1221,13 @@
 				CODE_SIGN_ENTITLEMENTS = ExtraSensory/ExtraSensory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Katherine Ellis (3V7R3B4DY3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/rafaelaguayo/pebble-dev/PebbleSDK-2.0.2/PebbleKit-iOS",
 					"$(PROJECT_DIR)/PebbleKit-iOS",
 				);
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "$(PROJECT_DIR)/PebbleKit-iOS";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExtraSensory/ExtraSensory-Prefix.pch";
 				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/boost_ext/include\"";
@@ -1247,7 +1249,13 @@
 				CODE_SIGN_ENTITLEMENTS = ExtraSensory/ExtraSensory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Katherine Ellis (3V7R3B4DY3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Katherine Ellis (3V7R3B4DY3)";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/rafaelaguayo/pebble-dev/PebbleSDK-2.0.2/PebbleKit-iOS",
+					"$(PROJECT_DIR)/PebbleKit-iOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
 					"/Users/rafaelaguayo/pebble-dev/PebbleSDK-2.0.2/PebbleKit-iOS",
 					"$(PROJECT_DIR)/PebbleKit-iOS",
