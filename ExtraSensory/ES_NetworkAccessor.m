@@ -527,7 +527,7 @@
     CFRelease(cert);
     CFRelease(certDataRef);
     
-    // id our custom trust chain evaluate successfully
+    // Did our custom trust chain evaluate successfully
     return trustResult == kSecTrustResultUnspecified;
 }
 
