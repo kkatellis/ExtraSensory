@@ -56,8 +56,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadIfNecessaryAfterNetworkStackChanged) name:@"NetworkStackSize" object:[self appDelegate]];
         
         isReady = YES;
-        
-        
+                
     }
     return self;
 }
