@@ -6,10 +6,12 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>137.110.112.50</key>
+			<key>calit2-112-50.ucsd.edu</key>
 			<dict>
 				<key>NSTemporaryExceptionMinimumTLSVersion</key>
-				<string>TLSv1.1</string>
+				<string>TLSv1.0</string>
+				<key>NSTemporaryExceptionRequiresForwardSecrecy</key>
+				<false/>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 				<key>NSIncludesSubdomains</key>

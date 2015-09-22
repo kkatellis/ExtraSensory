@@ -16,7 +16,7 @@
 #import "ES_Settings.h"
 
 #define BOUNDARY        @"0xKhTmLbOuNdArY"
-#define HOSTNAME        @"137.110.112.50"
+#define HOSTNAME        @"calit2-112-50.ucsd.edu"
 #define HTTP_PREFIX     @"http://"
 #define HTTPS_PREFIX    @"https://"
 #define HTTP_PORT       @"8080"
