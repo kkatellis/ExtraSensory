@@ -20,6 +20,7 @@
 @dynamic recentTimePeriod;
 @dynamic sampleDuration;
 @dynamic sampleRate;
+@dynamic storedSamplesBeforeSend;
 @dynamic timeBetweenSampling;
 @dynamic timeBetweenUserNags;
 @dynamic allowCellular;

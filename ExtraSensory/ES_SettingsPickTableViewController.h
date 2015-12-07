@@ -10,4 +10,6 @@
 
 @interface ES_SettingsPickTableViewController : UITableViewController
 
+@property NSInteger rowReceived;
+
 @end

@@ -11,6 +11,12 @@
 #import "ES_User.h"
 #import "ES_Settings.h"
 
+#define DATA_COLLECTION_ROW 0
+#define INTERVAL_ROW 1
+#define STORED_SAMPLES_ROW 2
+#define SECURE_ROW 3
+#define CELLULAR_ROW 4
+
 @interface ES_SettingsPickTableViewController ()
 @property (strong, nonatomic) ES_AppDelegate* appDelegate;
 @end
@@ -41,8 +47,12 @@
     return _appDelegate;
 }
 
-- (NSArray *) data{
+- (NSArray *) reminderOptions{
     return @[@2, @5, @10, @20, @30];
+}
+
+- (NSArray *) storageOptions{
+    return @[@1, @5, @10, @20, @30];
 }
 
 #pragma mark - Table view data source
@@ -54,33 +64,58 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [[self data] count];
+    if (self.rowReceived == INTERVAL_ROW){
+        return [[self reminderOptions] count];
+    } else if (self.rowReceived == STORED_SAMPLES_ROW){
+        return [[self storageOptions] count];
+    } else {
+        return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     
-    // Nag interval:
-    int reminderIntervalMins = ([self.appDelegate.user.settings.timeBetweenUserNags integerValue]) / 60;
-    
-    // Configure the cell...
-    int mins = [self.data[indexPath.row] integerValue];
-    cell.textLabel.text = [NSString stringWithFormat:@"%d min", mins];
-    
-    if (mins == reminderIntervalMins) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    if (self.rowReceived == INTERVAL_ROW){
+        // Nag interval:
+        int reminderIntervalMins = ([self.appDelegate.user.settings.timeBetweenUserNags integerValue]) / 60.0;
+        // Configure the cell...
+        NSNumber *mins = self.reminderOptions[indexPath.row];
+        cell.textLabel.text = [NSString stringWithFormat:@"%ld min", (long)[mins integerValue]];
+        
+        if ([mins integerValue] == reminderIntervalMins) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        
+    } else if (self.rowReceived == STORED_SAMPLES_ROW){
+        // storage
+        int storedSamplesBeforeSend = (int)[self.appDelegate.user.settings.storedSamplesBeforeSend integerValue];
+        // Configure the cell...
+        NSNumber *num = self.storageOptions[indexPath.row];
+        cell.textLabel.text = [NSString stringWithFormat:@"%ld", (long)[num integerValue]];
+        
+        if ([num integerValue] == storedSamplesBeforeSend) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
-    
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    
-    NSNumber *mins = self.data[indexPath.row];
-    self.appDelegate.user.settings.timeBetweenUserNags = [NSNumber numberWithInt:([mins integerValue]) * 60];
-    NSLog(@"reminder Interval = %@", self.appDelegate.user.settings.timeBetweenUserNags);
+    if (self.rowReceived == INTERVAL_ROW){
+        // Nag interval:
+        int mins = (int)[self.reminderOptions[indexPath.row] integerValue];
+        self.appDelegate.user.settings.timeBetweenUserNags = [NSNumber numberWithInt:(mins * 60.0)];
+        NSLog(@"reminder Interval = %@", self.appDelegate.user.settings.timeBetweenUserNags);
+    } else if (self.rowReceived == STORED_SAMPLES_ROW){
+        //storage
+        int num = (int)[self.storageOptions[indexPath.row] integerValue];
+        self.appDelegate.user.settings.storedSamplesBeforeSend = [NSNumber numberWithInt:num];
+    }
     [tableView reloadData];
 }
 //-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath

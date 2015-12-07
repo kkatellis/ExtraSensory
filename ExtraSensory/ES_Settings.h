@@ -21,6 +21,7 @@
 @property (nonatomic, retain) NSNumber * recentTimePeriod;
 @property (nonatomic, retain) NSNumber * sampleDuration;
 @property (nonatomic, retain) NSNumber * sampleRate;
+@property (nonatomic, retain) NSNumber * storedSamplesBeforeSend;
 @property (nonatomic, retain) NSNumber * timeBetweenSampling;
 @property (nonatomic, retain) NSNumber * timeBetweenUserNags;
 @property (nonatomic, retain) NSNumber * allowCellular;

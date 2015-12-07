@@ -7,6 +7,7 @@
 //
 
 #import "ES_SettingsTableViewController.h"
+#import "ES_SettingsPickTableViewController.h"
 #import "ES_AppDelegate.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
@@ -19,8 +20,9 @@
 
 #define DATA_COLLECTION_ROW 0
 #define INTERVAL_ROW 1
-#define SECURE_ROW 2
-#define CELLULAR_ROW 3
+#define STORED_SAMPLES_ROW 2
+#define SECURE_ROW 3
+#define CELLULAR_ROW 4
 
 #define DATA_COLLECTION_TAG 0
 #define HOME_SENSING_TAG 1
@@ -81,7 +83,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if (section == MAIN_SECTION) {
-        return 4;
+        return 5;
     } else if (section == HOME_SECTION) {
         return 1;
     } else if (section == LOCATION_BUBBLE_SECTION) {
@@ -116,7 +118,12 @@
             cell.textLabel.text = @"Reminder Interval";
             NSNumber *reminderIntervalMins = [NSNumber numberWithInteger:([self.appDelegate.user.settings.timeBetweenUserNags integerValue])/60];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ min", reminderIntervalMins];
-        } else if (indexPath.row == SECURE_ROW) {
+        } else if (indexPath.row == STORED_SAMPLES_ROW){
+            cell = [tableView dequeueReusableCellWithIdentifier:@"disclosureCell" forIndexPath:  indexPath];
+            cell.textLabel.text = @"Samples to store";
+            NSNumber *storedSamplesBeforeSend = [NSNumber numberWithInteger:[self.appDelegate.user.settings.storedSamplesBeforeSend integerValue]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", storedSamplesBeforeSend];
+        }else if (indexPath.row == SECURE_ROW) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"settingsCell" forIndexPath:  indexPath];
             cell.textLabel.text = @"Secure Communication";
             UISwitch *toggleSwitch = [[UISwitch alloc] init];
@@ -235,7 +242,7 @@
         {
             // Then user selected to activate the data collection mechanizm but probably there are too many zip files already in storage.
             NSString *message = @"Data collection is still inactive since the storage is in full capacity right now (until WiFi is available).";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:message delegate:self cancelButtonTitle:@"o.k." otherButtonTitles: nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ExtraSensory" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
             [alert show];
         }
     }
@@ -283,14 +290,19 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    NSLog(@"[settings] Preparing for segue");
+    if ([segue.identifier isEqualToString:@"reminderSegue"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        ES_SettingsPickTableViewController *destViewController = segue.destinationViewController;
+        destViewController.rowReceived = indexPath.row;
+        NSLog(@"[settings] Set rowReceived to %d", (int)destViewController.rowReceived);
+    }
 }
-*/
+
 
 @end

@@ -15,6 +15,7 @@
 NSURLConnection *api_connection;        // Connection to API server
 Reachability *wifiReachable;     // Object for wifi reach testing
 BOOL isReady;   //only upload one at a time
+BOOL sendCycleOn;   //currently sending all saved data
     
 }
 @property (strong, nonatomic) NSMutableData *recievedData;
@@ -25,6 +26,7 @@ BOOL isReady;   //only upload one at a time
 - (void) upload;
 - (void) sendNextFeedbackFromQueue;
 - (void) sendFeedback: (ES_Activity *)feedback;
+- (void) flush;
 
 - (NetworkStatus) reachabilityStatus;
 

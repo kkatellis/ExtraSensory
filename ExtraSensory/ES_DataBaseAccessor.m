@@ -650,7 +650,7 @@
     }
     ES_AppDelegate *appDelegate = (ES_AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate pushOnNetworkStack: zipFilename];
-    [appDelegate.networkAccessor upload]; //upload the new file
+    //[appDelegate.networkAccessor upload]; //upload the new file (should happen automatically when network stack size change detected)
 
 }
 

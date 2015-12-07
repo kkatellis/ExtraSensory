@@ -10,6 +10,7 @@
 #import "ES_SensorManager.h"
 #import "ES_AppDelegate.h"
 #import "ES_DataBaseAccessor.h"
+#import "ES_NetworkAccessor.h"
 #import "ES_Scheduler.h"
 #import "ES_User.h"
 #import "ES_Settings.h"
@@ -22,6 +23,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *networkStackSizeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *feedbackQueueSizeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *watchIcon;
+- (IBAction)flushNetworkQueue:(UIButton *)sender;
+@property (strong, nonatomic) IBOutlet UIButton *sendButton;
+
 
 @property NSMutableArray *activityCountArray;
 
@@ -206,10 +210,11 @@
     NSInteger qSize = [[self appDelegate] getFeedbackQueueSize];
     if (qSize > 0)
     {
-        NSString *lastWord = (qSize == 1) ? @"sample" : @"samples";
-        fQString = [NSString stringWithFormat:@"%lu %@ labels waiting.",(long)qSize,lastWord];
+        NSString *lastWord = (qSize == 1) ? @"label" : @"labels";
+        fQString = [NSString stringWithFormat:@"Storing %lu %@",(long)qSize,lastWord];
     }
     self.feedbackQueueSizeLabel.text = fQString;
+    [self updateButtonTitle];
 }
 
 - (void) updateCurrentStorageLabel
@@ -219,10 +224,22 @@
     if (storage > 0)
     {
         NSString *lastWord = (storage == 1) ? @"sample" : @"samples";
-        storageString = [NSString stringWithFormat:@"Storing %lu %@.",storage,lastWord];
+        storageString = [NSString stringWithFormat:@"Storing %lu %@",storage,lastWord];
     }
     self.networkStackSizeLabel.text = storageString;
+    [self updateButtonTitle];
 }
 
+- (void) updateButtonTitle
+{
+    if ((self.appDelegate.networkStack.count > 0) | ([[self appDelegate] getFeedbackQueueSize] > 0)){
+        [self.sendButton setTitle: @"Send" forState: UIControlStateNormal];
+    } else {
+        [self.sendButton setTitle: @"" forState: UIControlStateNormal];
+    }
+}
 
+- (IBAction)flushNetworkQueue:(UIButton *)sender {
+    [self.appDelegate.networkAccessor flush];
+}
 @end

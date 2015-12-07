@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15B42" minimumToolsVersion="Xcode 4.3">
     <entity name="ES_Activity" representedClassName="ES_Activity" syncable="YES">
         <attribute name="labelSource" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="serverPrediction" optional="YES" attributeType="String" syncable="YES"/>
@@ -43,6 +43,7 @@
         <attribute name="recentTimePeriod" optional="YES" attributeType="Double" defaultValueString="1200" syncable="YES"/>
         <attribute name="sampleDuration" attributeType="Double" minValueString="5" defaultValueString="20" syncable="YES"/>
         <attribute name="sampleRate" attributeType="Double" minValueString="1" maxValueString="1000" defaultValueString="40" syncable="YES"/>
+        <attribute name="storedSamplesBeforeSend" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
         <attribute name="timeBetweenSampling" attributeType="Double" defaultValueString="60" syncable="YES"/>
         <attribute name="timeBetweenUserNags" optional="YES" attributeType="Double" defaultValueString="600" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ES_User" inverseName="settings" inverseEntity="ES_User" syncable="YES"/>
@@ -67,7 +68,7 @@
         <element name="ES_Label" positionX="196" positionY="153" width="128" height="58"/>
         <element name="ES_Mood" positionX="196" positionY="63" width="128" height="58"/>
         <element name="ES_SecondaryActivity" positionX="196" positionY="248" width="128" height="58"/>
-        <element name="ES_Settings" positionX="-272" positionY="261" width="128" height="225"/>
+        <element name="ES_Settings" positionX="-272" positionY="261" width="128" height="240"/>
         <element name="ES_User" positionX="-90" positionY="162" width="128" height="135"/>
         <element name="ES_UserActivityLabels" positionX="0" positionY="-108" width="128" height="60"/>
         <element name="ES_UserPopulation" positionX="-99" positionY="360" width="128" height="60"/>

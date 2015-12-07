@@ -452,16 +452,16 @@
     
     // If relevant (if this timepoint's measurements already arrived at the server),
     // send the labels to the server:
-    if (act.serverPrediction)
-    {
+    //if (act.serverPrediction)
+    //{
         // Then the server has this timepoint's record and we already got the server's prediction. So send the user's labels feedback:
         NSLog(@"[Feedback] Sending feedback for time %@.",time);
         [[self appDelegate].networkAccessor sendFeedback:act];
-    }
-    else
-    {
-        NSLog(@"[Feedback] Activity of time %@ has no server prediction yet, so there's no point in sending label-feedback right now.",time);
-    }
+   // }
+   // else
+   // {
+   //     NSLog(@"[Feedback] Activity of time %@ has no server prediction yet, so there's no point in sending label-feedback right now.",time);
+   // }
 }
 
 

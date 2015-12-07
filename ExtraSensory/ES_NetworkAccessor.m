@@ -29,7 +29,6 @@
 
 @interface ES_NetworkAccessor()
 
-
 @property (nonatomic, strong) ES_AppDelegate* appDelegate;
 
 @end
@@ -167,14 +166,23 @@
 
 - (void) sendNextFeedbackFromQueue
 {
-    if(! [self canWeUseNetworkNow]) {
+    if(![self canWeUseNetworkNow]) {
         NSLog(@"[networkAccessor] No WiFi. Not sending feedback.");
+        return;
+    }
+    if (!sendCycleOn) {
+        NSLog(@"[networkAccessor] sendCycle not on. Not sending feedback.");
         return;
     }
     
     ES_Activity *activity = [self.appDelegate getNextActivityInFeedbackQueue];
     if (!activity) {
         NSLog(@"[networkAccessor] The feedback queue is empty, nothing to send");
+        if (self.appDelegate.networkStack.count == 0){
+            // everything is uploaded
+            NSLog(@"[networkAccessor] setting sendCycleOn to FALSE (184)");
+            sendCycleOn = FALSE;
+        }
         return;
     }
     
@@ -187,6 +195,13 @@
     NSLog(@"[networkAccessor] Got activity for feedback. Adding it to feedback queue. timestamp: %@",[activity timestamp]);
     [self.appDelegate addToFeedbackQueueActivity:activity];
     [self sendNextFeedbackFromQueue];
+}
+
+- (void) flush{
+    NSLog(@"[networkAccessor] flushing");
+    sendCycleOn = TRUE;
+    [self sendNextFeedbackFromQueue];
+    [self upload];
 }
 
 - (void) apiCall:(NSString *)api withParams:(ES_Activity *)activity{
@@ -232,6 +247,9 @@
             NSLog(@"[networkAccessor] Ready. Calling 'upload'");
             [self upload];
         }
+    } else if (self.appDelegate.networkFeedbackQueueTimestamps.count == 0){
+        NSLog(@"[networkAccessor] setting sendCycleOn to FALSE (236)");
+        sendCycleOn = FALSE; // only stop send cycle when network stack is empty
     }
 }
 
@@ -250,6 +268,13 @@
         NSLog(@"[networkAccessor] notReady");
         return;
     }
+    if (!sendCycleOn && [self.appDelegate.networkStack count] < [self.appDelegate.user.settings.storedSamplesBeforeSend integerValue])
+    {
+        NSLog( @"[networkAccessor] not enough items to upload");
+        return;
+    }
+    NSLog(@"[networkAccessor] Setting sendCycleOn to TRUE (261)");
+    sendCycleOn = TRUE;
     isReady = NO;
     NSString *file = [self.appDelegate getFirstOnNetworkStack];
     
@@ -257,6 +282,8 @@
     {
         NSLog( @"[networkAccessor] No file to upload. Nothing to send.");
         isReady = YES;
+        NSLog(@"[networkAccessor] Setting sendCycleOn to FALSE (270)");
+        sendCycleOn = FALSE;
         return;
     }
         
@@ -380,7 +407,7 @@
     NSLog( @"[networkAccessor] !!! Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLErrorKey]);
     self.appDelegate.currentlyUploading = NO;
     isReady = YES;
-    [self upload];
+    //[self upload];
 }
 
 - (void) connectionDidFinishLoading: (NSURLConnection *)connection
@@ -458,13 +485,17 @@
         }
         isReady = YES;
         
-        
         //[appDelegate updateNetworkStackFromStorageFilesIfEmpty];
         NSLog(@"[networkAccessor] network stack size (1): %lu",(unsigned long)appDelegate.networkStack.count);
         if ( [appDelegate.networkStack count] > 0)
         {
             NSLog(@"[networkAccessor] Still items in network stack. Calling upload...");
             [self upload];
+        } else if (self.appDelegate.networkFeedbackQueueTimestamps.count > 0){
+            [self sendNextFeedbackFromQueue];
+        } else {
+            NSLog(@"[networkAccessor] setting sendCycleOn to FALSE (489)");
+            sendCycleOn = FALSE;
         }
         NSLog(@"[networkAccessor] network stack size (2): %lu",(unsigned long)appDelegate.networkStack.count);
     }

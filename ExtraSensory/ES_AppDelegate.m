@@ -184,7 +184,7 @@
 
 - (void) updateNetworkStackFromStorageFilesIfEmpty
 {
-    if (self.networkStack.count <= 0)
+    if (self.networkStack.count == 0)
     {
         NSLog(@"[appDelegate] Updating network stack (currently count zero) - adding the stored zip files");
         NSMutableArray *zipFiles = [self getUnsentZipFiles];
@@ -195,11 +195,11 @@
     }
     
     // If added files, call for upload operation:
-    if (self.networkStack.count > 0)
-    {
-        NSLog(@"[appDelegate] after adding stored unsent zip files to the network stack, calling for upload.");
-        [self.networkAccessor upload];
-    }
+    //if (self.networkStack.count > 0)
+    //{
+    //    NSLog(@"[appDelegate] after adding stored unsent zip files to the network stack, calling for upload.");
+    //    [self.networkAccessor upload];
+    //}
 }
 
 - (void) initializeFeedbackQueue

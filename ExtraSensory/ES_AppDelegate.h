@@ -40,6 +40,8 @@
 
 @property (strong, readonly, atomic) NSMutableArray *networkStack;
 
+@property (strong, readonly, atomic) NSMutableArray *networkFeedbackQueueTimestamps;
+
 @property (strong, nonatomic) ES_NetworkAccessor *networkAccessor;
 
 @property (strong, nonatomic) NSMutableArray *predictions;
